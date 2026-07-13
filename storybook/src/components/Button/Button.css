@@ -1,0 +1,34 @@
+/* Button — components.md · Button. Tokens only; the gate lints this file. */
+.sy-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--sy-space-6);
+  height: var(--sy-control-height-md);
+  padding: 0 var(--sy-control-padding-x);
+  border: none; border-radius: var(--sy-radius-sm); cursor: pointer;
+  font: var(--sy-weight-medium) var(--sy-label-size) / var(--sy-label-lh) var(--sy-font-sans);
+  color: var(--sy-fg-primary); background: transparent;
+  transition: background var(--sy-duration-instant) var(--sy-ease-standard),
+              color var(--sy-duration-instant) var(--sy-ease-standard);
+}
+.sy-btn:focus-visible { outline: 2px solid var(--sy-border-focus); outline-offset: 2px; }
+.sy-btn--sm { height: var(--sy-control-height-sm); }
+.sy-btn--lg { height: var(--sy-control-height-lg); font-size: var(--sy-body-size); }
+.sy-btn--primary { background: var(--sy-action-primary-bg); color: var(--sy-action-primary-fg); }
+.sy-btn--primary:hover, .sy-btn--primary:active { background: var(--sy-action-primary-bg-hover); }
+.sy-btn--secondary { background: var(--sy-action-secondary-bg); }
+.sy-btn--secondary:hover, .sy-btn--secondary:active { background: var(--sy-action-secondary-bg-hover); }
+.sy-btn--ghost { color: var(--sy-fg-secondary); }
+.sy-btn--ghost:hover, .sy-btn--ghost:active { background: var(--sy-bg-hover); }
+.sy-btn--danger { background: var(--sy-status-danger-bg-solid); color: var(--sy-action-danger-fg);
+  font-weight: var(--sy-weight-semibold); /* §8 weight compensation */ }
+.sy-btn--danger:hover, .sy-btn--danger:active { background: var(--sy-status-danger-bg-solid-hover); }
+.sy-btn--accent { background: var(--sy-action-accent-bg); color: var(--sy-action-accent-fg); }
+.sy-btn--accent:hover, .sy-btn--accent:active { background: var(--sy-action-accent-bg-hover); }
+.sy-btn:disabled { background: var(--sy-bg-disabled); color: var(--sy-fg-disabled); cursor: not-allowed; }
+.sy-btn--pill { border-radius: var(--sy-radius-full); padding: 0 var(--sy-space-20); }
+.sy-btn__spinner {
+  width: 16px; height: 16px; border-radius: var(--sy-radius-full); flex: none;
+  border: 2px solid var(--sy-border-default); border-top-color: currentColor;
+  animation: sy-spin 0.8s linear infinite;
+}
+@keyframes sy-spin { to { transform: rotate(360deg); } }

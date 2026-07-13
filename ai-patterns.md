@@ -1,0 +1,154 @@
+# Synapse AI patterns
+
+Interaction conventions for agent behavior in AgentOS. These patterns govern every surface where an AI agent acts, speaks, proposes, or produces content. They carry the same contractual force as `components.md` — the states and anatomies here are closed sets.
+
+Applies on top of the base system: archetypes and density from `patterns.md`, components from `components.md` (including the AI-specific components added in v1.2: AgentStep, ProposalCard, SourceChip, ProgressBar, CommandPalette).
+
+---
+
+## 1. Principles — the four properties of visible agency
+
+Every agent surface must make agency **visible** (users always know when AI is acting vs. a human or deterministic system), **interruptible** (any generation or run can be stopped), **attributable** (AI output is marked as such, with provenance when available), and **reviewable** (consequential actions pass through human approval).
+
+**The two AI markers.** AI presence is signaled by exactly two devices, used consistently and used nowhere else:
+
+1. The **squared avatar** (radius `sm` vs. round human avatars) on any actor row, message, or attribution chip.
+2. The **`ai.*` token family** (`--sy-ai-surface`, `--sy-ai-border`, `--sy-ai-fg`) on surfaces that contain agent output or agent proposals, and the **`accent` (blue) button variant** on actions that invoke AI.
+
+NEVER mark AI presence any other way — no sparkle gradients, no purple, no robot iconography beyond the standard agent glyph. NEVER use `ai.*` tokens on non-AI surfaces, and never substitute `status.info-*` for `ai.*` or vice versa, even though the families are related.
+
+---
+
+## 2. Streaming output
+
+- Streamed text is **append-only**: rendered markdown may progressively enhance (a heading completes, a list item closes) but existing lines never reflow or jump. Reserve block height where possible.
+- The **streaming cursor** is a 2px × 1em `ai.fg` vertical bar after the last character, blinking at 1s intervals. It is the only blinking element permitted in the system.
+- While streaming: a **Stop** control (`ghost` Button, square-stop icon + "Stop" / "중지") MUST be visible and reachable without scrolling. Stopping keeps partial output and appends a `fg.tertiary` caption: "Stopped by you" / "사용자가 중지함".
+- Scroll behavior: stick to bottom while the user is at the bottom; the moment the user scrolls up, release the lock and show a "Jump to latest" pill (Toast surface — `bg.raised-2` + border + `shadow.overlay` — bottom-center).
+- Never disable the composer during generation — queue or interrupt, don't lock the user out.
+- Rate: render at natural token arrival. No artificial typewriter effects on non-streamed (already complete) content — instant render, no fake latency, ever.
+
+## 3. Working states — AgentStep
+
+All agent activity between "request" and "answer" renders as **AgentStep** rows (see `components.md`). The closed state set:
+
+| State | Indicator | Text color |
+|---|---|---|
+| `pending` | 12px `border.strong` hollow circle | `fg.tertiary` |
+| `running` | 12px Spinner | `fg.secondary` |
+| `success` | 12px `status.success` check | `fg.tertiary` |
+| `failed` | 12px `status.danger` ✕ | `fg.secondary` + trailing Retry ghost button |
+| `skipped` | 12px `border.strong` dash | `fg.disabled` |
+
+- Steps are 13px rows, one line each: verb-first summary ("Fetched 328 tickets" / "문의 데이터 328건 조회됨") + optional duration (`fg.tertiary`, tabular-nums).
+- **Collapse rule:** while running, show at most the last 3 steps; on completion, collapse to a single summary row — "5 steps · 12s" / "5단계 · 12초" — expandable. Expanded step detail (tool payloads) renders as `.sy-code-block`, collapsed by default.
+- Step hierarchy is flat or one level deep. NEVER nest deeper — restructure the agent's reporting instead.
+
+## 4. Tool calls
+
+- A tool call is an AgentStep whose summary carries the tool name in mono: `slack.post_message` — human-readable summary first, mono identifier second ("Posted summary to #ops · `slack.post_message`").
+- Inputs and outputs are collapsed by default; expanding shows `.sy-code-block` with copy button. Redact secrets by default (`••••`, reveal requires explicit click and permission).
+- Tool calls with **external side effects** (sending, posting, purchasing, deleting, writing to third-party systems) MUST pass through a ProposalCard (§5) unless the user has granted standing approval for that specific tool+scope, in which case the step shows a "pre-approved" Badge (`neutral`).
+
+## 5. Human-in-the-loop approval — ProposalCard
+
+The agent never performs a consequential action silently. It proposes; the human disposes.
+
+**Anatomy** (see `components.md`): `ai.surface` background, 1px `ai.border`, radius `md` card. Header: squared agent avatar + agent name + "proposes" / "제안" (13 medium, `ai.fg`). Body: one-sentence summary of the action and its scope, then the payload — a diff, a message preview, a list of affected records. Footer: **Approve** (`accent` Button — the sanctioned AI-action use) + **Reject** (`secondary`) + optional **Edit** (`ghost`).
+
+**Rules:**
+- NEVER auto-approve by timeout. No countdown timers on approval. Absence of response = no action.
+- Destructive proposals swap Approve for a `danger` Button and MUST name consequences by count and noun ("Deletes 14 runs permanently" / "실행 기록 14개가 영구 삭제됩니다").
+- Batch proposals (agent proposes N similar actions) allow Approve all / Review individually — never approve-all as the default-focused control.
+- A resolved ProposalCard collapses to a single attribution row: check/✕ icon + "Approved by June · 14:02" / "June 승인 · 14:02". The decision trail is permanent — resolved proposals are never deleted from the transcript.
+
+**Diff rendering** inside proposals: added lines on `status.success-bg`, removed on `status.danger-bg`, mono for code/config, sans for prose diffs; word-level highlighting within changed lines. Never red/green text alone — background tint plus +/− gutter markers (colorblind-safe).
+
+## 6. Provenance — SourceChip
+
+- Any agent claim derived from retrievable sources SHOULD carry inline **SourceChips**: numbered chips `[1]` (18px height, `bg.sunken`, radius `xs`, mono 11) placed after the sentence they support. Hover/click opens a Popover: source title, origin (favicon or connector icon), timestamp, and an open-source link.
+- A sources footer lists all citations for the message (13px, `fg.secondary`).
+- Claims with no retrievable source and low verifiability are marked once per message with a `neutral` Badge: "Model knowledge" / "모델 지식" — never fake a citation, never cite the agent itself.
+- Numbers, quotes, and named facts in agent-generated *documents* (not just chat) follow the same rule. If AgentOS renders an agent-written report, the chips come with it.
+
+## 7. Uncertainty
+
+- Three-level vocabulary only: no raw percentages unless the underlying system is actually calibrated. Rendered as Badges: high = `success` "Verified" / "확인됨" (only when checked against a source), medium = `neutral` "Likely" / "추정", low = `warning` "Unverified" / "미확인".
+- Low-confidence output additionally hedges in copy using approved templates ("Based on limited data, …" / "제한된 데이터 기준으로는 …"). Hedging lives in the text, uncertainty class lives in the Badge — don't duplicate the hedge in both.
+- NEVER express uncertainty with opacity, italics (banned anyway), or decorative question marks.
+
+## 8. Interruption & cancellation
+
+- Every generation: Stop control (§2). Every long-running run: Cancel (`ghost` in the run's toolbar).
+- Cancelling a run with no external side effects: immediate, no confirmation. With side effects already executed: Modal states what has and hasn't happened before confirming ("2 of 5 messages already sent. Cancel the remaining 3?").
+- A cancelled run's status is `warning` Badge "Cancelled" / "취소됨" — distinct from `failed`.
+
+## 9. Attribution
+
+- Agent-produced artifacts (documents, table rows, configs) carry an attribution row: squared avatar + agent name + timestamp, 12px `fg.tertiary`.
+- When a human edits agent output, attribution flips to "AI-drafted · edited by June" / "AI 초안 · June 편집" — the AI origin never silently disappears, and the human edit is never presented as AI output.
+- In mixed lists (human and agent actors), every row shows its actor's avatar; shape alone (round vs squared) must be sufficient to scan authorship.
+
+## 10. Failure & recovery
+
+- A failed run or step uses the error EmptyState flavor inline: what failed, why in one sentence (cause, not stack trace), Retry action. Stack traces and raw errors live behind an expandable `.sy-code-block`.
+- Copy never blames the user, never anthropomorphizes distress ("I'm so sorry!!"), and never fakes certainty about the cause. Neutral, factual, actionable: "The Slack connector rejected the request (rate limit). Retrying usually resolves this." / "Slack 연동이 요청을 거부했습니다(요청 한도 초과). 다시 시도하면 대부분 해결됩니다."
+- After 2 automatic retries fail, stop retrying and escalate to the user with the manual-path alternative if one exists.
+- Partial success is reported as partial: "Processed 312 of 328" with a link to the 16 failures — never rounded up to success.
+
+## 11. Long-running work — ProgressBar
+
+- Known-length work: determinate ProgressBar (see `components.md`) + "N of M" caption. Unknown: indeterminate bar + current AgentStep as the label. NEVER a bare spinner for work >10s.
+- If the user navigates away, completion notifies via Toast (with View action); failure notifies via Toast danger variant. Runs in progress are always findable in the run list — background work is never orphaned.
+- Time estimates only when derived from history ("usually ~4 min" / "평균 4분 소요") — never invented.
+
+## 12. Agent-markdown rendering (v5.1)
+
+Agent output is markdown; without fixed rendering rules every message improvises its own typography. The mapping is closed:
+
+- **Headings demote:** agent `#` renders as `heading-md`, `##` as `heading-sm`, deeper levels as semibold `body`. Agent text NEVER produces `heading-xl/lg` — page hierarchy belongs to the page, not the message.
+- **Body** = `body` style; lists get `space-4` item gaps, one level of nesting rendered, deeper flattened.
+- **Code:** fences → the code block treatment (`bg.sunken`, `code` style, copy button, language chip, max-height 400px + expand); inline → `sy-code-inline`.
+- **Links** = `fg.link` with the external mark for off-app targets; bare URLs auto-link and middle-truncate.
+- **Tables** render as bare (frameless) dense tables — hairline header rule, `label` headers; wider than the message column → horizontal scroll, never reflow.
+- **Blockquote:** 2px `border.strong` left rule + `fg.secondary`; one level, deeper flattened.
+- **Images:** only user/workspace attachments render inline (max-width 100%, radius `md`, `caption` caption); remote URLs render as links, never fetched — provenance and safety.
+- **Task lists** → read-only Checkboxes; **hr** → full-bleed `border.subtle`; emphasis follows system rules (bold = 600; italics normalize to 600 per foundations §2.3.2).
+- **Streaming safety:** block elements (tables, fences) render when their block closes — partial tables never flash unstyled; text streams per §2.
+
+## 13. CommandPalette as the AI entry point
+
+The palette (⌘K / Ctrl+K, see `components.md`) is the universal entry surface: navigation, actions, and the "Ask agent" escape hatch as its final item when no result matches ("Ask agent: '{query}'" with the accent treatment). This gives every screen an AI affordance without scattering accent buttons across the chrome — preserve that scarcity.
+
+## 14. Reasoning disclosure (v5.2)
+
+When the product exposes an agent's working/reasoning text, it renders as a **disclosure row**, never as answer content:
+
+- Collapsed by default: chevron + "Reasoning" / "추론 과정" (`label`, `fg.tertiary`) + duration. Expanding reveals the text in `body-sm` `fg.secondary` on `bg.surface`, rendered with the agent-markdown rules (§12) but capped: no headings, no images.
+- Reasoning is visually subordinate to the answer — it never uses `fg.primary`, never carries SourceChips (citations belong to claims in the *answer*), and is excluded from copy/regenerate (the ResponseToolbar acts on the answer only).
+- Expand state persists per user per conversation; auto-expand is forbidden.
+- Reasoning MAY be redacted by policy; a redacted section says so plainly ("Reasoning not available for this response" / "이 응답의 추론 과정은 제공되지 않습니다") — never renders as empty.
+
+## 15. Guardrail notices (v5.2)
+
+A refusal or blocked action is a *policy outcome*, not an error — it must not wear error styling:
+
+- Render as an inline notice on `bg.sunken` with the shield icon and `fg.secondary` text (the neutral Banner treatment). NEVER `status.danger` — red teaches users that policy is breakage.
+- Copy names the category and the path forward, without lecturing: "This request can't be completed under your workspace's data policy. An admin can review the policy in Settings." / "워크스페이스 데이터 정책에 따라 처리할 수 없는 요청입니다. 정책은 관리자가 설정에서 확인할 수 있습니다."
+- Partial blocks (some sources excluded from an answer) note it in a `caption` line + the SourceChip broken state — the answer renders, the exclusion is visible.
+- NEVER disguise a policy block as a technical failure, and never the reverse.
+
+## 16. Human handoff (v5.2)
+
+When an agent escalates to a person (or a person takes over):
+
+- The transfer renders as a conversation row: transfer icon + "Handed off to {name}" / "{name}님에게 전달됨" (`caption`, `fg.tertiary`) with the assignee's round Avatar — from that row on, the actor shape flips and stays flipped. The avatar shape system (round=human, squared=agent) carries the state; no extra chrome.
+- The waiting state is a status Badge: "Needs review" / "확인 필요" (`warning` subtle) on the run/task wherever it appears in lists.
+- Handing *back* to the agent is an explicit `accent` action ("Resume agent" / "에이전트 계속하기") — agents never silently reclaim a task a human took.
+- In mixed activity feeds, handoffs are first-class events, never inferred from adjacent rows.
+
+## 17. Usage & limits (v5.2)
+
+- Quota display is the ProgressBar usage jurisdiction (`components.md`): determinate, tabular-nums values, warning fill at ≥80%, danger at 100% with the plan-limit Banner ("Workspace is out of agent credits — runs are queued." / "워크스페이스 크레딧이 소진되어 실행이 대기 중입니다.").
+- Costs shown on runs are actuals, locale-formatted (content.md §6); estimates are labeled as estimates and derived from history, never invented (§11).
+- Approaching-limit states degrade gracefully: agents keep accepting requests and queue them; the composer never locks on quota — the Banner carries the state.

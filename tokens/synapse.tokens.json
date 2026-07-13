@@ -1,0 +1,349 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$description": "Synapse design tokens — source of truth for AgentOS. Primitives are mode-independent raw values. Semantic tokens resolve per color mode via $extensions.synapse.modes and per density via $extensions.synapse.density. Agents MUST reference semantic tokens, never primitives, in generated UI. See design.md §3.",
+  "$version": "6.1.0",
+
+  "primitive": {
+    "color": {
+      "$type": "color",
+      "white": { "$value": "#FFFFFF" },
+      "black": { "$value": "#09090B" },
+      "gray": {
+        "50":  { "$value": "#FAFAFB" },
+        "100": { "$value": "#F4F4F6" },
+        "150": { "$value": "#ECECEF" },
+        "175": { "$value": "#E9E9ED", "$description": "Hairline chrome step (v4.0 sleek restyle) — border.default's light value." },
+        "200": { "$value": "#E3E3E8" },
+        "300": { "$value": "#D1D1D8" },
+        "400": { "$value": "#A9A9B2" },
+        "500": { "$value": "#83838D" },
+        "600": { "$value": "#62626B" },
+        "700": { "$value": "#4A4A52" },
+        "800": { "$value": "#33333A" },
+        "900": { "$value": "#1E1E24" },
+        "950": { "$value": "#141419" }
+      },
+      "alpha": {
+        "black-4":  { "$value": "rgba(9, 9, 11, 0.04)" },
+        "black-6":  { "$value": "rgba(9, 9, 11, 0.06)" },
+        "black-10": { "$value": "rgba(9, 9, 11, 0.10)" },
+        "black-15": { "$value": "rgba(9, 9, 11, 0.15)" },
+        "black-40": { "$value": "rgba(9, 9, 11, 0.40)" },
+        "black-60": { "$value": "rgba(9, 9, 11, 0.60)" },
+        "white-6":  { "$value": "rgba(255, 255, 255, 0.06)" },
+        "white-10": { "$value": "rgba(255, 255, 255, 0.10)" },
+        "white-16": { "$value": "rgba(255, 255, 255, 0.16)" },
+        "white-40": { "$value": "rgba(255, 255, 255, 0.40)" }
+      },
+      "blue": {
+        "50":  { "$value": "#F0F4FD" },
+        "100": { "$value": "#E4EAFB" },
+        "200": { "$value": "#C4D1F5" },
+        "300": { "$value": "#9DB3EE" },
+        "400": { "$value": "#6B89E6" },
+        "500": { "$value": "#3D63DD" },
+        "600": { "$value": "#3155C6" },
+        "700": { "$value": "#2A48A5" },
+        "800": { "$value": "#22397F" },
+        "900": { "$value": "#1B2C60" },
+        "950": { "$value": "#111A3C" }
+      },
+      "green": {
+        "50":  { "$value": "#EEF9F3" },
+        "100": { "$value": "#DCF2E6" },
+        "200": { "$value": "#A9E3C4" },
+        "300": { "$value": "#3FBF7F" },
+        "400": { "$value": "#2FAF6D" },
+        "500": { "$value": "#1F9D5B" },
+        "600": { "$value": "#0E7A42" },
+        "700": { "$value": "#135933" },
+        "800": { "$value": "#124A2C" },
+        "900": { "$value": "#123F27" },
+        "950": { "$value": "#0C2A1A" }
+      },
+      "amber": {
+        "50":  { "$value": "#FDF6E7" },
+        "100": { "$value": "#FBEED3" },
+        "200": { "$value": "#F3D492" },
+        "300": { "$value": "#D99A27" },
+        "400": { "$value": "#CC8B1E" },
+        "500": { "$value": "#BA7C14" },
+        "600": { "$value": "#8C5A00" },
+        "700": { "$value": "#6B4708" },
+        "800": { "$value": "#5A3C08" },
+        "900": { "$value": "#4A3208" },
+        "950": { "$value": "#332305" }
+      },
+      "red": {
+        "50":  { "$value": "#FDF1F0" },
+        "100": { "$value": "#FBE3E2" },
+        "200": { "$value": "#F7BEBB" },
+        "300": { "$value": "#EE837D" },
+        "400": { "$value": "#DB504D" },
+        "500": { "$value": "#D2403E" },
+        "600": { "$value": "#B23230" },
+        "700": { "$value": "#8F2826" },
+        "800": { "$value": "#73201E" },
+        "900": { "$value": "#571716" },
+        "950": { "$value": "#3D100F" }
+      },
+      "viz": {
+        "$description": "Categorical palette for data visualization only. Order is fixed: assign in sequence, never skip. Muted saturation by design — must not compete with status colors.",
+        "1": { "$value": "#5B7CE0" },
+        "2": { "$value": "#4FAE8B" },
+        "3": { "$value": "#C9932E" },
+        "4": { "$value": "#C15D5D" },
+        "5": { "$value": "#8A6FC9" },
+        "6": { "$value": "#4FA3C4" },
+        "7": { "$value": "#B36FA3" },
+        "8": { "$value": "#7A828E" }
+      }
+    },
+    "font": {
+      "family": {
+        "sans": { "$type": "fontFamily", "$value": ["Pretendard Variable", "Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "sans-serif"] },
+        "display": {
+          "$type": "fontFamily",
+          "$value": ["Artific", "Pretendard Variable", "Pretendard", "sans-serif"],
+          "$description": "Stylized brand family (Power Type Foundry, self-hosted in assets/fonts/, commercial license required). Latin only — Hangul intentionally falls back to Pretendard. Permitted ONLY for Display roles (30/40, 36/48) in sanctioned brand moments; max one per screen. See foundations.md §2.1."
+        },
+        "mono": {
+          "$type": "fontFamily",
+          "$value": ["JetBrains Mono", "SF Mono", "D2Coding", "Consolas", "monospace"],
+          "$description": "Code blocks, inline code, IDs/hashes/keys, log output, keyboard hints. Numeric table columns use sans + tabular-nums, not mono, unless the column holds identifiers. See foundations.md §2.1."
+        }
+      },
+      "weight": {
+        "$type": "fontWeight",
+        "regular":  { "$value": 400 },
+        "medium":   { "$value": 500 },
+        "semibold": { "$value": 600 },
+        "bold":     { "$value": 700 }
+      },
+      "size": {
+        "$type": "dimension",
+        "$description": "Line heights are deliberately generous to accommodate Hangul glyph height. Never tighten below the paired value. See foundations.md §2.",
+        "11": { "$value": "11px" },
+        "12": { "$value": "12px" },
+        "13": { "$value": "13px" },
+        "14": { "$value": "14px" },
+        "16": { "$value": "16px" },
+        "18": { "$value": "18px" },
+        "20": { "$value": "20px" },
+        "24": { "$value": "24px" },
+        "30": { "$value": "30px" },
+        "36": { "$value": "36px" },
+        "44": { "$value": "44px" }
+      },
+      "lineHeight": {
+        "$type": "dimension",
+        "11": { "$value": "16px" },
+        "12": { "$value": "18px" },
+        "13": { "$value": "20px" },
+        "14": { "$value": "22px" },
+        "16": { "$value": "24px" },
+        "18": { "$value": "27px" },
+        "20": { "$value": "30px" },
+        "24": { "$value": "34px" },
+        "30": { "$value": "40px" },
+        "36": { "$value": "48px" },
+        "44": { "$value": "56px" }
+      }
+    },
+    "space": {
+      "$type": "dimension",
+      "$description": "4px base grid. Values outside this scale are forbidden in generated UI.",
+      "0":  { "$value": "0px" },
+      "2":  { "$value": "2px" },
+      "4":  { "$value": "4px" },
+      "6":  { "$value": "6px" },
+      "8":  { "$value": "8px" },
+      "12": { "$value": "12px" },
+      "16": { "$value": "16px" },
+      "20": { "$value": "20px" },
+      "24": { "$value": "24px" },
+      "28": { "$value": "28px" },
+      "32": { "$value": "32px" },
+      "40": { "$value": "40px" },
+      "48": { "$value": "48px" },
+      "64": { "$value": "64px" },
+      "80": { "$value": "80px" },
+      "96": { "$value": "96px" }
+    },
+    "radius": {
+      "$type": "dimension",
+      "xs":   { "$value": "4px" },
+      "sm":   { "$value": "8px" },
+      "md":   { "$value": "10px" },
+      "lg":   { "$value": "16px" },
+      "full": { "$value": "9999px" }
+    },
+    "shadow": {
+      "$type": "shadow",
+      "$description": "Synapse is borders-first; shadows only for floating layers. See foundations.md §5.",
+      "raised":  { "$value": "0 1px 2px rgba(9, 9, 11, 0.05)" },
+      "overlay": { "$value": "0 8px 24px rgba(9, 9, 11, 0.08)" },
+      "modal":   { "$value": "0 24px 48px rgba(9, 9, 11, 0.12)" }
+    },
+    "z": {
+      "$type": "number",
+      "$description": "Stacking scale (v5.1). Every floating/pinned element takes exactly one of these; arbitrary z-index values are forbidden. Order is law: sticky < dropdown < drawer < modal < toast < tooltip.",
+      "sticky":   { "$value": 100 },
+      "dropdown": { "$value": 200 },
+      "drawer":   { "$value": 300 },
+      "modal":    { "$value": 400 },
+      "toast":    { "$value": 500 },
+      "tooltip":  { "$value": 600 }
+    },
+    "motion": {
+      "duration": {
+        "$type": "duration",
+        "instant": { "$value": "100ms" },
+        "fast":    { "$value": "150ms" },
+        "base":    { "$value": "200ms" },
+        "slow":    { "$value": "300ms" }
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "standard":   { "$value": [0.2, 0, 0, 1] },
+        "enter":      { "$value": [0, 0, 0.2, 1] },
+        "exit":       { "$value": [0.4, 0, 1, 1] }
+      }
+    }
+  },
+
+  "semantic": {
+    "$description": "Mode-aware tokens. 'light' / 'dark' under $extensions.synapse.modes. These are the ONLY color tokens agents may reference.",
+    "type": {
+      "$description": "Typography styles — the ONLY way agents set typography. Each style = family + size/lineHeight + weight. Rendered as .sy-type-* classes in synapse.css. body/label/heading-sm bind to density variables. Styles marked 'display' use the display family (Latin) with Pretendard Hangul fallback.",
+      "display-xl":  { "$value": { "family": "display", "size": "{primitive.font.size.44}", "lineHeight": "{primitive.font.lineHeight.44}", "weight": 700 }, "$description": "Marketing-adjacent heroes only." },
+      "display":     { "$value": { "family": "display", "size": "{primitive.font.size.36}", "lineHeight": "{primitive.font.lineHeight.36}", "weight": 600 }, "$description": "Guided-archetype heroes, empty-state heroes." },
+      "display-sm":  { "$value": { "family": "display", "size": "{primitive.font.size.30}", "lineHeight": "{primitive.font.lineHeight.30}", "weight": 600 }, "$description": "Compact brand moments." },
+      "heading-xl":  { "$value": { "family": "sans", "size": "{primitive.font.size.24}", "lineHeight": "{primitive.font.lineHeight.24}", "weight": 700, "letterSpacing": "-0.01em (Latin only)" }, "$description": "Page title. One per page. Bold + tight Latin tracking (v4.0)." },
+      "heading-lg":  { "$value": { "family": "sans", "size": "{primitive.font.size.18}", "lineHeight": "{primitive.font.lineHeight.18}", "weight": 600 }, "$description": "Section / card / modal titles." },
+      "heading-md":  { "$value": { "family": "sans", "size": "{primitive.font.size.16}", "lineHeight": "{primitive.font.lineHeight.16}", "weight": 600 }, "$description": "Subsections, drawer titles, empty-state titles." },
+      "heading-sm":  { "$value": { "family": "sans", "size": "density:body", "lineHeight": "density:body", "weight": 600 }, "$description": "Group titles inside cards, dense panel headers. Density-bound." },
+      "body-lg":     { "$value": { "family": "sans", "size": "{primitive.font.size.16}", "lineHeight": "{primitive.font.lineHeight.16}", "weight": 400 }, "$description": "Long-form reading: agent reports, docs, onboarding prose." },
+      "body":        { "$value": { "family": "sans", "size": "density:body", "lineHeight": "density:body", "weight": 400 }, "$description": "Default text. Density-bound (14/22 focus · 13/20 dense)." },
+      "body-sm":     { "$value": { "family": "sans", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 400 }, "$description": "Secondary prose fixed at 13 regardless of density (menu items, toast, meta sentences)." },
+      "label":       { "$value": { "family": "sans", "size": "density:label", "lineHeight": "density:label", "weight": 500 }, "$description": "Form labels, table headers, buttons. Density-bound (13/20 · 12/18)." },
+      "label-sm":    { "$value": { "family": "sans", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 500 }, "$description": "Compact labels, nav group headers pair with micro." },
+      "caption":     { "$value": { "family": "sans", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 400 }, "$description": "Helper text, footnotes, attribution rows." },
+      "micro":       { "$value": { "family": "sans", "size": "{primitive.font.size.11}", "lineHeight": "{primitive.font.lineHeight.11}", "weight": 600 }, "$description": "Badges, kbd hints, group labels. Never sentences. Weight 600 by rule: the floor size carries the reinforced weight — 500 fuzzes at 11px, especially Hangul; 700 clogs counters." },
+      "code":        { "$value": { "family": "mono", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 400 }, "$description": "Code blocks, log output." },
+      "code-sm":     { "$value": { "family": "mono", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 400 }, "$description": "Inline code, IDs in table cells." },
+      "stat-lg":     { "$value": { "family": "sans", "size": "{primitive.font.size.30}", "lineHeight": "{primitive.font.lineHeight.30}", "weight": 600, "numeric": "tabular-nums" }, "$description": "Hero KPI values." },
+      "stat":        { "$value": { "family": "sans", "size": "{primitive.font.size.24}", "lineHeight": "{primitive.font.lineHeight.24}", "weight": 600, "numeric": "tabular-nums" }, "$description": "Standard stat-card values." },
+      "stat-sm":     { "$value": { "family": "sans", "size": "{primitive.font.size.20}", "lineHeight": "{primitive.font.lineHeight.20}", "weight": 600, "numeric": "tabular-nums" }, "$description": "Dense dashboards, inline metrics." }
+    },
+    "color": {
+      "$type": "color",
+      "bg": {
+        "page":      { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.black}" } } } },
+        "surface":   { "$value": "{primitive.color.gray.50}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.50}", "dark": "{primitive.color.gray.950}" } } } },
+        "raised":    { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.gray.900}" } } } },
+        "raised-2":  { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.gray.800}" } } }, "$description": "Layer above raised (popover on modal, nested panel). In light mode differentiation comes from border + shadow; in dark mode from this background step. See foundations §1.3 layering model." },
+        "sunken":    { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.950}" } } } },
+        "hover":     { "$value": "{primitive.color.alpha.black-4}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.alpha.black-4}", "dark": "{primitive.color.alpha.white-6}" } } } },
+        "active":    { "$value": "{primitive.color.alpha.black-6}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.alpha.black-6}", "dark": "{primitive.color.alpha.white-10}" } } } },
+        "selected":  { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.800}" } } }, "$description": "Lightened v3.8.3 so badge tints keep differentiation on highlighted rows. Sits close to bg.hover — selected states lean on their secondary cues (checkbox, fg.primary + weight in nav, check in menus)." },
+        "selected-hover": { "$value": "{primitive.color.gray.150}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.150}", "dark": "{primitive.color.gray.700}" } } }, "$description": "Hover on an already-selected row/item." },
+        "disabled":  { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.900}" } } }, "$description": "Fill of disabled controls. Pairs with fg.disabled and border.disabled semantics — never opacity." },
+        "scrim":     { "$value": "{primitive.color.alpha.black-40}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.alpha.black-40}", "dark": "{primitive.color.alpha.black-60}" } } } },
+        "inverse":   { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.white}" } } } }
+      },
+      "fg": {
+        "primary":   { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.gray.100}" } } } },
+        "secondary": { "$value": "{primitive.color.gray.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.600}", "dark": "{primitive.color.gray.400}" } } } },
+        "tertiary":  { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.500}" } } } },
+        "placeholder": { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.500}" } } }, "$description": "Placeholder/example text in inputs and the mixed-value marker. Placeholders never carry required information." },
+        "disabled":  { "$value": "{primitive.color.gray.400}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.400}", "dark": "{primitive.color.gray.600}" } } } },
+        "on-solid":  { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } }, "$description": "Text/icons on any status *-bg-solid fill. Constant white in both modes." },
+        "inverse":   { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.black}" } } } },
+        "link":      { "$value": "{primitive.color.blue.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.600}", "dark": "{primitive.color.blue.300}" } } } },
+        "link-inverse": { "$value": "{primitive.color.blue.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.300}", "dark": "{primitive.color.blue.600}" } } } }
+      },
+      "border": {
+        "subtle":  { "$value": "{primitive.color.gray.150}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.150}", "dark": "{primitive.color.gray.800}" } } } },
+        "default": { "$value": "{primitive.color.gray.175}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.175}", "dark": "{primitive.color.gray.700}" } } } },
+        "overlay": { "$value": "transparent", "$extensions": { "synapse": { "modes": { "light": "transparent", "dark": "{primitive.color.gray.700}" } } }, "$description": "Border for floating layers (menus, toasts, tooltips, popovers): none in light mode — soft shadow carries the edge — visible in dark mode where shadows die." },
+        "strong":  { "$value": "{primitive.color.gray.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.300}", "dark": "{primitive.color.gray.600}" } } } },
+        "focus":   { "$value": "{primitive.color.blue.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.500}", "dark": "{primitive.color.blue.300}" } } } },
+        "selected": { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.gray.100}" } } }, "$description": "Key-color outline for selected cards/tiles (selection ≠ focus: focus is blue, selection is the key color)." },
+        "error": { "$value": "{primitive.color.red.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.500}", "dark": "{primitive.color.red.300}" } } }, "$description": "Invalid-field borders. Brighter than status.danger text for 3:1 non-text contrast on inputs." }
+      },
+      "action": {
+        "$description": "Key-color actions. Primary action is black-on-light / white-on-dark by brand definition.",
+        "primary-bg":        { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.white}" } } } },
+        "primary-bg-hover":  { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } } },
+        "primary-bg-active": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Aliases hover by maintainer decision (v3.7.3) — pressed and hover share one fill. Kept as a separate token so they can diverge later without an API change." },
+        "primary-fg":        { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.black}" } } } },
+        "secondary-bg":       { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.800}" } } }, "$description": "Tonal secondary button fill (v5.0 — replaced the outlined secondary). Ghost stays transparent." },
+        "secondary-bg-hover": { "$value": "{primitive.color.gray.150}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.150}", "dark": "{primitive.color.gray.700}" } } } },
+        "accent-bg":         { "$value": "{primitive.color.blue.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.500}", "dark": "{primitive.color.blue.500}" } } } },
+        "accent-bg-hover":   { "$value": "{primitive.color.blue.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.600}", "dark": "{primitive.color.blue.600}" } } } },
+        "accent-bg-active":  { "$value": "{primitive.color.blue.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.600}", "dark": "{primitive.color.blue.600}" } } }, "$description": "Aliases hover (v3.7.3)." },
+        "accent-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } },
+        "danger-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } }
+      },
+      "status": {
+        "info":            { "$value": "{primitive.color.blue.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.600}", "dark": "{primitive.color.blue.300}" } } } },
+        "info-bg":         { "$value": "{primitive.color.blue.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.100}", "dark": "{primitive.color.blue.900}" } } } },
+        "success":         { "$value": "{primitive.color.green.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.green.600}", "dark": "{primitive.color.green.300}" } } } },
+        "success-bg":      { "$value": "{primitive.color.green.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.green.100}", "dark": "{primitive.color.green.900}" } } } },
+        "warning":         { "$value": "{primitive.color.amber.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.amber.600}", "dark": "{primitive.color.amber.300}" } } } },
+        "warning-bg":      { "$value": "{primitive.color.amber.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.amber.100}", "dark": "{primitive.color.amber.900}" } } } },
+        "danger":          { "$value": "{primitive.color.red.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.600}", "dark": "{primitive.color.red.300}" } } } },
+        "danger-bg":       { "$value": "{primitive.color.red.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.100}", "dark": "{primitive.color.red.900}" } } } },
+        "danger-bg-solid": { "$value": "{primitive.color.red.400}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.400}", "dark": "{primitive.color.red.400}" } } }, "$description": "Light-leaning resting fill (v3.7.1), ~3.4:1 with white under §8 policy — labels on it are semibold. Hover darkens to red.500 (AA)." },
+        "danger-bg-solid-hover": { "$value": "{primitive.color.red.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.500}", "dark": "{primitive.color.red.500}" } } }, "$description": "Hover/pressed fill — darkens from the resting red.400 and passes AA with white." },
+        "info-bg-solid":    { "$value": "{primitive.color.blue.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.500}", "dark": "{primitive.color.blue.500}" } } } },
+        "success-bg-solid": { "$value": "{primitive.color.green.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.green.500}", "dark": "{primitive.color.green.500}" } } }, "$description": "Mid fill + fg.on-solid white at ~3.5:1 — documented policy deviation from AA for short solid labels (foundations §8)." },
+        "warning-bg-solid": { "$value": "{primitive.color.amber.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.amber.500}", "dark": "{primitive.color.amber.500}" } } }, "$description": "Mid fill + fg.on-solid white at ~3.5:1 — documented policy deviation from AA for short solid labels (foundations §8)." },
+        "info-inverse":    { "$value": "{primitive.color.blue.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.300}", "dark": "{primitive.color.blue.600}" } } } },
+        "success-inverse": { "$value": "{primitive.color.green.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.green.300}", "dark": "{primitive.color.green.600}" } } } },
+        "warning-inverse": { "$value": "{primitive.color.amber.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.amber.300}", "dark": "{primitive.color.amber.600}" } } } },
+        "danger-inverse":  { "$value": "{primitive.color.red.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.300}", "dark": "{primitive.color.red.600}" } } } }
+      },
+      "meter": {
+        "$description": "Progress/meter fills. Non-text elements — 3:1 floor against the sunken track.",
+        "fill": { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.400}" } } }, "$description": "Default (user-initiated work). AI runs use action.accent-bg; failed uses status.danger-bg-solid." }
+      },
+      "ai": {
+        "$description": "Surfaces and marks that identify agent/AI presence. Distinct from status.info even where values currently match info's family — do not substitute one for the other. See ai-patterns.md §1.",
+        "surface":       { "$value": "{primitive.color.blue.50}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.50}", "dark": "{primitive.color.blue.950}" } } } },
+        "border":        { "$value": "{primitive.color.blue.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.300}", "dark": "{primitive.color.blue.700}" } } } },
+        "fg":            { "$value": "{primitive.color.blue.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.600}", "dark": "{primitive.color.blue.300}" } } } }
+      }
+    }
+  },
+
+  "density": {
+    "$description": "Density-aware tokens. Every screen region declares exactly one density mode: 'focus' (curated, spacious) or 'dense' (data-heavy). Values resolve via $extensions.synapse.density. Mixing modes within one region is forbidden — see design.md §4.",
+    "control": {
+      "$type": "dimension",
+      "height-sm": { "$value": "32px", "$extensions": { "synapse": { "density": { "focus": "32px", "dense": "24px" } } } },
+      "height-md": { "$value": "36px", "$extensions": { "synapse": { "density": { "focus": "36px", "dense": "28px" } } } },
+      "height-lg": { "$value": "40px", "$extensions": { "synapse": { "density": { "focus": "40px", "dense": "32px" } } } },
+      "padding-x": { "$value": "12px", "$extensions": { "synapse": { "density": { "focus": "12px", "dense": "8px" } } } },
+      "gap":       { "$value": "8px",  "$extensions": { "synapse": { "density": { "focus": "8px",  "dense": "6px" } } } }
+    },
+    "text": {
+      "$type": "dimension",
+      "body":      { "$value": "14px", "$extensions": { "synapse": { "density": { "focus": "14px", "dense": "13px" } } } },
+      "body-lh":   { "$value": "22px", "$extensions": { "synapse": { "density": { "focus": "22px", "dense": "20px" } } } },
+      "label":     { "$value": "13px", "$extensions": { "synapse": { "density": { "focus": "13px", "dense": "12px" } } } },
+      "label-lh":  { "$value": "20px", "$extensions": { "synapse": { "density": { "focus": "20px", "dense": "18px" } } } }
+    },
+    "layout": {
+      "$type": "dimension",
+      "page-padding":   { "$value": "32px", "$extensions": { "synapse": { "density": { "focus": "32px", "dense": "24px" } } } },
+      "section-gap":    { "$value": "40px", "$extensions": { "synapse": { "density": { "focus": "40px", "dense": "20px" } } } },
+      "card-padding":   { "$value": "28px", "$extensions": { "synapse": { "density": { "focus": "28px", "dense": "16px" } } } },
+      "stack-gap":      { "$value": "16px", "$extensions": { "synapse": { "density": { "focus": "16px", "dense": "8px" } } } },
+      "table-row":      { "$value": "52px", "$extensions": { "synapse": { "density": { "focus": "52px", "dense": "36px" } } } },
+      "table-cell-x":   { "$value": "16px", "$extensions": { "synapse": { "density": { "focus": "16px", "dense": "12px" } } } },
+      "content-max":    { "$value": "760px", "$extensions": { "synapse": { "density": { "focus": "760px", "dense": "none" } } } }
+    }
+  }
+}

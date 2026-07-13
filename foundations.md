@@ -1,0 +1,231 @@
+# Synapse foundations
+
+Rationale and usage rules for the token layer. Token values live in `tokens/synapse.tokens.json` (canonical) and `tokens/synapse.css` (generated). This document explains *when* and *why* — an agent that only reads the JSON will produce technically valid but poorly judged UI; this file supplies the judgment.
+
+Rule keywords: **MUST** / **NEVER** are machine-enforceable constraints. **SHOULD** indicates strong default, deviation requires stated reason. **MAY** is discretionary.
+
+---
+
+## 1. Color
+
+### 1.1 Character
+
+Synapse is a neutral, black-key system. The interface is built almost entirely from the gray ramp; color is a scarce resource spent only on meaning. The intended impression is engineered restraint — closer to a precision instrument than a consumer app.
+
+- The primary action color is **black** (white in dark mode). Not blue.
+- Blue (`action.accent-*`, `border.focus`, `fg.link`) is *functional*, not brand: links, focus rings, selection, informational status. It exists because pure monochrome cannot signal interactivity and focus accessibly.
+- Status colors sit inside the neutral field without shouting, but they are chromatic, not muddy (recalibrated v3.4–3.5): text tokens carry as much chroma as AA contrast on their tints allows, and all solid fills are mid-tone with white `fg.on-solid` text — success/warning solids run ~3.5:1 under the documented solid-label policy (§8).
+
+### 1.2 Rules
+
+- Agents MUST use semantic tokens (`--sy-bg-*`, `--sy-fg-*`, `--sy-border-*`, `--sy-action-*`, `--sy-status-*`). Raw hex values and primitive ramp references are NEVER allowed in generated UI.
+- One screen region SHOULD contain at most one solid-fill accent element (e.g. one primary button). Everything else uses outline, ghost, or text styles.
+- Status colors are for status only. NEVER use `--sy-status-danger` for decoration or `--sy-status-success` as a generic "green accent."
+- Solid red fills (`danger-bg-solid`) are reserved for destructive confirmation buttons.
+- Data visualization MUST use `--sy-viz-1` … `--sy-viz-8`, assigned in order without skipping. If a chart encodes status (pass/fail, healthy/degraded), use status tokens instead of viz tokens.
+- Text on colored status backgrounds MUST use the paired status foreground token, never `fg.primary`.
+- All text/background pairings MUST meet WCAG 2.1 AA (4.5:1 body, 3:1 large text ≥18px semibold or ≥24px). The semantic pairs in the token file are pre-verified; novel combinations are forbidden, which makes verification unnecessary.
+
+### 1.3 The layering model
+
+Every surface sits on exactly one of five levels. Backgrounds express depth in dark mode; borders and shadows express it in light mode — the level tokens handle both automatically.
+
+| Level | Token | Light | Dark | Used for |
+|---|---|---|---|---|
+| L0 | `bg.page` | white | black | The page itself. |
+| L1 | `bg.surface` | gray-50 | gray-950 | Grouping regions: sidebar, table headers, toolbars, flat cards. |
+| L2 | `bg.raised` | white + border | gray-900 | Cards, modals, drawers, menus — anything with its own boundary. |
+| L3 | `bg.raised-2` | white + border + shadow | gray-800 | A layer on a layer: popover opened from a modal, nested panel, dragged item. |
+| well | `bg.sunken` | gray-100 | gray-950 | Recessed content: code blocks, input wells, skeleton fills, dropzones. |
+
+- Floating layers additionally take the shadow tier matching their behavior (`raised`/`overlay`/`modal`) — shadows communicate *floating*, levels communicate *stacking*.
+- Do not invent intermediate grays, and do not skip levels (a popover from a modal is L3, not L2 again — in dark mode two L2 surfaces would visually merge).
+- Interaction tints (`bg.hover`, `bg.active`, `bg.selected`, `bg.selected-hover`) apply *within* a level; they are not levels.
+
+### 1.4 Token selection map — which token for which case
+
+The full semantic vocabulary by use case. If a case isn't here and no token obviously fits, that's a proposal — not a raw value.
+
+| Case | Token(s) |
+|---|---|
+| Page / grouping region / card / layer-on-layer / recessed well | `bg.page` / `bg.surface` / `bg.raised` / `bg.raised-2` / `bg.sunken` |
+| Row or item hover · pressed · selected · hover on selected | `bg.hover` · `bg.active` · `bg.selected` · `bg.selected-hover` |
+| Disabled control fill · disabled text · disabled border | `bg.disabled` · `fg.disabled` · `border.subtle` |
+| Default text · supporting text · timestamps/hints · placeholder & mixed-value marker | `fg.primary` · `fg.secondary` · `fg.tertiary` · `fg.placeholder` |
+| Links · links on `bg.inverse` strips | `fg.link` · `fg.link-inverse` |
+| Component boundaries · inner dividers · bordered-element hover | `border.default` · `border.subtle` · `border.strong` |
+| Focus ring · selected-card outline · invalid-field border | `border.focus` · `border.selected` · `border.error` |
+| Primary button rest/hover/pressed + text | `action.primary-bg` / `-hover` / `-active` + `action.primary-fg` |
+| AI action button rest/hover/pressed + text | `action.accent-bg` / `-hover` / `-active` + `action.accent-fg` |
+| Destructive confirm fill + text | `status.danger-bg-solid` + `action.danger-fg` |
+| Status text/icon · status tint · status solid fill · text on solid | `status.*` · `status.*-bg` · `status.*-bg-solid` · `fg.on-solid` |
+| Status/link colors on `bg.inverse` surfaces | `status.*-inverse` · `fg.link-inverse` |
+| Agent surfaces · agent borders · agent text/marks | `ai.surface` · `ai.border` · `ai.fg` |
+| Categorical chart series (fixed order) | `viz-1` … `viz-8` |
+| Modal backdrop · inverse emphasis block | `bg.scrim` · `bg.inverse` + `fg.inverse` |
+| Identity tints (avatars, category Badges/Chips) | deterministic `viz-n` at 20% + matching `viz-n` text |
+
+---
+
+## 2. Typography
+
+### 2.1 Type families
+
+Three families, each with a closed jurisdiction. Using a family outside its jurisdiction is a contract violation, same severity as a raw hex value.
+
+| Family | Token | Jurisdiction |
+|---|---|---|
+| **Pretendard Variable** | `font.family.sans` | All UI text, KO and EN alike. The default; everything not explicitly granted to the other two families. |
+| **Artific** (Power Type Foundry) | `font.family.display` | Stylized brand moments only — see below. |
+| **JetBrains Mono** (D2Coding Hangul fallback) | `font.family.mono` | Code and data identifiers — see below. |
+
+One sans for both scripts eliminates cross-language baseline drift, weight mismatch, and fallback flashing.
+
+**Display family (Artific) rules.** Artific exists to create visual impact at brand moments; scarcity is what makes it read as branding.
+
+- Permitted ONLY at Display sizes (30/40, 36/48) and ONLY in: Guided-archetype heroes (onboarding, login, first-run), empty-state hero titles, and marketing-adjacent surfaces. NEVER in body text, controls, tables, navigation, or any dense region.
+- Max one display-family element per screen.
+- Weights 600/700 only, via `.sy-display`. The family's Thin–Medium weights and all oblique styles are excluded from the system.
+- **Artific has no Hangul glyphs.** The token stack falls back to Pretendard for Korean — this is intended behavior, not a bug: KO display text renders Pretendard semibold/bold at the same size. Do not attempt mixed-family styling within one string, and never substitute a different stylized Korean face without a system proposal.
+- Latin display text may use -1% letter-spacing (built into `.sy-display`); Hangul never gets letter-spacing.
+- Licensing: commercial family, self-hosted woff2 in `assets/fonts/` (600/700 only). Not on public CDNs. Verify Enhans' license covers app embedding before shipping.
+
+**Mono family rules.** Mono signals "machine-significant text — copy it exactly."
+
+- Use for: code blocks and inline code (`.sy-code-block`, `.sy-code-inline`), IDs/hashes/API keys, log and terminal output, file paths, keyboard hints (`.sy-kbd`).
+- Do NOT use for: numeric table columns (use sans + `tabular-nums` — mono is for identifiers, not quantities), dates, currency, or any prose.
+- Mono text is exempt from the no-truncation rules only for hashes/IDs, which MUST truncate middle-out (`a3f8…c92e`) with copy-on-click.
+
+### 2.2 Typography styles — the closed typographic vocabulary
+
+Typography is set through named **styles**, never through ad-hoc size/weight combinations. Each style is a complete recipe (family + size/line-height + weight) rendered as a `.sy-type-*` class and defined in `semantic.type` in the token file. If a text element doesn't fit a style, that's a proposal, not an excuse for a custom combination.
+
+| Style | Spec | Jurisdiction |
+|---|---|---|
+| `display-xl` | display 44/56 bold | Marketing-adjacent heroes (sign-in, launch moments). At most one per flow. |
+| `display` | display 36/48 semibold | Guided-archetype heroes, empty-state heroes. |
+| `display-sm` | display 30/40 semibold | Compact brand moments; Guided step titles. |
+| `heading-xl` | sans 24/34 bold, −1% Latin tracking | Page title. One per page. |
+| `heading-lg` | sans 18/27 semibold, −1% Latin tracking | Section, card, modal, drawer titles. |
+| `heading-md` | sans 16/24 semibold | Subsections, empty-state titles, settings group titles. |
+| `heading-sm` | sans body-size semibold (density-bound) | Group titles inside cards, dense panel headers. |
+| `body-lg` | sans 16/24 regular | Long-form reading: agent reports, docs, onboarding prose. Max width 680px. |
+| `body` | sans density-bound regular (14/22 · 13/20) | Default text everywhere. |
+| `body-sm` | sans 13/20 regular (fixed) | Menu items, toast text, meta sentences that must not scale with density. |
+| `label` | sans density-bound medium (13/20 · 12/18) | Form labels, table headers, buttons. |
+| `label-sm` | sans 12/18 medium | Compact labels, secondary table headers. |
+| `caption` | sans 12/18 regular | Helper text, footnotes, attribution rows. |
+| `micro` | sans 11/16 semibold | Badges, kbd hints, nav group labels. NEVER sentences. The floor size carries the reinforced weight: 500 fuzzes at 11px (especially Hangul), 700 clogs counters. |
+| `code` / `code-sm` | mono 13/20 · 12/18 | Code blocks, logs / inline code, IDs in cells. |
+| `stat-lg` / `stat` / `stat-sm` | sans 30/40 · 24/34 · 20/30 semibold, tabular-nums | KPI values: hero / standard stat card / dense dashboards. |
+
+Rules:
+
+- Density-bound styles (`heading-sm`, `body`, `label`) MUST use the density variables — this is what makes regions re-typeset when density changes.
+- Hierarchy within one surface needs at least a 2-step style gap or a color change (`fg.primary` vs `fg.secondary`) — adjacent styles alone (16 vs 14) read as an accident.
+- NEVER use weights other than 400/500/600/700; NEVER 600+ for body-length text; NEVER a raw `font-size` where a style exists.
+- Stat styles always carry `tabular-nums`; they are for numerals and units, not sentences.
+
+### 2.3 Bilingual (KO/EN) rules — non-negotiable
+
+These exist because Korean and English versions of the same string differ systematically: Korean is often 10–20% wider for UI labels, has taller glyphs, no italics, and different truncation behavior.
+
+1. **No fixed-width text containers.** Buttons, tabs, badges, menu items MUST size from content plus padding. Minimum widths are allowed; fixed widths are NEVER allowed on anything containing translatable text.
+2. **No italics, ever.** Hangul has no italic form; synthetic oblique is illegible. Emphasis = weight 600 or `fg.primary` against secondary text. The CSS layer force-normalizes `<em>/<i>`.
+3. **Line heights are floors.** The paired line-height in the scale accommodates Hangul ascent/descent. NEVER tighten. Custom `line-height < 1.4` on body text is forbidden.
+4. **Korean line breaking:** `word-break: keep-all; overflow-wrap: break-word;` on all Korean text (applied via `:lang(ko)` in the CSS layer). Mark language on the document or region root with `lang="ko"` / `lang="en"`.
+5. **Layouts must survive +25% text width.** When designing any label-bearing component, verify the layout at 125% string length. If it breaks, the design is wrong, not the translation.
+6. **Truncation:** single-line ellipsis truncation is allowed only in table cells and list rows, and every truncated string MUST be recoverable (tooltip or detail view). NEVER truncate buttons, form labels, error messages, or headings.
+7. **No ALL-CAPS styling.** `text-transform: uppercase` does nothing to Hangul, so mixed-language UI renders inconsistently. Hierarchy comes from size/weight/color instead.
+8. **Avoid text in images/icons.** All rendered text must be live text so it can localize.
+9. **Line balancing (v5.0.2).** Display styles, `heading-xl/lg`, and hero/empty-state explanation paragraphs take `text-wrap: balance` — short multi-line text breaks into even lines instead of one long line with an orphaned fragment. This matters doubly in Korean, where `keep-all` preserves words but produces extreme rag on centered short text. Long-form body text is exempt (balancing is for ≤ ~4 lines); use the `.sy-balance` utility on hero paragraphs.
+
+---
+
+## 3. Spacing
+
+4px base grid; the scale is enumerated in `--sy-space-*`. Off-scale values (e.g. 10px, 18px, 25px) are NEVER allowed. One sanctioned exception: ±1px as a hairline offset paired with a 1px border (e.g. a tab's active underline overlapping its container rule).
+
+- Related items: 4–8. Grouped controls: 8–12. Between groups: 16–24. Between sections: `--sy-section-gap`. Page padding: `--sy-page-padding`.
+- **Dividers span their container edge to edge.** Inside padded surfaces (menus, cards, lists), a divider extends into the padding (negative margin equal to the container padding) — a divider that stops short of the edges reads as an accident. If a divider *shouldn't* reach the edge, use spacing instead of a divider: every gap is either clearly intentional or absent.
+- Layout-level spacing (page padding, section gaps, card padding, stack gaps) MUST use the density variables, not raw scale values, so regions re-space when density changes.
+- Vertical rhythm rule of thumb: the gap *above* a heading should be ~2× the gap below it.
+
+---
+
+## 4. Density architecture
+
+This is Synapse's mechanism for serving both curated, whitespace-led pages and data-heavy screens with one component set. It is a **regional mode**, not a component prop.
+
+- Two modes: **`focus`** (default; spacious, content max-width 760px, controls 36px) and **`dense`** (compact; fluid width, controls 28px, 36px table rows).
+- A mode is declared once per screen region via `data-density` on the region root. Components inside automatically resize through the density variables.
+- **NEVER mix densities within one region.** A page MAY contain both (e.g. focus header above a dense table workspace) only when regions are separated by an explicit structural boundary (divider, background change, panel edge).
+- Overlays (modals, drawers, popovers) inherit the density of the region that opened them, except full-screen data drawers which MAY be dense.
+- Which mode to use is decided by page archetype, not taste — see `patterns.md` §1. If unsure: settings/onboarding/detail = focus; tables/monitoring/multi-panel = dense.
+
+---
+
+## 5. Elevation & borders
+
+Synapse is **borders-first**: in-flow hierarchy is drawn with 1px borders and background steps, not shadows.
+
+- `border.subtle` — dividers inside components (table rows, list separators).
+- `border.default` — component boundaries (cards, inputs, table frames). Hairline-quiet since v4.0.
+- `border.strong` — hover state on interactive bordered elements.
+- `border.overlay` — floating layers (menus, popovers, toasts, tooltips): **transparent in light mode** — the soft shadow carries the edge — visible in dark mode, where shadows die against black.
+- Shadows are reserved for elements that float above the page: `raised` (sticky bars), `overlay` (dropdowns, popovers, tooltips — soft, large-blur since v4.0), `modal` (dialogs, drawers). NEVER put shadows on static cards, buttons, or inputs (Card `elevated` excepted).
+- Sanctioned exception: an `inset 0 0 0 1px` ring using a `border.*` token is a border substitute (used where a true border would shift layout, e.g. calendar day cells) — it is not elevation and carries no blur.
+- **Stacking (v5.1):** floating/pinned elements take exactly one `--sy-z-*` token — `sticky` (100, table headers, toolbars, solid Banner strip) < `dropdown` (200, menus/popovers/palette) < `drawer` (300) < `modal` (400) < `toast` (500) < `tooltip` (600). Arbitrary z-index values are forbidden; if two things fight, the fix is the scale, not a 9999.
+
+Radius: inputs/buttons/chips `sm` (8px) · cards/panels/menus `md` (10px) · modals/drawers `lg` (16px) · pills/avatars `full`. NEVER exceed 16px on rectangular containers.
+
+---
+
+## 6. Motion
+
+Motion confirms causality; it never decorates. Durations: `instant` 100ms (hover, focus) · `fast` 150ms (dropdowns, tooltips) · `base` 200ms (modals, drawers, accordions) · `slow` 300ms (page-level transitions, toasts).
+
+**Finish rule (v4.0, mandatory):** every interactive element transitions its background, border-color, and color at `instant`–`fast` with `standard` easing — hover and pressed states NEVER snap. Sanctioned micro-treatment: `hover-lift` on interactive Cards only — translateY(−1px) + `shadow.raised` at `fast`; no scaling, no bounce, anywhere.
+
+- Easing: `standard` for most; `enter` for elements appearing; `exit` for elements leaving.
+- Animate only `opacity` and `transform`. NEVER animate layout properties (width/height/top/left) except accordion height.
+- NEVER animate large data regions (table sorting, filtering results) — data updates snap.
+- Respect `prefers-reduced-motion`: all non-essential motion collapses to opacity fades ≤100ms.
+
+---
+
+## 7. Iconography
+
+- Single icon family, stroke-based, 1.5px stroke at 20px grid (Lucide). The usable set is the **closed concept→icon registry in `icons.md`** (v5.1) — unlisted concepts get no icon; unlisted Lucide names are violations.
+- Sizes: 16px (inline, dense controls), 20px (default controls, navigation), 24px (empty states, feature moments). No other sizes.
+- Icons inherit text color of their context. Icon-only buttons MUST have an accessible label and are only allowed for actions from the approved icon-action list (`components.md` §Button).
+- NEVER use emoji as UI iconography.
+
+---
+
+## 8. Accessibility baseline
+
+**Documented deviation — solid status labels.** By explicit maintainer decision (v3.5–3.7), white text on `success`/`warning`/`danger` solid fills runs ~3.4–3.5:1 — below AA's 4.5:1 for normal text, above the 3:1 hard floor. The deviation is bounded: it applies ONLY to solid Badge labels, solid Banner strips, and danger Button resting state (short labels, never sentences or body text; danger hover darkens back to AA), and the validator enforces ≥3:1 on these pairs while holding 4.5:1 everywhere else. **Weight compensation is mandatory:** text on any solid fill running below 4.5:1 is semibold (600) minimum — low contrast punishes thin strokes hardest (badges: `micro`/600 by default; `lg` solid badges upgrade to 600; solid Banner text is 13px semibold, not `body-sm` regular; danger Button labels are 600 because the resting fill runs ~3.4:1). Solid fills that pass AA (primary, accent) keep their normal label weight. Consequence to keep in view: this line item will surface in any formal WCAG/VPAT audit. If strict conformance becomes a requirement, revert these two fills to their 600-level primitives.
+
+Otherwise, WCAG 2.1 AA is the floor for everything: contrast (see §1.2), visible focus (2px `border.focus` ring, 2px offset, on every interactive element — never removed, only restyled within these rules), full keyboard operability, pointer targets ≥ 24×24px even in dense mode (WCAG 2.5.8; dense 24px controls meet this exactly — do not shrink further), and correct `lang` attributes per region for screen readers to switch synthesis language.
+
+**Focus management (v6.1).** Deterministic, per overlay type:
+
+- Opening: Modal → the least-destructive actionable control (Cancel in confirms — never the danger button); Drawer → its heading; Menu/Popover/ContextMenu → first item; CommandPalette → its input; Popconfirm → Cancel.
+- Closing: focus ALWAYS returns to the triggering element (or its nearest surviving ancestor if it's gone — e.g., after row deletion, the next row).
+- Modal and Drawer trap focus; Esc closes only the topmost layer of the z-scale.
+- Roving tabindex in composite widgets (Menu, Tree, Table grid nav, ChoiceCard groups, SegmentedControl): one Tab stop per widget, arrows move within.
+- Skeletons and disabled regions are not focusable; focus never lands on a placeholder.
+
+## 9. Keyboard shortcuts (v6.1 — closed registry)
+
+Global shortcuts are a closed set; adding one is a proposal:
+
+| Shortcut | Action |
+|---|---|
+| ⌘K / Ctrl+K | CommandPalette |
+| ⌘Enter | Send (Composer, when multiline entry made plain Enter ambiguous — product setting) |
+| Esc | Close topmost layer / cancel edit / clear selection (in that priority) |
+| ⌘/ | Shortcut reference overlay |
+
+Rules: no single-character global shortcuts (they collide with typing and IME composition); browser-reserved combos (⌘L, ⌘T, ⌘W, ⌘R…) are NEVER overridden; component-scoped keys (arrows, Enter, Space, type-ahead) are defined in each component's spec and don't register globally; every shortcut surfaces in its Tooltip via the kbd slot and in the ⌘/ overlay; shortcuts are identical in both locales (kbd symbols don't localize).

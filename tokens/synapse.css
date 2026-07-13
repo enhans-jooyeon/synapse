@@ -1,0 +1,387 @@
+/*
+ * Synapse design tokens — generated CSS custom properties.
+ * Source of truth: tokens/synapse.tokens.json. Do not edit values here directly;
+ * edit the JSON and regenerate. See design.md §6 (governance).
+ *
+ * Usage:
+ *   <html data-theme="light">            color mode: "light" | "dark"
+ *   <main data-density="focus">          density mode: "focus" | "dense" — set per region
+ *
+ * Agents: reference ONLY --sy-* semantic and density variables in generated UI.
+ * Raw hex values and primitive scales are intentionally not exposed.
+ */
+
+/*
+ * Artific is self-hosted (commercial license — Power Type Foundry).
+ * Place licensed woff2 files in assets/fonts/ for these faces to activate;
+ * absent files degrade gracefully to Pretendard.
+ */
+@font-face {
+  font-family: "Artific";
+  src: url("../assets/fonts/Artific-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Artific";
+  src: url("../assets/fonts/Artific-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  /* typography primitives */
+  --sy-font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --sy-font-display: "Artific", "Pretendard Variable", Pretendard, sans-serif;
+  --sy-font-mono: "JetBrains Mono", "SF Mono", D2Coding, Consolas, monospace;
+
+  --sy-weight-regular: 400;
+  --sy-weight-medium: 500;
+  --sy-weight-semibold: 600;
+  --sy-weight-bold: 700;
+
+  /* type scale: size / line-height pairs. Never tighten line-height (Hangul). */
+  --sy-text-11: 11px; --sy-text-11-lh: 16px;
+  --sy-text-12: 12px; --sy-text-12-lh: 18px;
+  --sy-text-13: 13px; --sy-text-13-lh: 20px;
+  --sy-text-14: 14px; --sy-text-14-lh: 22px;
+  --sy-text-16: 16px; --sy-text-16-lh: 24px;
+  --sy-text-18: 18px; --sy-text-18-lh: 27px;
+  --sy-text-20: 20px; --sy-text-20-lh: 30px;
+  --sy-text-24: 24px; --sy-text-24-lh: 34px;
+  --sy-text-30: 30px; --sy-text-30-lh: 40px;
+  --sy-text-36: 36px; --sy-text-36-lh: 48px;
+  --sy-text-44: 44px; --sy-text-44-lh: 56px;
+
+  /* spacing — 4px grid */
+  --sy-space-0: 0px;  --sy-space-2: 2px;  --sy-space-4: 4px;
+  --sy-space-6: 6px;  --sy-space-8: 8px;  --sy-space-12: 12px;
+  --sy-space-16: 16px; --sy-space-20: 20px; --sy-space-24: 24px; --sy-space-28: 28px;
+  --sy-space-32: 32px; --sy-space-40: 40px; --sy-space-48: 48px;
+  --sy-space-64: 64px; --sy-space-80: 80px; --sy-space-96: 96px;
+
+  /* radius */
+  --sy-radius-xs: 4px;
+  --sy-radius-sm: 8px;
+  --sy-radius-md: 10px;
+  --sy-radius-lg: 16px;
+  --sy-radius-full: 9999px;
+
+  /* elevation — borders-first system; shadows only for floating layers */
+  --sy-shadow-raised: 0 1px 2px rgba(9, 9, 11, 0.05);
+  --sy-shadow-overlay: 0 8px 24px rgba(9, 9, 11, 0.08);
+  --sy-shadow-modal: 0 24px 48px rgba(9, 9, 11, 0.12);
+
+  /* stacking — every floating/pinned element takes exactly one; arbitrary z-index forbidden */
+  --sy-z-sticky: 100;
+  --sy-z-dropdown: 200;
+  --sy-z-drawer: 300;
+  --sy-z-modal: 400;
+  --sy-z-toast: 500;
+  --sy-z-tooltip: 600;
+
+  /* motion */
+  --sy-duration-instant: 100ms;
+  --sy-duration-fast: 150ms;
+  --sy-duration-base: 200ms;
+  --sy-duration-slow: 300ms;
+  --sy-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --sy-ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --sy-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* data visualization — categorical, fixed order, assign in sequence */
+  --sy-viz-1: #5B7CE0; --sy-viz-2: #4FAE8B; --sy-viz-3: #C9932E; --sy-viz-4: #C15D5D;
+  --sy-viz-5: #8A6FC9; --sy-viz-6: #4FA3C4; --sy-viz-7: #B36FA3; --sy-viz-8: #7A828E;
+}
+
+/* ---------------------------------------------------------------- */
+/* Color modes                                                       */
+/* ---------------------------------------------------------------- */
+
+:root, [data-theme="light"] {
+  --sy-bg-page: #FFFFFF;
+  --sy-bg-surface: #FAFAFB;
+  --sy-bg-raised: #FFFFFF;
+  --sy-bg-raised-2: #FFFFFF;
+  --sy-bg-sunken: #F4F4F6;
+  --sy-bg-hover: rgba(9, 9, 11, 0.04);
+  --sy-bg-active: rgba(9, 9, 11, 0.06);
+  --sy-bg-selected: #F4F4F6;
+  --sy-bg-selected-hover: #ECECEF;
+  --sy-bg-disabled: #F4F4F6;
+  --sy-bg-scrim: rgba(9, 9, 11, 0.40);
+  --sy-bg-inverse: #09090B;
+
+  --sy-fg-primary: #09090B;
+  --sy-fg-secondary: #62626B;
+  --sy-fg-tertiary: #83838D;
+  --sy-fg-placeholder: #83838D;
+  --sy-fg-disabled: #A9A9B2;
+  --sy-fg-inverse: #FFFFFF;
+  --sy-fg-link: #3155C6;
+
+  --sy-border-subtle: #ECECEF;
+  --sy-border-default: #E9E9ED;
+  --sy-border-overlay: transparent;
+  --sy-border-strong: #D1D1D8;
+  --sy-border-focus: #3D63DD;
+  --sy-border-selected: #09090B;
+  --sy-border-error: #D2403E;
+
+  --sy-action-primary-bg: #09090B;
+  --sy-action-primary-bg-hover: #33333A;
+  --sy-action-primary-bg-active: #33333A;
+  --sy-action-primary-fg: #FFFFFF;
+  --sy-action-secondary-bg: #F4F4F6;
+  --sy-action-secondary-bg-hover: #ECECEF;
+  --sy-action-accent-bg: #3D63DD;
+  --sy-action-accent-bg-hover: #3155C6;
+  --sy-action-accent-bg-active: #3155C6;
+  --sy-action-accent-fg: #FFFFFF;
+
+  --sy-status-info: #3155C6;
+  --sy-status-info-bg: #E4EAFB;
+  --sy-status-success: #0E7A42;
+  --sy-status-success-bg: #DCF2E6;
+  --sy-status-warning: #8C5A00;
+  --sy-status-warning-bg: #FBEED3;
+  --sy-status-danger: #B23230;
+  --sy-status-danger-bg: #FBE3E2;
+  --sy-status-danger-bg-solid: #DB504D;
+  --sy-status-danger-bg-solid-hover: #D2403E;
+
+  --sy-action-danger-fg: #FFFFFF;
+  --sy-fg-on-solid: #FFFFFF;
+  --sy-status-info-bg-solid: #3D63DD;
+  --sy-status-success-bg-solid: #1F9D5B;
+  --sy-status-warning-bg-solid: #BA7C14;
+  --sy-fg-link-inverse: #9DB3EE;
+  --sy-status-info-inverse: #9DB3EE;
+  --sy-status-success-inverse: #3FBF7F;
+  --sy-status-warning-inverse: #D99A27;
+  --sy-status-danger-inverse: #EE837D;
+
+  --sy-ai-surface: #F0F4FD;
+  --sy-ai-border: #9DB3EE;
+  --sy-ai-fg: #3155C6;
+
+  --sy-meter-fill: #83838D;
+}
+
+[data-theme="dark"] {
+  --sy-bg-page: #09090B;
+  --sy-bg-surface: #141419;
+  --sy-bg-raised: #1E1E24;
+  --sy-bg-raised-2: #33333A;
+  --sy-bg-sunken: #141419;
+  --sy-bg-hover: rgba(255, 255, 255, 0.06);
+  --sy-bg-active: rgba(255, 255, 255, 0.10);
+  --sy-bg-selected: #33333A;
+  --sy-bg-selected-hover: #4A4A52;
+  --sy-bg-disabled: #1E1E24;
+  --sy-bg-scrim: rgba(9, 9, 11, 0.60);
+  --sy-bg-inverse: #FFFFFF;
+
+  --sy-fg-primary: #F4F4F6;
+  --sy-fg-secondary: #A9A9B2;
+  --sy-fg-tertiary: #83838D;
+  --sy-fg-placeholder: #83838D;
+  --sy-fg-disabled: #62626B;
+  --sy-fg-inverse: #09090B;
+  --sy-fg-link: #9DB3EE;
+
+  --sy-border-subtle: #33333A;
+  --sy-border-default: #4A4A52;
+  --sy-border-overlay: #4A4A52;
+  --sy-border-strong: #62626B;
+  --sy-border-focus: #9DB3EE;
+  --sy-border-selected: #F4F4F6;
+  --sy-border-error: #EE837D;
+
+  --sy-action-primary-bg: #FFFFFF;
+  --sy-action-primary-bg-hover: #E3E3E8;
+  --sy-action-primary-bg-active: #E3E3E8;
+  --sy-action-primary-fg: #09090B;
+  --sy-action-secondary-bg: #33333A;
+  --sy-action-secondary-bg-hover: #4A4A52;
+  --sy-action-accent-bg: #3D63DD;
+  --sy-action-accent-bg-hover: #3155C6;
+  --sy-action-accent-bg-active: #3155C6;
+  --sy-action-accent-fg: #FFFFFF;
+
+  --sy-status-info: #9DB3EE;
+  --sy-status-info-bg: #1B2C60;
+  --sy-status-success: #3FBF7F;
+  --sy-status-success-bg: #123F27;
+  --sy-status-warning: #D99A27;
+  --sy-status-warning-bg: #4A3208;
+  --sy-status-danger: #EE837D;
+  --sy-status-danger-bg: #571716;
+  --sy-status-danger-bg-solid: #DB504D;
+  --sy-status-danger-bg-solid-hover: #D2403E;
+
+  --sy-action-danger-fg: #FFFFFF;
+  --sy-fg-on-solid: #FFFFFF;
+  --sy-status-info-bg-solid: #3D63DD;
+  --sy-status-success-bg-solid: #1F9D5B;
+  --sy-status-warning-bg-solid: #BA7C14;
+  --sy-fg-link-inverse: #3155C6;
+  --sy-status-info-inverse: #3155C6;
+  --sy-status-success-inverse: #0E7A42;
+  --sy-status-warning-inverse: #8C5A00;
+  --sy-status-danger-inverse: #B23230;
+
+  --sy-ai-surface: #111A3C;
+  --sy-ai-border: #2A48A5;
+  --sy-ai-fg: #9DB3EE;
+
+  --sy-meter-fill: #A9A9B2;
+
+  --sy-shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sy-shadow-overlay: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --sy-shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------------------------------------------------------------- */
+/* Density modes — set data-density per screen REGION, never per     */
+/* individual component. Default (no attribute) resolves to focus.   */
+/* ---------------------------------------------------------------- */
+
+:root, [data-density="focus"] {
+  --sy-control-height-sm: 32px;
+  --sy-control-height-md: 36px;
+  --sy-control-height-lg: 40px;
+  --sy-control-padding-x: 12px;
+  --sy-control-gap: 8px;
+
+  --sy-body-size: 14px;
+  --sy-body-lh: 22px;
+  --sy-label-size: 13px;
+  --sy-label-lh: 20px;
+
+  --sy-page-padding: 32px;
+  --sy-section-gap: 40px;
+  --sy-card-padding: 28px;
+  --sy-stack-gap: 16px;
+  --sy-table-row: 52px;
+  --sy-table-cell-x: 16px;
+  --sy-content-max: 760px;
+}
+
+[data-density="dense"] {
+  --sy-control-height-sm: 24px;
+  --sy-control-height-md: 28px;
+  --sy-control-height-lg: 32px;
+  --sy-control-padding-x: 8px;
+  --sy-control-gap: 6px;
+
+  --sy-body-size: 13px;
+  --sy-body-lh: 20px;
+  --sy-label-size: 12px;
+  --sy-label-lh: 18px;
+
+  --sy-page-padding: 24px;
+  --sy-section-gap: 20px;
+  --sy-card-padding: 16px;
+  --sy-stack-gap: 8px;
+  --sy-table-row: 36px;
+  --sy-table-cell-x: 12px;
+  --sy-content-max: none;
+}
+
+/* ---------------------------------------------------------------- */
+/* Base text behavior — bilingual defaults (KO/EN). See foundations. */
+/* ---------------------------------------------------------------- */
+
+.sy-root {
+  font-family: var(--sy-font-sans);
+  font-size: var(--sy-body-size);
+  line-height: var(--sy-body-lh);
+  color: var(--sy-fg-primary);
+  background: var(--sy-bg-page);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss05"; /* Pretendard: improved Latin legibility */
+}
+
+.sy-root :lang(ko) {
+  word-break: keep-all;      /* never break inside Korean words */
+  overflow-wrap: break-word;
+}
+
+/* Emphasis: italics are forbidden system-wide (Hangul has no italic).
+   Use weight or color for emphasis instead. */
+.sy-root em, .sy-root i {
+  font-style: normal;
+  font-weight: var(--sy-weight-semibold);
+}
+
+/* Display type — the only sanctioned use of the stylized family.
+   Latin renders Artific; Hangul falls back to Pretendard by design. */
+.sy-display {
+  font-family: var(--sy-font-display);
+  font-weight: var(--sy-weight-semibold);
+  letter-spacing: -0.01em;
+}
+.sy-display:lang(ko) { letter-spacing: 0; }
+
+/* Mono roles — code, IDs, logs, keyboard hints */
+.sy-code-inline {
+  font-family: var(--sy-font-mono);
+  font-size: 0.925em;
+  background: var(--sy-bg-sunken);
+  border: 1px solid var(--sy-border-subtle);
+  border-radius: var(--sy-radius-xs);
+  padding: 1px var(--sy-space-4);
+}
+.sy-code-block {
+  font-family: var(--sy-font-mono);
+  font-size: var(--sy-text-13);
+  line-height: var(--sy-text-13-lh);
+  background: var(--sy-bg-sunken);
+  border: 1px solid var(--sy-border-subtle);
+  border-radius: var(--sy-radius-md);
+  padding: var(--sy-space-12) var(--sy-space-16);
+  overflow-x: auto;
+}
+.sy-kbd {
+  font-family: var(--sy-font-mono);
+  font-size: var(--sy-text-11);
+  line-height: var(--sy-text-11-lh);
+  background: var(--sy-bg-sunken);
+  border: 1px solid var(--sy-border-default);
+  border-bottom-width: 2px;
+  border-radius: var(--sy-radius-xs);
+  padding: 0 var(--sy-space-4);
+}
+
+/* ---------------------------------------------------------------- */
+/* Typography styles — the only sanctioned way to set typography.    */
+/* Agents use these classes (or their token equivalents), never raw  */
+/* font-size/weight combinations. See foundations §2.2.              */
+/* ---------------------------------------------------------------- */
+
+.sy-type-display-xl { font: var(--sy-weight-bold) var(--sy-text-44)/var(--sy-text-44-lh) var(--sy-font-display); letter-spacing: -0.01em; text-wrap: balance; }
+.sy-type-display    { font: var(--sy-weight-semibold) var(--sy-text-36)/var(--sy-text-36-lh) var(--sy-font-display); letter-spacing: -0.01em; text-wrap: balance; }
+.sy-type-display-sm { font: var(--sy-weight-semibold) var(--sy-text-30)/var(--sy-text-30-lh) var(--sy-font-display); letter-spacing: -0.01em; text-wrap: balance; }
+.sy-type-display-xl:lang(ko), .sy-type-display:lang(ko), .sy-type-display-sm:lang(ko) { letter-spacing: 0; }
+.sy-type-heading-xl { font: var(--sy-weight-bold) var(--sy-text-24)/var(--sy-text-24-lh) var(--sy-font-sans); letter-spacing: -0.01em; }
+.sy-type-heading-lg { font: var(--sy-weight-semibold) var(--sy-text-18)/var(--sy-text-18-lh) var(--sy-font-sans); letter-spacing: -0.01em; }
+.sy-type-heading-xl:lang(ko), .sy-type-heading-lg:lang(ko) { letter-spacing: 0; }
+.sy-type-heading-xl, .sy-type-heading-lg { text-wrap: balance; }
+
+/* Line balancing for hero/empty-state paragraphs (foundations §2.3.9). */
+.sy-balance { text-wrap: balance; }
+.sy-type-heading-md { font: var(--sy-weight-semibold) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); }
+.sy-type-heading-sm { font: var(--sy-weight-semibold) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); }
+.sy-type-body-lg    { font: var(--sy-weight-regular) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); }
+.sy-type-body       { font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); }
+.sy-type-body-sm    { font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); }
+.sy-type-label      { font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans); }
+.sy-type-label-sm   { font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); }
+.sy-type-caption    { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); }
+.sy-type-micro      { font: var(--sy-weight-semibold) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-sans); }
+.sy-type-code       { font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-mono); }
+.sy-type-code-sm    { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-mono); }
+.sy-type-stat-lg    { font: var(--sy-weight-semibold) var(--sy-text-30)/var(--sy-text-30-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; }
+.sy-type-stat       { font: var(--sy-weight-semibold) var(--sy-text-24)/var(--sy-text-24-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; }
+.sy-type-stat-sm    { font: var(--sy-weight-semibold) var(--sy-text-20)/var(--sy-text-20-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; }

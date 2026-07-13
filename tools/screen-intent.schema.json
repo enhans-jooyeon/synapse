@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Synapse screen intent",
+  "description": "Declaration an agent completes BEFORE generating a screen (design.md §4 made machine-checkable). Validate with: python3 tools/validate.py page <file>. Component names must match synapse.manifest.json keys exactly.",
+  "type": "object",
+  "required": ["name", "archetype", "regions", "locales", "states", "permissions"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "archetype": { "enum": ["workbench", "object", "settings", "guided", "console"] },
+    "regions": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "density", "components"],
+        "properties": {
+          "id": { "type": "string" },
+          "density": { "enum": ["focus", "dense"] },
+          "components": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "recipes": { "type": "array", "items": { "pattern": "^R([1-9]|1[0-2])$" } },
+          "boundary": { "enum": ["splitpanel", "divider", "panel-edge"], "description": "Required on any region whose density differs from the archetype default." }
+        }
+      }
+    },
+    "locales": { "type": "array", "items": { "enum": ["en", "ko"] }, "minItems": 2, "description": "Both locales are mandatory — strings must be provided for each." },
+    "states": {
+      "type": "object",
+      "required": ["empty", "loading", "error"],
+      "properties": {
+        "empty": { "const": true, "description": "Empty state specified for every list/table/search." },
+        "loading": { "const": true, "description": "Skeleton/spinner behavior specified per the feedback tree." },
+        "error": { "const": true, "description": "Error states specified, fixes named." }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "required": ["viewer_role"],
+      "properties": {
+        "viewer_role": { "type": "string", "minLength": 1 },
+        "hidden_capabilities": { "type": "array", "items": { "type": "string" }, "description": "Plan-gated features omitted from the screen (patterns.md §6)." },
+        "disabled_with_reason": { "type": "array", "items": { "type": "string" }, "description": "Org-obtainable capabilities rendered disabled + reason Tooltip." }
+      }
+    }
+  }
+}

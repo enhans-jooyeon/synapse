@@ -1,0 +1,17 @@
+# dependencies & build output
+node_modules/
+storybook/storybook-static/
+dist/
+*.log
+
+# python
+__pycache__/
+*.pyc
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# licensed fonts are NOT committed — see foundations.md §2.1 (Artific license)
+assets/fonts/*.woff2

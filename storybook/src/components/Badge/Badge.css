@@ -1,0 +1,28 @@
+/* Badge — components.md · Badge. Static annotation; interaction = Chip. */
+.sy-badge {
+  display: inline-flex; align-items: center; gap: var(--sy-space-4);
+  height: 20px; padding: 1px var(--sy-space-8) 0; /* md optical nudge — md only */
+  border-radius: var(--sy-radius-full); border: 1px solid transparent;
+  font: var(--sy-weight-semibold) var(--sy-text-11) / 1 var(--sy-font-sans);
+}
+.sy-badge--lg { height: 24px; padding: 0 var(--sy-space-12);
+  font: var(--sy-weight-medium) var(--sy-text-12) / var(--sy-text-12-lh) var(--sy-font-sans); }
+.sy-badge--rounded { border-radius: var(--sy-radius-sm); }
+.sy-badge--neutral { background: var(--sy-bg-sunken); color: var(--sy-fg-secondary); }
+.sy-badge--info { background: var(--sy-status-info-bg); color: var(--sy-status-info); }
+.sy-badge--success { background: var(--sy-status-success-bg); color: var(--sy-status-success); }
+.sy-badge--warning { background: var(--sy-status-warning-bg); color: var(--sy-status-warning); }
+.sy-badge--danger { background: var(--sy-status-danger-bg); color: var(--sy-status-danger); }
+.sy-badge--ai { background: var(--sy-ai-surface); color: var(--sy-ai-fg); border-color: var(--sy-ai-border); }
+.sy-badge--solid.sy-badge--info { background: var(--sy-status-info-bg-solid); color: var(--sy-fg-on-solid); }
+.sy-badge--solid.sy-badge--success { background: var(--sy-status-success-bg-solid); color: var(--sy-fg-on-solid); }
+.sy-badge--solid.sy-badge--warning { background: var(--sy-status-warning-bg-solid); color: var(--sy-fg-on-solid); }
+.sy-badge--solid.sy-badge--danger { background: var(--sy-status-danger-bg-solid); color: var(--sy-fg-on-solid); }
+.sy-badge--solid.sy-badge--neutral { background: var(--sy-bg-inverse); color: var(--sy-fg-inverse); }
+.sy-badge--solid.sy-badge--ai { background: var(--sy-action-accent-bg); color: var(--sy-action-accent-fg); border-color: transparent; }
+.sy-badge--outline { background: transparent; }
+.sy-badge--outline.sy-badge--info { border-color: var(--sy-status-info); }
+.sy-badge--outline.sy-badge--success { border-color: var(--sy-status-success); }
+.sy-badge--outline.sy-badge--warning { border-color: var(--sy-status-warning); }
+.sy-badge--outline.sy-badge--danger { border-color: var(--sy-status-danger); }
+.sy-badge--outline.sy-badge--neutral { border-color: var(--sy-border-default); }
