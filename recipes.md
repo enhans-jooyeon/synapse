@@ -40,9 +40,9 @@ Inside Card: `heading-md` (or `heading-lg` for page-dominant cards) + optional t
 
 ## R4 · Stat grid
 
-2–6 `stat` Cards in an equal-column grid, gutter `space-16` (dense) / `space-24` (focus).
+2–6 `stat` Cards in an equal-column grid, gutter `space-16` (dense) / `space-24` (focus). At most one card takes the `emphasized` treatment (v6.11 — emphasis.surface/border/fg) to mark the hero metric.
 
-Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards) → optional delta Badge + `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비") → optional sparkline. Delta up-good uses `success`, up-bad (cost, errors) uses `danger` — direction of *goodness*, not direction of change.
+Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking, v6.4) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row** (v6.4): 12px `trend-up`/`trend-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비").
 
 ## R5 · Action pair & footer conventions
 
@@ -77,7 +77,7 @@ Every 3–6 fields get a new section. Sections separated by full-bleed `border.s
 
 ## R9 · Stepper
 
-Sequential flow indicator for Guided archetypes (composed, not a component):
+Sequential flow indicator for Guided archetypes (composed, not a component). **Numeral discipline (v6.24):** step numbers are `600 11px/1` tabular — line-height 1 is mandatory inside the 20px circle (inherited line-heights sit the digit low); rings are **1.5px** (2px outweighs an 11px numeral; 1.5 matches AgentStep's pending-dot ring):
 
 ```
 [step dot/number 20px] — [label label-role] — [connector 1px border.default line] — …
@@ -87,7 +87,7 @@ States: done (key-color fill + check), current (key-color ring + `fg.primary` la
 
 ## R10 · Topbar
 
-App-frame top strip (when a product surface needs one in addition to Sidebar): height 48px, `bg.surface`, full-bleed bottom `border.subtle`. Left: context (workspace switcher — trigger styled as ghost Button with chevron). Center: nothing (search lives in ⌘K). Right: solid Banner slot (system-critical only) never here — it pins *above* the topbar; then notification bell (icon-button + count Badge), help, Avatar 32 menu.
+App-frame top strip (when a product surface needs one in addition to Sidebar): height 48px, `bg.surface`, full-bleed bottom `border.subtle`. Left: context (workspace switcher — ghost Button: **20px squared monogram tile** (`bg.inverse` fill, `fg.inverse` letter, radius `xs` — the frame's one deliberate dark object, v6.7) + workspace name + chevron). Center: nothing (search lives in ⌘K). Right: solid Banner slot (system-critical only) never here — it pins *above* the topbar; then notification bell (icon-button + count Badge), help, Avatar 32 menu.
 
 ## R11 · Key-value panel
 

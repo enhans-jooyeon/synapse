@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import "./Button.css";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** components.md · Button. `accent` is reserved for agent-invoking actions (hard rule 7). */
+  /** components.md · Button. `accent` = conversational-AI entry ONLY (Ask agent / Composer send), max one per screen. Operational agent actions (Run/Retry/Resume) use primary/secondary — executing an agent never earns blue (hard rule 7, v6.2.1). */
   variant?: "primary" | "secondary" | "ghost" | "danger" | "accent";
   size?: "sm" | "md" | "lg";
   /**

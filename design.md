@@ -1,6 +1,6 @@
 # Synapse — design system for AgentOS
 
-**Version 6.1.0 · Enhans · This file is the entry point. Read it before generating any UI.**
+**Version 6.19.0 · Enhans · This file is the entry point. Read it before generating any UI.**
 
 Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. It is built to be operated primarily by AI agents on behalf of non-designers, which means it is written as a *contract*, not an inspiration board: closed sets, enumerated options, explicit decision rules. An agent following this file mechanically should produce UI indistinguishable from designer-made AgentOS screens.
 
@@ -12,7 +12,7 @@ Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. I
 | `tokens/synapse.tokens.json` | canonical token values (DTCG) | Source of truth for all values |
 | `tokens/synapse.css` | generated CSS custom properties | Implementation artifact — regenerate from JSON, never hand-edit values |
 | `foundations.md` | color, type, spacing, density, elevation, motion, a11y — the *why* and usage rules | Governs token usage |
-| `components.md` | the closed set of components (50 entries) | Governs all UI structure |
+| `components.md` | the closed set of components (52 entries) | Governs all UI structure |
 | `recipes.md` | preset multi-component assemblies (headers, stat grids, filter bars, footers) | Governs recurring compositions — use before composing from scratch |
 | `patterns.md` | page archetypes, layout, forms, feedback, bilingual patterns | Governs composition |
 | `ai-patterns.md` | agent interaction conventions: streaming, steps, approval, provenance, uncertainty, failure | Governs every AI surface |
@@ -27,7 +27,7 @@ Figma and any other design-tool representation of Synapse are **generated views*
 
 ## 2. Identity in one paragraph
 
-Neutral, black-key, borders-first, engineered restraint. The UI is built from a cool-gray ramp; black (white in dark mode) is the brand action color; blue exists only as functional signal (focus, links, selection, AI-agent actions); status colors are desaturated and semantic-only. Pretendard serves Korean and English equally as the sole UI face; Artific (display family) appears at most once per screen, only at brand moments; JetBrains Mono marks machine-significant text. Density is architectural: every screen region is either `focus` (curated, spacious) or `dense` (data-heavy), decided by page archetype, never by taste.
+Neutral, black-key, borders-first, engineered restraint. The UI is built from a cool-gray ramp; black (white in dark mode) is the brand action color; AI surfaces and marks are slate (v6.19); blue exists only as functional signal (focus rings, links, informational status); status colors are desaturated and semantic-only. Pretendard serves Korean and English equally as the sole UI face; Artific (display family) appears at most once per screen, only at brand moments; JetBrains Mono marks machine-significant text. Density is architectural: every screen region is either `focus` (curated, spacious) or `dense` (data-heavy), decided by page archetype, never by taste.
 
 ## 3. Hard rules (the agent contract)
 
@@ -42,8 +42,8 @@ These are absolute. Violating any of these means the output is wrong regardless 
 4. The component set in `components.md` is closed (one `##` entry per component). NEVER invent a component, add a variant, or restyle an existing one. Unmet needs → §6 escalation.
 5. Every screen MUST be classified into exactly one archetype (`patterns.md` §1) before layout begins. The archetype fixes the density mode.
 6. Density is set per region via `data-density`. NEVER mixed within a region; NEVER set on individual components.
-7. Max one `primary` button and one Banner per region. Blue solid fill (`accent`) only for AI-agent actions.
-7a. AI presence is marked only by the squared avatar and the `ai.*` / `accent` treatments (`ai-patterns.md` §1). Consequential agent actions always pass through ProposalCard — no silent execution, no auto-approval.
+7. Max one `primary` button and one Banner per region (the Composer counts as its own region — its send is that region's one primary, v6.19). The `accent` variant is DEPRECATED (v6.19; removal at the next major): the conversational-AI entry uses `primary`. Operational agent actions (Run/Retry/Resume) follow the normal hierarchy: "executes an agent" never earns a special color (v6.2.1).
+7a. AI presence is marked only by the squared avatar (primary marker) and the `ai.*` slate treatments (`ai-patterns.md` §1). Consequential agent actions always pass through ProposalCard — no silent execution, no auto-approval.
 
 **Language**
 8. All UI must work in Korean and English. No fixed-width text containers, no italics, no ALL-CAPS, no line-height below the paired scale value, `keep-all` breaking for Korean, layouts verified at +25% string width. (Full rules: `foundations.md` §2.3.)
@@ -77,7 +77,7 @@ Before presenting any generated UI, verify mechanically:
 - [ ] No off-scale spacing/type/radius values
 - [ ] Only components from `components.md`, only their enumerated variants
 - [ ] One archetype declared; one density per region; boundary explicit where regions differ
-- [ ] ≤1 primary button per region; accent fill only on AI actions
+- [ ] ≤1 primary button per region (Composer = its own region); the deprecated `accent` variant appears nowhere
 - [ ] EN + KO strings supplied; nothing fixed-width, italic, or uppercase-transformed
 - [ ] Terminology, statuses, and actions match the `content.md` glossary; KO is 합니다체; no particle attached to a variable; no exclamation marks
 - [ ] Empty/loading/error/disabled states specified
@@ -113,4 +113,4 @@ The system is closed to inline modification but open to proposals. This is the m
 
 One place to check. (Machine-readable copy: `synapse.manifest.json → never`.)
 
-Raw color/spacing/radius/type values · components, variants, or icons outside the closed sets · italics, ALL-CAPS, fixed-width text containers, sub-floor line-heights · >1 primary button or Banner per region · accent fill on non-AI actions · mixed densities inside one region · carousels · marquee/auto-playing motion · infinite scroll in tables · nested modals, drawers, sheets-of-any-kind · custom scrollbars · arbitrary z-index · per-client theming / white-label · gradients, blur, glow · Korean particles attached to variables · concatenated sentence fragments · auto-approved agent proposals · silent agent side effects · fake citations · optimistic rendering of agent output.
+Raw color/spacing/radius/type values · components, variants, or icons outside the closed sets · italics, ALL-CAPS, fixed-width text containers, sub-floor line-heights · >1 primary button or Banner per region · the deprecated `accent` variant anywhere · mixed densities inside one region · carousels · marquee/auto-playing motion · infinite scroll in tables · nested modals, drawers, sheets-of-any-kind · rotated elements outside MediaGroup's generated-media fan · custom scrollbars · arbitrary z-index · per-client theming / white-label · gradients, glow, blur outside the glass material (scrimmed overlays only — foundations §5, v6.22) · Korean particles attached to variables · concatenated sentence fragments · auto-approved agent proposals · silent agent side effects · fake citations · optimistic rendering of agent output.

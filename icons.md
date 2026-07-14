@@ -4,6 +4,8 @@
 
 ## Navigation & chrome
 
+**Third-party product logos (v6.17):** brand logos (Slack, Zendesk, Google Calendar, …) are permitted ONLY in connector/integration contexts — connector lists, integration settings rows, source attribution rows. 16px, original brand colors, never recolored, never monochromed, never in navigation chrome, never as a substitute for registry icons. Everywhere else, the closed registry below is the only icon source.
+
 | Concept | Icon | Notes |
 |---|---|---|
 | home | `house` | |
@@ -49,6 +51,7 @@
 | retry | `rotate-cw` | distinct from refresh |
 | filter | `list-filter` | |
 | sort | `arrow-up` / `arrow-down` | active column only |
+| delta / trend | `trend-up` / `trend-down` | stat-card delta rows only (v6.4) — icon shows direction of change; color carries direction of goodness |
 | more (overflow) | `ellipsis` | approved icon-only |
 | send | `arrow-up` in filled circle context | Composer only |
 | stop (generation/run) | `square` | |
@@ -59,6 +62,12 @@
 | show / hide value | `eye` / `eye-off` | secrets reveal |
 | link / attach reference | `link` | |
 | attachment | `paperclip` | Composer |
+| reply / quote | `corner-up-left` | Reply pill + ComposerQuote only (v6.12) |
+| follow-up | `arrow-right` | follow-up panel rows only (v6.12) |
+| refine prompt | `pen-line` | Composer footer only (v6.25) |
+| voice input | `mic` | Composer footer only (v6.26) |
+| prompt template | `bookmark` | Composer footer + template library rows (v6.29) |
+| pause | `pause` | recording bar only (v6.26) |
 | approve / confirm | `check` | |
 | send (Composer) | `arrow-up` | Composer's sanctioned icon-only send |
 | regenerate | `refresh-ccw` | distinct from refresh/retry |

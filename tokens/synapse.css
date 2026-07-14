@@ -65,6 +65,7 @@
   --sy-radius-sm: 8px;
   --sy-radius-md: 10px;
   --sy-radius-lg: 16px;
+  --sy-radius-xl: 24px;
   --sy-radius-full: 9999px;
 
   /* elevation — borders-first system; shadows only for floating layers */
@@ -106,11 +107,14 @@
   --sy-bg-sunken: #F4F4F6;
   --sy-bg-hover: rgba(9, 9, 11, 0.04);
   --sy-bg-active: rgba(9, 9, 11, 0.06);
-  --sy-bg-selected: #F4F4F6;
-  --sy-bg-selected-hover: #ECECEF;
+  --sy-bg-selected: #EFF3F7;
+  --sy-bg-selected-hover: #DCE3EB;
   --sy-bg-disabled: #F4F4F6;
   --sy-bg-scrim: rgba(9, 9, 11, 0.40);
+  --sy-glass-surface: rgba(255, 255, 255, 0.85);
+  --sy-glass-blur: 20px;
   --sy-bg-inverse: #09090B;
+  --sy-bg-inverse-soft: #33333A;
 
   --sy-fg-primary: #09090B;
   --sy-fg-secondary: #62626B;
@@ -125,6 +129,7 @@
   --sy-border-overlay: transparent;
   --sy-border-strong: #D1D1D8;
   --sy-border-focus: #3D63DD;
+  --sy-border-focus-input: #33333A;
   --sy-border-selected: #09090B;
   --sy-border-error: #D2403E;
 
@@ -161,9 +166,14 @@
   --sy-status-warning-inverse: #D99A27;
   --sy-status-danger-inverse: #EE837D;
 
-  --sy-ai-surface: #F0F4FD;
-  --sy-ai-border: #9DB3EE;
-  --sy-ai-fg: #3155C6;
+  --sy-ai-surface: #EFF3F7;
+  --sy-ai-surface-hover: #DCE3EB;
+  --sy-ai-border: #DCE3EB;
+  --sy-emphasis-surface: #EFF3F7;
+  --sy-emphasis-border: #DCE3EB;
+  --sy-emphasis-fg: #4F5D6F;
+  --sy-ai-fg: #4F5D6F;
+  --sy-ai-solid: #4F5D6F;
 
   --sy-meter-fill: #83838D;
 }
@@ -176,11 +186,13 @@
   --sy-bg-sunken: #141419;
   --sy-bg-hover: rgba(255, 255, 255, 0.06);
   --sy-bg-active: rgba(255, 255, 255, 0.10);
-  --sy-bg-selected: #33333A;
-  --sy-bg-selected-hover: #4A4A52;
+  --sy-bg-selected: #2A333F;
+  --sy-bg-selected-hover: #3C4756;
   --sy-bg-disabled: #1E1E24;
   --sy-bg-scrim: rgba(9, 9, 11, 0.60);
+  --sy-glass-surface: rgba(30, 30, 36, 0.82);
   --sy-bg-inverse: #FFFFFF;
+  --sy-bg-inverse-soft: #E3E3E8;
 
   --sy-fg-primary: #F4F4F6;
   --sy-fg-secondary: #A9A9B2;
@@ -195,6 +207,7 @@
   --sy-border-overlay: #4A4A52;
   --sy-border-strong: #62626B;
   --sy-border-focus: #9DB3EE;
+  --sy-border-focus-input: #E3E3E8;
   --sy-border-selected: #F4F4F6;
   --sy-border-error: #EE837D;
 
@@ -231,9 +244,14 @@
   --sy-status-warning-inverse: #8C5A00;
   --sy-status-danger-inverse: #B23230;
 
-  --sy-ai-surface: #111A3C;
-  --sy-ai-border: #2A48A5;
-  --sy-ai-fg: #9DB3EE;
+  --sy-ai-surface: #1A212B;
+  --sy-ai-surface-hover: #2A333F;
+  --sy-ai-border: #2A333F;
+  --sy-emphasis-surface: #1A212B;
+  --sy-emphasis-border: #2A333F;
+  --sy-emphasis-fg: #C2CCD9;
+  --sy-ai-fg: #C2CCD9;
+  --sy-ai-solid: #6B7A8D;
 
   --sy-meter-fill: #A9A9B2;
 
@@ -380,8 +398,11 @@
 .sy-type-label-sm   { font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); }
 .sy-type-caption    { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); }
 .sy-type-micro      { font: var(--sy-weight-semibold) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-sans); }
+.sy-type-micro-label { font: var(--sy-weight-semibold) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-sans); letter-spacing: 0.02em; }
+.sy-type-micro-label:lang(ko) { letter-spacing: 0; }
 .sy-type-code       { font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-mono); }
 .sy-type-code-sm    { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-mono); }
-.sy-type-stat-lg    { font: var(--sy-weight-semibold) var(--sy-text-30)/var(--sy-text-30-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; }
-.sy-type-stat       { font: var(--sy-weight-semibold) var(--sy-text-24)/var(--sy-text-24-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; }
-.sy-type-stat-sm    { font: var(--sy-weight-semibold) var(--sy-text-20)/var(--sy-text-20-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; }
+.sy-type-stat-lg    { font: var(--sy-weight-semibold) var(--sy-text-30)/var(--sy-text-30-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.sy-type-stat       { font: var(--sy-weight-semibold) var(--sy-text-24)/var(--sy-text-24-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.sy-type-stat-sm    { font: var(--sy-weight-semibold) var(--sy-text-20)/var(--sy-text-20-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.sy-type-stat-lg:lang(ko), .sy-type-stat:lang(ko), .sy-type-stat-sm:lang(ko) { letter-spacing: 0; }

@@ -12,6 +12,9 @@
 }
 .sy-btn:focus-visible { outline: 2px solid var(--sy-border-focus); outline-offset: 2px; }
 .sy-btn--sm { height: var(--sy-control-height-sm); }
+.sy-btn--icon { width: var(--sy-control-height-md); padding: 0; }
+.sy-btn--icon.sy-btn--sm { width: var(--sy-control-height-sm); }
+.sy-btn--icon.sy-btn--lg { width: var(--sy-control-height-lg); }
 .sy-btn--lg { height: var(--sy-control-height-lg); font-size: var(--sy-body-size); }
 .sy-btn--primary { background: var(--sy-action-primary-bg); color: var(--sy-action-primary-fg); }
 .sy-btn--primary:hover, .sy-btn--primary:active { background: var(--sy-action-primary-bg-hover); }

@@ -1,5 +1,5 @@
 {
- "$version": "6.1.0",
+ "$version": "6.19.0",
  "$generated_by": "tools/build_manifest.py — regenerate after any components.md change; never hand-edit",
  "authority": "design.md > tokens/synapse.tokens.json > foundations.md > components.md > recipes.md > ai-patterns.md > content.md",
  "archetypes": {
@@ -32,6 +32,7 @@
   "label-sm",
   "caption",
   "micro",
+  "micro-label",
   "code",
   "code-sm",
   "stat-lg",
@@ -65,9 +66,10 @@
   "components or variants outside this manifest",
   "icons outside icons.md registry",
   "italics, ALL-CAPS, fixed-width text containers, line-height below paired floor",
-  ">1 primary button or Banner per region; accent fill on non-AI actions",
+  ">1 primary button or Banner per region; the deprecated accent variant anywhere (v6.19)",
   "mixed densities inside one region (SplitPanel divider is the sanctioned boundary)",
   "carousels; infinite scroll in tables; nested modals; custom scrollbars; per-client theming; arbitrary z-index",
+  "gradients; glow; blur outside the glass material (scrimmed overlays only, v6.22); rotation outside MediaGroup's generated-media fan",
   "particle attached to a variable in Korean; concatenated sentence fragments",
   "auto-approval of agent proposals; silent agent side effects; fake citations",
   "optimistic rendering of agent output; marquee/auto-playing motion; white-label/per-client theming"
@@ -80,7 +82,7 @@
     "secondary (tonal)",
     "ghost",
     "danger",
-    "accent (AI actions only)"
+    "accent (DEPRECATED v6.19 — no jurisdiction, removal at next major)"
    ],
    "sizes": [
     "sm",
@@ -89,9 +91,11 @@
    ],
    "key_rules": [
     "max 1 primary per region",
-    "accent = agent-invoking actions only",
+    "conversational-AI entry (Ask agent / Composer send) = primary (v6.19; Composer is its own region); accent is deprecated — any use is a violation; executing an agent never earns a special color",
     "text-only labels by default; icon+text only for accent AI actions and toolbar/filter contexts (approved icons)",
     "pill radius only in Guided heroes / empty-state first-use",
+    "icon-only buttons are always square (width = size height)",
+    "optical trim: icon+text buttons drop 2px padding on the icon side (v6.17.2)",
     "loading keeps width; disabled is a fill, never opacity",
     "danger labels semibold; danger hover darkens to AA"
    ]
@@ -107,7 +111,7 @@
   "Input (text)": {
    "purpose": "Single-line text entry (text/email/password/number/search).",
    "key_rules": [
-    "filled anatomy: bg.sunken, borderless; focus rings and opens to bg.page",
+    "filled anatomy: bg.sunken, borderless; focus = 1px NEUTRAL border.focus-input + fill opens to bg.page (v6.10; no offset ring on fields; non-entry controls keep the blue 2px offset ring)",
     "label above, always; placeholder is example content only",
     "errors name the fix (border.error)",
     "mixed bulk values show 'Mixed'/'여러 값'",
@@ -143,9 +147,11 @@
    ],
    "key_rules": [
     "status vocabulary = content.md §3.3 closed set",
-    "solid has named jobs only: urgent marks (1 solid color/view), ops-table opt-in, neutral=release markers (must expire), ai=live-activity beacon (disappears on completion)",
+    "undeclared color = neutral; a badge never renders unfilled (v6.24)",
+    "solid has named jobs only: urgent marks (1 solid color/view), ops-table opt-in, neutral=release markers (must expire), ai=live-activity beacon on ai.solid slate (disappears on completion)",
     "dot uses status.*-bg-solid fills",
     "with-icon option: 12px registry status icon for triple redundancy (subtle/solid only)",
+    "count overlay on the bell only: 18px bg.inverse-soft mini-pill + surface ring, half-in corner anchor (top/right -2px) covering part of the glyph; never neutral-subtle, never renders 0",
     "md optical nudge: line-height 1 + 1px top padding (md only)"
    ]
   },
@@ -155,7 +161,7 @@
     "input (removable)",
     "filter (toggleable)",
     "category (click-to-filter, system-assigned viz color)",
-    "suggestion (ai surface; Console/empty states only, max 3)"
+    "suggestion (borderless ai.surface fill, hover ai.surface-hover; Console/empty states only, max 3)"
    ],
    "key_rules": [
     "never carries commands (that is Button)",
@@ -170,7 +176,7 @@
     "outlined (separable/interactive objects)",
     "elevated (max 1/page; sole static shadow)",
     "ai (agent content)",
-    "stat (KPI anatomy)"
+    "stat (KPI anatomy; emphasized opt-in = slate emphasis.* fill, max 1/grid, v6.11)"
    ],
    "key_rules": [
     "interactive implies outlined/elevated + exactly one action + optional hover-lift",
@@ -182,6 +188,9 @@
    "purpose": "Workhorse of dense mode: records with aligned columns.",
    "key_rules": [
     "18 closed cell renderers fix alignment/format per column; empty cell = em dash",
+    "header row: label-size medium fg.tertiary, transparent fill (v6.5), hairline rule only; sort glyph space reserved",
+    "selection column: 40px, zero padding, centered both axes — control cell, not text cell (v6.24.1)",
+    "emphasis column opt-in (v6.11): emphasis.surface fill marks current period/totals, max 1/table",
     "status columns default dot+text; solid opt-in for ops walls",
     "focus tables frameless (bare header); dense/scrolling tables framed",
     "column menu closed set; bulk selection bar; inline edit for text/number/select cells; 1-level grouping; virtualize >200 rows",
@@ -206,7 +215,8 @@
   "SegmentedControl": {
    "purpose": "Exclusive 2–5-way switch, immediate effect (not Tabs, not Radio).",
    "key_rules": [
-    "content-based widths; disabled whole-control only"
+    "content-based widths; disabled whole-control only",
+    "concentric geometry (v6.8): radius-sm container, 4px padding, radius-xs segments — inner = outer − inset; assembled control = 36 focus / 32 dense"
    ]
   },
   "Accordion": {
@@ -220,13 +230,15 @@
    "purpose": "Dropzone or button; per-file progress rows.",
    "key_rules": [
     "constraints visible before selection; violations named per file",
-    "no combined progress bar"
+    "no combined progress bar",
+    "dropzone: dashed border.strong + radius lg + medallion; drag-over = border.focus-input + emphasis.surface (v6.14); dashed = drop targets only"
    ]
   },
   "SplitPanel": {
    "purpose": "Resizable workbench panes; the divider is the sanctioned mixed-density boundary.",
    "key_rules": [
-    "≤3 panes; min widths 280/200; ratio persists; not in focus archetypes"
+    "≤3 panes; min widths 280/200; ratio persists; not in focus archetypes",
+    "container = section shell: radius xl + hairline, flush panes (v6.9)"
    ]
   },
   "Chart": {
@@ -248,7 +260,8 @@
    "purpose": "The single global navigation surface.",
    "key_rules": [
     "240px expanded/64 rail",
-    "container padding 12; items 32px, 4px gaps; group labels 16px top pad",
+    "container padding 12; items 32px, 4px gaps; group labels 16px top pad (micro-label, sentence case)",
+    "collection rows may carry an 8px viz-tint category dot (v6.17) — the one color in the sidebar; never on system destinations",
     "labels never truncate when expanded — shorten the label",
     "max 2 nesting levels"
    ]
@@ -260,6 +273,7 @@
    "purpose": "Blocking decision or focused short task.",
    "key_rules": [
     "widths 400(confirm)/480/640 max",
+    "glass panel (v6.22; reduced-transparency → opaque)",
     "footer: Cancel + one primary (danger for destructive, consequences named by count+noun)",
     "no modal-on-modal; z.modal"
    ]
@@ -269,6 +283,7 @@
    "key_rules": [
     "inherits opener density (full-screen data drawers may be dense)",
     "wide 800 variant for data review (DiffView)",
+    "glass when scrimmed; no-scrim variant stays opaque (v6.22)",
     "z.drawer"
    ]
   },
@@ -276,7 +291,7 @@
    "purpose": "Anchored floating panel; menus of actions/options.",
    "key_rules": [
     "border.overlay (none in light, visible in dark) + shadow.overlay; z.dropdown",
-    "items 32px with 4px gaps; destructive last; dividers full-bleed",
+    "6px container padding (concentric: 10-6=4 item radius, v6.8); items 32px with 4px gaps; destructive last; dividers full-bleed — binds EVERY horizontal rule in any floating panel, incl. search/hint/footer rows (v6.21.2)",
     "search row optional >8 items",
     "one submenu level max"
    ]
@@ -292,6 +307,7 @@
    "key_rules": [
     "same-scheme surface (raised-2 + border.overlay + shadow)",
     "errors 8s + manual dismiss; never for validation or decisions",
+    "contents first-line aligned; dismiss × = compact 20px box (not a form control — v6.27.2)",
     "undo convention: reversible-lite ops get Undo toast (8s) instead of Popconfirm — never both"
    ]
   },
@@ -299,7 +315,7 @@
    "purpose": "Persistent inline notice for a page/section.",
    "variants": [
     "colors: neutral,info,success,warning,danger",
-    "emphasis: subtle, solid (app-critical strip; max 1 in app; semibold text)"
+    "emphasis: subtle (borderless status tint, no border/rail — v6.7.1), solid (app-critical strip; max 1 in app; semibold text)"
    ],
    "key_rules": [
     "max 1 per region"
@@ -332,6 +348,7 @@
    "key_rules": [
     "always an action when possible",
     "no illustrations in v1",
+    "icon medallion: sunken circle + two concentric hairline rings (v6.4); error flavor tints it danger-bg",
     "explanations balance-wrapped",
     "compact variant (one line, no icon) required inside small overlays"
    ]
@@ -343,6 +360,7 @@
    "purpose": "⌘K universal entry: navigation, actions, ask-agent.",
    "key_rules": [
     "never dead-ends — final row is 'Ask agent: {query}'",
+    "glass material (v6.22; reduced-transparency → opaque)",
     "grouped results, kbd hints, match highlighting",
     "z.dropdown"
    ]
@@ -364,6 +382,13 @@
    "key_rules": [
     "never disabled during generation (empty-send is the one sanctioned disable)",
     "send↔stop morph in place",
+    "ComposerQuote bar (v6.12): ai.surface radius-xs, max 1/send; follow-up panel above composer, max 4 rows, never auto-sends",
+    "slash commands (v6.15): / scopes palette to agent actions; ghost completion accepted with →, never Tab; closed glossary only",
+    "follow-up panel = glass material (v6.23, the one anchored glass exception)",
+    "templates: / gains 템플릿 group; slot chips = emphasis.surface, → moves slots, unfilled slot blocks send (v6.25 §23)",
+    "authoring coach: max one non-blocking quality hint; pen-line opens the CLOSED refinement-preset menu (다듬기/자세히/간결/범위/형식 — v6.27), rewrite replaces draft w/ Undo, disabled on empty",
+    "voice = dictation only (v6.26 §26): tray morphs to recording bar (cancel / pulsing danger dot + timer / pause / primary check confirm); transcript inserts at caret, NEVER auto-sends; no audio in thread",
+    "agent-picker menu: search + grouped rows + one submenu + mandatory request-footer escape row",
     "Enter sends, Shift+Enter breaks, Enter during IME composition NEVER sends",
     "attachments as input Chips; agent/scope picker ghost",
     "drafts persist; no formatting toolbar; one per screen"
@@ -374,9 +399,10 @@
    "key_rules": [
     "agent messages only; fixed order",
     "hover-reveal default, persistent in dense consoles",
-    "regenerate on latest message only",
+    "regenerate on latest message only — creates variant N+1, never destroys; answer header carries the ‹n/N› pager (v6.25 §22)",
     "thumbs selected = stroke + bg.selected circle, never filled icons",
-    "no destructive actions"
+    "no destructive actions",
+    "media variant: vertical rail beside a MediaGroup ONLY when media is the sole message content (v6.17.7) — text+media replies use the message toolbar alone, never both"
    ]
   },
   "AgentStep": {
@@ -385,13 +411,15 @@
     "closed states: pending/running/success/failed(+Retry)/skipped",
     "collapses to '5 steps · 12s' summary on completion",
     "tool ids in mono; payloads collapsed; max 1 nesting level",
-    "role=log aria-live=polite"
+    "role=log aria-live=polite",
+    "named working line above steps while generating (pulse, no shimmer); long replies open with title + duration badge + collapse (v6.13)"
    ]
   },
   "ProposalCard": {
    "purpose": "Human-in-the-loop approval of a consequential agent action.",
    "key_rules": [
-    "ai surface; Approve=accent (danger if destructive), Reject=secondary",
+    "tray anatomy (v6.20): borderless ai.surface fill, radius lg, no shadow; header row + ai.border hairline (single-tone; v6.21 two-tone reversed); payload surfaces open to bg.page; squared avatar FIRST in header (the agency marker); forbidden formula = tint + outline",
+    "Approve=primary (danger if destructive; approving is a human decision, not an AI CTA), Reject=secondary (light mode: bg.page fill on the tray — tonal gray dissolves on slate; dark keeps standard fill)",
     "no auto-approve, no countdowns",
     "resolved collapses to attribution row, never deleted",
     "diffs: tint backgrounds + gutter markers, never color alone"
@@ -417,6 +445,14 @@
    "key_rules": [
     "never fake citations — unsourced claims get the 'Model knowledge' badge",
     "≤3 per sentence"
+   ]
+  },
+  "ContextCard": {
+   "purpose": "Referenced object (doc/meeting/table) as a physical card in threads and Composer.",
+   "key_rules": [
+    "outlined radius-sm card: icon tile + title + one caption meta line; no thumbnails",
+    "stack: flat -4px underlay + page-colored ring + '+N', max 3, never rotated",
+    "compact inline variant for Composer @-mentions"
    ]
   },
   "Timeline": {
@@ -453,6 +489,16 @@
     "tint + gutter markers, never color alone",
     "unchanged runs collapse; +N −M counts tabular",
     "no syntax highlighting inside diffs"
+   ]
+  },
+  "MediaGroup": {
+   "purpose": "Agent-GENERATED media as a casual fan — the one sanctioned playful moment.",
+   "key_rules": [
+    "±2.5° alternating rotation, ~20% overlap, max 3 + '+N' (badge in caption strip); single item flat",
+    "card = media area + surface caption strip with hairline rule",
+    "hover straightens + raises; reduced-motion renders flat",
+    "jurisdiction hard: generated media in agent replies ONLY — rotation exists nowhere else (design.md §8)",
+    "playfulness lives in output, never chrome"
    ]
   },
   "Slider · NumberInput": {

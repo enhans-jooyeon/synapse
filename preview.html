@@ -27,7 +27,7 @@
   .nav-item.active { background: var(--sy-bg-selected); color: var(--sy-fg-primary); font-weight: var(--sy-weight-medium); }
   .sample-side { display: flex; flex-direction: column; gap: var(--sy-space-4); background: var(--sy-bg-surface); flex: none; }
   .sample-side .nav-item { height: 32px; font-weight: var(--sy-weight-medium); flex: none; }
-  .sample-side .nav-group { padding: var(--sy-space-16) var(--sy-space-8) 0; font: var(--sy-weight-semibold) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); }
+  .sample-side .nav-group { padding: var(--sy-space-16) var(--sy-space-8) 0; color: var(--sy-fg-tertiary); }
 
   .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
   .topbar { flex: none; display: flex; align-items: center; gap: var(--sy-space-12);
@@ -35,8 +35,9 @@
   .topbar .t { font: var(--sy-weight-semibold) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); }
   .topbar .doc { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-mono); color: var(--sy-fg-tertiary); }
   .topbar .spacer { margin-left: auto; }
-  .canvas { flex: 1; overflow-y: auto; padding: var(--sy-space-32); }
+  .canvas { flex: 1; overflow: auto; padding: var(--sy-space-32); }
   .canvas-inner { max-width: 920px; }
+  .canvas-inner.full { max-width: none; }
 
   .story { display: none; }
   .story.on { display: block; }
@@ -51,7 +52,7 @@
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sy-space-16); }
   @media (max-width: 1100px) { .grid2 { grid-template-columns: 1fr; } }
 
-  .seg { display: inline-flex; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-sm); padding: 2px; }
+  .seg { display: inline-flex; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-sm); padding: var(--sy-space-4); }
   .seg button { height: 24px; padding: 0 var(--sy-space-8); border: 1px solid transparent; border-radius: var(--sy-radius-xs);
     background: none; cursor: pointer; font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans);
     color: var(--sy-fg-secondary); }
@@ -69,12 +70,19 @@
     color: var(--sy-fg-primary); background: transparent;
     transition: background var(--sy-duration-instant) var(--sy-ease-standard), border-color var(--sy-duration-instant) var(--sy-ease-standard); }
   .btn:focus-visible { outline: 2px solid var(--sy-border-focus); outline-offset: 2px; }
+  /* optical trim (v6.17.2): the icon side of icon+text buttons reads heavier — trim 2px on that side */
+  .btn:not(.btn-icon):has(> .icon:first-child) { padding-left: calc(var(--sy-control-padding-x) - var(--sy-space-2)); }
+  .btn:not(.btn-icon):has(> .icon:last-child) { padding-right: calc(var(--sy-control-padding-x) - var(--sy-space-2)); }
   .btn-sm { height: var(--sy-control-height-sm); }
   .btn-lg { height: var(--sy-control-height-lg); font-size: var(--sy-body-size); }
   .btn-primary { background: var(--sy-action-primary-bg); color: var(--sy-action-primary-fg); }
   .btn-primary:hover { background: var(--sy-action-primary-bg-hover); }
   .btn-secondary { background: var(--sy-action-secondary-bg); }
   .btn-secondary:hover { background: var(--sy-action-secondary-bg-hover); }
+  /* tray rule applied to controls (v6.21.3): tonal secondary dissolves on tinted trays in light mode — open to page */
+  .proposal .btn-secondary { background: var(--sy-bg-page); }
+  .proposal .btn-secondary:hover { background: var(--sy-action-secondary-bg-hover); }
+  [data-theme="dark"] .proposal .btn-secondary { background: var(--sy-action-secondary-bg); }
   .btn-ghost { color: var(--sy-fg-secondary); }
   .btn-ghost:hover { background: var(--sy-bg-hover); }
   .btn-danger { background: var(--sy-status-danger-bg-solid); color: var(--sy-action-danger-fg); font-weight: var(--sy-weight-semibold); }
@@ -83,6 +91,8 @@
   .btn-accent:hover { background: var(--sy-action-accent-bg-hover); }
   .btn[disabled] { background: var(--sy-bg-sunken); color: var(--sy-fg-disabled); border-color: transparent; cursor: not-allowed; }
   .btn-icon { width: var(--sy-control-height-md); padding: 0; }
+  .btn-icon.btn-sm { width: var(--sy-control-height-sm); }
+  .btn-icon.btn-lg { width: var(--sy-control-height-lg); }
   .icon { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; flex: none; }
   a.sy-link { color: var(--sy-fg-link); text-decoration: none; }
   a.sy-link:hover, a.sy-link:focus-visible { text-decoration: underline; }
@@ -98,27 +108,27 @@
   .field textarea { padding: var(--sy-space-8) var(--sy-control-padding-x); min-height: 66px; resize: vertical; }
   .field input::placeholder, .field textarea::placeholder { color: var(--sy-fg-tertiary); }
   .field input:hover, .field textarea:hover { background: var(--sy-bg-selected-hover); }
-  .field input:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--sy-border-focus); outline-offset: 2px; background: var(--sy-bg-page); }
+  .field input:focus-visible, .field textarea:focus-visible { outline: none; border-color: var(--sy-border-focus-input); background: var(--sy-bg-page); }
   .field .help { font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); color: var(--sy-fg-secondary); }
   .field.error input { border-color: var(--sy-border-error); }
   .field.error .help { color: var(--sy-status-danger); }
   .field input[disabled] { background: var(--sy-bg-disabled); color: var(--sy-fg-disabled); }
   .field input[readonly] { background: var(--sy-bg-surface); }
-  .field .lead { position: absolute; left: 10px; color: var(--sy-fg-tertiary); }
-  .field .lead + input { padding-left: 32px; }
+  .field .lead { position: absolute; left: var(--sy-control-padding-x); color: var(--sy-fg-tertiary); }
+  .field .lead + input { padding-left: calc(var(--sy-control-padding-x) + var(--sy-space-24)); }
   .counter { align-self: flex-end; font-size: var(--sy-text-12); color: var(--sy-fg-tertiary); }
 
   .menu { width: 260px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-overlay);
-    border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-4);
+    border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-6);
     display: flex; flex-direction: column; gap: var(--sy-space-4); }
   .menu-item { display: flex; align-items: center; gap: var(--sy-space-8); height: 32px; padding: 0 var(--sy-space-8);
     border-radius: var(--sy-radius-xs); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); cursor: pointer; }
   .menu-item:hover { background: var(--sy-bg-hover); }
   .menu-item.selected { background: var(--sy-bg-selected); }
   .menu-item.danger { color: var(--sy-status-danger); }
-  .menu-sep { height: 1px; background: var(--sy-border-subtle); margin: var(--sy-space-2) -4px; flex: none; }
-  .menu-search { display: flex; align-items: center; gap: var(--sy-space-8); padding: var(--sy-space-8);
-    margin: -4px -4px var(--sy-space-4); border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary);
+  .menu-sep { height: 1px; background: var(--sy-border-subtle); margin: var(--sy-space-2) calc(-1 * var(--sy-space-6)); flex: none; }
+  .menu-search { display: flex; align-items: center; gap: var(--sy-space-8); padding: var(--sy-space-8) calc(var(--sy-space-8) + var(--sy-space-6));
+    margin: calc(-1 * var(--sy-space-6)) calc(-1 * var(--sy-space-6)) var(--sy-space-4); border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary);
     font-size: var(--sy-text-13); }
 
   .choice { display: flex; align-items: center; gap: var(--sy-space-8); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); cursor: pointer; }
@@ -138,7 +148,8 @@
   .switch .thumb-mixed::before { content: ""; width: 6px; height: 2px; background: var(--sy-fg-secondary); }
 
   .badge { display: inline-flex; align-items: center; height: 20px; padding: 1px var(--sy-space-8) 0;
-    border-radius: var(--sy-radius-full); font: var(--sy-weight-semibold) 11px/1 var(--sy-font-sans); }
+    border-radius: var(--sy-radius-full); font: var(--sy-weight-semibold) 11px/1 var(--sy-font-sans);
+    background: var(--sy-bg-sunken); color: var(--sy-fg-secondary); /* audit #2: bare badge = neutral, never unfilled text */ }
   .badge-lg { height: 24px; padding: 0 var(--sy-space-12); font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); }
   .badge-neutral { background: var(--sy-bg-sunken); color: var(--sy-fg-secondary); }
   .badge-info { background: var(--sy-status-info-bg); color: var(--sy-status-info); }
@@ -169,21 +180,35 @@
   .card .card-h h3 { font: var(--sy-weight-semibold) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); }
   .card .card-b { padding: var(--sy-card-padding); color: var(--sy-fg-secondary); }
   .card.interactive { cursor: pointer; transition: border-color var(--sy-duration-fast) var(--sy-ease-standard), transform var(--sy-duration-fast) var(--sy-ease-standard), box-shadow var(--sy-duration-fast) var(--sy-ease-standard); }
+  .tag, .nav-item, .menu-item, .tab, .palette .res, .src, .field input, .field textarea, .combo-trigger {
+    transition: background-color var(--sy-duration-instant) var(--sy-ease-standard), border-color var(--sy-duration-instant) var(--sy-ease-standard), color var(--sy-duration-instant) var(--sy-ease-standard), box-shadow var(--sy-duration-instant) var(--sy-ease-standard); }
+  @keyframes sy-enter { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @keyframes sy-enter-right { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+  .menu, .palette { animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
+  .toast { animation: sy-enter-right var(--sy-duration-slow) var(--sy-ease-standard); }
   .card.interactive:hover { border-color: var(--sy-border-strong); background: var(--sy-bg-hover); transform: translateY(-1px); box-shadow: var(--sy-shadow-raised); }
 
   .banner { display: flex; gap: var(--sy-space-8); align-items: flex-start;
     border-radius: var(--sy-radius-md); padding: var(--sy-space-12) var(--sy-space-16);
-    font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); border: 1px solid; }
-  .banner-info { background: var(--sy-status-info-bg); color: var(--sy-status-info); border-color: var(--sy-status-info); }
-  .banner-success { background: var(--sy-status-success-bg); color: var(--sy-status-success); border-color: var(--sy-status-success); }
-  .banner-warning { background: var(--sy-status-warning-bg); color: var(--sy-status-warning); border-color: var(--sy-status-warning); }
-  .banner-danger { background: var(--sy-status-danger-bg); color: var(--sy-status-danger); border-color: var(--sy-status-danger); }
+    font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); }
+  .banner-info { background: var(--sy-status-info-bg); color: var(--sy-status-info); }
+  .banner-success { background: var(--sy-status-success-bg); color: var(--sy-status-success); }
+  .banner-warning { background: var(--sy-status-warning-bg); color: var(--sy-status-warning); }
+  .banner-danger { background: var(--sy-status-danger-bg); color: var(--sy-status-danger); }
+  .delta { display: inline-flex; align-items: center; gap: var(--sy-space-2);
+    font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; }
+  .delta .icon { width: 12px; height: 12px; }
+  .ws-tile { width: 20px; height: 20px; flex: none; border-radius: var(--sy-radius-xs); background: var(--sy-bg-inverse); color: var(--sy-fg-inverse);
+    display: inline-flex; align-items: center; justify-content: center;
+    font: var(--sy-weight-semibold) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-sans); }
 
-  .toast { display: flex; gap: var(--sy-space-8); align-items: center; width: 340px;
+  .toast { display: flex; gap: var(--sy-space-8); align-items: flex-start; width: 340px;
     background: var(--sy-bg-raised-2); color: var(--sy-fg-primary); border: 1px solid var(--sy-border-overlay);
     border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-overlay);
     padding: var(--sy-space-12) var(--sy-space-16); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); }
-  .toast .act { margin-left: auto; color: var(--sy-fg-link); font-weight: var(--sy-weight-medium); cursor: pointer; white-space: nowrap; }
+  .toast > .icon { margin-top: var(--sy-space-2); }
+  .toast .btn-icon { height: 20px; width: 20px; flex: none; } /* compact inline dismiss — first-line aligned (v6.27.2) */
+  .toast .act { line-height: var(--sy-text-13-lh); margin-left: auto; color: var(--sy-fg-link); font-weight: var(--sy-weight-medium); cursor: pointer; white-space: nowrap; }
   .tooltip { display: inline-block; background: var(--sy-bg-raised-2); color: var(--sy-fg-primary);
     border: 1px solid var(--sy-border-overlay); font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh);
     border-radius: var(--sy-radius-xs); padding: var(--sy-space-4) var(--sy-space-8); box-shadow: var(--sy-shadow-overlay); }
@@ -192,7 +217,7 @@
   .tframe { border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow: hidden; }
   table.bare thead th { background: none; color: var(--sy-fg-tertiary); border-bottom: 1px solid var(--sy-border-default); }
   thead th { text-align: left; height: 36px; padding: 0 var(--sy-table-cell-x);
-    background: var(--sy-bg-surface); color: var(--sy-fg-secondary);
+    background: none; color: var(--sy-fg-tertiary);
     font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans);
     border-bottom: 1px solid var(--sy-border-default); white-space: nowrap; }
   tbody td { height: var(--sy-table-row); padding: 0 var(--sy-table-cell-x);
@@ -201,6 +226,8 @@
   tbody tr:hover { background: var(--sy-bg-hover); }
   tbody tr.selected { background: var(--sy-bg-selected); }
   td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.sel, th.sel { width: 40px; min-width: 40px; padding: 0; text-align: center; }
+  td.sel input, th.sel input { vertical-align: middle; margin: 0; accent-color: var(--sy-action-primary-bg); }
   td.id { font-family: var(--sy-font-mono); font-size: var(--sy-text-12); color: var(--sy-fg-secondary); }
 
   .tabs { display: flex; gap: var(--sy-space-20); border-bottom: 1px solid var(--sy-border-subtle); }
@@ -220,7 +247,7 @@
 
   .viewport { min-height: 320px; background: var(--sy-bg-scrim); border-radius: var(--sy-radius-md);
     display: flex; align-items: center; justify-content: center; padding: var(--sy-space-24); position: relative; overflow: hidden; }
-  .modal { width: 420px; max-width: 100%; background: var(--sy-bg-raised); border-radius: var(--sy-radius-lg);
+  .modal { width: 420px; max-width: 100%; background: var(--sy-glass-surface); backdrop-filter: blur(var(--sy-glass-blur)); border-radius: var(--sy-radius-lg);
     box-shadow: var(--sy-shadow-modal); padding: var(--sy-space-24); }
   .modal h3 { font: var(--sy-weight-semibold) var(--sy-text-18)/var(--sy-text-18-lh) var(--sy-font-sans); }
   .modal .m-b { color: var(--sy-fg-secondary); margin: var(--sy-space-12) 0 var(--sy-space-24); }
@@ -233,12 +260,26 @@
   .spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--sy-border-default);
     border-top-color: var(--sy-fg-tertiary); animation: spin 0.8s linear infinite; flex: none; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .skel, .spinner, .cursor { animation-duration: 4s; } }
+  /* audit #9: border.overlay is transparent in light — glass needs a containing hairline */
+  [data-theme="light"] .palette, [data-theme="light"] .modal, [data-theme="light"] .drawer-panel, [data-theme="light"] .followups { border: 1px solid var(--sy-border-default); }
+  @media (prefers-reduced-transparency: reduce) {
+    .palette, .modal, .drawer-panel, .followups { background: var(--sy-bg-raised); backdrop-filter: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skel, .spinner, .cursor { animation-duration: 4s; }
+    .menu, .palette, .toast { animation: none; }
+    .tag, .nav-item, .menu-item, .tab, .palette .res, .src, .field input, .field textarea, .combo-trigger, .btn, .card.interactive { transition: none; }
+    .rec-meter span, .rec-dot { animation: none; }
+    .card.interactive:hover { transform: none; }
+  }
 
   .empty { display: flex; flex-direction: column; align-items: center; gap: var(--sy-space-8);
     padding: var(--sy-space-40) var(--sy-space-24); text-align: center; }
   .empty .eicon { width: 48px; height: 48px; border-radius: 50%; background: var(--sy-bg-sunken);
-    display: flex; align-items: center; justify-content: center; color: var(--sy-fg-tertiary); }
+    display: flex; align-items: center; justify-content: center; color: var(--sy-fg-tertiary); position: relative; }
+  .empty .eicon::before, .empty .eicon::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+  .empty .eicon::before { inset: -8px; border: 1px solid var(--sy-border-default); }
+  .empty .eicon::after { inset: -16px; border: 1px solid var(--sy-border-subtle); }
   .empty h4 { font: var(--sy-weight-semibold) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); }
   .empty p { font-size: var(--sy-body-size); line-height: var(--sy-body-lh); color: var(--sy-fg-secondary); text-wrap: balance; }
 
@@ -256,13 +297,110 @@
   .step .ind { width: 12px; height: 12px; flex: none; display: flex; align-items: center; justify-content: center; }
   .step .dur { color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums; margin-left: auto; }
   .dot-pending { width: 10px; height: 10px; border: 1.5px solid var(--sy-border-strong); border-radius: 50%; }
-  .dot-skipped { width: 10px; height: 2px; background: var(--sy-border-strong); }
-  .proposal { background: var(--sy-ai-surface); border: 1px solid var(--sy-ai-border); border-radius: var(--sy-radius-md);
-    padding: var(--sy-space-16); max-width: 560px; }
-  .proposal .p-h { display: flex; gap: var(--sy-space-8); align-items: center;
+  .dot-skipped { width: 10px; height: 1.5px; background: var(--sy-border-strong); }
+  .proposal { background: var(--sy-ai-surface); border-radius: var(--sy-radius-lg); overflow: hidden; max-width: 560px; }
+  .proposal .p-h { display: flex; gap: var(--sy-space-8); align-items: center; padding: var(--sy-space-12);
+    border-bottom: 1px solid var(--sy-ai-border);
     font: var(--sy-weight-medium) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-ai-fg); }
-  .proposal .p-b { margin: var(--sy-space-12) 0; font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
-  .proposal .p-f { display: flex; gap: var(--sy-space-8); justify-content: flex-end; }
+  .proposal .p-b { padding: var(--sy-space-12) var(--sy-space-16); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
+  .proposal .p-f { display: flex; gap: var(--sy-space-8); justify-content: flex-end; padding: 0 var(--sy-space-16) var(--sy-space-16); }
+  .tag-sugg { background: var(--sy-ai-surface); border-color: transparent; color: var(--sy-ai-fg); cursor: pointer; }
+  .tag-sugg:hover { background: var(--sy-ai-surface-hover); }
+  .reply-pill { position: absolute; top: -36px; left: 0; display: inline-flex; align-items: center; gap: var(--sy-space-4);
+    height: 28px; padding: 0 var(--sy-space-12); background: var(--sy-bg-raised-2); border: 1px solid var(--sy-border-overlay);
+    border-radius: var(--sy-radius-full); box-shadow: var(--sy-shadow-overlay); cursor: pointer; white-space: nowrap;
+    font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); color: var(--sy-fg-primary);
+    animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); z-index: var(--sy-z-dropdown); }
+  .quote-hl { background: var(--sy-ai-surface); box-shadow: inset 0 0 0 1px var(--sy-ai-border); border-radius: var(--sy-radius-xs); padding: 0 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .composer-tray { background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12); }
+  .composer-tray .tag { background: var(--sy-bg-page); }
+  .att-img { position: relative; width: 48px; height: 48px; border-radius: var(--sy-radius-xs); border: 1px solid var(--sy-border-default);
+    overflow: hidden; flex: none; background: var(--sy-bg-page); }
+  .att-img svg { display: block; width: 100%; height: 100%; }
+  .att-img .x { position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--sy-bg-inverse-soft); color: var(--sy-fg-inverse); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .att-img .x svg { width: 10px; height: 10px; }
+  .msg-img { display: block; margin-left: auto; margin-bottom: var(--sy-space-4); width: 160px; border-radius: var(--sy-radius-md);
+    border: 1px solid var(--sy-border-default); overflow: hidden; }
+  .msg-img svg { display: block; width: 100%; }
+  .composer-quote { display: flex; align-items: center; gap: var(--sy-space-8); color: var(--sy-fg-secondary);
+    border-left: 2px solid var(--sy-border-strong); padding: var(--sy-space-2) var(--sy-space-4) var(--sy-space-2) var(--sy-space-8); margin-bottom: var(--sy-space-8);
+    font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); }
+  .composer-quote .q-t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .followups { background: var(--sy-glass-surface); backdrop-filter: blur(var(--sy-glass-blur)); border: 1px solid var(--sy-border-overlay); border-radius: var(--sy-radius-md);
+    box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-6); margin-bottom: var(--sy-space-8);
+    animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
+  .followups .fu-hint { display: flex; align-items: center; gap: var(--sy-space-12); padding: var(--sy-space-4) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-8);
+    margin: 0 calc(-1 * var(--sy-space-6)) var(--sy-space-4);
+    border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary); font-size: 11px; line-height: var(--sy-text-11-lh); }
+  .followups .fu-row { display: flex; align-items: center; gap: var(--sy-space-8); height: 32px; padding: 0 var(--sy-space-8);
+    border-radius: var(--sy-radius-xs); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); cursor: pointer; }
+  .followups .fu-row:hover, .followups .fu-row.sel { background: var(--sy-bg-selected); }
+  .followups .fu-row .icon { width: 12px; height: 12px; color: var(--sy-fg-tertiary); flex: none; }
+  .working { color: var(--sy-fg-secondary); animation: pulse 1.6s var(--sy-ease-standard) infinite; }
+  .rec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sy-status-danger-bg-solid); flex: none;
+    animation: pulse 1.2s var(--sy-ease-standard) infinite; }
+  .rec-meter { display: inline-flex; align-items: center; gap: var(--sy-space-2); height: 16px; }
+  .rec-meter span { width: 2px; height: 12px; border-radius: var(--sy-radius-full); background: var(--sy-fg-tertiary);
+    transform-origin: center; animation: rec-lv 1s var(--sy-ease-standard) infinite; }
+  .rec-meter span:nth-child(2) { animation-delay: 0.15s; } .rec-meter span:nth-child(3) { animation-delay: 0.3s; }
+  .rec-meter span:nth-child(4) { animation-delay: 0.45s; } .rec-meter span:nth-child(5) { animation-delay: 0.6s; }
+  @keyframes rec-lv { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+  .ans-h { display: flex; align-items: center; gap: var(--sy-space-8); margin-top: var(--sy-space-8); }
+  .ctx { display: inline-flex; align-items: center; gap: var(--sy-space-8); max-width: 240px; padding: var(--sy-space-8) var(--sy-space-12);
+    background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); cursor: pointer; }
+  .ctx:hover { border-color: var(--sy-border-strong); }
+  .ctx .c-i { width: 24px; height: 24px; flex: none; border-radius: var(--sy-radius-xs); background: var(--sy-bg-sunken);
+    display: flex; align-items: center; justify-content: center; color: var(--sy-fg-secondary); }
+  .ctx .c-i .icon { width: 14px; height: 14px; }
+  .ctx .c-t { min-width: 0; }
+  .ctx .c-t .t { font: var(--sy-weight-medium) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ctx .c-t .m { font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); color: var(--sy-fg-tertiary); }
+  .ctx-stack { position: relative; display: inline-flex; }
+  .ctx-stack .ctx { position: relative; outline: 2px solid var(--sy-bg-page); }
+  .ctx-stack .under { position: absolute; inset: -4px 4px auto 4px; height: 100%; background: var(--sy-bg-raised);
+    border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); }
+  .media-fan { display: flex; padding: var(--sy-space-16) var(--sy-space-8); }
+  .media-fan .m-card { width: 180px; height: 120px; background: var(--sy-bg-page); border: 1px solid var(--sy-border-default);
+    border-radius: var(--sy-radius-md); display: flex; flex-direction: column; align-items: stretch; overflow: hidden;
+    color: var(--sy-fg-secondary); outline: 2px solid var(--sy-bg-page);
+    transition: transform var(--sy-duration-fast) var(--sy-ease-standard), box-shadow var(--sy-duration-fast) var(--sy-ease-standard); }
+  .m-card .asset { display: block; width: 100%; height: 90px; flex: none; }
+  .m-card .m-cap { display: flex; align-items: center; gap: var(--sy-space-4); flex: 1; padding: 0 var(--sy-space-8);
+    border-top: 1px solid var(--sy-border-subtle); background: var(--sy-bg-surface); }
+  .media-fan .m-card:nth-child(odd) { transform: rotate(-2.5deg); }
+  .media-fan .m-card:nth-child(even) { transform: rotate(2.5deg); margin-left: -32px; margin-top: var(--sy-space-8); }
+  .media-fan .m-card:hover { transform: rotate(0); box-shadow: var(--sy-shadow-raised); z-index: 1; position: relative; }
+  @media (prefers-reduced-motion: reduce) { .media-fan .m-card, .media-fan .m-card:nth-child(even) { transform: none; } }
+  .media-rail { display: inline-flex; flex-direction: column; gap: var(--sy-space-2); padding: var(--sy-space-4);
+    background: var(--sy-bg-raised); border: 1px solid var(--sy-border-overlay); border-radius: var(--sy-radius-full);
+    box-shadow: var(--sy-shadow-raised); align-self: center; margin-right: var(--sy-space-8); }
+  /* interactive sample-page layer (preview-only) */
+  [hidden] { display: none !important; }
+  .ov { position: absolute; inset: 0; z-index: var(--sy-z-modal); display: flex; align-items: center; justify-content: center; }
+  .ov.top { align-items: flex-start; padding-top: var(--sy-space-48); }
+  .ov .scrim { position: absolute; inset: 0; background: var(--sy-bg-scrim); }
+  .ov > .modal, .ov > .palette { position: relative; animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
+  .drawer-ov { position: absolute; inset: 0; z-index: var(--sy-z-drawer); }
+  .drawer-ov .scrim { position: absolute; inset: 0; background: var(--sy-bg-scrim); }
+  .drawer-panel { position: absolute; top: 0; right: 0; bottom: 0; width: 420px; max-width: 80%; background: var(--sy-glass-surface); backdrop-filter: blur(var(--sy-glass-blur));
+    border-left: 1px solid var(--sy-border-subtle); box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-24);
+    overflow: auto; animation: sy-enter-right var(--sy-duration-base) var(--sy-ease-standard); }
+  .pop-anchor { position: absolute; z-index: var(--sy-z-dropdown); }
+  .toast-slot { position: absolute; right: var(--sy-space-16); bottom: var(--sy-space-16); z-index: var(--sy-z-toast); display: flex; flex-direction: column; gap: var(--sy-space-8); }
+  .notif { width: 360px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-overlay); border-radius: var(--sy-radius-md);
+    box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-6); animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
+  .notif .n-h { display: flex; align-items: center; padding: var(--sy-space-4) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-8); margin: 0 calc(-1 * var(--sy-space-6)) var(--sy-space-4); border-bottom: 1px solid var(--sy-border-subtle); }
+  .notif .n-item { display: flex; gap: var(--sy-space-8); align-items: flex-start; padding: var(--sy-space-8); border-radius: var(--sy-radius-xs); cursor: pointer; }
+  .notif .n-item:hover { background: var(--sy-bg-hover); }
+  .notif .n-item.unread { background: var(--sy-bg-surface); }
+  .notif .n-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sy-status-info-bg-solid); flex: none; margin-top: var(--sy-space-6); }
+  .notif .n-f { display: flex; justify-content: space-between; padding: var(--sy-space-8) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-4); margin: var(--sy-space-4) calc(-1 * var(--sy-space-6)) 0; border-top: 1px solid var(--sy-border-subtle); }
+  .kv-row { display: flex; gap: var(--sy-space-16); padding: var(--sy-space-8) 0; border-bottom: 1px solid var(--sy-border-subtle); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); }
+  .kv-row .k { min-width: 96px; flex: none; color: var(--sy-fg-tertiary); }
+  #s-sample-workbench tbody tr { cursor: pointer; }
+  .ptag { font-family: var(--sy-font-mono); font-size: 11px; line-height: var(--sy-text-11-lh); color: var(--sy-fg-tertiary); }
+  .ptag::before { content: "· "; }
   .diff { font-family: var(--sy-font-mono); font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh);
     border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-xs); overflow: hidden; margin-top: var(--sy-space-8); background: var(--sy-bg-page); }
   .diff div { padding: 2px var(--sy-space-8); }
@@ -270,7 +408,7 @@
   .diff .del { background: var(--sy-status-danger-bg); color: var(--sy-status-danger); }
   .src { display: inline-flex; align-items: center; height: 18px; padding: 0 var(--sy-space-4);
     background: var(--sy-bg-sunken); border-radius: var(--sy-radius-xs);
-    font-family: var(--sy-font-mono); font-size: 11px; color: var(--sy-fg-secondary); cursor: pointer; vertical-align: 2px; }
+    font-family: var(--sy-font-mono); font-size: 11px; color: var(--sy-fg-secondary); cursor: pointer; vertical-align: text-bottom; }
   .src:hover { background: var(--sy-bg-selected); }
   .pbar { height: 4px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-full); overflow: hidden; }
   .pbar > div { height: 100%; border-radius: var(--sy-radius-full); }
@@ -278,19 +416,18 @@
   @keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(430%); } }
   .plabel { display: flex; justify-content: space-between; font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); margin-bottom: var(--sy-space-4); }
   .plabel .n { color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums; }
-  .palette { width: 560px; max-width: 100%; background: var(--sy-bg-raised); border-radius: var(--sy-radius-lg);
+  .palette { width: 560px; max-width: 100%; background: var(--sy-glass-surface); backdrop-filter: blur(var(--sy-glass-blur)); border-radius: var(--sy-radius-lg);
     box-shadow: var(--sy-shadow-modal); overflow: hidden; }
   .palette .p-in { display: flex; align-items: center; gap: var(--sy-space-8); padding: var(--sy-space-12) var(--sy-space-16);
     border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary); }
   .palette .p-in input { border: none; outline: none; background: none; flex: 1; color: var(--sy-fg-primary);
     font: var(--sy-weight-regular) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); }
-  .palette .grp { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans);
-    color: var(--sy-fg-tertiary); padding: var(--sy-space-8) var(--sy-space-16) var(--sy-space-4); }
+  .palette .grp { color: var(--sy-fg-tertiary); padding: var(--sy-space-8) var(--sy-space-16) var(--sy-space-4); }
   .palette .res { display: flex; align-items: center; gap: var(--sy-space-8); height: 40px; padding: 0 var(--sy-space-16);
     font-size: var(--sy-text-13); cursor: pointer; }
   .palette .res:hover, .palette .res.sel { background: var(--sy-bg-selected); }
   .palette .res .kbd-r { margin-left: auto; display: flex; gap: 2px; }
-  .palette .p-ft { display: flex; gap: var(--sy-space-12); padding: var(--sy-space-8) var(--sy-space-16);
+  .palette .p-ft { display: flex; align-items: center; gap: var(--sy-space-12); padding: var(--sy-space-8) var(--sy-space-16);
     border-top: 1px solid var(--sy-border-subtle); font-size: 11px; color: var(--sy-fg-tertiary); }
 
   .combo-trigger { display: flex; flex-wrap: wrap; gap: var(--sy-space-4); align-items: center; min-height: var(--sy-control-height-md);
@@ -308,7 +445,7 @@
   .cal .d { width: 32px; height: 32px; text-align: center; font-size: var(--sy-text-13); border-radius: var(--sy-radius-sm); cursor: pointer; }
   .cal .d:hover { background: var(--sy-bg-hover); }
   .cal .d.out { color: var(--sy-fg-disabled); }
-  .cal .d.today { box-shadow: inset 0 0 0 1px var(--sy-border-strong); }
+  .cal .d.today { background: var(--sy-emphasis-surface); box-shadow: inset 0 0 0 1px var(--sy-emphasis-border); color: var(--sy-emphasis-fg); font-weight: var(--sy-weight-semibold); }
   .cal .d.in { background: var(--sy-bg-selected); border-radius: 0; }
   .cal .d.ep { background: var(--sy-action-primary-bg); color: var(--sy-action-primary-fg); }
   .acc { border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); max-width: 560px; }
@@ -318,12 +455,16 @@
     font: var(--sy-weight-medium) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); color: var(--sy-fg-primary); }
   .acc-h .meta { margin-left: auto; font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); }
   .acc-b { padding: 0 var(--sy-space-16) var(--sy-space-16) 40px; color: var(--sy-fg-secondary); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
-  .dropzone { border: 1px dashed var(--sy-border-default); border-radius: var(--sy-radius-md); padding: var(--sy-space-24);
-    display: flex; flex-direction: column; align-items: center; gap: var(--sy-space-4); max-width: 480px; }
+  .dropzone { border: 1px dashed var(--sy-border-strong); border-radius: var(--sy-radius-lg); padding: var(--sy-space-32) var(--sy-space-24);
+    display: flex; flex-direction: column; align-items: center; gap: var(--sy-space-8); max-width: 480px; }
+  .dropzone .dz-i { width: 48px; height: 48px; border-radius: 50%; background: var(--sy-bg-sunken); position: relative;
+    display: flex; align-items: center; justify-content: center; color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-4); }
+  .dropzone .dz-i::before { content: ""; position: absolute; inset: -8px; border: 1px solid var(--sy-border-default); border-radius: 50%; pointer-events: none; }
+  .dropzone.over { border-color: var(--sy-border-focus-input); background: var(--sy-emphasis-surface); }
   .frow { display: flex; align-items: center; gap: var(--sy-space-8); height: 40px; max-width: 480px;
     font-size: var(--sy-text-13); position: relative; border-bottom: 1px solid var(--sy-border-subtle); }
   .frow .sz { color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums; margin-left: auto; }
-  .split { display: flex; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow: hidden; height: 180px; }
+  .split { display: flex; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow: hidden; height: 180px; }
   .split .pane { padding: var(--sy-space-16); font-size: var(--sy-text-13); color: var(--sy-fg-secondary); }
   .split .div { width: 1px; background: var(--sy-border-default); cursor: col-resize; }
   .split .div:hover { background: var(--sy-border-strong); }
@@ -331,12 +472,13 @@
   .msg-h { max-width: 75%; margin-left: auto; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg);
     padding: var(--sy-space-8) var(--sy-space-12); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
   .msg-a { display: flex; gap: var(--sy-space-8); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
+
 </style>
 </head>
 <body class="sy-root">
 <div class="app">
   <nav class="side" id="sidenav" aria-label="Stories">
-    <div class="brand">Synapse <span class="v">v6.0.0</span></div>
+    <div class="brand">Synapse <span class="v">v6.29.0</span></div>
   </nav>
   <div class="main">
     <div class="topbar">
@@ -388,6 +530,7 @@
           <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm);">sm 8 — controls</div>
           <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);">md 10 — cards</div>
           <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg);">lg 16 — modals</div>
+          <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl);">xl 24 — section shells</div>
         </div>
         <h3 class="sub">Shadows</h3>
         <div class="row">
@@ -404,7 +547,7 @@
           <button class="btn btn-secondary" type="button" lang="ko">변경사항 저장</button>
           <button class="btn btn-ghost" type="button">Cancel</button>
           <button class="btn btn-danger" type="button" lang="ko">영구 삭제</button>
-          <button class="btn btn-accent" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Ask agent</button>
+          <button class="btn btn-accent" type="button" title="accent — deprecated v6.19, removal at 7.0"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Ask agent (deprecated)</button>
           <button class="btn" disabled type="button">Disabled</button>
           <button class="btn btn-primary" type="button"><span class="spinner" style="border-top-color: var(--sy-action-primary-fg);"></span>Saving…</button>
         </div>
@@ -430,8 +573,8 @@
             <button class="btn btn-secondary" type="button" style="border-radius: 0 var(--sy-radius-sm) var(--sy-radius-sm) 0; border-left: 1px solid var(--sy-border-default);" aria-label="Zoom in"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
           </span>
           <span role="group" style="display:inline-flex;">
-            <button class="btn btn-accent" type="button" style="border-radius: var(--sy-radius-sm) 0 0 var(--sy-radius-sm);" lang="ko">실행</button>
-            <button class="btn btn-accent" type="button" style="border-radius: 0 var(--sy-radius-sm) var(--sy-radius-sm) 0; width:28px; padding:0; border-left: 1px solid var(--sy-ai-border);" aria-haspopup="menu" aria-label="More run options"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+            <button class="btn btn-primary" type="button" style="border-radius: var(--sy-radius-sm) 0 0 var(--sy-radius-sm);" lang="ko">실행</button>
+            <button class="btn btn-primary" type="button" style="border-radius: 0 var(--sy-radius-sm) var(--sy-radius-sm) 0; width:28px; padding:0; border-left: 1px solid var(--sy-action-primary-bg-hover);" aria-haspopup="menu" aria-label="More run options"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
           </span>
         </div>
       </div>
@@ -605,8 +748,8 @@
       <div class="story" data-group="Components" data-title="SegmentedControl" data-doc="components.md · SegmentedControl" id="s-segmented">
         <p class="desc">Exclusive switch, immediate effect. 2–5 segments, content-based widths.</p>
         <div class="row">
-          <div class="seg" style="padding:2px;"><button type="button" style="height:28px;">1D</button><button type="button" class="on" style="height:28px;">7D</button><button type="button" style="height:28px;">30D</button><button type="button" style="height:28px;">90D</button></div>
-          <div class="seg" lang="ko" style="padding:2px;"><button type="button" class="on" style="height:28px;">목록</button><button type="button" style="height:28px;">그리드</button><button type="button" style="height:28px;">지난 30일</button></div>
+          <div class="seg"><button type="button" style="height:28px;">1D</button><button type="button" class="on" style="height:28px;">7D</button><button type="button" style="height:28px;">30D</button><button type="button" style="height:28px;">90D</button></div>
+          <div class="seg" lang="ko"><button type="button" class="on" style="height:28px;">목록</button><button type="button" style="height:28px;">그리드</button><button type="button" style="height:28px;">지난 30일</button></div>
         </div>
       </div>
 
@@ -638,16 +781,16 @@
         <h3 class="sub">Solid · outline · dot · count · ai</h3>
         <div class="row">
           <span class="badge" style="background: var(--sy-status-danger-bg-solid); color: var(--sy-fg-on-solid);">Incident</span>
-          <span class="badge" style="border: 1px solid var(--sy-status-warning); color: var(--sy-status-warning);" lang="ko">확인 필요</span>
+          <span class="badge" style="background: transparent; border: 1px solid var(--sy-status-warning); color: var(--sy-status-warning);" lang="ko">확인 필요</span>
           <span style="display:inline-flex; align-items:center; gap: var(--sy-space-6); font-size: var(--sy-text-13); color: var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background: var(--sy-status-info-bg-solid);"></span><span lang="ko">진행 중</span></span>
           <span class="badge badge-neutral" style="font-variant-numeric: tabular-nums;">99+</span>
-          <span class="badge" style="background: var(--sy-ai-surface); color: var(--sy-ai-fg); border: 1px solid var(--sy-ai-border);" lang="ko">사전 승인됨</span>
+          <span class="badge" style="background: var(--sy-ai-surface); color: var(--sy-ai-fg);" lang="ko">사전 승인됨</span>
         </div>
         <h3 class="sub">Restricted solids — release marker · live-agent beacon (one named job each)</h3>
         <div class="row">
           <span class="badge" style="background: var(--sy-bg-inverse); color: var(--sy-fg-inverse);">New</span>
           <span class="badge" style="background: var(--sy-bg-inverse); color: var(--sy-fg-inverse);" lang="ko">베타</span>
-          <span class="badge" style="background: var(--sy-action-accent-bg); color: var(--sy-action-accent-fg);" lang="ko">실행 중</span>
+          <span class="badge" style="background: var(--sy-ai-solid); color: var(--sy-fg-on-solid);" lang="ko">실행 중</span>
           <span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">neutral solid = release markers only, must expire · ai solid = visible only while an agent operates on this surface</span>
         </div>
         <h3 class="sub">Matrix — color × emphasis ("—" = forbidden by spec)</h3>
@@ -676,9 +819,9 @@
         </div>
         <h3 class="sub">suggestion — agent-proposed next actions (Console &amp; empty states only, max 3)</h3>
         <div class="row">
-          <span class="tag" style="background: var(--sy-ai-surface); border-color: var(--sy-ai-border); color: var(--sy-ai-fg);" lang="ko">지난주와 비교해 줘</span>
-          <span class="tag" style="background: var(--sy-ai-surface); border-color: var(--sy-ai-border); color: var(--sy-ai-fg);" lang="ko">보고서로 만들기</span>
-          <span class="tag" style="background: var(--sy-ai-surface); border-color: var(--sy-ai-border); color: var(--sy-ai-fg);">Export as CSV</span>
+          <span class="tag tag-sugg" lang="ko">지난주와 비교해 줘</span>
+          <span class="tag tag-sugg" lang="ko">보고서로 만들기</span>
+          <span class="tag tag-sugg">Export as CSV</span>
         </div>
       </div>
 
@@ -735,7 +878,7 @@
             <div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">주간 실행 횟수</div>
             <div class="sy-type-stat-lg">1,204</div>
             <div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);">
-              <span class="badge badge-success">▲ 12%</span>
+              <span class="delta" style="color: var(--sy-status-success);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>12%</span>
               <span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span>
             </div>
           </div>
@@ -747,7 +890,7 @@
         <div class="col" style="max-width: 640px; gap: var(--sy-space-8);">
           <div class="banner banner-info" lang="ko">이 워크스페이스는 읽기 전용입니다. 편집하려면 관리자에게 권한을 요청하세요.</div>
           <div class="banner banner-warning">Your API quota is at 92%. Runs may queue after the limit.</div>
-          <div class="banner" style="background: var(--sy-bg-sunken); color: var(--sy-fg-secondary); border-color: var(--sy-border-default);" lang="ko">7월 12일 02:00–04:00 KST에 예정된 점검이 있습니다.</div>
+          <div class="banner" style="background: var(--sy-bg-sunken); color: var(--sy-fg-secondary);" lang="ko">7월 12일 02:00–04:00 KST에 예정된 점검이 있습니다.</div>
           <div class="banner" style="background: var(--sy-status-danger-bg-solid); color: var(--sy-fg-on-solid); border: none; border-radius: 0; font-weight: var(--sy-weight-semibold);">Workspace is locked — payment failed. <a href="#" style="color: var(--sy-fg-on-solid); text-decoration: underline;">Update billing</a></div>
         </div>
         <h3 class="sub">Matrix — color × emphasis</h3>
@@ -783,8 +926,8 @@
         </div>
         <div class="col" style="max-width: 480px; gap: var(--sy-space-16); margin-top: var(--sy-space-24);">
           <div><div class="plabel"><span>Importing records</span><span class="n">312 / 328</span></div><div class="pbar"><div style="width: 95%; background: var(--sy-meter-fill);"></div></div></div>
-          <div><div class="plabel"><span lang="ko">주간 보고서 생성 중</span><span class="n">64%</span></div><div class="pbar"><div style="width: 64%; background: var(--sy-action-accent-bg);"></div></div></div>
-          <div><div class="plabel"><span lang="ko">주제별 분류 중…</span></div><div class="pbar"><div class="indet" style="background: var(--sy-action-accent-bg);"></div></div></div>
+          <div><div class="plabel"><span lang="ko">주간 보고서 생성 중</span><span class="n">64%</span></div><div class="pbar"><div style="width: 64%; background: var(--sy-ai-solid);"></div></div></div>
+          <div><div class="plabel"><span lang="ko">주제별 분류 중…</span></div><div class="pbar"><div class="indet" style="background: var(--sy-ai-solid);"></div></div></div>
           <div><div class="plabel"><span>Posting to Slack</span><span class="n" style="color: var(--sy-status-danger);">failed</span></div><div class="pbar"><div style="width: 40%; background: var(--sy-status-danger-bg-solid);"></div></div></div>
         </div>
       </div>
@@ -811,10 +954,10 @@
             <button class="btn btn-ghost btn-sm" type="button" style="margin-left:auto;">Clear</button>
           </div>
           <table>
-            <thead><tr><th style="width:32px;"><input type="checkbox" checked style="accent-color: var(--sy-action-primary-bg);"></th><th>Agent run</th><th>Status</th><th class="num">Duration</th></tr></thead>
+            <thead><tr><th class="sel"><input type="checkbox" checked></th><th>Agent run</th><th>Status</th><th class="num">Duration</th></tr></thead>
             <tbody>
-              <tr class="selected"><td><input type="checkbox" checked style="accent-color: var(--sy-action-primary-bg);"></td><td>Quarterly report draft</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-success-bg-solid);flex:none;"></span><span>Completed</span></span></td><td class="num">4m 12s</td></tr>
-              <tr class="selected"><td><input type="checkbox" checked style="accent-color: var(--sy-action-primary-bg);"></td><td lang="ko">고객 문의 분류 자동화</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-info-bg-solid);flex:none;"></span><span lang="ko">진행 중</span></span></td><td class="num">1m 03s</td></tr>
+              <tr class="selected"><td class="sel"><input type="checkbox" checked></td><td>Quarterly report draft</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-success-bg-solid);flex:none;"></span><span>Completed</span></span></td><td class="num">4m 12s</td></tr>
+              <tr class="selected"><td class="sel"><input type="checkbox" checked></td><td lang="ko">고객 문의 분류 자동화</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-info-bg-solid);flex:none;"></span><span lang="ko">진행 중</span></span></td><td class="num">1m 03s</td></tr>
             </tbody>
           </table>
         </div>
@@ -856,14 +999,30 @@
         <p class="desc">Constraints visible before selection; per-file progress; violations named per file.</p>
         <div class="col" style="gap: var(--sy-space-8);">
           <div class="dropzone">
-            <svg class="icon" style="width:20px;height:20px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5M4 20h16"/></svg>
-            <span style="font-size: var(--sy-text-13);" lang="ko">파일을 끌어다 놓거나 <a class="sy-link" href="#">찾아보기</a></span>
+            <span class="dz-i"><svg class="icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5M4 20h16"/></svg></span>
+            <span style="font-size: var(--sy-text-13); font-weight: var(--sy-weight-medium);" lang="ko">파일을 끌어다 놓거나 <a class="sy-link" href="#">찾아보기</a></span>
             <span style="font-size: var(--sy-text-12); color: var(--sy-fg-tertiary);">PDF, CSV · 최대 20MB</span>
+          </div>
+          <h3 class="sub">Drag-over</h3>
+          <div class="dropzone over">
+            <span class="dz-i"><svg class="icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5M4 20h16"/></svg></span>
+            <span style="font-size: var(--sy-text-13); font-weight: var(--sy-weight-medium);" lang="ko">여기에 놓아 업로드</span>
           </div>
           <div class="frow"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg>quarterly-tickets.csv<span class="sz">8.2 MB · 64%</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Remove"><svg class="icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
             <div style="position:absolute; bottom:0; left:0; right:0;" class="pbar"><div style="width:64%; background: var(--sy-meter-fill);"></div></div></div>
           <div class="frow"><svg class="icon" style="color: var(--sy-status-danger);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span lang="ko">전체_로그.zip</span><span style="color: var(--sy-status-danger);" lang="ko">— ZIP은 지원되지 않습니다</span><span class="sz"></span><button class="btn btn-ghost btn-sm" type="button" lang="ko">다시 선택</button></div>
         </div>
+      </div>
+
+      <div class="story" data-group="Components" data-title="ContextCard" data-doc="components.md · ContextCard" id="s-contextcard">
+        <p class="desc">Referenced objects as physical cards — the visible form of "what the agent is looking at". Flat 4px stack, max 3 + "+N"; no rotation, no thumbnails.</p>
+        <h3 class="sub">Single · stack</h3>
+        <div class="row" style="gap: var(--sy-space-24); align-items: flex-start; padding-top: var(--sy-space-8);">
+          <span class="ctx"><span class="c-i"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></span><span class="c-t"><div class="t" lang="ko">주간_고객문의.csv</div><div class="m" lang="ko">Zendesk · 7월 12일</div></span></span>
+          <span class="ctx-stack"><span class="under" aria-hidden="true"></span><span class="ctx"><span class="c-i"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></span><span class="c-t"><div class="t" lang="ko">킥오프 회의</div><div class="m" lang="ko">회의록 · 7월 10일</div></span><span class="badge" style="flex:none;">+2</span></span></span>
+        </div>
+        <h3 class="sub">Compact — inline @-mention in Composer</h3>
+        <div class="row"><span class="ctx" style="padding: var(--sy-space-2) var(--sy-space-8); gap: var(--sy-space-6);"><span class="c-i" style="width:16px;height:16px;"><svg class="icon" style="width:11px;height:11px;" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></span><span class="c-t"><span class="t" style="font-size: var(--sy-text-12);" lang="ko">주간_고객문의.csv</span></span></span></div>
       </div>
 
       <div class="story" data-group="Components" data-title="SplitPanel" data-doc="components.md · SplitPanel" id="s-splitpanel">
@@ -878,7 +1037,7 @@
       <div class="story" data-group="Components" data-title="Chart" data-doc="components.md · Chart" id="s-chart">
         <p class="desc">Viz tokens in fixed order, horizontal gridlines only, bars start at 0, status labels from the closed vocabulary.</p>
         <div class="grid2">
-          <div class="card tight"><div class="card-h"><h3 lang="ko">주간 실행 횟수</h3><div class="seg" style="padding:2px;"><button type="button" style="height:24px;">7D</button><button type="button" class="on" style="height:24px;">30D</button></div></div>
+          <div class="card tight"><div class="card-h"><h3 lang="ko">주간 실행 횟수</h3><div class="seg"><button type="button" style="height:24px;">7D</button><button type="button" class="on" style="height:24px;">30D</button></div></div>
             <div style="padding: var(--sy-space-16) var(--sy-card-padding) var(--sy-card-padding);">
               <svg viewBox="0 0 400 160" style="width:100%; height:auto;" role="img" aria-label="Line chart, weekly runs">
                 <line x1="40" y1="20" x2="390" y2="20" stroke="var(--sy-border-subtle)"/><line x1="40" y1="60" x2="390" y2="60" stroke="var(--sy-border-subtle)"/><line x1="40" y1="100" x2="390" y2="100" stroke="var(--sy-border-subtle)"/>
@@ -971,7 +1130,7 @@
             <button class="btn btn-secondary" type="button">Clear filters</button>
           </div></div>
           <div class="tframe" style="flex:1; min-width: 240px;"><div class="empty">
-            <div class="eicon"><svg class="icon" style="width:24px;height:24px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div>
+            <div class="eicon" style="background: var(--sy-status-danger-bg); color: var(--sy-status-danger);"><svg class="icon" style="width:24px;height:24px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg></div>
             <h4>Couldn't load runs</h4><p>Check your connection and try again.</p>
             <button class="btn btn-secondary" type="button">Retry</button>
           </div></div>
@@ -1097,7 +1256,7 @@ team: finance</pre>
             <span class="avatar agent av-24" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
             <div style="flex:1;">
               <p lang="ko">지난주 문의는 총 328건으로 전주 대비 12% 증가했습니다. 상위 주제는 결제 오류<span class="cursor"></span></p>
-              <div style="margin-top: var(--sy-space-8);"><button class="btn btn-ghost btn-sm" type="button"><svg class="icon" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/></svg><span lang="ko">중지</span></button></div>
+              <div style="margin-top: var(--sy-space-8);"><button class="btn btn-secondary btn-sm" type="button"><svg class="icon" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/></svg><span lang="ko">중지</span></button></div>
             </div>
           </div>
         </div>
@@ -1129,7 +1288,7 @@ team: finance</pre>
             <div class="p-f">
               <button class="btn btn-ghost" type="button">Edit</button>
               <button class="btn btn-secondary" type="button" lang="ko">거절</button>
-              <button class="btn btn-accent" type="button" lang="ko">승인</button>
+              <button class="btn btn-primary" type="button" lang="ko">승인</button>
             </div>
           </div>
           <div class="step" style="max-width: 560px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span style="color: var(--sy-fg-tertiary);">Approved by June · 14:02</span></div>
@@ -1160,7 +1319,8 @@ team: finance</pre>
               <div>
                 <div class="step" style="height:24px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">문의 데이터 328건 조회됨</span></div>
                 <div class="step" style="height:24px;"><span class="spinner" style="width:12px;height:12px;"></span><span style="color: var(--sy-fg-tertiary);" lang="ko">주제별 분류 중…</span></div>
-                <p style="margin-top: var(--sy-space-8);" lang="ko">지난주 문의는 총 328건으로 전주 대비 12% 증가했습니다. 상위 주제는…</p>
+                <div class="ans-h"><span class="sy-type-heading-sm" lang="ko">주간 고객 문의 요약</span><span class="badge" style="font-variant-numeric: tabular-nums;">12.4s</span><span style="margin-left:auto; display:inline-flex; align-items:center; gap: var(--sy-space-2);"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="이전 버전"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button><span class="sy-type-caption" style="color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums;">2/2</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="다음 버전"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="접기"><svg class="icon" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg></button><span class="ptag">§22</span></span></div>
+                    <p style="margin-top: var(--sy-space-8);" lang="ko">지난주 문의는 총 328건으로 전주 대비 12% 증가했습니다. 상위 주제는…</p>
               </div>
             </div>
           </div>
@@ -1172,10 +1332,10 @@ team: finance</pre>
         <div class="viewport" style="align-items: flex-start; padding-top: var(--sy-space-40);">
           <div class="palette">
             <div class="p-in"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input value="보고" readonly></div>
-            <div class="grp">NAVIGATION</div>
+            <div class="grp sy-type-micro-label">Navigation</div>
             <div class="res sel"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span lang="ko"><strong style="font-weight:600">보고</strong>서 에이전트</span><span class="kbd-r"><span class="sy-kbd">↵</span></span></div>
             <div class="res"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span lang="ko">주간 <strong style="font-weight:600">보고</strong> 실행 기록</span></div>
-            <div class="grp">ACTIONS</div>
+            <div class="grp sy-type-micro-label">Actions</div>
             <div class="res"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span lang="ko">새 <strong style="font-weight:600">보고</strong>서 만들기</span><span class="kbd-r"><span class="sy-kbd">⌘</span><span class="sy-kbd">N</span></span></div>
             <div class="res" style="color: var(--sy-ai-fg);"><span class="avatar agent" style="width:16px;height:16px;background: color-mix(in srgb, var(--sy-ai-fg) 20%, transparent); color: var(--sy-ai-fg);"><svg class="icon" style="width:10px;height:10px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span><span lang="ko">에이전트에게 묻기: "보고"</span></div>
             <div class="p-ft"><span><span class="sy-kbd">↑</span> <span class="sy-kbd">↓</span> navigate</span><span><span class="sy-kbd">↵</span> select</span><span><span class="sy-kbd">esc</span> close</span></div>
@@ -1184,10 +1344,40 @@ team: finance</pre>
       </div>
 
 
+      <div class="story" data-group="AI patterns" data-title="Follow-up panel" data-doc="ai-patterns.md §19" id="s-followups">
+        <p class="desc">Keyboard-first escalation of suggestion chips: anchored above the Composer, glass material (v6.23 — the one anchored glass exception: it floats over the thread like a mini-palette, static while open), ↑↓/↵/esc keycaps, max 4 rows, selecting inserts — never auto-sends. Chips and panel never show simultaneously.</p>
+        <div style="max-width: 640px; position: relative; padding-top: var(--sy-space-48);">
+          <p lang="ko" style="color: var(--sy-fg-secondary);">지난주 문의는 총 328건으로 전주 대비 12% 증가했습니다. 상위 주제는 결제 오류(47건)와 로그인 문제(31건)입니다. 초안을 만들었습니다 — 검토 후 공유할 수 있습니다. 로그인 문제 증가는 지난주 SSO 설정 변경과 관련이 있을 수 있습니다.</p>
+          <div class="followups" style="position: absolute; left: 0; right: 0; top: 0; margin-bottom: 0;">
+            <div class="fu-hint"><span><span class="sy-kbd">↑</span> <span class="sy-kbd">↓</span> <span lang="ko">이동</span></span><span><span class="sy-kbd">↵</span> <span lang="ko">선택</span></span><span style="margin-left:auto;"><span class="sy-kbd">esc</span> <span lang="ko">닫기</span></span></div>
+            <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>지난달과 비교해 줘</div>
+            <div class="fu-row sel" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>결제 오류 47건의 원인을 분석해 줘</div>
+            <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>#ops에 공유하기</div>
+            <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>보고서로 만들기</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story" data-group="AI patterns" data-title="MediaGroup" data-doc="components.md · MediaGroup" id="s-mediagroup">
+        <p class="desc">Agent-generated media as a casual fan — the system's ONE sanctioned playful moment (v6.16): ±2.5° rotation lives here and nowhere else. Hover straightens; reduced-motion renders flat; referenced objects stay in flat ContextCard stacks.</p>
+        <div class="row" style="align-items: center;">
+          <span class="media-rail">
+            <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Copy"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+            <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Good response"><svg class="icon" viewBox="0 0 24 24"><path d="M7 10v12M15 5.9 14 10h5.8a2 2 0 0 1 1.9 2.6l-2.3 7a2 2 0 0 1-1.9 1.4H7V10l4.7-7a2.4 2.4 0 0 1 3.3 2.9z"/></svg></button>
+            <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Poor response"><svg class="icon" viewBox="0 0 24 24"><path d="M17 14V2M9 18.1 10 14H4.2a2 2 0 0 1-1.9-2.6l2.3-7A2 2 0 0 1 6.5 3H17v11l-4.7 7a2.4 2.4 0 0 1-3.3-2.9z"/></svg></button>
+          </span>
+          <div class="media-fan">
+            <div class="m-card"><svg class="asset" viewBox="0 0 180 90" aria-hidden="true"><rect width="180" height="90" fill="var(--sy-bg-page)"/><rect x="22" y="16" width="44" height="20" rx="4" fill="var(--sy-bg-sunken)" stroke="var(--sy-border-strong)"/><rect x="114" y="16" width="44" height="20" rx="4" fill="var(--sy-bg-sunken)" stroke="var(--sy-border-strong)"/><rect x="68" y="56" width="44" height="20" rx="4" fill="var(--sy-bg-page)" stroke="var(--sy-viz-2)"/><path d="M66 26h48" stroke="var(--sy-border-strong)"/><path d="M44 36v12h46v8" fill="none" stroke="var(--sy-border-strong)"/><path d="M136 36v12h-46v8" fill="none" stroke="var(--sy-border-strong)"/></svg><span class="m-cap"><span class="sy-type-micro" lang="ko">개요 다이어그램</span></span></div>
+            <div class="m-card"><svg class="asset" viewBox="0 0 180 90" aria-hidden="true"><rect width="180" height="90" fill="var(--sy-bg-page)"/><path d="M16 70h150" stroke="var(--sy-border-default)"/><path d="M16 48h150" stroke="var(--sy-border-subtle)"/><path d="M16 26h150" stroke="var(--sy-border-subtle)"/><polyline points="20,62 44,48 68,54 92,36 116,42 140,22 164,28" fill="none" stroke="var(--sy-viz-1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="140" cy="22" r="3" fill="var(--sy-viz-1)"/></svg><span class="m-cap"><span class="sy-type-micro" lang="ko">주간 추이 차트</span></span></div>
+            <div class="m-card"><svg class="asset" viewBox="0 0 180 90" aria-hidden="true"><rect width="180" height="90" fill="var(--sy-bg-page)"/><rect x="20" y="16" width="72" height="8" rx="2" fill="var(--sy-bg-inverse-soft)"/><rect x="20" y="32" width="124" height="4" rx="2" fill="var(--sy-border-default)"/><rect x="20" y="40" width="104" height="4" rx="2" fill="var(--sy-border-default)"/><rect x="20" y="56" width="10" height="20" rx="2" style="fill: color-mix(in srgb, var(--sy-viz-1) 60%, transparent);"/><rect x="34" y="62" width="10" height="14" rx="2" style="fill: color-mix(in srgb, var(--sy-viz-1) 35%, transparent);"/><rect x="48" y="52" width="10" height="24" rx="2" fill="var(--sy-viz-1)"/><rect x="104" y="56" width="56" height="4" rx="2" fill="var(--sy-border-subtle)"/><rect x="104" y="64" width="44" height="4" rx="2" fill="var(--sy-border-subtle)"/></svg><span class="m-cap"><span class="sy-type-micro" lang="ko">표지 시안</span><span class="badge" style="margin-left:auto;">+2</span></span></div>
+          </div>
+        </div>
+      </div>
+
       <div class="story" data-group="AI patterns" data-title="Composer" data-doc="components.md · Composer" id="s-composer">
         <p class="desc">Never disabled during generation; send morphs to stop in place; Enter during Korean IME composition never sends. Attachments as input Chips; agent picker inline.</p>
         <h3 class="sub">Default — with attachments</h3>
-        <div style="max-width: 640px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12);">
+        <div class="composer-tray" style="max-width: 640px;">
           <div class="row" style="gap: var(--sy-space-4); margin-bottom: var(--sy-space-8);">
             <span class="tag">quarterly-tickets.csv <span class="x" role="button" aria-label="Remove">✕</span></span>
             <span class="tag" lang="ko">지난주_보고서.pdf <span class="x" role="button" aria-label="제거">✕</span></span>
@@ -1195,14 +1385,60 @@ team: finance</pre>
           <textarea placeholder="에이전트에게 요청하세요…" lang="ko" style="width:100%; border:none; outline:none; background:transparent; resize:none; font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); color: var(--sy-fg-primary); min-height: 44px;"></textarea>
           <div class="row" style="gap: var(--sy-space-8); margin-top: var(--sy-space-4);">
             <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Attach"><svg class="icon" viewBox="0 0 24 24"><path d="m21 11-8.5 8.5a5 5 0 0 1-7-7L14 4a3.3 3.3 0 0 1 4.7 4.7L10 17.4a1.7 1.7 0 0 1-2.4-2.4L16 6.6"/></svg></button>
+            <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="템플릿"><svg class="icon" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+            <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="프롬프트 다듬기"><svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="음성 입력"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
             <button class="btn btn-ghost btn-sm" type="button"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span> <span lang="ko">주간 보고서</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
             <span style="margin-left:auto;"></span>
             <span class="sy-type-micro" style="color: var(--sy-fg-tertiary);"><span class="sy-kbd">⏎</span> send · <span class="sy-kbd">⇧⏎</span> line</span>
-            <button class="btn btn-accent" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+            <button class="btn btn-primary" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
           </div>
         </div>
+        <h3 class="sub">Agent picker — search, groups, submenu escape, request footer (v6.15)</h3>
+        <div class="menu" style="width: 280px;">
+          <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-4) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-8); margin: 0 calc(-1 * var(--sy-space-6)) var(--sy-space-4); border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary);">
+            <svg class="icon" style="width:14px;height:14px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input placeholder="에이전트 검색…" lang="ko" style="border:none; outline:none; background:none; flex:1; min-width:0; font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-fg-primary);">
+          </div>
+          <div class="grp sy-type-micro-label" style="padding-left: var(--sy-space-8);" lang="ko">내 에이전트</div>
+          <div class="menu-item selected" lang="ko"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>주간 보고서<svg class="icon" style="width:14px;height:14px; margin-left:auto;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></div>
+          <div class="menu-item" lang="ko"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-2) 20%, transparent); color: var(--sy-viz-2); flex:none;"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>문의 분류<span class="badge" style="flex:none;">베타</span></div>
+          <div class="menu-item" lang="ko"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>모든 에이전트<svg class="icon" style="width:14px;height:14px; margin-left:auto; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
+          <div style="border-top: 1px solid var(--sy-border-subtle); margin: var(--sy-space-4) calc(-1 * var(--sy-space-6)) 0; padding: var(--sy-space-4) var(--sy-space-6) 0;"><div class="menu-item" lang="ko"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>에이전트 요청</div></div>
+        </div>
+        <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4); max-width: 640px;" lang="ko">기간을 지정하면 더 정확한 결과를 얻습니다 · §24 quality hint (한 개, 전송을 막지 않음)</div>
+        <h3 class="sub">Assisted editing — refinement presets (v6.27 §24): closed set, rewrite replaces draft with Undo</h3>
+        <div class="menu" style="width: 220px;" lang="ko">
+          <div class="menu-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>프롬프트 다듬기</div>
+          <div class="menu-sep"></div>
+          <div class="menu-item">더 자세히</div>
+          <div class="menu-item">더 간결하게</div>
+          <div class="menu-item">기간·범위 구체화</div>
+          <div class="menu-item">형식 지정</div>
+        </div>
+        <h3 class="sub">Voice dictation — recording state (v6.26 §26): tray morphs in place, esc cancels, ↵ confirms</h3>
+        <div class="composer-tray" style="max-width: 640px;">
+          <div class="row" style="gap: var(--sy-space-12); min-height: 32px;">
+            <button class="btn btn-ghost btn-sm" type="button" lang="ko">취소</button>
+            <span style="margin-left:auto;"></span>
+            <span class="rec-dot"></span>
+            <span class="sy-type-body-sm" style="font-variant-numeric: tabular-nums; color: var(--sy-fg-secondary);">0:04</span>
+            <span class="rec-meter" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
+            <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="일시정지"><svg class="icon" viewBox="0 0 24 24"><path d="M10 5v14M14 5v14"/></svg></button>
+            <button class="btn btn-primary" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="음성 입력 완료"><svg class="icon" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></button>
+          </div>
+          <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);" lang="ko">받아쓴 내용은 보내기 전에 확인할 수 있습니다 — 자동 전송되지 않습니다</div>
+        </div>
+        <h3 class="sub">Template with placeholder slots (v6.25 §23) — → moves between slots; unfilled slots block send</h3>
+        <div class="composer-tray" style="max-width: 640px;">
+          <div style="font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); min-height: 24px;" lang="ko"><span style="background: var(--sy-emphasis-surface); color: var(--sy-emphasis-fg); border-radius: var(--sy-radius-xs); padding: 0 var(--sy-space-4); font-weight: var(--sy-weight-medium);">[영업팀]</span> 관련 문의를 <span style="background: var(--sy-emphasis-surface); color: var(--sy-fg-tertiary); border-radius: var(--sy-radius-xs); padding: 0 var(--sy-space-4); box-shadow: inset 0 0 0 1px var(--sy-emphasis-border); font-weight: var(--sy-weight-medium);">[기간]</span> 기준으로 요약해 줘</div>
+          <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);" lang="ko">[기간] 값을 입력하면 보낼 수 있습니다</div>
+        </div>
+        <h3 class="sub">Slash command — ghost completion (v6.15)</h3>
+        <div class="composer-tray" style="max-width: 640px;">
+          <div style="font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); min-height: 24px;"><span style="color: var(--sy-fg-primary);">/보고</span><span style="color: var(--sy-fg-placeholder);">서 만들기</span><span class="sy-kbd" style="margin-left: var(--sy-space-8);">→</span><span class="sy-type-micro" style="color: var(--sy-fg-tertiary); margin-left: var(--sy-space-4);" lang="ko">자동 완성</span></div>
+        </div>
         <h3 class="sub">Generating — stop in place, input stays live</h3>
-        <div style="max-width: 640px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12);">
+        <div class="composer-tray" style="max-width: 640px;">
           <textarea placeholder="Keep typing — sending queues or interrupts" style="width:100%; border:none; outline:none; background:transparent; resize:none; font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); color: var(--sy-fg-primary); min-height: 24px;"></textarea>
           <div class="row" style="gap: var(--sy-space-8); margin-top: var(--sy-space-4);">
             <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Attach"><svg class="icon" viewBox="0 0 24 24"><path d="m21 11-8.5 8.5a5 5 0 0 1-7-7L14 4a3.3 3.3 0 0 1 4.7 4.7L10 17.4a1.7 1.7 0 0 1-2.4-2.4L16 6.6"/></svg></button>
@@ -1249,7 +1485,7 @@ team: finance</pre>
         <h3 class="sub">Handoff — actor shape flips and stays flipped</h3>
         <div class="col" style="max-width: 560px; gap: var(--sy-space-8);">
           <div class="step"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4M20 7H4M8 21l-4-4 4-4M4 17h16"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">June님에게 전달됨 · 14:02</span><span style="margin-left:auto;"><span class="badge badge-warning" lang="ko">확인 필요</span></span></div>
-          <div class="row"><button class="btn btn-accent btn-sm" type="button" lang="ko">에이전트 계속하기</button><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">handing back is always explicit — agents never silently reclaim</span></div>
+          <div class="row"><button class="btn btn-primary btn-sm" type="button" lang="ko">에이전트 계속하기</button><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">handing back is always explicit — agents never silently reclaim</span></div>
         </div>
       </div>
 
@@ -1274,7 +1510,7 @@ team: finance</pre>
             <span class="badge badge-lg badge-info" lang="ko">진행 중</span>
             <span style="margin-left:auto; display:flex; gap: var(--sy-space-8);">
               <button class="btn btn-secondary" type="button">Edit</button>
-              <button class="btn btn-accent" type="button" lang="ko">실행</button>
+              <button class="btn btn-primary" type="button" lang="ko">실행</button>
               <button class="btn btn-ghost btn-icon" type="button" aria-label="More"><svg class="icon" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
             </span>
           </div>
@@ -1285,9 +1521,9 @@ team: finance</pre>
       <div class="story" data-group="Recipes" data-title="Stat grid (R4)" data-doc="recipes.md R4" id="s-r-stats">
         <p class="desc">Equal columns; delta colored by direction of goodness, not direction of change.</p>
         <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--sy-space-16);">
-          <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">주간 실행</div><div class="sy-type-stat">1,204</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="badge badge-success">▲ 12%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
-          <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">평균 소요</div><div class="sy-type-stat">4m 02s</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="badge badge-success">▼ 8%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
-          <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">실패율</div><div class="sy-type-stat">2.1%</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="badge badge-danger">▲ 0.4%p</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
+          <div class="card" style="background: var(--sy-emphasis-surface); border: 1px solid var(--sy-emphasis-border);"><div class="sy-type-label" style="color: var(--sy-emphasis-fg);" lang="ko">주간 실행</div><div style="display:flex; align-items:flex-end; justify-content:space-between; gap: var(--sy-space-8);"><div class="sy-type-stat">1,204</div><svg width="64" height="24" viewBox="0 0 64 24" fill="none" aria-hidden="true" style="flex:none; margin-bottom: var(--sy-space-4);"><polyline points="1,18 11,14 21,16 31,10 41,13 51,6 63,9" stroke="var(--sy-viz-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="delta" style="color: var(--sy-status-success);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>12%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
+          <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">평균 소요</div><div class="sy-type-stat">4m 02s</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="delta" style="color: var(--sy-status-success);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 17l-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></svg>8%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
+          <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">실패율</div><div class="sy-type-stat">2.1%</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="delta" style="color: var(--sy-status-danger);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>0.4%p</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
         </div>
       </div>
 
@@ -1298,7 +1534,7 @@ team: finance</pre>
           <div class="field" style="width: 150px;"><div class="ctrl"><input value="Status: Failed" readonly style="cursor:pointer;"><svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary);"><path d="m6 9 6 6 6-6"/></svg></div></div>
           <div class="field" style="width: 160px;"><div class="ctrl"><input value="지난 7일" lang="ko" readonly style="cursor:pointer;"><svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary);"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg></div></div>
           <button class="btn btn-ghost" type="button" lang="ko">해제</button>
-          <span style="margin-left:auto;"><div class="seg" style="padding:2px;"><button type="button" class="on" style="height:28px;" lang="ko">목록</button><button type="button" style="height:28px;" lang="ko">그리드</button></div></span>
+          <span style="margin-left:auto;"><div class="seg"><button type="button" class="on" style="height:28px;" lang="ko">목록</button><button type="button" style="height:28px;" lang="ko">그리드</button></div></span>
         </div>
       </div>
 
@@ -1307,65 +1543,303 @@ team: finance</pre>
         <div class="row" style="gap: 0; align-items: center; max-width: 560px;">
           <span style="display:flex; align-items:center; gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius:50%;background:var(--sy-action-primary-bg);color:var(--sy-action-primary-fg);display:inline-flex;align-items:center;justify-content:center;"><svg class="icon" style="width:11px;height:11px;stroke:var(--sy-action-primary-fg);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span class="sy-type-label" lang="ko">연동 선택</span></span>
           <span style="flex:1; height:1px; background: var(--sy-border-default); margin: 0 var(--sy-space-8);"></span>
-          <span style="display:flex; align-items:center; gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius:50%;border:2px solid var(--sy-action-primary-bg);color:var(--sy-fg-primary);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;">2</span><span class="sy-type-label" lang="ko">규칙 설정</span></span>
+          <span style="display:flex; align-items:center; gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius:50%;border:1.5px solid var(--sy-action-primary-bg);color:var(--sy-fg-primary);display:inline-flex;align-items:center;justify-content:center;font:600 11px/1 var(--sy-font-sans);font-variant-numeric:tabular-nums;">2</span><span class="sy-type-label" lang="ko">규칙 설정</span></span>
           <span style="flex:1; height:1px; background: var(--sy-border-default); margin: 0 var(--sy-space-8);"></span>
-          <span style="display:flex; align-items:center; gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius:50%;border:2px solid var(--sy-border-strong);color:var(--sy-fg-tertiary);display:inline-flex;align-items:center;justify-content:center;font-size:11px;">3</span><span class="sy-type-label" style="color: var(--sy-fg-tertiary);" lang="ko">검토</span></span>
+          <span style="display:flex; align-items:center; gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius:50%;border:1.5px solid var(--sy-border-strong);color:var(--sy-fg-tertiary);display:inline-flex;align-items:center;justify-content:center;font:600 11px/1 var(--sy-font-sans);font-variant-numeric:tabular-nums;">3</span><span class="sy-type-label" style="color: var(--sy-fg-tertiary);" lang="ko">검토</span></span>
         </div>
       </div>
 
 
-      <div class="story" data-group="Sample pages" data-title="Workbench (dense)" data-doc="patterns.md §1A" id="s-sample-workbench">
-        <p class="desc">Dense archetype end-to-end: sidebar, page header, filter bar (R6), stat grid (R4), framed dense table with dot statuses and a totals row. Everything below is composed from shipped tokens and components only.</p>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; display: flex; background: var(--sy-bg-page);" data-density="dense">
-          <nav class="sidebar sample-side" style="width: 200px; border-radius: 0; border: none; border-right: 1px solid var(--sy-border-subtle); padding: var(--sy-space-12);" aria-label="Sample nav">
+
+      <div class="story" data-group="Sample pages" data-title="Workbench (dense)" data-doc="patterns.md §1A · R1/R4/R6/R10" id="s-sample-workbench">
+        <p class="desc">Full dense workbench: topbar (R10), sidebar, filter bar, stat grid, framed table with dot statuses and totals, SplitPanel detail pane, pagination. One accent on the whole screen — the conversational entry. <strong>Interactive:</strong> bell → NotificationCenter · avatar &amp; workspace → menus · 🔍 → CommandPalette · table row → detail Drawer.</p>
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
+          <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
+            <button class="btn btn-ghost btn-sm" type="button"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+            <span style="margin-left:auto;"></span>
+            <span style="position:relative; display:inline-flex;"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Notifications"><svg class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></button><span style="position:absolute; top:-2px; right:-2px; min-width:18px; height:18px; padding:0 var(--sy-space-4); border:2px solid var(--sy-bg-surface); border-radius:var(--sy-radius-full); background:var(--sy-bg-inverse-soft); color:var(--sy-fg-inverse); font:var(--sy-weight-semibold) 11px/14px var(--sy-font-sans); display:inline-flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums;">3</span></span>
+            <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Search (⌘K)"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Help"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 .5c0 1.5-2.5 2-2.5 3.5M12 17h.01"/></svg></button>
+            <span class="avatar av-32" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);">JC</span>
+          </div>
+          <div style="display:flex; min-height: 520px;">
+            <nav class="sidebar sample-side" style="width: 200px; border-radius: 0; border: none; border-right: 1px solid var(--sy-border-subtle); padding: var(--sy-space-12);" aria-label="Sample nav">
             <div class="nav-item"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg>Home</div>
-            <div class="nav-item active"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Agents<span class="badge badge-neutral">12</span></div>
-            <div class="nav-item" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>실행 기록</div>
-            <div class="nav-group">WORKSPACE</div>
+            <div class="nav-item "><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Agents<span class="badge badge-neutral">12</span></div>
+            <div class="nav-item active" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>실행 기록</div>
+            <div class="nav-item " lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>콘솔</div>
+            <div class="nav-group sy-type-micro-label">Workspace</div>
             <div class="nav-item"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>Members</div>
+            <div class="nav-item " lang="ko"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.2-1.6l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2.8-1.6L13 2h-2l-.7 2.9a7 7 0 0 0-2.8 1.6l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .2 1.6l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2.8 1.6L11 22h2l.7-2.9a7 7 0 0 0 2.8-1.6l2.3 1 2-3.4-2-1.5A7 7 0 0 0 19 12z"/></svg>설정</div>
+            <div class="nav-group sy-type-micro-label" lang="ko">컬렉션</div>
+            <div class="nav-item" lang="ko"><span style="width:8px; height:8px; border-radius:50%; background: var(--sy-viz-2); flex:none;"></span>주간 보고</div>
+            <div class="nav-item" lang="ko"><span style="width:8px; height:8px; border-radius:50%; background: var(--sy-viz-5); flex:none;"></span>고객 응대</div>
           </nav>
-          <div style="flex: 1; min-width: 0; padding: var(--sy-page-padding); display: flex; flex-direction: column; gap: var(--sy-section-gap);">
-            <div>
-              <div style="display: flex; align-items: center; gap: var(--sy-space-12);">
-                <span class="sy-type-heading-xl" lang="ko">실행 기록</span>
-                <span style="margin-left: auto; display: flex; gap: var(--sy-space-8);">
-                  <button class="btn btn-secondary btn-sm" type="button">Export</button>
-                  <button class="btn btn-accent btn-sm" type="button" lang="ko">에이전트에게 묻기</button>
-                </span>
+            <div data-density="dense" style="flex: 1.6; min-width: 0; padding: var(--sy-page-padding); display: flex; flex-direction: column; gap: var(--sy-section-gap); border-right: 1px solid var(--sy-border-default);">
+              <div>
+                <div style="display: flex; align-items: center; gap: var(--sy-space-12);">
+                  <span class="sy-type-heading-xl" lang="ko">실행 기록</span>
+                  <span style="margin-left: auto; display: flex; gap: var(--sy-space-8);">
+                    <button class="btn btn-secondary btn-sm" type="button">Export</button>
+                    <button class="btn btn-primary btn-sm" type="button" lang="ko">에이전트에게 묻기</button>
+                  </span>
+                </div>
+                <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);" lang="ko">총 284건 · 마지막 동기화 4분 전</div>
               </div>
-              <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);" lang="ko">총 284건 · 마지막 동기화 4분 전</div>
+              <div class="row" style="gap: var(--sy-space-8);">
+                <div class="field" style="width: 180px;"><div class="ctrl"><svg class="icon lead" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input placeholder="Search runs…"></div></div>
+                <div class="field" style="width: 130px;"><div class="ctrl"><input value="Status: All" readonly style="cursor:pointer;"><svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary);"><path d="m6 9 6 6 6-6"/></svg></div></div>
+                <div class="field" style="width: 120px;"><div class="ctrl"><input value="지난 7일" lang="ko" readonly style="cursor:pointer;"><svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary);"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg></div></div>
+                <button class="btn btn-ghost btn-sm" type="button" lang="ko">해제</button>
+              </div>
+              <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--sy-space-16);">
+                <div class="card" style="background: var(--sy-emphasis-surface); border: 1px solid var(--sy-emphasis-border);"><div class="sy-type-label" style="color: var(--sy-emphasis-fg);" lang="ko">주간 실행</div><div style="display:flex; align-items:flex-end; justify-content:space-between; gap: var(--sy-space-8);"><div class="sy-type-stat">1,204</div><svg width="64" height="24" viewBox="0 0 64 24" fill="none" aria-hidden="true" style="flex:none; margin-bottom: var(--sy-space-4);"><polyline points="1,18 11,14 21,16 31,10 41,13 51,6 63,9" stroke="var(--sy-viz-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="delta" style="color: var(--sy-status-success);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>12%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
+                <div class="card" style="background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default);"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">평균 소요</div><div class="sy-type-stat">4m 02s</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="delta" style="color: var(--sy-status-success);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 17l-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></svg>8%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
+                <div class="card" style="background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default);"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">실패율</div><div class="sy-type-stat">2.1%</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="delta" style="color: var(--sy-status-danger);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>0.4%p</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
+              </div>
+              <div class="tframe">
+                <table>
+                  <thead><tr><th>Agent run</th><th>Run ID</th><th>Status</th><th class="num">Duration</th><th class="num">Cost</th></tr></thead>
+                  <tbody>
+                    <tr class="selected"><td>Quarterly report draft</td><td class="id">run_a3f8…c92e</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-success-bg-solid);flex:none;"></span><span>Completed</span></span></td><td class="num">4m 12s</td><td class="num">$0.42</td></tr>
+                    <tr><td lang="ko">고객 문의 분류 자동화</td><td class="id">run_b7d1…e04a</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-info-bg-solid);flex:none;"></span><span lang="ko">진행 중</span></span></td><td class="num">1m 03s</td><td class="num">$0.11</td></tr>
+                    <tr><td>Inbox triage — weekly</td><td class="id">run_c291…9f77</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-danger-bg-solid);flex:none;"></span><span>Failed</span></span></td><td class="num">0m 41s</td><td class="num">$0.03</td></tr>
+                    <tr><td lang="ko">경쟁사 가격 모니터링</td><td class="id">run_d40b…8c15</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-warning-bg-solid);flex:none;"></span><span lang="ko">확인 필요</span></span></td><td class="num">12m 55s</td><td class="num">$1.87</td></tr>
+                    <tr><td colspan="3" style="background: var(--sy-bg-surface); font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans); color: var(--sy-fg-secondary);">Σ 4 runs</td><td class="num" style="background: var(--sy-bg-surface); font-variant-numeric: tabular-nums;">18m 51s</td><td class="num" style="background: var(--sy-bg-surface); font-variant-numeric: tabular-nums;">$2.43</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pager">
+                <span class="pg" aria-label="Previous"><svg class="icon" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></span>
+                <span class="pg cur">1</span><span class="pg">2</span><span class="pg">3</span><span class="pg">…</span><span class="pg">12</span>
+                <span class="pg" aria-label="Next"><svg class="icon" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></span>
+                <span class="sum" lang="ko">총 284건 중 1–24</span>
+              </div>
             </div>
-            <div class="row" style="gap: var(--sy-space-8);">
-              <div class="field" style="width: 200px;"><div class="ctrl"><svg class="icon lead" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input placeholder="Search runs…"></div></div>
-              <div class="field" style="width: 140px;"><div class="ctrl"><input value="Status: All" readonly style="cursor:pointer;"><svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary);"><path d="m6 9 6 6 6-6"/></svg></div></div>
-              <div class="field" style="width: 130px;"><div class="ctrl"><input value="지난 7일" lang="ko" readonly style="cursor:pointer;"><svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary);"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg></div></div>
-              <button class="btn btn-ghost btn-sm" type="button" lang="ko">해제</button>
-              <span style="margin-left:auto;"><div class="seg" style="padding:2px;"><button type="button" class="on" style="height:24px;" lang="ko">목록</button><button type="button" style="height:24px;" lang="ko">그리드</button></div></span>
-            </div>
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--sy-space-16);">
-              <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">주간 실행</div><div class="sy-type-stat">1,204</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="badge badge-success">▲ 12%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
-              <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">평균 소요</div><div class="sy-type-stat">4m 02s</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="badge badge-success">▼ 8%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
-              <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">실패율</div><div class="sy-type-stat">2.1%</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="badge badge-danger">▲ 0.4%p</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
-            </div>
-            <div class="tframe">
-              <table>
-                <thead><tr><th>Agent run</th><th>Run ID</th><th>Owner</th><th>Status</th><th class="num">Duration</th><th class="num">Cost</th></tr></thead>
-                <tbody>
-                  <tr><td>Quarterly report draft</td><td class="id">run_a3f8…c92e</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);"><span class="avatar av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);">JC</span> June</span></td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-success-bg-solid);flex:none;"></span><span>Completed</span></span></td><td class="num">4m 12s</td><td class="num">$0.42</td></tr>
-                  <tr><td lang="ko">고객 문의 분류 자동화</td><td class="id">run_b7d1…e04a</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-6) 20%, transparent); color: var(--sy-viz-6);"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span> <span lang="ko">분류 에이전트</span></span></td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-info-bg-solid);flex:none;"></span><span lang="ko">진행 중</span></span></td><td class="num">1m 03s</td><td class="num">$0.11</td></tr>
-                  <tr><td>Inbox triage — weekly</td><td class="id">run_c291…9f77</td><td style="color: var(--sy-fg-tertiary);">—</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-danger-bg-solid);flex:none;"></span><span>Failed</span></span></td><td class="num">0m 41s</td><td class="num">$0.03</td></tr>
-                  <tr><td lang="ko">경쟁사 가격 모니터링</td><td class="id">run_d40b…8c15</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-6) 20%, transparent); color: var(--sy-viz-6);"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span> <span lang="ko">가격 에이전트</span></span></td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-warning-bg-solid);flex:none;"></span><span lang="ko">확인 필요</span></span></td><td class="num">12m 55s</td><td class="num">$1.87</td></tr>
-                  <tr><td colspan="4" style="background: var(--sy-bg-surface); font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans); color: var(--sy-fg-secondary);">Σ 4 runs</td><td class="num" style="background: var(--sy-bg-surface); font-variant-numeric: tabular-nums;">18m 51s</td><td class="num" style="background: var(--sy-bg-surface); font-variant-numeric: tabular-nums;">$2.43</td></tr>
-                </tbody>
-              </table>
+            <div style="flex: 1; min-width: 0; padding: var(--sy-space-16); display:flex; flex-direction:column; gap: var(--sy-space-16);" data-density="focus">
+              <div style="display:flex; align-items:center; gap: var(--sy-space-8);">
+                <span class="sy-type-heading-md">Run #482</span>
+                <span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-success-bg-solid);flex:none;"></span><span>Completed</span></span>
+                <button class="btn btn-ghost btn-icon btn-sm" type="button" style="margin-left:auto;" aria-label="Close"><svg class="icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              </div>
+              <dl style="margin:0; display:flex; flex-direction:column; gap: var(--sy-space-8);">
+                <div style="display:flex; gap: var(--sy-space-16);"><dt class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:100px;" lang="ko">에이전트</dt><dd style="margin:0;" class="sy-type-body-sm">Quarterly report</dd></div>
+                <div style="display:flex; gap: var(--sy-space-16);"><dt class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:100px;">Run ID</dt><dd style="margin:0;"><span class="sy-code-inline">run_a3f8…c92e</span></dd></div>
+                <div style="display:flex; gap: var(--sy-space-16);"><dt class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:100px;" lang="ko">시작</dt><dd style="margin:0;" class="sy-type-body-sm" lang="ko">2026년 7월 13일 06:00 KST</dd></div>
+              </dl>
+              <div>
+                <div class="sy-type-heading-sm" style="margin-bottom: var(--sy-space-8);" lang="ko">단계</div>
+                <div class="step"><span class="ind"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span style="color: var(--sy-fg-tertiary);" lang="ko">데이터 조회 · 328건</span><span class="dur">2.1s</span></div>
+                <div class="step"><span class="ind"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span style="color: var(--sy-fg-tertiary);">Posted to #ops</span><span class="dur">0.8s</span></div>
+              </div>
+              <div class="row" style="gap: var(--sy-space-8); margin-top:auto;">
+                <button class="btn btn-secondary btn-sm" type="button" lang="ko">다시 시도</button>
+                <button class="btn btn-ghost btn-sm" type="button" lang="ko">전체 보기</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="story" data-group="Sample pages" data-title="Object detail (focus)" data-doc="patterns.md §1B" id="s-sample-object">
-        <p class="desc">Focus archetype: page header (R1) with lg badge, tabs, flat key-value card (R11), an agent proposal, and recent activity as steps.</p>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); padding: var(--sy-page-padding);">
+      <div class="story" data-group="Sample pages" data-title="Console" data-doc="patterns.md §1E · ai-patterns" id="s-sample-console">
+        <p class="desc">The product's heart — now a full ai-patterns walkthrough: context cards, named working line (§20), steps with pre-approved tool call and failure→retry (§3/§4/§10), answer anatomy (§20), provenance + Model-knowledge + uncertainty register (§6/§7/§9), ProposalCard + resolved attribution (§5), MediaGroup + rail (§21), quote-reply (§18), follow-ups (§19), guardrail (§15), handoff (§16), long-running progress (§11), live streaming + Stop (§2/§8). Mono §-tags mark each pattern; thread scrolls. <strong>Interactive:</strong> follow-up rows &amp; chips insert into the Composer · send ↔ stop morph · quote × removes · agent picker opens · pen-line → refinement presets rewrite the draft (Undo in the toast) · bookmark → template library inserts a cloze draft ([슬롯] placeholders) · topbar as in Workbench.</p>
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
+          <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
+            <button class="btn btn-ghost btn-sm" type="button"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+            <span style="margin-left:auto;"></span>
+            <span style="position:relative; display:inline-flex;"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Notifications"><svg class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></button><span style="position:absolute; top:-2px; right:-2px; min-width:18px; height:18px; padding:0 var(--sy-space-4); border:2px solid var(--sy-bg-surface); border-radius:var(--sy-radius-full); background:var(--sy-bg-inverse-soft); color:var(--sy-fg-inverse); font:var(--sy-weight-semibold) 11px/14px var(--sy-font-sans); display:inline-flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums;">3</span></span>
+            <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Search (⌘K)"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Help"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 .5c0 1.5-2.5 2-2.5 3.5M12 17h.01"/></svg></button>
+            <span class="avatar av-32" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);">JC</span>
+          </div>
+          <div style="display:flex; min-height: 560px;">
+            <nav class="sidebar sample-side" style="width: 200px; border-radius: 0; border: none; border-right: 1px solid var(--sy-border-subtle); padding: var(--sy-space-12);" aria-label="Sample nav">
+            <div class="nav-item"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg>Home</div>
+            <div class="nav-item "><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Agents<span class="badge badge-neutral">12</span></div>
+            <div class="nav-item " lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>실행 기록</div>
+            <div class="nav-item active" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>콘솔</div>
+            <div class="nav-group sy-type-micro-label">Workspace</div>
+            <div class="nav-item"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>Members</div>
+            <div class="nav-item " lang="ko"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.2-1.6l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2.8-1.6L13 2h-2l-.7 2.9a7 7 0 0 0-2.8 1.6l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .2 1.6l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2.8 1.6L11 22h2l.7-2.9a7 7 0 0 0 2.8-1.6l2.3 1 2-3.4-2-1.5A7 7 0 0 0 19 12z"/></svg>설정</div>
+            <div class="nav-group sy-type-micro-label" lang="ko">대화 · 오늘</div>
+            <div class="nav-item" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>새 대화</div>
+            <div class="nav-item active" lang="ko" style="font-weight: var(--sy-weight-regular);">주간 문의 보고서 초안</div>
+            <div class="nav-item" lang="ko" style="font-weight: var(--sy-weight-regular);">결제 오류 분석</div>
+            <div class="nav-group sy-type-micro-label" lang="ko">컬렉션</div>
+            <div class="nav-item" lang="ko"><span style="width:8px; height:8px; border-radius:50%; background: var(--sy-viz-2); flex:none;"></span>주간 보고</div>
+            <div class="nav-item" lang="ko"><span style="width:8px; height:8px; border-radius:50%; background: var(--sy-viz-5); flex:none;"></span>고객 응대</div>
+          </nav>
+            <div style="flex:1; min-width:0; display:flex; flex-direction:column; max-height: 820px;">
+              <div style="flex:1; overflow:auto; min-height:0;">
+              <div style="max-width: 760px; width:100%; margin: 0 auto; padding: var(--sy-space-24); display:flex; flex-direction:column; gap: var(--sy-space-24);">
+                <div style="display:flex; justify-content:flex-end; padding-top: var(--sy-space-4);"><span class="ctx-stack"><span class="under" aria-hidden="true"></span><span class="ctx"><span class="c-i"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></span><span class="c-t"><div class="t" lang="ko">주간_고객문의.csv</div><div class="m" lang="ko">Zendesk · 7월 12일</div></span><span class="badge" style="flex:none;">+1</span></span></span></div>
+                <span class="msg-img" title="결제오류_스크린샷.png"><svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" fill="var(--sy-bg-page)"/><rect width="160" height="18" fill="var(--sy-bg-sunken)"/><circle cx="10" cy="9" r="3" fill="var(--sy-border-strong)"/><rect x="20" y="6" width="48" height="6" rx="2" fill="var(--sy-border-strong)"/><rect x="12" y="30" width="90" height="6" rx="2" fill="var(--sy-border-default)"/><rect x="12" y="44" width="136" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="55" width="136" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="66" width="112" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="80" width="42" height="10" rx="3" style="fill: color-mix(in srgb, var(--sy-status-danger) 22%, transparent);"/><rect x="16" y="83" width="34" height="4" rx="2" fill="var(--sy-status-danger)"/></svg></span>
+                <div class="msg-h" lang="ko">지난주 고객 문의 요약해서 보고서 초안 만들어 줘</div>
+                <div class="msg-a">
+                  <span class="avatar agent av-24" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
+                  <div style="flex:1; min-width:0;">
+                    <div style="display:flex; align-items:center; gap: var(--sy-space-8);"><div class="working" lang="ko" style="font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); flex:1;">보고서 초안 생성 중…</div><span class="ptag">§20 working</span></div>
+                    <div class="step" style="height:24px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">추론 과정</span><span class="dur">4.1s</span></div>
+                    <div class="step" style="height:24px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span lang="ko">Zendesk에서 문의 조회</span><span style="font-family: var(--sy-font-mono); font-size:11px; color: var(--sy-fg-tertiary);">zendesk.search</span><span class="badge" lang="ko">사전 승인됨</span><span class="dur">2.3s</span></div>
+                    <div class="step" style="min-height:24px; height:auto;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-danger);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span lang="ko">주제 분류 — 시간 초과</span><button class="btn btn-ghost btn-sm" type="button" lang="ko">다시 시도</button><span class="dur">30s</span></div>
+                    <div class="step" style="height:24px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span lang="ko">재시도 1/2 — 주제 분류 완료</span><span class="dur">6.1s</span></div>
+                    <div class="step" style="height:24px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">5단계 · 12초 — 문의 328건 조회, 주제 분류, 초안 생성</span><span class="ptag" style="margin-left:auto;">§3/§4/§10 steps</span></div>
+                    <div class="ans-h"><span class="sy-type-heading-sm" lang="ko">주간 고객 문의 요약</span><span class="badge" style="font-variant-numeric: tabular-nums;">12.4s</span><span style="margin-left:auto; display:inline-flex; align-items:center; gap: var(--sy-space-2);"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="이전 버전"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button><span class="sy-type-caption" style="color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums;">2/2</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="다음 버전"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="접기"><svg class="icon" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg></button><span class="ptag">§22</span></span></div>
+                    <p style="margin-top: var(--sy-space-8);" lang="ko">지난주 문의는 총 328건으로 전주 대비 12% 증가했습니다 <span class="src">[1]</span> <span style="position:relative; display:inline;"><span class="reply-pill"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v4"/></svg>답장<span style="width:1px; height:12px; background: var(--sy-border-default); margin: 0 var(--sy-space-4);"></span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>재생성</span><span class="quote-hl">상위 주제는 결제 오류(47건)와 로그인 문제(31건)입니다</span></span> <span class="src">[2]</span> 초안을 만들었습니다 — 검토 후 공유할 수 있습니다.</p>
+                    <p style="margin-top: var(--sy-space-8);" lang="ko">로그인 문제 증가는 <strong style="font-weight: var(--sy-weight-semibold);">추정으로는</strong> 지난주 SSO 설정 변경과 관련이 있을 수 있습니다 <span class="badge" lang="ko">모델 지식</span> — 확인하려면 감사 로그 조회가 필요합니다. <span class="ptag">§6/§7</span></p>
+                    <p class="sy-type-caption" style="color: var(--sy-fg-secondary); margin-top: var(--sy-space-8);">[1] Zendesk · 문의 데이터 · [2] #payments-alerts</p>
+                    <div class="proposal" style="max-width:none; margin-top: var(--sy-space-12);">
+                      <div class="p-h"><span class="avatar agent av-24" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span><span lang="ko">보고서 초안 제안</span></div>
+                      <div class="p-b" lang="ko">'주간 고객 문의 보고서'를 워크스페이스 문서로 저장합니다.</div>
+                      <div class="p-f">
+                        <button class="btn btn-secondary" type="button" lang="ko">거절</button>
+                        <button class="btn btn-primary" type="button" lang="ko">승인</button>
+                      </div>
+                    </div>
+                    <div class="step" style="margin-top: var(--sy-space-8);"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">June 승인 · 14:02</span><span class="ptag" style="margin-left:auto;">§5 resolved</span></div>
+                    <div class="row" style="align-items:center; margin-top: var(--sy-space-8);">
+                      <div class="media-fan">
+                        <div class="m-card"><svg class="asset" viewBox="0 0 180 90" aria-hidden="true"><rect width="180" height="90" fill="var(--sy-bg-page)"/><path d="M16 70h150" stroke="var(--sy-border-default)"/><path d="M16 48h150" stroke="var(--sy-border-subtle)"/><path d="M16 26h150" stroke="var(--sy-border-subtle)"/><polyline points="20,62 44,48 68,54 92,36 116,42 140,22 164,28" fill="none" stroke="var(--sy-viz-1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="140" cy="22" r="3" fill="var(--sy-viz-1)"/></svg><span class="m-cap"><span class="sy-type-micro" lang="ko">주간 추이 차트</span></span></div>
+                        <div class="m-card"><svg class="asset" viewBox="0 0 180 90" aria-hidden="true"><rect width="180" height="90" fill="var(--sy-bg-page)"/><rect x="20" y="16" width="72" height="8" rx="2" fill="var(--sy-bg-inverse-soft)"/><rect x="20" y="32" width="124" height="4" rx="2" fill="var(--sy-border-default)"/><rect x="20" y="40" width="104" height="4" rx="2" fill="var(--sy-border-default)"/><rect x="20" y="56" width="10" height="20" rx="2" style="fill: color-mix(in srgb, var(--sy-viz-1) 60%, transparent);"/><rect x="34" y="62" width="10" height="14" rx="2" style="fill: color-mix(in srgb, var(--sy-viz-1) 35%, transparent);"/><rect x="48" y="52" width="10" height="24" rx="2" fill="var(--sy-viz-1)"/><rect x="104" y="56" width="56" height="4" rx="2" fill="var(--sy-border-subtle)"/><rect x="104" y="64" width="44" height="4" rx="2" fill="var(--sy-border-subtle)"/></svg><span class="m-cap"><span class="sy-type-micro" lang="ko">보고서 표지</span></span></div>
+                      </div>
+                      <span class="ptag" style="align-self:flex-end;">§21 media</span>
+                    </div>
+                    <div class="row" style="gap: var(--sy-space-2); margin-top: var(--sy-space-8);">
+                      <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Copy"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+                      <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Regenerate"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+                      <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Good response"><svg class="icon" viewBox="0 0 24 24"><path d="M7 10v12M15 5.9 14 10h5.8a2 2 0 0 1 1.9 2.6l-2.3 7a2 2 0 0 1-1.9 1.4H7V10l4.7-7a2.4 2.4 0 0 1 3.3 2.9z"/></svg></button>
+                      <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Poor response"><svg class="icon" viewBox="0 0 24 24"><path d="M17 14V2M9 18.1 10 14H4.2a2 2 0 0 1-1.9-2.6l2.3-7A2 2 0 0 1 6.5 3H17v11l-4.7 7a2.4 2.4 0 0 1-3.3-2.9z"/></svg></button>
+                    </div>
+                    <div class="row" style="gap: var(--sy-space-8); margin-top: var(--sy-space-12);">
+                      <span class="tag tag-sugg" lang="ko">지난달과 비교해 줘</span>
+                      <span class="tag tag-sugg" lang="ko">#ops에 공유하기</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="msg-h" lang="ko">고객 개인 연락처 목록도 넣어 줘. 그리고 결제 오류 원인 분석 계속해 줘</div>
+                <div class="msg-a">
+                  <span class="avatar agent av-24" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
+                  <div style="flex:1; min-width:0;">
+                    <div style="display:flex; gap: var(--sy-space-8); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-12) var(--sy-space-16); max-width: 560px;">
+                      <svg class="icon" style="color: var(--sy-fg-tertiary); flex:none;" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.7 9a.6.6 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 .6-.9l7-2.9a1 1 0 0 1 .8 0l7 2.9A1 1 0 0 1 20 6z"/></svg>
+                      <span class="sy-type-body-sm" style="color: var(--sy-fg-secondary);" lang="ko">개인 연락처는 워크스페이스 데이터 정책에 따라 보고서에 포함할 수 없습니다. 정책은 관리자가 설정에서 확인할 수 있습니다.</span>
+                      <span class="ptag" style="flex:none; align-self:flex-start;">§15</span>
+                    </div>
+                    <div class="step" style="margin-top: var(--sy-space-8);"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4M20 7H4M8 21l-4-4 4-4M4 17h16"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">June님에게 전달됨 · 14:05</span><span class="badge badge-warning" lang="ko">확인 필요</span><span class="ptag" style="margin-left:auto;">§16 handoff</span></div>
+                    <div class="row" style="gap: var(--sy-space-8); margin-top: var(--sy-space-4);"><button class="btn btn-primary btn-sm" type="button" lang="ko">에이전트 계속하기</button></div>
+                    <div style="margin-top: var(--sy-space-12);">
+                      <div class="plabel" style="max-width:360px;"><span lang="ko">결제 오류 로그 분석</span><span class="n">62%</span></div>
+                      <div class="pbar" style="max-width:360px;"><div style="width:62%; background: var(--sy-meter-fill);"></div></div>
+                      <span class="ptag">§11 long-running</span>
+                    </div>
+                    <p style="margin-top: var(--sy-space-8);" lang="ko">결제 오류 47건 중 31건은 카드사 점검 시간대에 발생했으며, 나머지 16건은<span class="cursor"></span></p>
+                    <div style="margin-top: var(--sy-space-8);"><button class="btn btn-secondary btn-sm" type="button"><svg class="icon" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/></svg><span lang="ko">중지</span></button><span class="ptag" style="margin-left: var(--sy-space-8);">§2 streaming</span></div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div style="max-width: 760px; width:100%; margin: 0 auto; padding: 0 var(--sy-space-24) var(--sy-space-24); position: relative;">
+                <div class="followups" style="position: absolute; left: var(--sy-space-24); right: var(--sy-space-24); bottom: 100%; margin-bottom: var(--sy-space-8);">
+                  <div class="fu-hint"><span><span class="sy-kbd">↑</span> <span class="sy-kbd">↓</span> <span lang="ko">이동</span></span><span><span class="sy-kbd">↵</span> <span lang="ko">선택</span></span><span style="margin-left:auto;"><span class="sy-kbd">esc</span> <span lang="ko">닫기</span></span></div>
+                  <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>지난달과 비교해 줘</div>
+                  <div class="fu-row sel" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>결제 오류 47건의 원인을 분석해 줘</div>
+                  <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>#ops에 공유하기</div>
+                </div>
+                <div class="composer-tray">
+                  <div class="row" style="gap: var(--sy-space-8); margin-bottom: var(--sy-space-8);">
+                    <span class="att-img" title="결제오류_스크린샷.png"><svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" fill="var(--sy-bg-page)"/><rect width="160" height="18" fill="var(--sy-bg-sunken)"/><circle cx="10" cy="9" r="3" fill="var(--sy-border-strong)"/><rect x="20" y="6" width="48" height="6" rx="2" fill="var(--sy-border-strong)"/><rect x="12" y="30" width="90" height="6" rx="2" fill="var(--sy-border-default)"/><rect x="12" y="44" width="136" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="55" width="136" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="66" width="112" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="80" width="42" height="10" rx="3" style="fill: color-mix(in srgb, var(--sy-status-danger) 22%, transparent);"/><rect x="16" y="83" width="34" height="4" rx="2" fill="var(--sy-status-danger)"/></svg><span class="x" role="button" aria-label="결제오류_스크린샷.png 제거"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span></span>
+                  </div>
+                  <div class="row" style="gap: var(--sy-space-8); margin-bottom: var(--sy-space-8);">
+                    <span class="tag">error_log.csv <span class="x" role="button" aria-label="제거">✕</span></span>
+                    <span class="tag" lang="ko">지난주_보고서.pdf <span class="x" role="button" aria-label="제거">✕</span></span>
+                  </div>
+                  <div class="composer-quote"><svg class="icon" style="width:12px;height:12px; flex:none; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v4"/></svg><span class="q-t" lang="ko">상위 주제는 결제 오류(47건)와 로그인 문제(31건)입니다</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="인용 제거" style="height:20px; width:20px; color: inherit;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+                  <textarea placeholder="에이전트에게 요청하세요…" lang="ko" style="width:100%; border:none; outline:none; background:transparent; resize:none; font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); color: var(--sy-fg-primary); min-height: 24px;">결제 오류 정리해줘</textarea>
+                  <div class="row" style="gap: var(--sy-space-8); margin-top: var(--sy-space-4);">
+                    <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Attach"><svg class="icon" viewBox="0 0 24 24"><path d="m21 11-8.5 8.5a5 5 0 0 1-7-7L14 4a3.3 3.3 0 0 1 4.7 4.7L10 17.4a1.7 1.7 0 0 1-2.4-2.4L16 6.6"/></svg></button>
+                    <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="템플릿"><svg class="icon" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+                    <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="프롬프트 다듬기"><svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>
+                    <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="음성 입력"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
+                    <button class="btn btn-ghost btn-sm" type="button"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-6) 20%, transparent); color: var(--sy-viz-6); flex:none;"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span> <span lang="ko">주간 보고서</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+                    <span style="margin-left:auto;"></span>
+                    <button class="btn btn-primary" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story" data-group="Sample pages" data-title="Settings (focus)" data-doc="patterns.md §1C" id="s-sample-settings">
+        <p class="desc">Settings archetype: 760px column, tabs, form card with save pair, switch rows, usage meter, danger zone. Zero accent — nothing here prompts an AI. <strong>Interactive:</strong> 워크스페이스 삭제 → destructive Modal → Toast · topbar as in Workbench.</p>
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
+          <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
+            <button class="btn btn-ghost btn-sm" type="button"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+            <span style="margin-left:auto;"></span>
+            <span style="position:relative; display:inline-flex;"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Notifications"><svg class="icon" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></button><span style="position:absolute; top:-2px; right:-2px; min-width:18px; height:18px; padding:0 var(--sy-space-4); border:2px solid var(--sy-bg-surface); border-radius:var(--sy-radius-full); background:var(--sy-bg-inverse-soft); color:var(--sy-fg-inverse); font:var(--sy-weight-semibold) 11px/14px var(--sy-font-sans); display:inline-flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums;">3</span></span>
+            <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Search (⌘K)"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Help"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 .5c0 1.5-2.5 2-2.5 3.5M12 17h.01"/></svg></button>
+            <span class="avatar av-32" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);">JC</span>
+          </div>
+          <div style="display:flex; min-height: 560px;">
+            <nav class="sidebar sample-side" style="width: 200px; border-radius: 0; border: none; border-right: 1px solid var(--sy-border-subtle); padding: var(--sy-space-12);" aria-label="Sample nav">
+            <div class="nav-item"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12l9-8 9 8M5 10v10h14V10"/></svg>Home</div>
+            <div class="nav-item "><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Agents<span class="badge badge-neutral">12</span></div>
+            <div class="nav-item " lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>실행 기록</div>
+            <div class="nav-item " lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>콘솔</div>
+            <div class="nav-group sy-type-micro-label">Workspace</div>
+            <div class="nav-item"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>Members</div>
+            <div class="nav-item active" lang="ko"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.2-1.6l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2.8-1.6L13 2h-2l-.7 2.9a7 7 0 0 0-2.8 1.6l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .2 1.6l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2.8 1.6L11 22h2l.7-2.9a7 7 0 0 0 2.8-1.6l2.3 1 2-3.4-2-1.5A7 7 0 0 0 19 12z"/></svg>설정</div>
+          </nav>
+            <div style="flex:1; min-width:0; padding: var(--sy-page-padding);">
+              <div style="max-width: 760px; margin: 0 auto; display:flex; flex-direction:column; gap: var(--sy-space-24);">
+                <span class="sy-type-heading-xl" lang="ko">설정</span>
+                <div class="tabs">
+                  <span class="tab active">General</span>
+                  <span class="tab">Members</span>
+                  <span class="tab" lang="ko">알림</span>
+                  <span class="tab">Billing</span>
+                  <span class="tab">API</span>
+                </div>
+                <div class="card" style="background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default);">
+                  <div class="sy-type-heading-md" style="margin-bottom: var(--sy-space-16);" lang="ko">워크스페이스</div>
+                  <div class="col" style="gap: var(--sy-space-16);">
+                    <div class="field" style="width: 360px;"><label lang="ko">워크스페이스 이름</label><div class="ctrl"><input value="Enhans"></div></div>
+                    <div class="field" style="width: 240px;"><label lang="ko">기본 언어</label><div class="ctrl"><input value="한국어 (Korean)" lang="ko" readonly style="cursor:pointer;"><svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary);"><path d="m6 9 6 6 6-6"/></svg></div></div>
+                    <div class="row" style="justify-content:flex-end; gap: var(--sy-space-8);">
+                      <button class="btn btn-ghost" type="button" lang="ko">취소</button>
+                      <button class="btn btn-primary" type="button" lang="ko">변경사항 저장</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="sy-type-heading-md" style="margin-bottom: var(--sy-space-8);" lang="ko">알림</div>
+                  <div style="display:flex; align-items:center; padding: var(--sy-space-8) 0; border-bottom: 1px solid var(--sy-border-subtle);"><span><span class="sy-type-body" lang="ko">실행 완료 알림</span><br><span class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">에이전트 실행이 끝나면 알립니다</span></span><span style="margin-left:auto;"><span class="switch"><input type="checkbox" checked><span class="track"></span></span></span></div>
+                  <div style="display:flex; align-items:center; padding: var(--sy-space-8) 0;"><span><span class="sy-type-body" lang="ko">실패 시 이메일</span><br><span class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">실패한 실행을 이메일로 받습니다</span></span><span style="margin-left:auto;"><span class="switch"><input type="checkbox"><span class="track"></span></span></span></div>
+                </div>
+                <div class="card" style="background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default);">
+                  <div class="sy-type-heading-md" style="margin-bottom: var(--sy-space-8);" lang="ko">플랜 사용량</div>
+                  <div class="plabel"><span lang="ko">에이전트 크레딧</span><span class="n">1.7M / 2M</span></div>
+                  <div class="pbar"><div style="width: 85%; background: var(--sy-status-warning-bg-solid);"></div></div>
+                  <div class="row" style="gap: var(--sy-space-8); margin-top: var(--sy-space-12);">
+                    <span class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">7월 31일에 갱신됩니다</span>
+                    <button class="btn btn-secondary btn-sm" type="button" style="margin-left:auto;" lang="ko">플랜 업그레이드</button>
+                  </div>
+                </div>
+                <div class="card" style="background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default);">
+                  <div class="sy-type-heading-md" style="margin-bottom: var(--sy-space-8);" lang="ko">위험 구역</div>
+                  <div style="display:flex; align-items:center; gap: var(--sy-space-16);">
+                    <span class="sy-type-body-sm" style="color: var(--sy-fg-secondary);" lang="ko">워크스페이스와 모든 실행 기록 284건이 영구 삭제됩니다. 되돌릴 수 없습니다.</span>
+                    <button class="btn btn-danger" type="button" style="margin-left:auto; flex:none;" lang="ko">워크스페이스 삭제</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story" data-group="Sample pages" data-title="Object detail (focus)" data-doc="patterns.md §1B · R1/R11" id="s-sample-object">
+        <p class="desc">Focus object page: R1 header (Run is `primary` — operational, v6.2.1), tabs, key-value flat card, trend chart, embedded dense runs table, agent proposal, activity. No accent — the ask-entry lives in chrome (⌘K).</p>
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); padding: var(--sy-page-padding); min-width: 960px; max-width: 1440px;">
           <div style="max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--sy-space-24);">
             <div>
               <div class="crumbs" style="margin-bottom: var(--sy-space-4);"><a href="#">Agents</a><span>/</span><span class="cur" lang="ko">주간 보고서</span></div>
@@ -1374,11 +1848,11 @@ team: finance</pre>
                 <span class="badge badge-lg badge-info" lang="ko">진행 중</span>
                 <span style="margin-left:auto; display:flex; gap: var(--sy-space-8);">
                   <button class="btn btn-secondary" type="button">Edit</button>
-                  <button class="btn btn-accent" type="button" lang="ko">실행</button>
+                  <button class="btn btn-primary" type="button" lang="ko">실행</button>
                   <button class="btn btn-ghost btn-icon" type="button" aria-label="More"><svg class="icon" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
                 </span>
               </div>
-              <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);">June · <span lang="ko">2026년 7월 9일 수정</span> · <span style="font-family: var(--sy-font-mono);">agt_9d21</span></div>
+              <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);">June · <span lang="ko">2026년 7월 13일 수정</span> · <span style="font-family: var(--sy-font-mono);">agt_9d21</span></div>
             </div>
             <div class="tabs">
               <span class="tab active">Overview</span>
@@ -1390,45 +1864,83 @@ team: finance</pre>
               <dl style="margin:0; display:flex; flex-direction:column; gap: var(--sy-space-8);">
                 <div style="display:flex; gap: var(--sy-space-16);"><dt class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:120px;" lang="ko">예약</dt><dd style="margin:0;" class="sy-type-body" lang="ko">매주 월요일 오전 6:00 KST</dd></div>
                 <div style="display:flex; gap: var(--sy-space-16);"><dt class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:120px;" lang="ko">커넥터</dt><dd style="margin:0;"><span class="tag">Slack</span> <span class="tag">Zendesk</span></dd></div>
-                <div style="display:flex; gap: var(--sy-space-16);"><dt class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:120px;" lang="ko">상태</dt><dd style="margin:0;"><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-info-bg-solid);flex:none;"></span><span lang="ko">실행 중… 다음: 7월 13일</span></span></dd></div>
+                <div style="display:flex; gap: var(--sy-space-16);"><dt class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:120px;" lang="ko">상태</dt><dd style="margin:0;"><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-info-bg-solid);flex:none;"></span><span lang="ko">실행 중 · 다음: 7월 20일</span></span></dd></div>
               </dl>
             </div>
-            <div class="proposal" style="max-width: none;">
-              <div class="p-h"><span class="avatar agent av-24" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span><span lang="ko">주간 보고서 제안</span></div>
-              <div class="p-b" lang="ko">지난 4주 실패율이 높은 시간대를 피해 실행 시간을 오전 5:30으로 변경합니다.</div>
-              <div class="p-f">
-                <button class="btn btn-secondary" type="button" lang="ko">거절</button>
-                <button class="btn btn-accent" type="button" lang="ko">승인</button>
+            <div class="card tight" style="background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default);">
+              <div class="card-h"><h3 lang="ko">주간 실행 추이</h3><div class="seg"><button type="button" style="height:24px;">7D</button><button type="button" class="on" style="height:24px;">30D</button></div></div>
+              <div style="padding: var(--sy-space-16) var(--sy-card-padding) var(--sy-card-padding);">
+                <svg viewBox="0 0 640 140" style="width:100%; height:auto;" role="img" aria-label="Line chart, weekly runs">
+                  <line x1="40" y1="16" x2="630" y2="16" stroke="var(--sy-border-subtle)"/><line x1="40" y1="60" x2="630" y2="60" stroke="var(--sy-border-subtle)"/><line x1="40" y1="104" x2="630" y2="104" stroke="var(--sy-border-subtle)"/>
+                  <line x1="40" y1="124" x2="630" y2="124" stroke="var(--sy-border-default)"/>
+                  <text x="34" y="20" text-anchor="end" font-size="11" fill="var(--sy-fg-tertiary)">60</text>
+                  <text x="34" y="108" text-anchor="end" font-size="11" fill="var(--sy-fg-tertiary)">20</text>
+                  <polyline points="40,100 120,92 200,80 280,86 360,58 440,64 520,36 630,30" fill="none" stroke="var(--sy-viz-1)" stroke-width="2"/>
+                  <text x="40" y="138" font-size="11" fill="var(--sy-fg-tertiary)">6/13</text><text x="630" y="138" text-anchor="end" font-size="11" fill="var(--sy-fg-tertiary)">7/13</text>
+                </svg>
               </div>
             </div>
             <div>
               <div style="display:flex; align-items:center; gap: var(--sy-space-8); margin-bottom: var(--sy-space-8);">
-                <span class="sy-type-heading-lg" lang="ko">최근 활동</span>
+                <span class="sy-type-heading-lg" lang="ko">최근 실행</span>
                 <button class="btn btn-ghost btn-sm" type="button" style="margin-left:auto;" lang="ko">전체 보기</button>
               </div>
-              <div class="step"><span class="ind"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span style="color: var(--sy-fg-tertiary);" lang="ko">보고서 생성 완료 · 328건 분석</span><span class="dur">4m 12s</span></div>
-              <div class="step"><span class="ind"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span style="color: var(--sy-fg-tertiary);">Posted to #ops · <span class="sy-code-inline" style="font-size:11px; padding:0 var(--sy-space-2);">slack.post_message</span></span><span class="dur">0.8s</span></div>
+              <div class="tframe" data-density="dense">
+                <table>
+                  <thead><tr><th>Run ID</th><th>Status</th><th class="num">Duration</th><th class="num" lang="ko">시작</th></tr></thead>
+                  <tbody>
+                    <tr><td class="id">run_a3f8…c92e</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-success-bg-solid);flex:none;"></span><span>Completed</span></span></td><td class="num">4m 12s</td><td class="num">07-13 06:00</td></tr>
+                    <tr><td class="id">run_e1c2…77aa</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-success-bg-solid);flex:none;"></span><span>Completed</span></span></td><td class="num">3m 58s</td><td class="num">07-06 06:00</td></tr>
+                    <tr><td class="id">run_f9b0…31d5</td><td><span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-danger-bg-solid);flex:none;"></span><span>Failed</span></span></td><td class="num">0m 12s</td><td class="num">06-29 06:00</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="proposal" style="max-width: none;">
+              <div class="p-h"><span class="avatar agent av-24" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span><span lang="ko">주간 보고서 제안</span></div>
+              <div class="p-b" lang="ko">지난 4주 실패율이 높은 시간대를 피해 실행 시간을 오전 5:30으로 변경합니다.
+                <div class="diff">
+                  <div class="del">− schedule: "0 6 * * 1"</div>
+                  <div class="add">+ schedule: "30 5 * * 1"</div>
+                </div>
+              </div>
+              <div class="p-f">
+                <button class="btn btn-ghost" type="button">Edit</button>
+                <button class="btn btn-secondary" type="button" lang="ko">거절</button>
+                <button class="btn btn-primary" type="button" lang="ko">승인</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="story" data-group="Sample pages" data-title="First run (guided)" data-doc="patterns.md §1D · R12" id="s-sample-guided">
-        <p class="desc">Guided archetype: Artific display title, body-lg, pill primary (sanctioned here), horizontal stepper. Whitespace is intentional — resist filling it.</p>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); background: var(--sy-bg-page); padding: var(--sy-space-64) var(--sy-space-32);">
+        <p class="desc">Guided archetype, two moments: the hero (EN so the Artific display face actually renders — Hangul falls back to Pretendard by design, v6.7) and step 2's ChoiceCard decision. Whitespace is intentional.</p>
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); background: var(--sy-bg-page); padding: var(--sy-space-64) var(--sy-space-32); min-width: 960px; max-width: 1440px;">
           <div style="max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: var(--sy-space-16); text-align: center;">
-            <div class="row" style="gap: 0; align-items: center; width: 100%; max-width: 420px; margin-bottom: var(--sy-space-16);">
-              <span style="display:flex; align-items:center; gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius:50%;background:var(--sy-action-primary-bg);color:var(--sy-action-primary-fg);display:inline-flex;align-items:center;justify-content:center;"><svg class="icon" style="width:11px;height:11px;stroke:var(--sy-action-primary-fg);" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></span><span class="sy-type-label" lang="ko">연동</span></span>
-              <span style="flex:1; height:1px; background: var(--sy-border-default); margin: 0 var(--sy-space-8);"></span>
-              <span style="display:flex; align-items:center; gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius:50%;border:2px solid var(--sy-action-primary-bg);color:var(--sy-fg-primary);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;">2</span><span class="sy-type-label" lang="ko">에이전트</span></span>
-              <span style="flex:1; height:1px; background: var(--sy-border-default); margin: 0 var(--sy-space-8);"></span>
-              <span style="display:flex; align-items:center; gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius:50%;border:2px solid var(--sy-border-strong);color:var(--sy-fg-tertiary);display:inline-flex;align-items:center;justify-content:center;font-size:11px;">3</span><span class="sy-type-label" style="color: var(--sy-fg-tertiary);" lang="ko">검토</span></span>
-            </div>
-            <div class="sy-type-display" lang="ko">첫 에이전트를 만들어 보세요</div>
-            <p class="sy-type-body-lg sy-balance" style="color: var(--sy-fg-secondary); max-width: 440px;" lang="ko">반복 업무를 맡길 에이전트를 만들고, 결과를 검토할 수 있도록 정리해 드립니다.</p>
+            <div class="sy-type-display">Create your first agent</div>
+            <p class="sy-type-body-lg sy-balance" style="color: var(--sy-fg-secondary); max-width: 440px;">Hand off a recurring task — results come back organized and ready to review.</p>
             <div class="row" style="gap: var(--sy-space-12); justify-content: center; margin-top: var(--sy-space-8);">
-              <button class="btn btn-primary btn-lg" type="button" style="border-radius: var(--sy-radius-full); padding: 0 var(--sy-space-24);" lang="ko">에이전트 만들기</button>
-              <button class="btn btn-ghost btn-lg" type="button" lang="ko">둘러보기</button>
+              <button class="btn btn-primary btn-lg" type="button" style="border-radius: var(--sy-radius-full); padding: 0 var(--sy-space-24);">Create an agent</button>
+              <button class="btn btn-ghost btn-lg" type="button">Take a tour</button>
+            </div>
+          </div>
+        </div>
+        <h3 class="sub" lang="ko">2단계 — 에이전트 유형 선택 (ChoiceCard)</h3>
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); background: var(--sy-bg-page); padding: var(--sy-space-48) var(--sy-space-32); min-width: 960px; max-width: 1440px;">
+          <div style="max-width: 640px; margin: 0 auto; display:flex; flex-direction:column; gap: var(--sy-space-24);">
+            <div style="text-align:center;">
+              <div class="sy-type-caption" style="color: var(--sy-fg-tertiary);">2 / 3</div>
+              <div class="sy-type-heading-lg" style="margin-top: var(--sy-space-4);" lang="ko">어떤 일을 맡기시겠어요?</div>
+            </div>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--sy-space-12);">
+              <div class="card" role="radio" aria-checked="true" tabindex="0" style="background: var(--sy-bg-raised); padding: var(--sy-space-16); position:relative; border: 1px solid var(--sy-border-selected); box-shadow: inset 0 0 0 1px var(--sy-border-selected);"><svg class="icon" style="position:absolute; top:12px; right:12px;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><svg class="icon" style="width:20px;height:20px; margin-bottom: var(--sy-space-8);" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg><div class="sy-type-heading-sm" lang="ko">보고서</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">주기적으로 데이터를 요약합니다</div></div>
+              <div class="card" role="radio" aria-checked="false" tabindex="0" style="background: var(--sy-bg-raised); padding: var(--sy-space-16); border: 1px solid var(--sy-border-default);"><svg class="icon" style="width:20px;height:20px; margin-bottom: var(--sy-space-8);" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><div class="sy-type-heading-sm" lang="ko">분류</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">문의를 자동으로 배정합니다</div></div>
+              <div class="card" role="radio" aria-checked="false" tabindex="0" style="background: var(--sy-bg-raised); padding: var(--sy-space-16); border: 1px solid var(--sy-border-default);"><svg class="icon" style="width:20px;height:20px; margin-bottom: var(--sy-space-8);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div class="sy-type-heading-sm" lang="ko">모니터링</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">이상 징후를 감시합니다</div></div>
+            </div>
+            <div class="row" style="justify-content: space-between;">
+              <button class="btn btn-ghost" type="button" lang="ko">이전</button>
+              <button class="btn btn-primary" type="button" lang="ko">계속</button>
             </div>
           </div>
         </div>
@@ -1450,7 +1962,7 @@ team: finance</pre>
   Object.keys(groups).forEach(function (g) {
     var h = document.createElement('div');
     h.className = 'nav-group';
-    h.textContent = g.toUpperCase();
+    h.textContent = g;
     nav.appendChild(h);
     groups[g].forEach(function (s) {
       var b = document.createElement('button');
@@ -1469,6 +1981,7 @@ team: finance</pre>
     Array.prototype.forEach.call(nav.querySelectorAll('.nav-item'), function (b) {
       b.classList.toggle('active', b.dataset.target === target.id);
     });
+    document.getElementById('canvas').classList.toggle('full', target.getAttribute('data-group') === 'Sample pages');
     document.getElementById('storyTitle').textContent = target.getAttribute('data-title');
     document.getElementById('storyDoc').textContent = target.getAttribute('data-doc') || '';
     document.querySelector('.canvas').scrollTop = 0;
@@ -1531,6 +2044,7 @@ team: finance</pre>
 
   var prims = {
     gray: { white:'#FFFFFF', 50:'#FAFAFB', 100:'#F4F4F6', 150:'#ECECEF', 200:'#E3E3E8', 300:'#D1D1D8', 400:'#A9A9B2', 500:'#83838D', 600:'#62626B', 700:'#4A4A52', 800:'#33333A', 900:'#1E1E24', 950:'#141419', black:'#09090B' },
+    slate: { 50:'#F7F9FB', 100:'#EFF3F7', 200:'#DCE3EB', 300:'#C2CCD9', 400:'#93A1B3', 500:'#6B7A8D', 600:'#4F5D6F', 700:'#3C4756', 800:'#2A333F', 900:'#1A212B', 950:'#10151C' },
     blue: { 50:'#F0F4FD', 100:'#E4EAFB', 200:'#C4D1F5', 300:'#9DB3EE', 400:'#6B89E6', 500:'#3D63DD', 600:'#3155C6', 700:'#2A48A5', 800:'#22397F', 900:'#1B2C60', 950:'#111A3C' },
     green: { 50:'#EEF9F3', 100:'#DCF2E6', 200:'#A9E3C4', 300:'#3FBF7F', 400:'#2FAF6D', 500:'#1F9D5B', 600:'#146B3D', 700:'#135933', 800:'#124A2C', 900:'#123F27', 950:'#0C2A1A' },
     amber: { 50:'#FDF6E7', 100:'#FBEED3', 200:'#F3D492', 300:'#D99A27', 400:'#CC8B1E', 500:'#BA7C14', 600:'#7E5309', 700:'#6B4708', 800:'#5A3C08', 900:'#4A3208', 950:'#332305' },
@@ -1563,7 +2077,8 @@ team: finance</pre>
     'Borders': ['border-subtle','border-default','border-strong','border-focus','border-selected','border-error'],
     'Actions': ['action-primary-bg','action-primary-bg-hover','action-primary-bg-active','action-primary-fg','action-accent-bg','action-accent-bg-hover','action-accent-bg-active','action-accent-fg','action-danger-fg'],
     'Status': ['status-info','status-info-bg','status-info-bg-solid','status-info-inverse','status-success','status-success-bg','status-success-bg-solid','status-success-inverse','status-warning','status-warning-bg','status-warning-bg-solid','status-warning-inverse','status-danger','status-danger-bg','status-danger-bg-solid','status-danger-bg-solid-hover','status-danger-inverse'],
-    'AI': ['ai-surface','ai-border','ai-fg']
+    'AI': ['ai-surface','ai-border','ai-fg','ai-solid'],
+    'Emphasis — quiet, non-vibrant (v6.11)': ['emphasis-surface','emphasis-border','emphasis-fg']
   };
   var tg = document.getElementById('tokengroups');
   Object.keys(tokenGroups).forEach(function (g) {
@@ -1630,18 +2145,18 @@ team: finance</pre>
     }
     var label = c === 'ai' ? 'Agent' : 'Status';
     if (e === 'subtle') {
-      if (c === 'ai') return '<span class="badge" style="background: var(--sy-ai-surface); color: var(--sy-ai-fg); border: 1px solid var(--sy-ai-border);">' + label + '</span>';
+      if (c === 'ai') return '<span class="badge" style="background: var(--sy-ai-surface); color: var(--sy-ai-fg);">' + label + '</span>';
       return '<span class="badge badge-' + c + '">' + label + '</span>';
     }
     if (e === 'solid') {
       if (c === 'neutral') return '<span class="badge" style="background: var(--sy-bg-inverse); color: var(--sy-fg-inverse);">New</span>';
-      if (c === 'ai') return '<span class="badge" style="background: var(--sy-action-accent-bg); color: var(--sy-action-accent-fg);" lang="ko">실행 중</span>';
+      if (c === 'ai') return '<span class="badge" style="background: var(--sy-ai-solid); color: var(--sy-fg-on-solid);" lang="ko">실행 중</span>';
       return '<span class="badge" style="background: var(--sy-status-' + c + '-bg-solid); color: var(--sy-fg-on-solid);">' + label + '</span>';
     }
     if (e === 'outline') {
       var bc = c === 'neutral' ? 'var(--sy-border-default)' : c === 'ai' ? 'var(--sy-ai-border)' : 'var(--sy-status-' + c + ')';
       var fc = c === 'neutral' ? 'var(--sy-fg-secondary)' : c === 'ai' ? 'var(--sy-ai-fg)' : 'var(--sy-status-' + c + ')';
-      return '<span class="badge" style="border: 1px solid ' + bc + '; color: ' + fc + ';">' + label + '</span>';
+      return '<span class="badge" style="background: transparent; border: 1px solid ' + bc + '; color: ' + fc + ';">' + label + '</span>';
     }
     var dc = c === 'neutral' ? 'var(--sy-fg-tertiary)' : c === 'ai' ? 'var(--sy-ai-fg)' : 'var(--sy-status-' + c + '-bg-solid)';
     return '<span style="display:inline-flex; align-items:center; gap: 6px; font-size: var(--sy-text-13); color: var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background: ' + dc + ';"></span>' + label + '</span>';
@@ -1675,6 +2190,215 @@ team: finance</pre>
     d.innerHTML = '<div class="space-demo"><div style="width:' + s + 'px; height:' + s + 'px;"></div></div><div class="space-lbl">' + s + '</div>';
     sp.appendChild(d);
   });
+
+  // ---------- Interactive sample pages (preview-only demo wiring) ----------
+  (function () {
+    var agentGlyph = '<svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>';
+    function el(html) { var d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; }
+    var frames = [];
+    ['s-sample-workbench', 's-sample-console', 's-sample-settings'].forEach(function (id) {
+      var story = document.getElementById(id); if (!story) return;
+      var frame = null;
+      Array.prototype.some.call(story.querySelectorAll('div'), function (d) {
+        if ((d.getAttribute('style') || '').indexOf('min-width: 1160px') !== -1) { frame = d; return true; } return false;
+      });
+      if (!frame) return;
+      frame.style.position = 'relative';
+      frame.insertAdjacentHTML('beforeend', '<div class="toast-slot"></div>');
+      frames.push({ id: id, frame: frame });
+    });
+
+    var openPop = null;
+    function closePop() { if (openPop) { openPop.el.remove(); openPop = null; } }
+    function showPop(frame, anchor, html, dir) {
+      if (openPop && openPop.anchor === anchor) { closePop(); return; }
+      closePop();
+      var p = el('<div class="pop-anchor"></div>'); p.appendChild(el(html));
+      frame.appendChild(p);
+      var fr = frame.getBoundingClientRect(), ar = anchor.getBoundingClientRect();
+      if (dir === 'up') { p.style.bottom = (fr.bottom - ar.top + 4) + 'px'; p.style.left = Math.max(8, ar.left - fr.left) + 'px'; }
+      else { p.style.top = (ar.bottom - fr.top + 4) + 'px'; p.style.right = Math.max(8, fr.right - ar.right) + 'px'; }
+      openPop = { el: p, anchor: anchor };
+    }
+    document.addEventListener('click', function (e) {
+      if (openPop && !e.target.closest('.pop-anchor') && !openPop.anchor.contains(e.target)) closePop();
+    }, true);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { closePop(); document.querySelectorAll('.ov, .drawer-ov').forEach(function (o) { o.remove(); }); }
+    });
+    function showToast(frame, msg, actionLabel, onAction) {
+      var act = actionLabel ? '<span class="act" role="button" lang="ko">' + actionLabel + '</span>' : '';
+      var t = el('<div class="toast"><svg class="icon" style="color: var(--sy-status-success); flex:none;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span class="sy-type-body-sm" style="flex:1;" lang="ko">' + msg + '</span>' + act + '<button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Dismiss"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>');
+      t.querySelector('button').addEventListener('click', function () { t.remove(); });
+      var a = t.querySelector('.act');
+      if (a && onAction) a.addEventListener('click', function () { onAction(); t.remove(); });
+      frame.querySelector('.toast-slot').appendChild(t);
+      setTimeout(function () { t.remove(); }, 8000);
+    }
+    function showOverlay(frame, html, top) {
+      var o = el('<div class="ov' + (top ? ' top' : '') + '"><div class="scrim"></div></div>');
+      o.appendChild(el(html));
+      o.addEventListener('click', function (e) { if (e.target.classList.contains('scrim') || e.target.closest('[data-close]')) o.remove(); });
+      frame.appendChild(o);
+      return o;
+    }
+
+    var notifHtml = '<div class="notif" lang="ko">' +
+      '<div class="n-h"><span class="sy-type-label">알림</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="모두 읽음 처리" style="margin-left:auto;"><svg class="icon" viewBox="0 0 24 24"><path d="m2 13 4 4L14 9"/><path d="m10 13 4 4 8-8"/></svg></button></div>' +
+      '<div class="grp sy-type-micro-label" style="padding: var(--sy-space-4) var(--sy-space-8);">오늘</div>' +
+      '<div class="n-item unread"><span class="n-dot"></span><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;">' + agentGlyph + '</span><span style="min-width:0;"><span class="sy-type-body-sm">주간 보고서 실행이 완료되었습니다</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">10분 전</span></span></div>' +
+      '<div class="n-item unread"><span class="n-dot"></span><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-2) 20%, transparent); color: var(--sy-viz-2); flex:none;">' + agentGlyph + '</span><span style="min-width:0;"><span class="sy-type-body-sm">문의 분류 제안이 승인을 기다립니다</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">32분 전</span></span></div>' +
+      '<div class="grp sy-type-micro-label" style="padding: var(--sy-space-4) var(--sy-space-8);">이전</div>' +
+      '<div class="n-item"><span style="width:8px; flex:none;"></span><span class="avatar av-20" style="background: color-mix(in srgb, var(--sy-viz-5) 20%, transparent); color: var(--sy-viz-5); flex:none;">MK</span><span style="min-width:0;"><span class="sy-type-body-sm">민경님이 댓글을 남겼습니다</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">어제</span></span></div>' +
+      '<div class="n-f"><a class="sy-link" href="#" style="font-size: var(--sy-text-12);">알림 설정</a><a class="sy-link" href="#" style="font-size: var(--sy-text-12);">모두 보기</a></div></div>';
+
+    var profileHtml = '<div class="menu" style="width: 200px;" lang="ko">' +
+      '<div style="display:flex; gap: var(--sy-space-8); align-items:center; padding: var(--sy-space-8);"><span class="avatar av-32" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;">JC</span><span style="min-width:0;"><span class="sy-type-label">조주연</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">jooyeon@enhans.ai</span></span></div>' +
+      '<div class="menu-item">프로필 설정</div><div class="menu-item">환경 설정</div><div class="menu-item danger">로그아웃</div></div>';
+
+    var wsHtml = '<div class="menu" style="width: 220px;" lang="ko">' +
+      '<div class="menu-item selected"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:14px;height:14px; margin-left:auto;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></div>' +
+      '<div class="menu-item"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>새 워크스페이스</div></div>';
+
+    var paletteHtml = '<div class="palette" style="width: 520px;">' +
+      '<div class="p-in"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input placeholder="명령 또는 검색…" lang="ko"></div>' +
+      '<div class="grp sy-type-micro-label" lang="ko">바로가기</div>' +
+      '<div class="res sel" data-close lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>새 에이전트 만들기<span class="kbd-r"><span class="sy-kbd">↵</span></span></div>' +
+      '<div class="res" data-close lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>실행 기록 열기</div>' +
+      '<div class="res" data-close style="color: var(--sy-ai-fg);"><span class="avatar agent" style="width:16px;height:16px;background: color-mix(in srgb, var(--sy-ai-fg) 20%, transparent); color: var(--sy-ai-fg);">' + agentGlyph + '</span><span lang="ko">에이전트에게 묻기</span></div>' +
+      '<div class="p-ft"><span><span class="sy-kbd">↑</span> <span class="sy-kbd">↓</span> <span lang="ko">이동</span></span><span><span class="sy-kbd">↵</span> <span lang="ko">선택</span></span><span><span class="sy-kbd">esc</span> <span lang="ko">닫기</span></span></div></div>';
+
+    var drawerHtml = '<div class="drawer-panel" lang="ko">' +
+      '<div style="display:flex; align-items:center; gap: var(--sy-space-8); margin-bottom: var(--sy-space-16);"><span class="sy-type-heading-lg">실행 상세</span><span class="badge badge-success">성공</span><button class="btn btn-ghost btn-icon btn-sm" type="button" data-close aria-label="닫기" style="margin-left:auto;"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>' +
+      '<div class="kv-row"><span class="k">ID</span><span style="font-family: var(--sy-font-mono);">run_8f31a</span></div>' +
+      '<div class="kv-row"><span class="k">에이전트</span><span style="display:inline-flex; gap: var(--sy-space-6); align-items:center;"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);">' + agentGlyph + '</span>주간 보고서</span></div>' +
+      '<div class="kv-row"><span class="k">트리거</span><span>예약 · 매주 월 09:00</span></div>' +
+      '<div class="kv-row"><span class="k">소요 시간</span><span style="font-variant-numeric: tabular-nums;">4m 02s</span></div>' +
+      '<div class="kv-row"><span class="k">처리 건수</span><span style="font-variant-numeric: tabular-nums;">328건</span></div>' +
+      '<div class="kv-row" style="border-bottom:none;"><span class="k">결과</span><span>보고서 초안 1건 생성됨</span></div>' +
+      '<div class="row" style="gap: var(--sy-space-8); margin-top: var(--sy-space-16);"><button class="btn btn-secondary" type="button">로그 보기</button><button class="btn btn-primary" type="button" data-close>보고서 열기</button></div></div>';
+
+    var dangerModalHtml = '<div class="modal" style="width: 400px;" lang="ko">' +
+      '<div class="sy-type-heading-lg" style="margin-bottom: var(--sy-space-8);">워크스페이스를 삭제할까요?</div>' +
+      '<p class="sy-type-body-sm" style="color: var(--sy-fg-secondary);">워크스페이스와 모든 실행 기록 284건이 영구 삭제됩니다. 되돌릴 수 없습니다.</p>' +
+      '<div class="row" style="justify-content: flex-end; gap: var(--sy-space-8); margin-top: var(--sy-space-24);"><button class="btn btn-secondary" type="button" data-close>취소</button><button class="btn btn-danger" type="button" data-confirm>영구 삭제</button></div></div>';
+
+    var pickerHtml = '<div class="menu" style="width: 260px;" lang="ko">' +
+      '<div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-4) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-8); margin: 0 calc(-1 * var(--sy-space-6)) var(--sy-space-4); border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary);"><svg class="icon" style="width:14px;height:14px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input placeholder="에이전트 검색…" style="border:none; outline:none; background:none; flex:1; min-width:0; font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-fg-primary);"></div>' +
+      '<div class="menu-item selected"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;">' + agentGlyph + '</span>주간 보고서<svg class="icon" style="width:14px;height:14px; margin-left:auto;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></div>' +
+      '<div class="menu-item"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-2) 20%, transparent); color: var(--sy-viz-2); flex:none;">' + agentGlyph + '</span>문의 분류<span class="badge" style="margin-left:auto;">베타</span></div>' +
+      '<div class="menu-item"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>에이전트 요청</div></div>';
+
+    frames.forEach(function (f) {
+      var frame = f.frame;
+      var bellBtn = frame.querySelector('button[aria-label="Notifications"]');
+      if (bellBtn) bellBtn.addEventListener('click', function () { showPop(frame, bellBtn, notifHtml); });
+      var searchBtn = frame.querySelector('button[aria-label="Search (⌘K)"]');
+      if (searchBtn) searchBtn.addEventListener('click', function () {
+        var o = showOverlay(frame, paletteHtml, true); var inp = o.querySelector('input'); if (inp) inp.focus();
+      });
+      var av = frame.querySelector('.av-32');
+      if (av) { av.style.cursor = 'pointer'; av.addEventListener('click', function () { showPop(frame, av, profileHtml); }); }
+      var ws = frame.querySelector('.ws-tile');
+      if (ws) { var wsBtn = ws.closest('button'); wsBtn.addEventListener('click', function () { showPop(frame, wsBtn, wsHtml, 'down-left'); }); }
+
+      if (f.id === 's-sample-workbench') {
+        frame.querySelectorAll('tbody tr').forEach(function (tr) {
+          tr.addEventListener('click', function () {
+            var o = el('<div class="drawer-ov"><div class="scrim"></div></div>');
+            o.appendChild(el(drawerHtml));
+            o.addEventListener('click', function (e) { if (e.target.classList.contains('scrim') || e.target.closest('[data-close]')) o.remove(); });
+            frame.appendChild(o);
+          });
+        });
+      }
+      if (f.id === 's-sample-settings') {
+        var del = frame.querySelector('.btn-danger');
+        if (del) del.addEventListener('click', function () {
+          var o = showOverlay(frame, dangerModalHtml);
+          var c = o.querySelector('[data-confirm]');
+          if (c) c.addEventListener('click', function () { o.remove(); showToast(frame, '워크스페이스 삭제가 시작되었습니다'); });
+        });
+      }
+      if (f.id === 's-sample-console') {
+        var ta = frame.querySelector('textarea');
+        frame.querySelectorAll('.fu-row, .tag-sugg').forEach(function (r) {
+          r.style.cursor = 'pointer';
+          r.addEventListener('click', function () {
+            if (!ta) return;
+            ta.value = r.textContent.trim(); ta.focus();
+            frame.querySelectorAll('.fu-row').forEach(function (x) { x.classList.remove('sel'); });
+            if (r.classList.contains('fu-row')) r.classList.add('sel');
+          });
+        });
+        var q = frame.querySelector('.composer-quote button');
+        if (q) q.addEventListener('click', function () { q.closest('.composer-quote').remove(); });
+        var send = frame.querySelector('button[aria-label="Send"]');
+        if (send) send.addEventListener('click', function () {
+          var stopped = send.classList.contains('btn-secondary');
+          send.classList.toggle('btn-primary', stopped); send.classList.toggle('btn-secondary', !stopped);
+          send.innerHTML = stopped ? '<svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>' : '<svg class="icon" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/></svg>';
+          send.setAttribute('aria-label', stopped ? 'Send' : 'Stop');
+        });
+        var tplBtn = frame.querySelector('button[aria-label="템플릿"]');
+        if (tplBtn && ta) {
+          var tpl = {
+            '주간 문의 보고서': '[기간] 고객 문의를 유형별로 정리하고 보고서 초안을 만들어 줘',
+            '결제 오류 분석': '[기간] 결제 오류 문의를 원인별로 분류하고 표 형식으로 정리해 줘',
+            '고객 응대 요약': '[채널] 의 미해결 문의를 우선순위 순으로 요약해 줘'
+          };
+          var tplHtml = '<div class="menu" style="width: 260px;" lang="ko">' +
+            '<div class="menu-search"><svg class="icon" style="width:14px;height:14px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input placeholder="템플릿 검색…" style="border:none; outline:none; background:none; flex:1; min-width:0; font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-fg-primary);"></div>' +
+            '<div class="grp sy-type-micro-label" style="padding-left: var(--sy-space-8);">내 템플릿</div>' +
+            '<div class="menu-item" data-tpl="주간 문의 보고서">주간 문의 보고서</div>' +
+            '<div class="menu-item" data-tpl="결제 오류 분석">결제 오류 분석</div>' +
+            '<div class="grp sy-type-micro-label" style="padding-left: var(--sy-space-8);">팀 템플릿</div>' +
+            '<div class="menu-item" data-tpl="고객 응대 요약">고객 응대 요약<span class="badge" style="margin-left:auto;">팀</span></div>' +
+            '<div class="menu-sep"></div>' +
+            '<div class="menu-item"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>새 템플릿 만들기</div></div>';
+          tplBtn.addEventListener('click', function () {
+            showPop(frame, tplBtn, tplHtml, 'up');
+            if (openPop) openPop.el.querySelectorAll('[data-tpl]').forEach(function (mi) {
+              mi.addEventListener('click', function () {
+                ta.value = tpl[mi.dataset.tpl]; closePop(); ta.focus();
+              });
+            });
+          });
+        }
+        var refineBtn = frame.querySelector('button[aria-label="프롬프트 다듬기"]');
+        if (refineBtn && ta) {
+          var refined = {
+            '프롬프트 다듬기': '지난주 결제 오류 문의를 유형별로 정리하고 원인 분석을 포함한 보고서 초안을 만들어 줘',
+            '더 자세히': '지난주(7/6–7/12) 결제 오류 문의 47건을 카드사·PG사·내부 오류로 분류하고, 유형별 건수와 대표 사례를 포함해 정리해 줘',
+            '더 간결하게': '지난주 결제 오류 문의 요약해 줘',
+            '기간·범위 구체화': '7월 6일부터 7월 12일까지 접수된 결제 오류 문의만 정리해 줘',
+            '형식 지정': '결제 오류 문의를 표 형식(유형·건수·대표 사례)으로 정리해 줘'
+          };
+          var refineHtml = '<div class="menu" style="width: 220px;" lang="ko">' +
+            '<div class="menu-item" data-preset="프롬프트 다듬기"><svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>프롬프트 다듬기</div>' +
+            '<div class="menu-sep"></div>' +
+            '<div class="menu-item" data-preset="더 자세히">더 자세히</div>' +
+            '<div class="menu-item" data-preset="더 간결하게">더 간결하게</div>' +
+            '<div class="menu-item" data-preset="기간·범위 구체화">기간·범위 구체화</div>' +
+            '<div class="menu-item" data-preset="형식 지정">형식 지정</div></div>';
+          refineBtn.addEventListener('click', function () {
+            if (!ta.value.trim()) return;
+            showPop(frame, refineBtn, refineHtml, 'up');
+            if (openPop) openPop.el.querySelectorAll('[data-preset]').forEach(function (mi) {
+              mi.addEventListener('click', function () {
+                var prev = ta.value;
+                ta.value = refined[mi.dataset.preset] || prev;
+                closePop();
+                showToast(frame, '프롬프트를 다듬었습니다', '실행 취소', function () { ta.value = prev; });
+              });
+            });
+          });
+        }
+        var picker = frame.querySelector('button .avatar.agent');
+        if (picker) { var pb = picker.closest('button'); pb.addEventListener('click', function () { showPop(frame, pb, pickerHtml, 'up'); }); }
+      }
+    });
+  })();
 </script>
 </body>
 </html>

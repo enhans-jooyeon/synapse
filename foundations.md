@@ -13,7 +13,8 @@ Rule keywords: **MUST** / **NEVER** are machine-enforceable constraints. **SHOUL
 Synapse is a neutral, black-key system. The interface is built almost entirely from the gray ramp; color is a scarce resource spent only on meaning. The intended impression is engineered restraint — closer to a precision instrument than a consumer app.
 
 - The primary action color is **black** (white in dark mode). Not blue.
-- Blue (`action.accent-*`, `border.focus`, `fg.link`) is *functional*, not brand: links, focus rings, selection, informational status. It exists because pure monochrome cannot signal interactivity and focus accessibly.
+- Slate (`emphasis.*`, `ai.*` surfaces, and the slate-valued selected states) is the quiet-emphasis family — a barely-cool tint for marking importance without vibrant color. It is NOT a second neutral: never on default surfaces, borders, or text, and only through its closed job list (hero stat card — one per grid; table emphasis column/cell; timeline/calendar now-markers; selected states; AI surfaces — v6.18). Anti-collision: tint alone never signals AI — the squared avatar is the primary agency marker, supported by `ai.fg` slate marks; `emphasis.*` tokens themselves never appear on AI surfaces (use `ai.*`, same values, distinct semantics).
+- Blue (`border.focus`, `fg.link`, status.info family) is *functional*, not brand: links, keyboard-focus rings on non-entry controls, informational status. AI is fully slate since v6.19 (surfaces, marks, solid fills); the deprecated `action.accent-*` tokens remain defined but have no jurisdiction until their removal at the next major. It exists because pure monochrome cannot signal interactivity and focus accessibly. Exception (v6.10): entry surfaces focus with the neutral `border.focus-input` perimeter — a text field shows focus on every click-to-type, and the caret + fill change + border swap form a compound indicator that doesn't need the accent.
 - Status colors sit inside the neutral field without shouting, but they are chromatic, not muddy (recalibrated v3.4–3.5): text tokens carry as much chroma as AA contrast on their tints allows, and all solid fills are mid-tone with white `fg.on-solid` text — success/warning solids run ~3.5:1 under the documented solid-label policy (§8).
 
 ### 1.2 Rules
@@ -61,6 +62,7 @@ The full semantic vocabulary by use case. If a case isn't here and no token obvi
 | Status text/icon · status tint · status solid fill · text on solid | `status.*` · `status.*-bg` · `status.*-bg-solid` · `fg.on-solid` |
 | Status/link colors on `bg.inverse` surfaces | `status.*-inverse` · `fg.link-inverse` |
 | Agent surfaces · agent borders · agent text/marks | `ai.surface` · `ai.border` · `ai.fg` |
+| Quiet emphasis (hero stat, table emphasis column, now-markers) | `emphasis.surface` · `emphasis.border` · `emphasis.fg` |
 | Categorical chart series (fixed order) | `viz-1` … `viz-8` |
 | Modal backdrop · inverse emphasis block | `bg.scrim` · `bg.inverse` + `fg.inverse` |
 | Identity tints (avatars, category Badges/Chips) | deterministic `viz-n` at 20% + matching `viz-n` text |
@@ -115,7 +117,8 @@ Typography is set through named **styles**, never through ad-hoc size/weight com
 | `label` | sans density-bound medium (13/20 · 12/18) | Form labels, table headers, buttons. |
 | `label-sm` | sans 12/18 medium | Compact labels, secondary table headers. |
 | `caption` | sans 12/18 regular | Helper text, footnotes, attribution rows. |
-| `micro` | sans 11/16 semibold | Badges, kbd hints, nav group labels. NEVER sentences. The floor size carries the reinforced weight: 500 fuzzes at 11px (especially Hangul), 700 clogs counters. |
+| `micro` | sans 11/16 semibold | Badges, kbd hints. NEVER sentences. The floor size carries the reinforced weight: 500 fuzzes at 11px (especially Hangul), 700 clogs counters. |
+| `micro-label` | sans 11/16 semibold, +2% Latin tracking | Eyebrow/group labels: sidebar groups, palette groups, card eyebrows, chart axis labels (v6.5). Tracking does the work ALL-CAPS would — caps remain forbidden (§2.3). Hangul never tracked. |
 | `code` / `code-sm` | mono 13/20 · 12/18 | Code blocks, logs / inline code, IDs in cells. |
 | `stat-lg` / `stat` / `stat-sm` | sans 30/40 · 24/34 · 20/30 semibold, tabular-nums | KPI values: hero / standard stat card / dense dashboards. |
 
@@ -177,7 +180,11 @@ Synapse is **borders-first**: in-flow hierarchy is drawn with 1px borders and ba
 - Sanctioned exception: an `inset 0 0 0 1px` ring using a `border.*` token is a border substitute (used where a true border would shift layout, e.g. calendar day cells) — it is not elevation and carries no blur.
 - **Stacking (v5.1):** floating/pinned elements take exactly one `--sy-z-*` token — `sticky` (100, table headers, toolbars, solid Banner strip) < `dropdown` (200, menus/popovers/palette) < `drawer` (300) < `modal` (400) < `toast` (500) < `tooltip` (600). Arbitrary z-index values are forbidden; if two things fight, the fix is the scale, not a 9999.
 
-Radius: inputs/buttons/chips `sm` (8px) · cards/panels/menus `md` (10px) · modals/drawers `lg` (16px) · pills/avatars `full`. NEVER exceed 16px on rectangular containers.
+Radius: inputs/buttons/chips `sm` (8px) · cards/panels/menus `md` (10px) · modals/drawers `lg` (16px) · **section shells `xl` (24px, v6.9)** · pills/avatars `full`. `xl` is the ceiling for rectangular containers and is reserved for section shells — the outermost rounded well a page region sits in (SplitPanel container, content wells, hero/empty wells): one shell level per region, never on cards or overlays, never nested inside another shell. Shells pad ≥ `space-24`, which keeps the concentric-corner rule from binding their children.
+
+**Glass material (v6.22 — a governed §8 amendment, maintainer decision):** scrimmed, screen-level overlays (CommandPalette, Modal, Drawer) MAY render as glass: `glass.surface` fill (opacity floor 0.82 — this bound is what keeps pre-verified text pairs approximately valid over unknown backdrops) + `backdrop-filter: blur(glass.blur)` + `border.overlay` + the layer's standard shadow. Jurisdiction: scrimmed overlays, plus ONE named anchored exception — the Composer's follow-up panel (ai-patterns §19), which behaves like a mini-palette (floats over thread content, static while open, dismisses on interaction elsewhere). All other anchored surfaces (menus, popovers, tooltips, toasts) stay opaque — blur costs compound during scroll and pointer interaction on dense screens; new exceptions require a governance proposal, not precedent-matching. `prefers-reduced-transparency: reduce` falls back to opaque `bg.raised`. In light mode glass carries a `border.default` hairline (v6.24 — `border.overlay` is transparent in light and an edgeless glass panel reads unfinished on busy backdrops); dark keeps `border.overlay`. `backdrop-filter` is legal ONLY in this form (SY015).
+
+**Concentric-corner rule (v6.8, mandatory):** when a rounded element sits in the corner region of a rounded container — the inset is smaller than the outer radius, so the two curves visually interact — the inner radius MUST equal the outer radius minus the inset (`inner = outer − inset`). Mismatched nesting is what makes a control read subtly "off". Both radii must come from the scale; when the subtraction lands off-scale, adjust the *inset*, never the radius (SegmentedControl: 8 − 4px padding = 4; Menu: 10 − 6px padding = 4). Insets of 0 share the radius exactly (flush nesting: tight Card headers, ProposalCard band). Elements inset ≥ the outer radius (e.g. a diff block 16px inside a card) are exempt — the corners no longer interact. Free-flowing content (chips wrapping inside a Combobox trigger) is exempt; the rule binds corner-anchored structure: segments, menu items, banded headers, attached groups.
 
 ---
 
@@ -186,6 +193,8 @@ Radius: inputs/buttons/chips `sm` (8px) · cards/panels/menus `md` (10px) · mod
 Motion confirms causality; it never decorates. Durations: `instant` 100ms (hover, focus) · `fast` 150ms (dropdowns, tooltips) · `base` 200ms (modals, drawers, accordions) · `slow` 300ms (page-level transitions, toasts).
 
 **Finish rule (v4.0, mandatory):** every interactive element transitions its background, border-color, and color at `instant`–`fast` with `standard` easing — hover and pressed states NEVER snap. Sanctioned micro-treatment: `hover-lift` on interactive Cards only — translateY(−1px) + `shadow.raised` at `fast`; no scaling, no bounce, anywhere.
+
+**Entrance rule (v6.6, mandatory):** floating layers enter with a 4px translate + fade — menus/popovers/palette rise (`translateY(4px)→0`) at `base`; toasts slide in from the right (`translateX(8px)→0`) at `slow`; tooltips fade only. No entrance exceeds one duration step; nothing "springs". Exits are plain fades at `fast` — leaving must feel quicker than arriving.
 
 - Easing: `standard` for most; `enter` for elements appearing; `exit` for elements leaving.
 - Animate only `opacity` and `transform`. NEVER animate layout properties (width/height/top/left) except accordion height.

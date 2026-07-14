@@ -1,5 +1,304 @@
 # Synapse changelog
 
+## 6.29.0 — 2026-07-13
+
+- Prompt-template library surfaced (completing §23 from the aiuxpatterns pass): bookmark icon-button in the Composer footer opens the browse menu — search row, 내 템플릿 / 팀 템플릿 groups (team rows carry a 팀 badge), 새 템플릿 만들기 footer escape. Rationale spec'd: / is the expert path, the button is the novice path (the pattern's core audience). Wired live in the Console sample — choosing a template inserts its cloze draft with [슬롯] placeholders. Registry +bookmark; glossary +새 템플릿 만들기.
+
+## 6.28.1 — 2026-07-13
+
+- Mixed-attachment ordering spec'd (maintainer question: "what if a file follows an image?"): Composer attachments group by kind — image tiles on one row, document chips below, chronological within a kind (mixed 24px/48px heights in one row read ragged; attachments are a set, not a sequence). Sent messages fix the order docs → images → text; 3+ images = 2-wide grid, never a MediaGroup fan (generated media only). Console demo now shows one tile row + two document chips.
+
+## 6.28.0 — 2026-07-13
+
+- Image attachments spec'd (Composer + §12): in the Composer, images render as 48px thumb tiles (radius xs, hairline, compact 16px × overlay, filename in tooltip) — the one attachment type where the thumbnail is the identity; documents stay text chips and ContextCard's no-thumbnail rule is untouched. Sent human messages render the image above the bubble text (radius md, hairline, max-height 240). Console sample demos both with a token-pure mock screenshot.
+
+## 6.27.2 — 2026-07-13
+
+- Toast alignment regression fixed (maintainer caught it on the refine toast): the v6.24 flex-start fix solved two-line icon float but left the 32px dismiss button dangling below single-line text. Ruling: toast contents top-align to the FIRST text line — icon +2px, action link on the text line-height, dismiss × as a compact 20px box. Spec'd that inline dismiss affordances (Toast ×, ComposerQuote ×) are not form controls, so the control-height scale doesn't apply — this also legitimizes the quote bar's existing 20px ×.
+
+## 6.27.1 — 2026-07-13
+
+- Preview only: assisted editing wired live in the Console sample — pen-line in the composer footer opens the preset menu upward; each preset rewrites the (prefilled rough) draft; the confirmation Toast carries 실행 취소 which restores the previous text — the full §24 loop including reversibility. Toast helper gained an action slot; empty drafts no-op per spec.
+
+## 6.27.0 — 2026-07-13
+
+- Assisted editing (from aiuxpatterns.com "AI Assisted Editing"): the §24 pen-line refine grows a preset menu — a CLOSED refinement set (프롬프트 다듬기 · 더 자세히 · 더 간결하게 · 기간·범위 구체화 · 형식 지정), standard Popover anatomy, rewrite replaces the draft with Undo, disabled on empty drafts. Freeform rewrite styles are explicitly forbidden — preset extension is a governance act. Glossary +4 presets; demo in the Composer story.
+
+## 6.26.0 — 2026-07-13
+
+- Voice input adopted (maintainer decision, superseding the "parked" ruling) as ai-patterns §26 — DICTATION ONLY: mic ghost icon-button in the Composer footer; recording morphs the tray in place (Cancel · pulsing danger dot + tabular timer · ≤5-bar transform-only level meter, static under reduced-motion · pause · primary check confirm in the send position, matching the send↔stop morph language); transcript inserts at the caret and NEVER auto-sends. Audio never posts to the thread — conversations stay textual for provenance/search/quote-reply. Registry +mic/+pause (Composer/recording only); glossary +음성 입력/녹음 중.
+
+## 6.25.0 — 2026-07-13 (AIUX gap pass: ai-patterns §22–25)
+
+- Gap analysis against aiuxpatterns.com (28 patterns; ~2/3 already covered). Four groups spec'd:
+- §22 Result variants (‹n/N› pager in the answer header; regenerate = new variant, never destroys) & partial regeneration (selection pill gains 재생성 — in-place, emphasis flash + Undo).
+- §23 Prompt templates & placeholders (library via / group + picker-menu pattern; slot chips on emphasis.surface; → moves slots; unfilled slot is the only other sanctioned send-block; slots never carry Korean particles).
+- §24 Authoring coach (one non-blocking quality hint with absolute anti-nag rules; pen-line refine with Undo). Explicitly NOT adopted: generative inline autocomplete — authorship stays with the user.
+- §25 Threads (sidebar history under time groups, 새 대화, 임시 대화 switch with visible 임시 badge).
+- Glossary +5 actions; registry +pen-line (Composer footer only).
+
+## 6.24.1 — 2026-07-13
+
+- Table selection column (maintainer caught the header checkbox off-center): the cell was inheriting text-cell padding and left alignment. Now spec'd anatomy — 40px fixed, zero padding, centered both axes; a selection cell holds a control, not text. Applied to header and body cells in the bulk-selection demo.
+
+## 6.24.0 — 2026-07-13 (micro-polish audit, all 12 approved)
+
+1. Stepper (R9): numerals 600 11px/1 tabular (inherited line-height sat digits low in the 20px circle); rings 2px → 1.5px (outweighed the numeral). Spec'd as R9 numeral discipline.
+2. Bare Badge = neutral by default (several recent badges — 사전 승인됨, 베타, durations, +N — rendered as unfilled floating text); outline instances now declare transparent explicitly. Spec'd: a badge never renders unfilled.
+3. .menu-search content left-aligns with menu items (14px from panel edge — miss introduced by the 6.23.3 bleed fix).
+4. Quote highlight survives line wrap (box-decoration-break: clone).
+5. Input leading icon: left 10px/32px magic numbers → derived from control-padding-x (+ space-24).
+6. Console retry step: off-scale 20px button height removed; row sizes to the natural btn-sm.
+7. Drawer template key column: fixed 96px width → min-width (translatable-text rule).
+8. Toast icon anchors to the first text line (flex-start + 2px top) instead of floating mid-block on two-liners.
+9. Glass panels get a border.default hairline in light mode (border.overlay is transparent there; edgeless glass read unfinished). Foundations §5 updated.
+10. Keycap hint rows (follow-up panel, palette footer) vertically center their mixed keycap/label content.
+11. AgentStep skipped-dash 2px → 1.5px, matching the pending ring's stroke.
+12. SourceChip baseline: vertical-align 2px magic number → text-bottom.
+
+## 6.23.3 — 2026-07-13
+
+- Full-bleed divider drift fixed in HoverCard/Popconfirm/ContextMenu (maintainer caught side gaps): .menu-sep bled with a hardcoded −4px from the era of 4px menu padding; the v6.8 concentric fix moved panel padding to 6px and the separator silently stopped 2px short. Now token-derived (−space-6) so it tracks the panel padding. Same fix applied to .menu-search (same stale −4px). Lesson encoded: bleed offsets must be derived from the padding token, never hardcoded.
+
+## 6.23.2 — 2026-07-13
+
+- Follow-up panel anchor offset: 8px gap above the Composer restored (lost in the v6.23.1 absolute-positioning fix) and spec'd — floating layers detach from their anchors; flush contact reads as part of the input. Menus stay at 4px; the panel's larger mass earns 8.
+
+## 6.23.1 — 2026-07-13
+
+- Follow-up panel placement fixed (maintainer caught the glass not reading): the panel was in document flow, pushing content instead of overlaying it — glass over empty background shows nothing. Now absolutely anchored to the Composer's top edge, floating over the last thread messages; spec'd in §19 with the rule that the panel never pushes content (no layout shift on open). Story demo gets thread text behind the panel so the frost is visible.
+
+## 6.23.0 — 2026-07-13
+
+- Follow-up panel gets its own story in the AI patterns group (it previously existed only inside the Console sample) and adopts the glass material — spec'd as the ONE named anchored exception to glass's scrim-gating (it behaves like a mini-palette: floats over thread content, static while open, dismisses on esc/typing). Foundations §5 jurisdiction updated with the exception named explicitly and a rule that further exceptions require a governance proposal, not precedent-matching. Reduced-transparency fallback covers it.
+
+## 6.22.0 — 2026-07-13 (§8 amendment: the glass material)
+
+- Maintainer amendment to the never-list: blur is now permitted solely as the GLASS MATERIAL on scrimmed screen-level overlays — CommandPalette, Modal, and scrimmed Drawers (the no-scrim Drawer variant stays opaque). glass.surface (0.85 white / 0.82 dark over bg.raised values — the opacity floor keeps pre-verified text pairs approximately valid over unknown backdrops) + blur(glass.blur 20px) + border.overlay + the layer's standard shadow. prefers-reduced-transparency falls back to opaque bg.raised.
+- Enforcement: new SY015 — backdrop-filter anywhere except blur(var(--sy-glass-blur)) is an error; anchored surfaces (menus, popovers, tooltips, toasts) remain opaque by law (blur cost compounds during scroll/pointer interaction).
+- Manifest never-list drift fixed while in there: stale accent-CTA phrasing (pre-6.19) and the missing gradients/glow/rotation entries now mirror design.md §8.
+
+## 6.21.3 — 2026-07-13
+
+- Secondary buttons on the ProposalCard tray open to bg.page in light mode (maintainer caught 거절 dissolving: secondary gray.100 vs tray slate.100 is near-identical luminance) — the tray rule applied to controls. Dark mode keeps the standard secondary fill, which already contrasts with the dark tray; hover unchanged in both.
+
+## 6.21.2 — 2026-07-13
+
+- Full-bleed divider compliance sweep (maintainer re-flagged; the rule dates to v2.0): the follow-up panel hint row, NotificationCenter header/footer rules, and agent-picker search rows were bordering padded rows instead of bleeding through the 6px panel padding — all now negative-margin to the panel edge with content alignment preserved. Spec generalized: the edge-to-edge rule binds every horizontal rule inside any floating panel, not just menu item dividers.
+
+## 6.21.1 — 2026-07-13 (maintainer reversal)
+
+- v6.21.0 two-tone ProposalCard header reversed on sight: back to the single-tone tray with the ai.border hairline (v6.20.2 state). The ai.surface-strong token is removed — it existed only within this unpushed session, so no migration surface exists; its gate pair is dropped with it.
+
+## 6.21.0 — 2026-07-13
+
+- ProposalCard goes two-tone (maintainer direction): new ai.surface-strong token (slate.200/800 — same values as surface-hover today, separate token so they can diverge) fills the header band, one slate step above the body; the divider is retired — the fill step does the separating, layering not lines. New gate pair ai-fg/ai-surface-strong.
+
+## 6.20.2 — 2026-07-13
+
+- ProposalCard header divider: border.strong → ai.border (slate.200/800) — the whole object is slate now, and the neutral gray rule read foreign on the tint. Full circle: the divider that was blue (odd), then dark gray (v6.17.8), lands on the tray's own family.
+
+## 6.20.1 — 2026-07-13
+
+- ProposalCard header padding → uniform 12px (maintainer, second pass on icon spacing): the avatar reads the spacing, so top/side/bottom must match around it; the 4px offset from the body's 16px column is sub-perceptual at avatar scale and loses to even icon breathing room.
+
+## 6.20.0 — 2026-07-13
+
+- ProposalCard goes borderless (maintainer direction): tray anatomy — whole-object ai.surface fill, radius lg, no shadow, header band dissolved into a hairline-separated row, payload surfaces open to bg.page (tray rule), footer buttons on the tint. The Console's two anchor objects (Composer, ProposalCard) now share one borderless-filled language. Header padding realigns to the 16px text column — supersedes v6.17.8's uniform-8 band padding, whose rationale (even spacing inside the filled band) dissolved with the band.
+- Note for a future call: Card's `ai` variant still specs an outlined ai.surface container; ProposalCard has now diverged from it. If the tray read wins, the ai Card variant should follow.
+
+## 6.19.2 — 2026-07-13
+
+- ComposerQuote rendered as a blockquote, not a box (maintainer: the boxed bar's radius/style looked out of place — diagnosis: a white outlined rounded bar above a textarea reads as a second input). Now the §12 quotation anatomy: 2px border.strong left rule + fg.secondary text, no fill/border/radius; reply icon fg.tertiary. Supersedes the v6.19.1 boxed fix; the tray page-fill rule still governs surface objects (chips, ContextCards) — the quote is typographic, exempt.
+
+## 6.19.0 — 2026-07-13
+
+- Full-slate AI theme (maintainer: the v6.18 blue-on-slate mix read as mixed-up): ai.fg → slate.600/300, new ai.solid (slate.600/500) replaces accent-bg on the live-activity beacon Badge and ai ProgressBar. The squared avatar is now THE agency marker; ai.* slate treatments support it.
+- Composer send → `primary` (icon-only circle exception stands). Rule 7 amended: the Composer counts as its own region, so its send is that region's one primary.
+- Button `accent` variant DEPRECATED — no jurisdiction, any use is a violation, removal at the next major (kept defined per one-way-door discipline; still rendered in the Button matrix, marked deprecated). Blue's remaining territory: focus rings (non-entry), links, status.info.
+- New gate pair fg-on-solid/ai-solid (3:1 solid-label policy).
+
+## 6.18.0 — 2026-07-13
+
+- AI surfaces retire the blue wash (maintainer direction, "surfaces only" scope): ai.surface/surface-hover/border retarget to slate (slate.100/200 light; slate.900/800 dark). ai.fg stays blue — AI is now signaled by blue text/marks + the squared avatar on calm slate tint; action.accent, border.focus, fg.link unchanged. Affects ProposalCard band, suggestion chips, ComposerQuote, quote highlight, AI Card, palette ask-row — all via tokens, no markup changes.
+- ai.* and emphasis.* now share values by design but stay separate token groups (distinct semantics; can diverge without migration). Anti-collision rule updated accordingly; new gate pair ai-fg/ai-surface.
+
+## 6.17.8 — 2026-07-13
+
+- ProposalCard header band: bottom hairline ai.border → border.strong (maintainer: blue rule read odd — the tint alone marks AI, the rule just separates), and padding 8×16 → uniform 8px so the avatar sits with even spacing on all sides.
+
+## 6.17.7 — 2026-07-13
+
+- Media rail jurisdiction tightened (maintainer caught the redundancy in the Console sample): the side rail appears ONLY on media-only replies; when media accompanies text, the message-level ResponseToolbar governs the whole reply — two feedback surfaces on one message is forbidden. Console sample drops the rail; the MediaGroup story keeps it as the media-only demo.
+
+## 6.17.6 — 2026-07-13
+
+- Preview only: MediaGroup cards now carry mock assets (inline token-pure SVG — line chart, flow diagram, report cover) with a caption strip, replacing the gray icon placeholders, in both the MediaGroup story and the Console fan. Card anatomy: asset area + surface caption row with hairline rule; "+N" badge lives in the caption row.
+
+## 6.17.5 — 2026-07-13
+
+- New composition rule (patterns §2): scroll containers span the full region — centered reading columns live inside the scroller, so scrollbars sit at the region edge, never mid-canvas beside the column. Console sample restructured accordingly.
+
+## 6.17.4 — 2026-07-13
+
+- Preview only: the Console sample is now a complete ai-patterns walkthrough — added pre-approved tool call, failure→retry escalation, uncertainty register + Model-knowledge badge, resolved-proposal attribution row, MediaGroup + media rail, guardrail notice, human handoff + continue, long-running ProgressBar, and a live streaming tail with Stop. Discreet mono §-tags label each pattern for review; thread column scrolls (max-height 820).
+
+## 6.17.3 — 2026-07-13
+
+- Preview only (no contract change): the three app-frame sample pages are now interactive — bell opens NotificationCenter, avatar/workspace open their menus, a new topbar search trigger opens the CommandPalette, Workbench table rows open a detail Drawer, Settings 워크스페이스 삭제 runs the destructive Modal → Toast flow, and the Console composer is live (follow-ups/chips insert, send↔stop morphs, quote removes, agent picker opens). Esc and scrim clicks dismiss everything; all overlays use the spec'd anatomies and motion.
+
+## 6.17.2 — 2026-07-13
+
+- Optical padding trim on icon+text Buttons (maintainer caught it on the streaming Stop): the icon side's padding drops 2px — stroke icons carry internal whitespace, so equal side padding reads heavier on the icon side. Per-side rule: leading icon trims left, trailing chevron trims right; icon-only squares exempt.
+
+## 6.17.1 — 2026-07-13
+
+- Streaming Stop control: ghost → `secondary` tonal (maintainer: ghost read as floating text). Stop generation now renders identically everywhere — the Composer's send→stop morph was already secondary. Run-toolbar Cancel stays ghost (it halts a job, not an in-flight stream).
+
+## 6.17.0 — 2026-07-13 (governed fun, part 2: color moments)
+
+- Third-party product logos sanctioned (icons.md): connector/integration contexts only, 16px, original brand colors, never recolored, never in nav chrome — imports the liveliness of connector rows legally.
+- Sidebar collection rows may carry an 8px system-assigned viz-tint dot (same assignment rule as category Badges) — the one place color enters the sidebar; never on system destinations. Demo in the Console sample sidebar.
+
+## 6.16.0 — 2026-07-13 (governed fun, part 1)
+
+- New component MediaGroup (52nd): agent-generated media as a ±2.5° fan — the system's ONE sanctioned playful moment. Principle written into ai-patterns §21: playfulness lives in the agent's output, never in the chrome. Never-list now bans rotation everywhere else; hover straightens; reduced-motion renders flat; referenced objects stay in flat ContextCards.
+- ResponseToolbar `media` variant: vertical pill rail (copy + thumbs) anchored beside a MediaGroup.
+- Declined from the reference shots, for the record: glassmorphism (§8 blur), mascot/proactive nudge bubbles (violates rule 7a and the human-in-the-loop trust posture), emoji in system text (register).
+
+## 6.15.0 — 2026-07-13 (Console character B2+B4: composer commands)
+
+- Slash commands in the Composer: / scopes the command palette to agent actions; single-best-match ghost completion in fg.placeholder, accepted with → (never Tab — IME conflict), closed action glossary only.
+- Agent-picker menu upgraded: search row, micro-label groups, squared-avatar rows with optional neutral Badge (베타), one submenu, and a mandatory "에이전트 요청" footer escape — pickers never dead-end.
+
+## 6.14.0 — 2026-07-13 (Console character B1+B3: context objects)
+
+- New component ContextCard (51st): referenced objects as physical cards in threads/Composer — icon tile + title + one meta line, flat 4px stack with page-colored ring + "+N" (max 3, never rotated), compact inline @-mention form. No thumbnails.
+- FileUpload dropzone retuned: dashed border.strong, radius lg, EmptyState-style medallion; drag-over = border.focus-input + emphasis.surface. Dashed borders spec'd as drop-targets-only. (Proposal doc corrected — this was a retune, not a gap.)
+
+## 6.13.0 — 2026-07-13 (Console character C: answer anatomy)
+
+- Titled answer sections (ai-patterns §20): long/multi-step replies open with heading-sm title + tabular duration Badge + collapse chevron; one per reply.
+- Named working line: multi-step generation shows the current activity by name with the pulse animation (no gradient shimmer — §8 stands); resolves into the answer title on completion.
+
+## 6.12.0 — 2026-07-13 (Console character A: selection & reply loop)
+
+- Quote-reply (ai-patterns §18): selecting agent text raises a floating Reply pill; choosing it inserts an ai-tinted ComposerQuote bar (radius xs by the concentric rule, single line, ×, max one per send). Selected passage highlights ai.surface + inset hairline.
+- Follow-up panel (§19): suggestion chips can escalate to a keyboard-first anchored panel above the Composer — menu anatomy, keycap hint row (↑↓/↵/esc), max 4 rows, inserts never auto-sends. Chips and panel are mutually exclusive.
+- Registry: reply/quote = corner-up-left (Reply pill + ComposerQuote only); follow-up = arrow-right (panel rows only). Glossary: Reply / 답장.
+
+## 6.11.0 — 2026-07-13
+
+- Slate primitive ramp (11 steps) + `emphasis.*` semantic trio (surface/border/fg) — quiet emphasis without vibrant color (maintainer direction, chosen over retinting the neutrals; the tone-experiment toolbar stays in preview for reference). Slate is NOT a second neutral: closed job list only — hero stat card (max 1/grid), table emphasis column (max 1/table), timeline/calendar now-markers — plus selected states, which move from gray to slate (bg.selected/selected-hover, both modes; the subtle cool read on selection is the character gain).
+- Anti-collision rule (foundations §1 + ai-patterns §1): bare cool tint alone never signals AI; AI surfaces always carry a squared avatar or ai.fg text; emphasis.* never on AI surfaces. Slate.100 tuned visibly grayer than blue.50.
+- Calendar "today" upgraded from hairline outline to the emphasis treatment. New contrast pairs added to the gate (emphasis-fg/emphasis-surface, fg-primary/emphasis-surface, fg-primary/bg-selected).
+- Preview-chrome fix: component-browser nav group labels were JS-uppercased — caps ban applies there too; now sentence case.
+
+## 6.10.0 — 2026-07-13
+
+- Entry-surface focus goes neutral: new `border.focus-input` token (gray.800 light / gray.200 dark — softened key tone, bg.inverse-soft precedent) replaces blue on Input/Textarea and, by inheritance, Select/Combobox/DatePicker triggers. Rationale: text fields show focus on every click-to-type, so blue overexposed the accent during ordinary form-filling. Focus language is now deliberately split: entry surfaces neutral, non-entry controls keep the blue offset ring (inseparable focus/focus-visible on text fields makes a keyboard-only blue impossible). Foundations §1 blue-is-functional rule amended accordingly.
+
+## 6.9.0 — 2026-07-13
+
+- New radius step `xl` (24px) — maintainer request. Jurisdiction is deliberately narrow to prevent radius drift: section shells only (the outermost rounded well a page region sits in: SplitPanel container, content wells, hero/empty wells), one shell level per region, never on cards/overlays/nested shells. Shells pad ≥ space-24 so the concentric-corner rule never binds their children.
+- This amends the former "never exceed 16px on rectangular containers" line in foundations §3 — xl is now the ceiling.
+- SplitPanel container adopts the shell treatment (radius md → xl). Validator RADIUS_SCALE updated.
+
+## 6.8.1 — 2026-07-13
+
+- Input/Textarea focus quieted (maintainer: the 2px offset ring was too much on filled fields): now a 1px border.focus perimeter + the existing sunken→page fill change — a compound indicator, still clearly visible for keyboard users. Buttons and non-field controls keep the 2px offset ring (they have no fill change to lean on). Error fields keep the danger border while focused; the fill change carries focus.
+
+## 6.8.0 — 2026-07-13
+
+- New foundations §5 law: the concentric-corner rule — nested rounded elements MUST satisfy inner radius = outer radius − inset; when the subtraction lands off-scale, adjust the inset, never the radius (maintainer caught the SegmentedControl violating this: radius-8 frame, 2px padding, radius-4 segments = 2px corner mismatch).
+- SegmentedControl inner padding 2px → 4px: 8 − 4 = 4 makes the nesting exactly concentric with both radii on-scale, and the assembled control now lands on standard control heights (36 focus / 32 dense).
+- The rule immediately caught Menu/Popover too: radius-10 container with 4px padding around radius-4 items. Container padding → 6px (10 − 6 = 4).
+- Rule scoped precisely: binds corner-anchored structure (segments, menu items, banded headers, attached groups) where inset < outer radius; flush nesting shares the radius; inset ≥ outer radius and free-flowing content are exempt.
+
+## 6.7.1 — 2026-07-13 (maintainer reversals)
+
+- Banner subtle: left status rail (v6.4) removed — dated. Now a pure borderless status tint with colored text; no border of any kind.
+- Sidebar active leading bar (v6.7) removed — same verdict. Active = bg.selected + fg.primary + medium weight.
+- Ruling recorded: Artific stays out of page header titles — titles are KO/user-generated, and Latin-only Artific would make the same chrome slot switch typefaces by content language.
+
+## 6.7.0 — 2026-07-13 (character audit, tranche 4: chrome & brand)
+
+- Sidebar active item gains a 2px key-color leading bar (16px, pill radius) alongside bg.selected — position signal that survives squint/colorblind viewing.
+- Topbar workspace switcher (R10): 20px squared monogram tile (bg.inverse/fg.inverse, radius xs) before the workspace name — the frame's one deliberate dark object.
+- Guided hero switched to EN so the Artific display face actually renders: the KO headline had been silently falling back to Pretendard, so the licensed brand face appeared nowhere in the product's own samples. Hangul fallback remains by design.
+
+## 6.6.0 — 2026-07-13 (character audit, tranche 3: motion law)
+
+- Entrance rule added to foundations §6: floating layers enter with 4px translate + fade (menus/popovers/palette rise at base; toasts slide from the right at slow; tooltips fade only); exits are plain fast fades. No springs, no multi-step choreography.
+- Finish rule now actually applied everywhere: chips, nav items, menu items, tabs, palette rows, source chips, inputs and combo triggers all transition at instant/standard (previously only buttons, switches and interactive cards).
+- prefers-reduced-motion in preview upgraded from "slow the spinners" to the spec'd full collapse: entrances and hover transforms off.
+
+## 6.5.0 — 2026-07-13 (character audit, tranche 2: micro-typography)
+
+- New type style `micro-label` (20th): sans 11/16 semibold + 2% Latin tracking (Hangul never tracked). Jurisdiction: sidebar/palette group labels, card eyebrows, axis labels. Tracking does the work ALL-CAPS would; caps stay forbidden.
+- Contract violation fixed in our own samples: literal ALL-CAPS group labels ("WORKSPACE", "NAVIGATION", "ACTIONS") — hard rule 8 breach the linter can't see (literal text, not text-transform). Now sentence-case micro-labels.
+- Table headers: fill dropped (transparent on framed and bare tables), fg.tertiary; hairline rule alone marks the header. Sort-glyph space reservation spec'd.
+- kbd keycap treatment: no change — already spec'd (v6.1 stepped bottom edge); audit item closed as done.
+
+## 6.4.0 — 2026-07-13 (character audit, tranche 1: wireframe killers)
+
+- Banner subtle relayered: borderless status tint + 3px status rail on the left edge — the last surface using the tint-plus-saturated-outline formula removed from ProposalCard in 6.3.
+- Stat cards (R4): delta text-glyph badges (▲ 12%) replaced with a delta row — 12px trend-up/trend-down registry icons (new, sanctioned for stat deltas only) + 12 medium tabular text colored by direction of goodness. Optional 64×24 viz.1 hairline sparkline slot on the value baseline. Stat type styles gain −1% numeral tracking.
+- EmptyState medallion: icon circle gains two concentric hairline rings (border.default/-8, border.subtle/-16 — pure borders, §8 untouched); error flavor tints the medallion danger-bg.
+
+## 6.3.0 — 2026-07-13
+
+AI-surface finish pass — the "wireframe callout" fix. Root cause: every AI surface used the same flat formula (full ai.surface tint + saturated blue.300 outline). Character now comes from layering, not more color. Gradients/blur/glow remain forbidden (§8 unchanged — maintainer ruling).
+
+- ProposalCard relayered: neutral surface card + border.default hairline + shadow.raised; the ai.surface tint is confined to a header band with an ai.border bottom hairline. Body and diff sit on clean surface.
+- Suggestion chips: borderless soft fill (ai.surface → ai.surface-hover on hover), matching the borderless filled-input language. Saturated outline removed.
+- Subtle ai Badge: outline dropped — now a borderless fill like every other subtle badge.
+- Token: ai.border softened blue.300→200 (dark 700→800) — hairline weight everywhere it appears (AI Card border, ProposalCard band rule, outline ai badge). New ai.surface-hover (blue.100 / blue.900).
+
+## 6.2.6 — 2026-07-13
+
+- Count overlay anchoring finalized (maintainer direction): the pill sits half-in at the button's top-right corner (fixed top/right −2px), covering part of the glyph's upper-right — the 2px surface ring keeps the covered icon legible. Coverage identical at every button size.
+
+## 6.2.5 — 2026-07-13
+
+- Root cause of the still-different bells: the Workbench topbar sat inside the page's dense region, so its chrome shrank to dense metrics while Console/Settings stayed focus. New rule (patterns §2): **app chrome (Topbar, Sidebar) is density-independent** — density governs content regions, never the frame. Workbench sample rescoped accordingly.
+- Count overlay: anchor changed to fixed −4px/−4px overlapping offsets (maintainer preferred the overlapping look; fixed offsets read identically at every button size, unlike percentage translation) and fill softened to new `bg.inverse-soft` token (gray-800 light / gray-200 dark, pairs with fg.inverse) — key-family visibility without pure-black harshness.
+
+## 6.2.4 — 2026-07-13
+
+- Icon-only buttons are now spec-square: width equals the size's control height (the preview hardcoded md width on all icon buttons, so small ones rendered 36×24 and drifted with density — the source of the inconsistent bells).
+- Count overlay spec'd (Badge): the on-icon-button count (bell only) is an 18px key-color mini-pill (`bg.inverse` + `fg.inverse`, 2px surface ring, translate 30%/−30% from the corner) — visible against any chrome without borrowing status red; neutral-subtle fills forbidden there; never renders "0". All three sample topbars updated; Storybook Button.css gains the square rules.
+
+## 6.2.3 — 2026-07-13
+
+- Browser: sample pages no longer render proportionally squished — selecting a Sample-pages story lifts the canvas's 920px reading cap, and the screens carry natural widths (app frames min 1160px, single-column pages min 960px, all capped at 1440px) with horizontal canvas scroll as the fallback in narrow windows.
+
+## 6.2.2 — 2026-07-13
+
+Sample pages rebuilt as five full screens (browser only).
+
+- **Console** (new — the product's heart was missing): sidebar + topbar frame, human bubble, agent reply with reasoning disclosure, collapsed steps, SourceChips + sources footer, inline ProposalCard (Approve = primary), ResponseToolbar, suggestion chips, Composer with the screen's one accent (send).
+- **Settings** (new): tabs, form card with save pair, switch rows, warning-level usage meter, danger zone. Zero accent — nothing prompts an AI.
+- **Workbench** enriched: R10 topbar (workspace switcher, bell + count, avatar), SplitPanel detail pane (dense list ↔ focus detail with DescriptionList + steps), pagination, selected row.
+- **Object detail** enriched: trend chart card, embedded dense runs table, schedule-change proposal with diff; Run is `primary` per v6.2.1.
+- **Guided** gains its step-2 moment: ChoiceCard agent-type selection with compact stepper counter.
+- Accent audit across all five: exactly one per conversational surface (Workbench ask-entry, Console send), zero elsewhere — the sample pages now demonstrate the accent discipline in context.
+
+## 6.2.1 — 2026-07-13
+
+Accent boundary corrected after maintainer review of the R1 example: "executes an agent" never earns blue.
+
+- v6.2's "initiating AI CTA" was still ambiguous — in AgentOS everything executes agents, so Run/Retry/Resume all technically qualified. Final rule: `accent` = **conversational/generative AI entry only** (Ask agent, Composer send, generate-from-prompt — the button through which the user *prompts* an AI), max one per screen. Operational actions on agent objects follow the normal hierarchy: Run on an agent's page is `primary`.
+- Demoted accordingly: the object-page Run button (`primary`), the handoff "Resume agent" (`primary`/`secondary` per region — operational, not conversational), the split-button Run example (`primary` split). Remaining accents: Ask-agent entries and the Composer send.
+
+## 6.2.0 — 2026-07-13
+
+Accent tightened to the single AI CTA (maintainer direction: "VERY selectively").
+
+- Accent was already AI-only, but "any agent-invoking action" made blue ubiquitous in an AI-native product — nominal scarcity. New rule: `accent` = the screen's **single initiating AI call-to-action** (Ask agent / Run / Composer send), **max one per screen** (was implicitly per-region). All other agent-related actions use standard variants; AI context is carried by the glyph, `ai.*` surfaces, and squared avatars.
+- ProposalCard Approve demoted `accent` → `primary`: approving is a human decision about agent work, not an AI CTA. Destructive approvals stay `danger`. (ai-patterns §1/§5, components.md, hard rule 7, self-audit, manifest, browser stories, Storybook Button JSDoc all updated.)
+- Unchanged: the AI solid Badge beacon (status, not a CTA), the palette's ask-agent row (text treatment), accent ProgressBar fills (meters, not buttons).
+
 ## 6.1.1 — 2026-07-09
 
 Storybook workspace scaffolded (`storybook/`) — no spec changes.

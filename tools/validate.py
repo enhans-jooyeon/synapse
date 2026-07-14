@@ -18,6 +18,7 @@ Rules (E = error, W = warning):
   SY005 E font-style italic/oblique — foundations §2.3.2
   SY006 E text-transform: uppercase — foundations §2.3.7
   SY007 W letter-spacing declared (verify it never applies to Hangul) — foundations §2.3
+  SY015 E backdrop-filter outside the glass material — foundations §5 (only blur(var(--sy-glass-blur)))
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §5
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
@@ -36,7 +37,7 @@ TOKENS_CSS = os.path.join(ROOT, "tokens", "synapse.css")
 # 1 is allowed solely as a hairline offset paired with 1px borders (e.g. tab underline overlap)
 SPACE_SCALE = {0, 1, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 40, 48, 64, 80, 96}
 FONT_SCALE = {11, 12, 13, 14, 16, 18, 20, 24, 30, 36}
-RADIUS_SCALE = {4, 8, 10, 16, 9999}
+RADIUS_SCALE = {4, 8, 10, 16, 24, 9999}
 WEIGHTS = {"400", "500", "600", "700", "normal", "bold"}
 FORBIDDEN_TERMS = ["에러", "노티", "퍼미션", "컨펌", "익스포트", "워크플로우",
                    "부디", "제발", "을(를)", "(을)를", "Oops", "oops", "click here"]
@@ -70,6 +71,11 @@ CONTRAST_PAIRS = [
     ("fg-secondary on bg-raised", "--sy-fg-secondary", "--sy-bg-raised", 4.5),
     ("fg-secondary on bg-sunken", "--sy-fg-secondary", "--sy-bg-sunken", 4.5),
     ("fg-link on bg-page", "--sy-fg-link", "--sy-bg-page", 4.5),
+    ("emphasis-fg on emphasis-surface", "--sy-emphasis-fg", "--sy-emphasis-surface", 4.5),
+    ("ai-fg on ai-surface", "--sy-ai-fg", "--sy-ai-surface", 4.5),
+    ("fg-on-solid on ai-solid", "--sy-fg-on-solid", "--sy-ai-solid", 3.0),
+    ("fg-primary on emphasis-surface", "--sy-fg-primary", "--sy-emphasis-surface", 4.5),
+    ("fg-primary on bg-selected", "--sy-fg-primary", "--sy-bg-selected", 4.5),
     ("fg-link-inverse on bg-inverse", "--sy-fg-link-inverse", "--sy-bg-inverse", 4.5),
     ("action-primary-fg on action-primary-bg", "--sy-action-primary-fg", "--sy-action-primary-bg", 4.5),
     ("action-accent-fg on action-accent-bg", "--sy-action-accent-fg", "--sy-action-accent-bg", 4.5),
@@ -152,11 +158,13 @@ def lint_css_text(text, path, line_of, defined):
             report("E", "SY005", path, ln, "italic/oblique is forbidden (Hangul has no italics)")
         if prop == "text-transform" and "uppercase" in val:
             report("E", "SY006", path, ln, "text-transform: uppercase is forbidden")
+        if prop.endswith("backdrop-filter") and val.strip() not in ("blur(var(--sy-glass-blur))", "none"):
+            report("E", "SY015", path, ln, f"backdrop-filter only as blur(var(--sy-glass-blur)) on scrimmed overlays — got '{val[:40]}'")
         if prop == "letter-spacing":
             report("W", "SY007", path, ln, "letter-spacing declared — must never apply to Hangul")
         if prop == "box-shadow" and "var(--sy-shadow" not in val and val != "none":
             # sanctioned exemption: inset 1px ring using a border/focus token is a border substitute, not elevation
-            is_ring = val.startswith("inset 0 0 0") and ("var(--sy-border" in val or "var(--sy-ai-border" in val)
+            is_ring = val.startswith("inset 0 0 0") and ("var(--sy-border" in val or "var(--sy-ai-border" in val or "var(--sy-emphasis-border" in val)
             if not is_ring:
                 report("E", "SY009", path, ln, f"raw box-shadow '{val}' — use --sy-shadow-* tokens")
         if prop in ("color", "background", "background-color", "border-color", "fill", "stroke", "border",

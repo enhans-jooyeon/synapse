@@ -1,0 +1,44 @@
+name: Synapse gate
+
+# The design-system contract, enforced on every change. If this fails, the
+# change violates the system — fix the change or amend the spec via governance
+# (design.md §6), never skip the gate.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Token matrix + UI lint (validate.py all)
+        run: python3 tools/validate.py all
+
+      - name: Screen-intent example still validates
+        run: python3 tools/validate.py page examples/screen-intent.example.json
+
+      - name: Manifest is in sync with components.md
+        run: |
+          python3 tools/build_manifest.py
+          git diff --exit-code synapse.manifest.json \
+            || { echo "::error::synapse.manifest.json is stale — run tools/build_manifest.py and commit the result"; exit 1; }
+
+      - name: Version lockstep (tokens ↔ design.md)
+        run: |
+          python3 - <<'EOF'
+          import json, re, sys
+          tv = json.load(open("tokens/synapse.tokens.json"))["$version"]
+          dv = re.search(r"Version (\d+\.\d+\.\d+)", open("design.md").read()).group(1)
+          if tv != dv:
+              print(f"::error::version drift — tokens {tv} vs design.md {dv}")
+              sys.exit(1)
+          print(f"version {tv} — lockstep OK")
+          EOF

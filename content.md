@@ -57,6 +57,19 @@ One concept, one term, both languages. Synonyms listed as forbidden are wrong ev
 | Save changes | 변경사항 저장 | |
 | Cancel (abort an edit) | 취소 | |
 | Stop (halt generation/run) | 중지 | Never 정지, 멈춤. Distinct from 취소. |
+| Reply (quote a passage) | 답장 | Reply pill / ComposerQuote (v6.12). |
+| Regenerate selection | 재생성 | Selection pill second action (v6.25). |
+| Save as template | 템플릿으로 저장 | Message ⋯ overflow (v6.25). |
+| New template | 새 템플릿 만들기 | Template library footer escape (v6.29). |
+| New thread | 새 대화 | Console sidebar + ⌘K (v6.25). |
+| Temporary chat | 임시 대화 | Agent-picker switch; Console shows 임시 badge (v6.25). |
+| Refine prompt | 프롬프트 다듬기 | Composer footer pen-line; also the refinement menu's general action (v6.25/27). |
+| Add detail | 더 자세히 | Refinement preset (v6.27, closed set). |
+| Make concise | 더 간결하게 | Refinement preset (v6.27, closed set). |
+| Specify scope | 기간·범위 구체화 | Refinement preset (v6.27, closed set). |
+| Specify format | 형식 지정 | Refinement preset (v6.27, closed set). |
+| Voice input | 음성 입력 | Mic button aria-label; recording bar (v6.26). |
+| Recording | 녹음 중 | Recording-state announcement (v6.26). |
 | Delete (permanent) | 삭제 | Only for irreversible destruction. |
 | Remove (from a collection) | 제거 | Item survives elsewhere. NEVER interchangeable with Delete/삭제. |
 | Edit | 편집 | 수정 only inside sentences describing a change, never on buttons. |

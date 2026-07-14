@@ -60,7 +60,9 @@ Agent conversation surface.
 
 ## 2. Layout grid
 
-- App frame: Sidebar (240/64) + main area. Main area holds one archetype.
+- App frame: Sidebar (240/64) + main area. Main area holds one archetype. **Scroll containers span the region (v6.17.5):** when content is a centered reading column inside a wider region (Console thread, focus documents), the scroll container is the full-width region and the column is centered inside it — the scrollbar sits at the region's edge, never beside the column. A mid-canvas scrollbar reads as a broken layout.
+
+**App chrome is density-independent (v6.2.5):** the Topbar (R10) and Sidebar always render at focus metrics — page density governs content regions, never the frame around them (density-shifting chrome makes the same app feel different per page).
 - Content grids use CSS grid with `--sy-space-16` (dense) / `--sy-space-24` (focus) gutters. Column counts: metric cards 2–6; card grids 2–4; never 12-column decorative grids.
 - Breakpoints: <768 single column + collapsed sidebar; 768–1280 standard; >1440 workbenches keep fluid, focus archetypes stay at max-width (whitespace is intentional — do not fill it).
 
