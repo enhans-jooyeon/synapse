@@ -1,0 +1,7 @@
+# Deploy ONLY the component browser: the Vercel app IS preview.html (v6.47.5).
+# Specs, tools, proposals, and the stale Storybook scaffold stay out of the deployment.
+*
+!preview.html
+!tokens/
+!tokens/**
+!vercel.json

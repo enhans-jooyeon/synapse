@@ -1,5 +1,9 @@
 # Synapse changelog
 
+## 6.47.5 — 2026-07-15
+
+- Vercel deploy config (infra, no spec changes): the deployment is EXACTLY the component browser — allowlist-style `.vercelignore` ships only preview.html + tokens/, and `/` rewrites to preview.html. Specs, tools, proposals, and the stale Storybook scaffold are not deployed (they remain in the repo). Artific stays uncommitted per license; fallback renders by design.
+
 ## 6.47.4 — 2026-07-15
 
 - §27 starters: label ≠ insertion — chip shows a short task handle, click inserts the full exemplar prompt (scope/format/constraints). Found by running the reference's interactive demos in a browser (the earlier audit had only static page text): our HOME starters inserted their literal labels, violating our own "model complete prompts" law. Demo-verified findings also confirmed §18/§29/§30 as spec'd; batch demo is sequential-only with no per-item controls (we exceed it).
