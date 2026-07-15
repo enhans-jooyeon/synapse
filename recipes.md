@@ -40,7 +40,7 @@ Inside Card: `heading-md` (or `heading-lg` for page-dominant cards) + optional t
 
 ## R4 · Stat grid
 
-2–6 `stat` Cards in an equal-column grid, gutter `space-16` (dense) / `space-24` (focus). At most one card takes the `emphasized` treatment (v6.11 — emphasis.surface/border/fg) to mark the hero metric.
+2–6 `stat` Cards in an equal-column grid, gutter `space-16` (dense) / `space-24` (focus).
 
 Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking, v6.4) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row** (v6.4): 12px `trend-up`/`trend-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비").
 
@@ -115,3 +115,7 @@ Agent-generated reports leave the app; the export is a Synapse surface with no i
 - SourceChips convert to numbered footnotes on the page where cited, full source list at document end.
 - Page-break rules: never inside a table row, a stat card, or a heading-plus-first-paragraph pair; tables repeat their header row per page.
 - No interactive components render in exports: buttons, inputs, and toolbars are omitted, not disabled.
+
+## R15 · Batch-run results (v6.47)
+
+Queue (ai-patterns §29) completion lands here: Table, one row per input item — mono source name · status (dot+text) · count/metric columns (tabular) · per-row 열기 link; failed rows keep 다시 시도 inline. Header carries the aggregate line and 결과 내보내기 (`secondary`). Empty/failed-all uses the standard error EmptyState. Jurisdiction: Workbench archetype.

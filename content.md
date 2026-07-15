@@ -61,6 +61,8 @@ One concept, one term, both languages. Synonyms listed as forbidden are wrong ev
 | Regenerate selection | 재생성 | Selection pill second action (v6.25). |
 | Save as template | 템플릿으로 저장 | Message ⋯ overflow (v6.25). |
 | New template | 새 템플릿 만들기 | Template library footer escape (v6.29). |
+| Add favorite | 즐겨찾기 추가 | Favorite toggles (v6.34.1). |
+| Remove favorite | 즐겨찾기 해제 | Favorite toggles (v6.34.1). |
 | New thread | 새 대화 | Console sidebar + ⌘K (v6.25). |
 | Temporary chat | 임시 대화 | Agent-picker switch; Console shows 임시 badge (v6.25). |
 | Refine prompt | 프롬프트 다듬기 | Composer footer pen-line; also the refinement menu's general action (v6.25/27). |
@@ -69,6 +71,13 @@ One concept, one term, both languages. Synonyms listed as forbidden are wrong ev
 | Specify scope | 기간·범위 구체화 | Refinement preset (v6.27, closed set). |
 | Specify format | 형식 지정 | Refinement preset (v6.27, closed set). |
 | Voice input | 음성 입력 | Mic button aria-label; recording bar (v6.26). |
+| Add | 추가 | Composer + menu aria-label (v6.44). |
+| Tools | 도구 | Composer tools popover (v6.41). |
+| Explain (selection) | 설명 | Selection pill action (§18, v6.47). |
+| Refine all | 전체 다듬기 | General preset row, §24 menu (v6.47.3). |
+| Prompt starters | 시작 제안 | Zero-state chips (§27, v6.47). |
+| Batch processing | 일괄 처리 | Queue runs (§29, v6.47). |
+| Model | 모델 | Composer model selector; 자동 = agent default (v6.42). |
 | Recording | 녹음 중 | Recording-state announcement (v6.26). |
 | Delete (permanent) | 삭제 | Only for irreversible destruction. |
 | Remove (from a collection) | 제거 | Item survives elsewhere. NEVER interchangeable with Delete/삭제. |

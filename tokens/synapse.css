@@ -172,6 +172,7 @@
   --sy-emphasis-surface: #EFF3F7;
   --sy-emphasis-border: #DCE3EB;
   --sy-emphasis-fg: #4F5D6F;
+  --sy-emphasis-fg-soft: #6B7A8D;
   --sy-ai-fg: #4F5D6F;
   --sy-ai-solid: #4F5D6F;
 
@@ -250,6 +251,7 @@
   --sy-emphasis-surface: #1A212B;
   --sy-emphasis-border: #2A333F;
   --sy-emphasis-fg: #C2CCD9;
+  --sy-emphasis-fg-soft: #93A1B3;
   --sy-ai-fg: #C2CCD9;
   --sy-ai-solid: #6B7A8D;
 

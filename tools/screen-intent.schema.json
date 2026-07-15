@@ -6,7 +6,7 @@
   "required": ["name", "archetype", "regions", "locales", "states", "permissions"],
   "properties": {
     "name": { "type": "string", "minLength": 1 },
-    "archetype": { "enum": ["workbench", "object", "settings", "guided", "console"] },
+    "archetype": { "enum": ["workbench", "object", "settings", "guided", "console", "home"] },
     "regions": {
       "type": "array", "minItems": 1,
       "items": {

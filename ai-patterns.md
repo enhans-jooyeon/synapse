@@ -50,6 +50,8 @@ All agent activity between "request" and "answer" renders as **AgentStep** rows 
 
 - A tool call is an AgentStep whose summary carries the tool name in mono: `slack.post_message` — human-readable summary first, mono identifier second ("Posted summary to #ops · `slack.post_message`").
 - Inputs and outputs are collapsed by default; expanding shows `.sy-code-block` with copy button. Redact secrets by default (`••••`, reveal requires explicit click and permission).
+- **Model selection (v6.42):** a per-conversation Composer control beside the agent picker (reversal of the v6.41 in-picker placement). Defaults from the selected agent's config; switching agents resets it to that agent's default; org policy MAY lock it read-only. Model choice NEVER changes permissions, tool access, or approval rules.
+- **User tool control (v6.41):** the Composer's tools popover toggles which capabilities/connectors the agent may use in this conversation (defaults from agent config). Disabling a tool the agent needs → the agent asks for it by name, never silently fails or silently re-enables. Enabling a tool NEVER bypasses approval: the next rule holds regardless of toggles.
 - Tool calls with **external side effects** (sending, posting, purchasing, deleting, writing to third-party systems) MUST pass through a ProposalCard (§5) unless the user has granted standing approval for that specific tool+scope, in which case the step shows a "pre-approved" Badge (`neutral`).
 
 ## 5. Human-in-the-loop approval — ProposalCard
@@ -72,6 +74,8 @@ The agent never performs a consequential action silently. It proposes; the human
 - A sources footer lists all citations for the message (13px, `fg.secondary`).
 - Claims with no retrievable source and low verifiability are marked once per message with a `neutral` Badge: "Model knowledge" / "모델 지식" — never fake a citation, never cite the agent itself.
 - Numbers, quotes, and named facts in agent-generated *documents* (not just chat) follow the same rule. If AgentOS renders an agent-written report, the chips come with it.
+- **Sources row (v6.36):** below the message, sources render as compact ContextCards (index + icon tile + name) under a 출처 `micro-label` — never as a plain-text footnote line. Card↔marker hover linkage makes the mapping visual. Inline markers stay ≤3 per sentence.
+- **Marker form (v6.37):** circular 18px chips with bare numerals on the emphasis tint — a citation is quiet emphasis; brackets and mono are retired (they read as code, not annotation).
 
 ## 7. Uncertainty
 
@@ -163,9 +167,13 @@ Selected text inside an agent message is a first-class conversational object.
 **Quote highlight:** the selected passage takes `ai.surface` fill + inset `ai.border` hairline while quoted.
 **ComposerQuote:** choosing Reply inserts a quote bar into the Composer above the textarea — `ai.surface` fill, `ai.fg` text, reply icon, single-line ellipsis, × remove. Radius `xs` (concentric: composer radius 16 − 12 padding = 4). Max one quote per send; quoting replaces any existing quote. The sent message renders the quote above the user text.
 
+**Selection actions (v6.47, closed set):** the floating pill carries 답장 · 설명 · 재생성 — and nothing else without governance (actions come from the action glossary). 설명 composes a quoted follow-up ("이 부분을 설명해 줘" + ComposerQuote of the selection); the explanation arrives as a NORMAL agent turn in the thread. Selection actions NEVER mutate the original message in place — thread history is append-only (provenance law). Rewrite-type actions apply only to the user's OWN draft (§24), never to agent output.
+
 ## 19. Follow-up panel (v6.12)
 
 Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it: **glass material** (v6.23 — the one anchored exception to the scrim-gating in foundations §5: the panel floats over thread content like a mini-palette, is static while open, and dismisses on esc/typing; reduced-transparency falls back opaque) with `border.overlay`, `shadow.overlay`, radius `md`, 6px padding, 32px rows at radius `xs`; rows lead with the 12px follow-up arrow, full-bleed keyboard header row in keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). **Placement (v6.23.1–2):** the panel is absolutely anchored **8px above the Composer's top edge** (a floating layer detaches from its anchor — flush contact reads as part of the input; anchored menus use 4px, the panel's larger mass earns 8) and OVERLAYS the last thread messages — it never pushes content down (layout shift on open is forbidden, and the glass material is meaningless without content behind it). Max 4 rows; selecting inserts the text into the Composer (never auto-sends). Chips and panel never show simultaneously.
+
+**Chip honesty (v6.47, adopted law):** a suggestion chip's visible label IS the query it sends — never a longer or different hidden prompt. If the real query needs more words than the chip can show, the chip inserts into the Composer for editing instead of sending.
 
 ## 20. Answer anatomy & named working states (v6.13)
 
@@ -183,14 +191,14 @@ Agent-generated media renders as a MediaGroup fan (see components.md). Media-onl
 
 ## 23. Prompt templates & placeholders (v6.25)
 
-**Library:** prompts can be saved ("템플릿으로 저장" in the sent message's ⋯ overflow) and recalled two ways — the Composer's `/` scope gains a 템플릿 group (expert path), and a **bookmark icon-button in the Composer footer (v6.29 — novice path; `/` alone is expert-only discovery)** opens the browse menu: search row + `micro-label` groups 내 템플릿 / 팀 템플릿 (team rows carry a `neutral` 팀 Badge) + footer escape "새 템플릿 만들기" (the never-dead-end rule). Inserting a template renders its slots as cloze chips (below).
+**Library:** prompts can be saved ("템플릿으로 저장" in the sent message's ⋯ overflow) and recalled two ways — the Composer's `/` scope gains a 템플릿 group (expert quick-insert), and the **bookmark icon-button opens the Template Library Modal (v6.30–31 — upgraded from a menu: title-only rows cannot answer "what does this template do to my prompt?"; a library shows content before commitment).** Modal anatomy (opaque `bg.raised`, **760 — the browse-library width, a named Modal exception (v6.34): forms cap at 640, data-review Drawers run 800, libraries sit between**, **two-pane**): header (title + close, **16 vertical / 24 sides — vertical symmetric against the hairline; sides match the pane's 24 content column**, v6.34.2) over a hairline · left list column (260, **`bg.surface` fill — the layered-pane read**: full-bleed search row · **scope SegmentedControl (전체 / 내 템플릿 / 팀, v6.34)** · **즐겨찾기 group always first** (star toggles, v6.34.1 — was pin/고정됨) — favoriting is the volume answer: the working set stays on top regardless of library size — then `micro-label` group headers per scope, borderless 32px rows with a **hover-reveal star toggle** (20px compact, `aria-pressed`; idle = stroke, **active = FILLED at `emphasis.fg-soft` (v6.35 — slate.500/400, the lightest legal value: one step above the 3:1 non-text floor, gate-checked; the fill carries the mass so the mark affords lightness text cannot) — the one sanctioned fill-on-active icon: a favorite toggle's job is broadcasting state, and stroke+color alone read inactive.** Thumbs and all other icons stay stroke-only; favorited rows keep the star visible), selected = `bg.selected`; "새 템플릿 만들기" pinned at the bottom over a full-bleed hairline, uniform 8px padding around the row (v6.32.1)) · right preview pane (uniform 24 padding): **eyebrow lockup with a star toggle top-right (24px, mirrors the row state)** — group as a `micro-label` eyebrow over the `heading-sm` name (the eyebrow carries ownership; no badge needed), one-line description, the **cloze preview as a blockquote** (2px `border.strong` left rule — the system's quotation language, slots highlighted in `emphasis.surface`), and 삽입 (`primary`) bottom-right. Below the description sits a `caption` meta line (owner · last edited — v6.32), and under the cloze a `caption` slot summary ("입력 항목 N개 · 삽입 후 →로 이동" — v6.32.2, functional texture that teaches the → behavior); the pane footer pairs keycap hints (↵ 삽입 · esc 닫기, `micro` + `.sy-kbd`) left with 삽입 (`primary`) right, and ↵ inserts the selected template. Column-internal rules (search row, pinned footer) bleed to the column edges per the divider law. **At scale (v6.33):** the modal body fixes its height (420) and the row region scrolls independently — scrollbar at the column edge per the scroll-container law — with sticky group headers (surface-filled so rows slide beneath); search filters live on title, hiding emptied groups, with the compact no-results line ('…에 대한 결과가 없습니다'); ↑↓ move the selection through visible rows (scrolling it into view), ↵ inserts. Selecting a row previews; 삽입 or ↵ inserts with slot chips and closes. Content appears once in the pane — never repeated per row (boxes-in-boxes is the wireframe formula's cousin).
 **Placeholders:** templates carry named slots rendered as inline slot chips in the Composer text — `emphasis.surface` fill, `fg.secondary`, radius `xs`, "[기간]" label. → moves between slots (consistent with ghost completion; never Tab — IME). Send with an unfilled slot is blocked with a caption error naming the slot (extends the empty-send rule; the ONLY other sanctioned send-block).
 **Bilingual hard rule:** templates are authored as complete per-locale sentences with slots — a slot NEVER has a Korean particle attached to it (content.md §4); if the sentence needs a particle, rewrite the template so the slot sits particle-free.
 
 ## 24. Authoring coach (v6.25)
 
 **Quality hint:** while the Composer is focused, ONE `caption` `fg.tertiary` line MAY appear below it naming a concrete improvement ("기간을 지정하면 더 정확한 결과를 얻습니다"). Anti-nag rules are absolute: max one hint visible, never blocks or delays send, disappears on send or edit, never reappears for the same draft after dismissal, never uses warning/danger color — coaching is an offer, not a gate.
-**Refine prompt (extended v6.27 — assisted editing):** the pen-line `ghost` icon-button (Composer footer) opens a small menu of **preset refinements** — a CLOSED set: 프롬프트 다듬기 (general), 더 자세히, 더 간결하게, 기간·범위 구체화, 형식 지정. Menu anatomy is the standard Popover; the preset list is part of this spec and extends only by governance (freeform "rewrite styles" are forbidden — that is glossary drift into the input). The chosen rewrite REPLACES the composer text with an Undo Toast (reversible-lite); on an empty draft the button is disabled (nothing to refine — the one shared disable rationale with send). Never automatic; the rewritten text is the user's to edit — no provenance marking inside the input (authorship stays with the user).
+**Refine prompt (extended v6.27 — assisted editing):** the pen-line `ghost` icon-button (contextual, v6.44: floats at the input's top-right only while the draft is non-empty) opens a small menu of **preset refinements** — a CLOSED set: 전체 다듬기 (general; relabeled from 프롬프트 다듬기 in v6.47.3 — that string became the menu's micro-label header, and a row must never duplicate its header), 더 자세히, 더 간결하게, 기간·범위 구체화, 형식 지정. Menu anatomy matches the picker family (v6.47.3): `micro-label` header + rows + separator before the preset group; the preset list is part of this spec and extends only by governance (freeform "rewrite styles" are forbidden — that is glossary drift into the input). The chosen rewrite REPLACES the composer text with an Undo Toast (reversible-lite); on an empty draft the button is NOT RENDERED (v6.44 — visibility replaces disablement: a contextual affordance appears when applicable rather than sitting disabled). Never automatic; the rewritten text is the user's to edit — no provenance marking inside the input (authorship stays with the user).
 **Not adopted:** generative inline autocomplete of prompt text. Ghost completion stays closed-glossary — model output inside the user's input muddies authorship where provenance cannot mark it.
 
 ## 25. Threads (v6.25)
@@ -203,9 +211,41 @@ Agent-generated media renders as a MediaGroup fan (see components.md). Media-onl
 
 **Scope: dictation, not voice messages.** Speech becomes editable text in the Composer — the user reviews and sends. Audio never posts to the thread: agent conversations stay textual so provenance, search, and quote-reply hold. Authorship stays with the user (§24 logic — the transcript is the user's own speech).
 
-**Trigger:** mic `ghost` icon-button in the Composer footer, before the agent picker.
+**Trigger:** mic `ghost` icon-button on the Composer footer's trailing side, immediately left of send (v6.43 — relocated from the leading group: dictation fills the message about to be sent). Never inside the ⋯ overflow — voice input must stay one tap away.
 **Recording state:** the Composer tray morphs in place (never a separate overlay): Cancel (`ghost` Button, "취소") · pulsing 8px `status.danger-bg-solid` dot + tabular timer ("0:04") · compact level meter (≤5 bars, 2px wide, `fg.tertiary`, transform-scaleY animation only — motion law; static under reduced-motion) · pause `ghost` icon-button · confirm as a **`primary` icon-only circle (check)** in the send position — the same morph language as send↔stop. Esc cancels; ↵ confirms.
 **After confirm:** a working line ("받아쓰는 중…", pulse) while transcribing, then the transcript inserts at the caret — appended to any existing draft, NEVER auto-sent.
 **A11y:** recording state change announced via `aria-live`; the ticking timer is `aria-hidden` (announce on start/stop, not every second); the mic button reflects state in its `aria-label`.
 **Forbidden:** auto-send on transcription end; audio artifacts in the thread; waveform decoration outside the recording bar; recording without the visible danger-dot indicator.
 
+
+## 27. Prompt starters (v6.47)
+
+**Zero state only.** An empty conversation (new session, no turns) MAY show 3–4 starter chips above the Composer — `tag-sugg` anatomy, same object as §19 suggestions (one suggestion language system-wide). Selecting a starter INSERTS into the Composer for editing — never auto-sends (§19 chip law applies).
+
+- Starters MUST model a complete, well-formed prompt in the workspace's domain — never "무엇이든 물어보세요" (a starter that doesn't teach prompt structure is decoration). **Label ≠ insertion (v6.47.4, demo-verified):** the chip label is a short task handle (2–4 words); selecting it inserts the full exemplar prompt (scope, format, constraints spelled out). The label is a handle; the insertion is the lesson. Chip-honesty (§19) is preserved because starters insert for editing — they never send.
+- Personalize by role and recency after the first session (e.g., resume where the user left off); rotating generic starters past session one is an anti-pattern.
+- Dismissible (× at row end); dismissal persists per user. Never advertise a capability the selected agent cannot deliver.
+- Disappears at first turn; §19 follow-ups take over. The two never render together.
+
+## 28. Attachment intelligence (v6.47)
+
+After attach, the chip/tile MAY gain an advisory caption: extracted shape, not content judgment ("CSV · 328행 · 7/6–7/12 접수 문의") — `caption` style, `fg.tertiary`, marked 자동 요약. Laws: **advisory only** — never blocks send, never modifies the attachment, never required for send; pending state uses the `pulse` opacity animation (named-working-state family, §20); analysis failure falls back silently to the plain chip (no error surface for an optional nicety); agent-attributed like all generated text. Purpose: the user verifies the RIGHT file went in before spending a run.
+
+## 29. Batch input processing (v6.47)
+
+Multiple homogeneous inputs (files, records, queries) submitted at once run as a **queue**, not a mega-prompt:
+
+- Per-item row: mono filename + progress bar (R-progress anatomy) + status (완료 / n% / 대기 / 실패).
+- Individual control: pause and cancel per row (compact 20px icon buttons, v6.27.2 family); 실패 rows retry individually — one failure NEVER aborts the batch.
+- Batch footer: aggregate line ("2/4 완료 · 예상 3분") + 결과 내보내기; results land in a Table (recipe R15), one row per item.
+- External side effects inside a batch still pass ProposalCard (§5) — batching never bypasses approval; pre-approved tool budgets apply per item.
+- The Composer stays usable during a batch run (never blocks on the queue).
+
+## 30. Predictive text (v6.47 — generalizes the slash-command ghost completion)
+
+Whole-prompt continuations MAY render as ghost text after the caret: `fg.placeholder`, max one line, plain text only.
+
+- **→ accepts. Tab NEVER accepts** (IME law, same ruling as slash completion and template slots).
+- Suppressed entirely while Hangul composition is active (compositionstart→compositionend) — ghost text inside composing syllables is unreadable.
+- Continue typing = dismiss; no explicit dismiss control. Ghost text never changes what send submits — only accepted text is real.
+- Sources: closed — the action glossary, the user's own recent prompts, and template titles. Freeform model-generated continuations require a governance proposal (latency + wrong-ghost cost: bad ghost text is worse than none).

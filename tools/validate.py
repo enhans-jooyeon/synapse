@@ -74,6 +74,7 @@ CONTRAST_PAIRS = [
     ("emphasis-fg on emphasis-surface", "--sy-emphasis-fg", "--sy-emphasis-surface", 4.5),
     ("ai-fg on ai-surface", "--sy-ai-fg", "--sy-ai-surface", 4.5),
     ("fg-on-solid on ai-solid", "--sy-fg-on-solid", "--sy-ai-solid", 3.0),
+    ("emphasis-fg-soft on bg-surface (non-text mark)", "--sy-emphasis-fg-soft", "--sy-bg-surface", 3.0),
     ("fg-primary on emphasis-surface", "--sy-fg-primary", "--sy-emphasis-surface", 4.5),
     ("fg-primary on bg-selected", "--sy-fg-primary", "--sy-bg-selected", 4.5),
     ("fg-link-inverse on bg-inverse", "--sy-fg-link-inverse", "--sy-bg-inverse", 4.5),
@@ -111,6 +112,13 @@ def check_tokens():
     except Exception as e:
         report("E", "SY000", TOKENS_JSON, 0, f"tokens JSON unparseable: {e}")
         return
+    # version lockstep (v6.31.1): tokens $version must equal the design.md header —
+    # this drifted silently for 12 versions before being checked here; CI alone was not enough
+    dm = open(os.path.join(ROOT, "design.md")).read()
+    m = re.search(r"\*\*Version (\d+\.\d+\.\d+)", dm)
+    if m and data.get("$version") != m.group(1):
+        report("E", "SY000", TOKENS_JSON, 4,
+               f"version lockstep broken: tokens $version {data.get('$version')} != design.md {m.group(1)}")
     blob = json.dumps(data)
     # every {reference} resolves
     def get(path):

@@ -64,9 +64,11 @@
 | attachment | `paperclip` | Composer |
 | reply / quote | `corner-up-left` | Reply pill + ComposerQuote only (v6.12) |
 | follow-up | `arrow-right` | follow-up panel rows only (v6.12) |
-| refine prompt | `pen-line` | Composer footer only (v6.25) |
-| voice input | `mic` | Composer footer only (v6.26) |
+| refine prompt | `pen-line` | Composer input area, contextual overlay only (v6.25; moved v6.44) |
+| voice input | `mic` | Composer footer, send-adjacent trailing (v6.26; moved v6.43) |
+| tools / capabilities | `plug` | Composer footer + tool rows (v6.41) |
 | prompt template | `bookmark` | Composer footer + template library rows (v6.29) |
+| favorite | `star` | template library favorite toggles (v6.34.1, was pin); **active state renders FILLED — the registry's one fill-on-active exception (v6.34.3)**; future list favoriting by governance |
 | pause | `pause` | recording bar only (v6.26) |
 | approve / confirm | `check` | |
 | send (Composer) | `arrow-up` | Composer's sanctioned icon-only send |

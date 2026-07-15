@@ -1,5 +1,184 @@
 # Synapse changelog
 
+## 6.47.4 — 2026-07-15
+
+- §27 starters: label ≠ insertion — chip shows a short task handle, click inserts the full exemplar prompt (scope/format/constraints). Found by running the reference's interactive demos in a browser (the earlier audit had only static page text): our HOME starters inserted their literal labels, violating our own "model complete prompts" law. Demo-verified findings also confirmed §18/§29/§30 as spec'd; batch demo is sequential-only with no per-item controls (we exceed it).
+
+## 6.47.3 — 2026-07-14
+
+- Assisted-editing menu joins the picker anatomy (maintainer: didn't match the other pickers): `micro-label` header "프롬프트 다듬기" like every other composer menu, general preset row relabeled 전체 다듬기 (a row never duplicates its header), separator before the preset group. §24 + glossary updated; preset SET unchanged.
+
+## 6.47.2 — 2026-07-14
+
+- Thumbs glyph optical centering (maintainer: icon off-center — the 6.47.1 visible fill exposed it): thumbs-up ink is right-heavy, thumbs-down left-heavy; ∓1px translateX on both, all 3 render sites each. Numeral-nudge family rule recorded in ResponseToolbar spec.
+
+## 6.47.1 — 2026-07-14
+
+- ResponseToolbar thumbs select-state: `border.focus` blue circle → `bg.selected` square + `fg.primary` stroke (maintainer question surfaced a v5.2 relic breaking the blue-retreat ruling and the fill+ink selection language; circles remain exclusive to Composer send).
+
+## 6.47.0 — 2026-07-14
+
+Input-pattern audit adoption (proposals/2026-07-14-input-patterns-audit.md — all 22 aiuxplayground input patterns reviewed; 12 already covered, 4 rejected as spec'd there, 8 adopted per maintainer):
+
+- **§27 Prompt starters:** zero-state chips above the Composer (live on HOME: 3 starters + dismiss ×; click inserts, never sends). Laws: model complete prompts, personalize after session one, dismiss persists, gone at first turn.
+- **§18 + Selection actions:** the selection pill's closed set is now 답장 · 설명 · 재생성; 설명 composes a quoted follow-up, answers arrive as normal turns — thread history is append-only, rewrites only ever touch the user's own draft.
+- **§28 Attachment intelligence:** advisory caption on attachments (shape, not judgment; 자동 요약 marked; pulse while pending; silent fallback; never blocks send). Demo on the Composer story.
+- **§29 Batch input + R15:** per-item queue with individual pause/cancel/retry, one failure never aborts, ProposalCard still gates side effects, results Table recipe. New "Batch input" story.
+- **§30 Predictive text:** generalizes slash ghost completion — → accepts (never Tab), suppressed during Hangul composition, closed suggestion sources; freeform model continuations need governance (maintainer accepted the IME risk knowingly).
+- **§19 chip honesty law (verbatim adoption):** a chip's label IS the query it sends.
+- **Active-tools dot:** + button gains a 6px ink dot when toggles deviate from agent defaults — live in the demo (toggle Slack on). Fixes the silent-capability-state cost of nesting tools.
+- **Slash discoverability:** composer placeholders gain "· / 명령" — we were committing the reference's top anti-pattern.
+- Rejected with rationale (recorded in the proposal): gesture input, voice-to-action, input-mode-toggle (v6.26 dictation-only ruling), tone sliders (§24 closed-preset law).
+
+## 6.46.0 — 2026-07-14
+
+- Quiet scrollbar law (maintainer: remove scrollbar borders — they were native browser chrome; no styling existed): global thin trackless scrollbars — thumb only, `border.strong` on transparent, radius `full`, hover `fg.tertiary`, buttons hidden. Foundations §5 addition; one global rule, never per-component.
+
+## 6.45.1 — 2026-07-14
+
+- Preview repair (maintainer report — composer blocks rendering in every section): the 6.45 model-story replacement left a duplicate `</div>` that closed the Composer story container early, spilling every block after it (assisted-editing menu, recording bar, template trays, …) outside the story scoping. Removed; added a structural audit pass over all 57 stories (each story div must balance before the next begins) — clean.
+
+## 6.45.0 — 2026-07-14
+
+- **Home composer wiring parity** (maintainer report — selectors not appearing): the agent picker was wired only on the Console frame, and the v6.44 footer rewiring had silently DELETED the model-selector popup wiring everywhere (the cut span included the adjacent block). Agent picker, model menu, and the template library now wire generically on every sample frame with a composer tray; picker lookup scoped to `.composer-tray` so it can't grab a stray avatar.
+- **Real model names, grouped by provider** (maintainer request, replacing the placeholder K-1 family): menu = provider groups under `micro-label` headers — Anthropic (Claude Sonnet 5 ✓, Claude Opus 4.8), OpenAI (GPT-5.6, GPT-5.5), Google (Gemini 3.1 Pro, Gemini 3.5 Flash) — single-line mono rows, then 자동/에이전트-기본값. Naming law: model names are untranslated English product nouns in mono; provider headers are plain text, not logos (v6.17 keeps logos in connector contexts). Footer buttons show the active model (Claude Sonnet 5).
+- Lesson recorded: index-range JS surgery must assert what the cut span contains — a regression test would have caught the dead model button a version earlier.
+
+## 6.44.1 — 2026-07-14
+
+- Compact side padding (12→8) for labeled ghost controls inside the Composer tray — agent picker and model selector (maintainer: sides too wide on 자동 선택). Scoped CSS rule, not a Button variant: `btn-icon` and non-tray ghosts untouched.
+
+## 6.44.0 — 2026-07-14
+
+- **+ composer menu** replaces the paperclip + ⋯ pair (maintainer request): one leading icon opening 파일 첨부 / 템플릿 라이브러리 / 도구. The tray itself remains the drop target, so demoting attach doesn't orphan drag-and-drop.
+- **kbd send hint removed from the footer** (maintainer request); the **model selector moves into its slot** on the trailing side — footer reads: + · agent picker · … · model · mic · send. Send behavior unchanged; shortcut teaching moves to tooltip/onboarding.
+- **Refine-prompt is now contextual** (maintainer request): pen ghost icon-button floats at the input's top-right (textarea +40px right padding), rendered only while the draft is non-empty — visibility replaces disablement (§24 + icon registry updated). Wired live: typing in any sample composer reveals it; presets/Undo-Toast behavior unchanged. Composer story now shows a filled draft so the state is visible.
+- Composer anatomy paragraph rewritten wholesale — the 6.41→6.42 patch-on-patch had left a duplicated agent-picker description in the spec text.
+- Glossary +추가.
+
+## 6.43.0 — 2026-07-14
+
+- **Composer footer simplified** (maintainer: too many buttons): leading group is now attach + ⋯ overflow only — 템플릿 라이브러리, 프롬프트 다듬기, and 도구 (with its switch popover) moved into the overflow menu, fully wired in the Console sample. Two visible leading icons is the new default; five remains the hard cap. Attach stays visible as the drop-target affordance.
+- **Mic relocated send-adjacent** (maintainer request): trailing side now reads kbd hint · mic · send. Rationale spec'd in §26: dictation fills the message about to be sent, so it belongs with send, not the authoring aids — and it may never be buried in the overflow.
+- Composer entry, §26, icon registry (mic jurisdiction), manifest key_rules updated.
+
+## 6.42.0 — 2026-07-14
+
+- **Model selector pulled out of the agent picker** (maintainer reversal of the 6.41 placement): now its own ghost control right of the agent picker — mono model name + chevron; menu = model rows (mono name + 11px caption), separator, 자동/에이전트-기본값 row. Per-conversation, defaults from agent config, org-lockable, never changes permissions or approval rules. Agent-picker rows lose their model captions and 모델 submenu — one object per menu; picker restored to v6.15 anatomy (260px, single-line rows, group label, 모든 에이전트, footer escape — the 6.41 edit had also dropped these).
+- **Tools popover retune** (maintainer: awkward proportions): 260→280 (governance note fits one line), group header gets real micro-label padding (the 6.41 header borrowed the palette-scoped `.grp` class, which is a no-op in menus — cramped against the top edge), rows gain leading 16px fg-tertiary icons (search/code from the registry; connector rows use the plug glyph — brand logos need real assets, registry glyph until then).
+- Footer cap clarified: the 5-affordance cap covers leading ICON buttons; labeled trailing controls (agent, model) are exempt.
+- Two-line menu row law: trailing glyphs align to the FIRST line via a first-line-height (20px) flex wrapper — the toast v6.27.2 precedent — never flex-centered across both lines, never off-scale margin nudges (SY002 caught exactly that in this change's first draft).
+- Glossary +모델.
+
+## 6.41.0 — 2026-07-13
+
+- Composer tools affordance (plug icon → popover of per-conversation capability Switches, seeded from agent config). Governance rules: disabling a needed tool makes the agent ask by name — never silent failure or silent re-enable; enabling never bypasses ProposalCard approval for external side effects. Wired live in Console and Home.
+- Model selection surfaces INSIDE the agent picker (maintainer choice, refining — not reversing — the agents-encapsulate-models ruling): rows show a read-only mono model caption (configured agents pin their model), and a 모델 submenu applies to 자동 선택 conversations only. No composer model chip.
+- Composer footer cap spec'd: five leading affordances maximum (now reached: attach·template·refine·mic·tools), further additions go to a ⋯ overflow.
+- Registry +plug; glossary +도구.
+
+## 6.40.1 — 2026-07-13
+
+- Home agent shelf cards: padding 12 uniform → 8 vertical / 12 sides. The two-line text block's line-height slack (label 13/20 + caption 12/18) adds ~4px of built-in vertical air, so numerically-uniform padding read taller than the sides — the optical complement of the uniform-padding rule: when content carries internal leading, the box compensates.
+
+## 6.40.0 — 2026-07-13
+
+- Emphasized stat card REMOVED (maintainer: no slate on stat cards) — the hero-stat job leaves the slate family's closed list (remaining jurisdiction: table emphasis, now-markers, selected states, AI surfaces). Metric grids render uniform; urgency belongs to queues and status colors, not card tint. All three emphasized instances (R4 story, Workbench, Home) reverted; recipes/foundations/patterns/tokens/manifest synced. Note: strictly a variant-treatment removal — recorded as such, migration is deletion of the opt-in.
+
+## 6.39.1 — 2026-07-13
+
+- Home archetype: one-viewport rule (maintainer — no scroll on Home): content is contracted to fit, never scrolled — stat cards compact to stat-sm numerals with 16 padding, agent shelf cards to 12, section gaps 16, greeting inset 24; caps spec'd (≤3 metrics, ≤2 queued proposals then 모두 보기, one shelf row). If content would overflow, cut content — the Composer never leaves view.
+
+## 6.39.0 — 2026-07-13
+
+- New page archetype: HOME (patterns §1F + decision-tree line + screen-intent schema enum). The workspace's start surface: greeting block (the screen's Display moment), hero metric strip with the actionable number emphasized, approval queue first (the human-in-the-loop backlog surfaces here before anywhere else), agent shelf, and the Composer pinned at the bottom — Console anatomy without a thread; sending opens a Console. Suggestion chips explicitly not sanctioned here; an empty Home never shows an EmptyState ("no work" is the good state).
+- Home sample page added (first in the Sample pages group) with the shared interactive topbar.
+
+## 6.38.4 — 2026-07-13
+
+- Citation numeral optical nudge (maintainer caught digits riding high): 1px top padding on both numbered circles — inline marker and pill numeral — the same v2.1 Badge md-nudge remedy for Pretendard's 11px digits at line-height 1. Spec'd with the precedent cited so the two nudges stay linked.
+
+## 6.38.3 — 2026-07-13
+
+- Source-type icon restored to pills (maintainer preference, reversing the v6.38.2 retirement): 12px fg.tertiary icon between the numeral circle and the name. The earlier clutter was the naked mono index, not the icon — with the numeral contained, the icon reads as metadata and aids scanning across multiple sources.
+
+## 6.38.2 — 2026-07-13
+
+- Source pill anatomy rebuilt (maintainer: numbers and icons misaligned): the naked mono index + icon-tile pair collapses into one leading 18px page-filled numeral circle — marker↔pill correspondence becomes structural (both are numbered circles), baselines unify, and the type icon retires (the source name carries the scent). Numeral 11/1 semibold tabular sans; name 12/18.
+
+## 6.38.1 — 2026-07-13
+
+- Provenance family goes neutral gray (maintainer): markers and source pills together move from emphasis tint to bg.sunken + fg.secondary — family unity preserved, now on the neutral badge palette; hover uses the gray ladder's next step. The emphasis.surface-hover token (added in 6.38.0 solely for tinted pills, never pushed) is removed rather than orphaned. Suggestion chips keep their v6.38 outlined style.
+
+## 6.38.0 — 2026-07-13
+
+- Style swap between suggestion chips and source pills, shapes retained (maintainer direction — and semantically sounder than before): suggestions go OUTLINED (bg.raised + hairline, fg.primary; actions should read clickable), source pills take the borderless emphasis tint (emphasis.surface + emphasis.fg), unifying them with their emphasis-tinted circular markers into one provenance family. New token emphasis.surface-hover (the family's first interactive fill); icon tiles inside tinted pills go page-filled circular per the tray rule (sunken-on-slate is invisible — third occurrence of that collision).
+
+## 6.37.1 — 2026-07-13
+
+- Sources row layout (maintainer): 출처 micro-label moves from inline-leading to an eyebrow above the row (the reference's "Reference Sources" placement, consistent with the system's eyebrow lockups); source cards become pill-shaped with circular icon tiles — the pill silhouette distinguishes them from the rounded suggestion Chips sharing the Console. Spec notes source pills are ContextCard derivatives, exempt from the Chip family's rounded rule.
+
+## 6.37.0 — 2026-07-13
+
+- Citation markers restyled to the circular superscript form (maintainer reference shots): 18px round chip, emphasis.surface fill + emphasis.fg bare numeral (11 semibold tabular, sans) — the bracketed mono [n] is retired; brackets and mono read as code, not annotation. A citation is quiet emphasis, so the tint is semantically exact. Provenance story's stale text footnote also replaced with the v6.36 sources row. Hover/link highlight steps to ai.surface-hover.
+
+## 6.36.0 — 2026-07-13
+
+- Citations upgraded (maintainer asked for better): the plain-text footnote line is retired — sources render as a row of compact ContextCards (mono index + source-type icon + name) under a 출처 micro-label, and hovering a card highlights its inline [n] markers (and vice versa), turning number-mapping from mental to visual. Inline markers keep their 18px visual but gain an invisible ≥24px hit area — they'd been below the target floor since v5.2. Demo live in the Console sample.
+
+## 6.35.0 — 2026-07-13
+
+- New token emphasis.fg-soft (slate.500 light / slate.400 dark): soft emphasis marks where a fill carries the visual mass — the favorite star moves to it (maintainer wanted lighter than emphasis.fg). Floor stated in the token itself: one step above 3:1 non-text contrast vs surfaces, gate-checked with a new pair — nothing lighter is legal for stateful marks, so this is the end of the lightness ladder. Never for text.
+
+## 6.34.4 — 2026-07-13
+
+- Favorite star active color: fg.primary → emphasis.fg (maintainer: key-black read stark). Semantically exact — favoriting is quiet emphasis, the slate family's defined job. The conventional gold star was considered and passed over: amber is a status color and status colors stay status-only; if the classic gold is ever wanted, it enters as a governed status-color exception, not a default.
+
+## 6.34.3 — 2026-07-13
+
+- Favorite star: active state now renders FILLED (maintainer: stroke+color read inactive). Carved as the registry's one fill-on-active exception — a favorite toggle's job is broadcasting state at a glance; thumbs and every other icon remain stroke-only, and the exception is written into the registry entry so it cannot spread by precedent.
+
+## 6.34.2 — 2026-07-13
+
+- Template Library header padding: 16/24/12 → 16/24/16 (maintainer question exposed the leftover 12 bottom). Ruling nuance recorded: vertical padding is symmetric against the hairline; side padding intentionally differs (24) because it serves cross-alignment with the pane's 24 content column — uniform-all-around applies to compact containers around a single element, not full-width headers with column alignment duties.
+
+## 6.34.1 — 2026-07-13
+
+- Favorite glyph: pin → star (maintainer preference; bookmark was unavailable — it IS the template entry button). Terminology follows the metaphor: 고정됨 → 즐겨찾기, 고정/고정 해제 → 즐겨찾기 추가/해제. Star stays stroke-only in both states per the thumbs precedent (state = color, never fill); registry entry updated.
+
+## 6.34.0 — 2026-07-13
+
+- Template Library: pin system + scope navigation (maintainer: flat 내/팀 groups won't scale, wants favorites). 고정됨 group always renders first — pinning is the volume answer, the working set stays on top; scope SegmentedControl (전체/내 템플릿/팀) under the search keeps each view short; rows get hover-reveal pin toggles (20px compact, aria-pressed; pinned stay visible at fg.primary) mirrored by a pane-header pin. Modal widens to 760 — spec'd as the browse-library width tier in the Modal entry (forms 640 · libraries 760 · wide Drawer 800). Registry +pin; glossary +고정/고정 해제.
+
+## 6.33.0 — 2026-07-13
+
+- Template Library at scale (maintainer stress test; demo grown to 12 templates / 4 owners): fixed 420 body height with an independently scrolling row region (scrollbar at the column edge), sticky surface-filled group headers, live title filtering that hides emptied groups + compact no-results line, and full keyboard traversal (↑↓ through visible rows with scroll-into-view, ↵ inserts) — hints row updated to match.
+
+## 6.32.2 — 2026-07-13
+
+- Template Library visual pass (system levers only): list column takes a bg.surface fill (layered panes — list zone vs content zone), micro-label group headers return to the list (lost in the two-pane rewrite; the 팀 badge moves out of rows), preview pane gets the eyebrow lockup (group as micro-label over the heading — eyebrow carries ownership) with uniform 24 padding, and a slot-summary caption under the cloze ("입력 항목 N개 · 삽입 후 →로 이동") that doubles as instruction for the → behavior.
+
+## 6.32.1 — 2026-07-13
+
+- Template Library: 새 템플릿 만들기 footer row gets uniform 8px padding (was 4 top / 8 sides+bottom — the asymmetry read as misalignment against the hairline).
+
+## 6.32.0 — 2026-07-13
+
+- Template Library polish (maintainer direction): column-internal rules (search row, pinned 새 템플릿 만들기 footer) now bleed to the column edges — the divider law explicitly extended to padded Modal panes; header gets breathing room above a flush hairline. Sleek additions: caption meta line (owner · last edited) in the preview pane, keycap footer hints (↵ 삽입 · esc 닫기) paired with the primary, and ↵ inserts the selected template.
+
+## 6.31.1 — 2026-07-13
+
+- Version-lockstep drift found and fixed: BOTH design.md's header and tokens $version had silently stuck at 6.19.0 since the 6.19.1 bump failed — every later bump matched a stale string and no-op'd, and because both halves drifted together, nothing mismatched visibly. The lockstep check now lives in validate.py itself (tokens mode errors on tokens-vs-design.md mismatch), so this fails locally and immediately. Changelog was unaffected (its anchor never depended on the version string).
+
+## 6.31.0 — 2026-07-13
+
+- Glass jurisdiction corrected (maintainer caught the Template Library modal reading gray): blur over a scrim samples an already-darkened backdrop — muddy by construction; the v6.22 scrim-gating had the physics backwards. Glass now = UNSCRIMMED floating layers over live content (CommandPalette — which drops its scrim, the frost is the focus device — and the follow-up panel). Modal and Drawer revert to opaque bg.raised; the scrim carries their de-emphasis.
+- Template Library redesigned (maintainer: boxed cards were not clean): opaque two-pane modal — borderless list rows + search left, single preview pane right (name, description, cloze as a blockquote with emphasis-highlighted slots, 삽입 primary). Content appears once, never repeated per row.
+
+## 6.30.0 — 2026-07-13
+
+- Template browse surface upgraded menu → Template Library Modal (maintainer: title-only menu rows give no context on what a template is for; a library must show content before commitment). Glass Modal 640: search field, 내/팀 groups, rich template cards (title + 팀 badge + one-line description + cloze preview in a sunken box with emphasis-highlighted slots), 새 템플릿 만들기 footer. Whole card clickable → inserts and closes. / remains the expert quick-insert path. Wired live in the Console sample.
+
 ## 6.29.0 — 2026-07-13
 
 - Prompt-template library surfaced (completing §23 from the aiuxpatterns pass): bookmark icon-button in the Composer footer opens the browse menu — search row, 내 템플릿 / 팀 템플릿 groups (team rows carry a 팀 badge), 새 템플릿 만들기 footer escape. Rationale spec'd: / is the expert path, the button is the novice path (the pattern's core audience). Wired live in the Console sample — choosing a template inserts its cloze draft with [슬롯] placeholders. Registry +bookmark; glossary +새 템플릿 만들기.

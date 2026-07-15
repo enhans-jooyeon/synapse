@@ -15,7 +15,8 @@ Is the page's job to display many records or live metrics at once?
     ├── Is it a single object's detail or editing view? → OBJECT (focus, may embed dense regions)
     ├── Is it configuration, preferences, or account? → SETTINGS (focus)
     ├── Is it a first-run, wizard, or decision moment? → GUIDED (focus)
-    └── Is it conversation with an agent? → CONSOLE (focus, own layout)
+    ├── Is it conversation with an agent? → CONSOLE (focus, own layout)
+    └── Is it the workspace's start/today surface? → HOME (focus, composer pinned)
 ```
 
 ### A. Workbench — dense
@@ -57,6 +58,16 @@ Agent conversation surface.
 - Agent identity uses the squared Avatar. Streaming, working steps, approvals, provenance, and failure conventions are governed by `ai-patterns.md` — the Console archetype is where most of those patterns live, but they apply to every AI surface in any archetype.
 
 ---
+
+### F. Home — focus (v6.39)
+
+The workspace's start surface: today's state plus the conversational entry.
+
+- `data-density="focus"`; content max-width 760 centered in a full-region scroller (scrollbar at the region edge); the **Composer is pinned at the bottom** — the Console's composer anatomy without a thread. Sending opens a Console conversation.
+- Structure top-to-bottom: **greeting block** (the screen's one sanctioned Display moment — `display-sm`, may use the display family; date + today-summary `caption` beneath) → **metric strip** (R4, ≤3 cards, uniform — no emphasized card since v6.40; urgency lives in the approval queue below, not in card tint) → **approval queue** (pending ProposalCards — the human-in-the-loop backlog surfaces here before anywhere else; "모두 보기" Link when >2) → **agent shelf** (interactive Cards: squared Avatar, name, status dot + schedule caption; click opens the agent).
+- Suggestion chips are NOT sanctioned here (Console/empty states only); the composer placeholder carries the invitation.
+- **One viewport, no page scroll (v6.39.1):** Home always fits the window — ≤3 uniform metric cards (`stat-sm` numerals, 16 card padding — Home compacts the R4 metrics), ≤2 queued proposals (then "모두 보기"), one shelf row, 16px section gaps. If content would overflow, cut content — never scroll, and never push the Composer out of view.
+- Empty flavors: first-run Home hands off to the GUIDED archetype; a Home with nothing pending still shows the greeting + composer — never an EmptyState card for "no work".
 
 ## 2. Layout grid
 

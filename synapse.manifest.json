@@ -1,5 +1,5 @@
 {
- "$version": "6.19.0",
+ "$version": "6.47.1",
  "$generated_by": "tools/build_manifest.py — regenerate after any components.md change; never hand-edit",
  "authority": "design.md > tokens/synapse.tokens.json > foundations.md > components.md > recipes.md > ai-patterns.md > content.md",
  "archetypes": {
@@ -161,7 +161,7 @@
     "input (removable)",
     "filter (toggleable)",
     "category (click-to-filter, system-assigned viz color)",
-    "suggestion (borderless ai.surface fill, hover ai.surface-hover; Console/empty states only, max 3)"
+    "suggestion (outlined bg.raised + hairline, hover bg.hover/border.strong — v6.38 style swap w/ source pills; Console/empty states only, max 3)"
    ],
    "key_rules": [
     "never carries commands (that is Button)",
@@ -176,7 +176,7 @@
     "outlined (separable/interactive objects)",
     "elevated (max 1/page; sole static shadow)",
     "ai (agent content)",
-    "stat (KPI anatomy; emphasized opt-in = slate emphasis.* fill, max 1/grid, v6.11)"
+    "stat (KPI anatomy; uniform — the v6.11 emphasized opt-in removed v6.40)"
    ],
    "key_rules": [
     "interactive implies outlined/elevated + exactly one action + optional hover-lift",
@@ -273,7 +273,7 @@
    "purpose": "Blocking decision or focused short task.",
    "key_rules": [
     "widths 400(confirm)/480/640 max",
-    "glass panel (v6.22; reduced-transparency → opaque)",
+    "opaque bg.raised (v6.31 — glass retired from scrimmed layers)",
     "footer: Cancel + one primary (danger for destructive, consequences named by count+noun)",
     "no modal-on-modal; z.modal"
    ]
@@ -283,7 +283,7 @@
    "key_rules": [
     "inherits opener density (full-screen data drawers may be dense)",
     "wide 800 variant for data review (DiffView)",
-    "glass when scrimmed; no-scrim variant stays opaque (v6.22)",
+    "opaque bg.raised always (v6.31 — glass retired from scrimmed layers)",
     "z.drawer"
    ]
   },
@@ -360,7 +360,7 @@
    "purpose": "⌘K universal entry: navigation, actions, ask-agent.",
    "key_rules": [
     "never dead-ends — final row is 'Ask agent: {query}'",
-    "glass material (v6.22; reduced-transparency → opaque)",
+    "glass material, SCRIMLESS (v6.31 — frost is the focus device; reduced-transparency → opaque)",
     "grouped results, kbd hints, match highlighting",
     "z.dropdown"
    ]
@@ -385,10 +385,14 @@
     "ComposerQuote bar (v6.12): ai.surface radius-xs, max 1/send; follow-up panel above composer, max 4 rows, never auto-sends",
     "slash commands (v6.15): / scopes palette to agent actions; ghost completion accepted with →, never Tab; closed glossary only",
     "follow-up panel = glass material (v6.23, the one anchored glass exception)",
-    "templates: / gains 템플릿 group; slot chips = emphasis.surface, → moves slots, unfilled slot blocks send (v6.25 §23)",
+    "templates: / = expert quick-insert; bookmark opens the Template Library Modal (glass 640: search + grouped rich cards w/ description + cloze preview + 새 템플릿 만들기 footer — v6.30); slot chips = emphasis.surface, → moves slots, unfilled slot blocks send (§23)",
     "authoring coach: max one non-blocking quality hint; pen-line opens the CLOSED refinement-preset menu (다듬기/자세히/간결/범위/형식 — v6.27), rewrite replaces draft w/ Undo, disabled on empty",
     "voice = dictation only (v6.26 §26): tray morphs to recording bar (cancel / pulsing danger dot + timer / pause / primary check confirm); transcript inserts at caret, NEVER auto-sends; no audio in thread",
-    "agent-picker menu: search + grouped rows + one submenu + mandatory request-footer escape row",
+    "agent-picker menu: search + grouped rows + one submenu + mandatory request-footer escape (no model rows — reversed v6.42)",
+    "model selector (v6.42, trailing v6.44): menu grouped by provider under micro-label headers, real product names in mono, 자동 row = agent default (v6.45); per-conversation, defaults from agent, lockable; never changes permissions/approval",
+    "tools popover (plug, v6.41): per-conversation capability switches; disabled tool → agent asks; enabling never bypasses ProposalCard",
+    "composer footer (v6.44): leading = + menu (첨부/템플릿/도구) + agent picker; trailing = model + mic (send-adjacent, never in + menu) + send; kbd hint removed; refine-prompt = contextual pen at input top-right, rendered only with a non-empty draft; 1 visible leading icon default, 5 hard cap",
+    "input-pattern laws (v6.47): starters = zero-state only, insert never send, dismissible; chip label IS the query; selection pill = 답장/설명/재생성 closed set, thread append-only; attachment captions advisory-only; batch = per-item queue, one failure never aborts, ProposalCard still gates; ghost text → accepts never Tab, suppressed during Hangul composition",
     "Enter sends, Shift+Enter breaks, Enter during IME composition NEVER sends",
     "attachments as input Chips; agent/scope picker ghost",
     "drafts persist; no formatting toolbar; one per screen"
@@ -444,7 +448,9 @@
    "purpose": "Inline provenance marker [n] for agent claims; popover with source detail.",
    "key_rules": [
     "never fake citations — unsourced claims get the 'Model knowledge' badge",
-    "≤3 per sentence"
+    "≤3 per sentence",
+    "sources row: 출처 eyebrow ABOVE pill source cards — leading 18px page-filled numeral circle (mirrors the inline marker) + 12px type icon + name (icon restored v6.38.3); card↔marker hover linkage; ≥24px hit areas",
+    "marker = 18px circle, neutral bg.sunken + fg.secondary, bare numeral 11 semibold tabular (v6.38.1) — brackets/mono retired"
    ]
   },
   "ContextCard": {
