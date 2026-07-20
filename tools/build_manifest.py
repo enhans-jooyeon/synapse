@@ -13,9 +13,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 C = {
  "Button": {"purpose": "Trigger an action; never navigation (that is Link).",
-  "variants": ["primary", "secondary (tonal)", "ghost", "danger", "accent (DEPRECATED v6.19 — no jurisdiction, removal at next major)"],
+  "variants": ["primary", "secondary (tonal)", "ghost", "danger", "accent (POINT color #0A84FF, revived v6.51 — conversational-AI CTA only: Ask agent / Composer send)"],
   "sizes": ["sm", "md", "lg"],
-  "key_rules": ["max 1 primary per region", "conversational-AI entry (Ask agent / Composer send) = primary (v6.19; Composer is its own region); accent is deprecated — any use is a violation; executing an agent never earns a special color", "text-only labels by default; icon+text only for accent AI actions and toolbar/filter contexts (approved icons)", "pill radius only in Guided heroes / empty-state first-use", "icon-only buttons are always square (width = size height)", "optical trim: icon+text buttons drop 2px padding on the icon side (v6.17.2)", "loading keeps width; disabled is a fill, never opacity", "danger labels semibold; danger hover darkens to AA"]},
+  "key_rules": ["max 1 primary per region", "conversational-AI entry (Ask agent / Composer send) = accent = the point color #0A84FF (v6.51; max 1/screen); operational agent actions (Run/Retry/Resume) stay primary/black — executing a configured run never earns the point color; slate stays the AI surface, point blue is a distinct accent on top (never blue-on-slate)", "text-only labels by default; icon+text only for accent AI actions and toolbar/filter contexts (approved icons)", "pill radius only in Guided heroes / empty-state first-use", "icon-only buttons are always square (width = size height)", "optical trim: icon+text buttons drop 2px padding on the icon side (v6.17.2)", "loading keeps width; disabled is a fill, never opacity", "danger labels semibold; danger hover darkens to AA"]},
  "Link": {"purpose": "Navigation. fg.link; underline on hover/focus; inline links always underlined.",
   "key_rules": ["never styled as a button", "external links take the arrow-up-right mark", "no 'click here' labels"]},
  "Input (text)": {"purpose": "Single-line text entry (text/email/password/number/search).",

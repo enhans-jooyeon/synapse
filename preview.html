@@ -205,7 +205,7 @@
   .delta { display: inline-flex; align-items: center; gap: var(--sy-space-2);
     font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); font-variant-numeric: tabular-nums; }
   .delta .icon { width: 12px; height: 12px; }
-  .ws-tile { width: 20px; height: 20px; flex: none; border-radius: var(--sy-radius-xs); background: var(--sy-bg-inverse); color: var(--sy-fg-inverse);
+  .ws-tile { width: 20px; height: 20px; flex: none; border-radius: var(--sy-radius-xs); background: var(--sy-brand-point); color: var(--sy-brand-point-fg);
     display: inline-flex; align-items: center; justify-content: center;
     font: var(--sy-weight-semibold) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-sans); }
 
@@ -516,7 +516,7 @@
 <body class="sy-root">
 <div class="app">
   <nav class="side" id="sidenav" aria-label="Stories">
-    <div class="brand">Synapse <span class="v">v6.50.0</span></div>
+    <div class="brand">Synapse <span class="v">v6.51.0</span></div>
   </nav>
   <div class="main">
     <div class="topbar">
@@ -579,13 +579,13 @@
       </div>
 
       <div class="story" data-group="Components" data-title="Button" data-doc="components.md · Button" id="s-button">
-        <p class="desc">Five variants. Max one primary per region; accent = AI actions only; loading keeps width; disabled is a fill, never opacity.</p>
+        <p class="desc">Five variants. Max one primary per region; accent = the point color (#0A84FF, v6.51) for conversational-AI CTAs only (Ask agent / Composer send), max 1/screen; loading keeps width; disabled is a fill, never opacity.</p>
         <div class="row">
           <button class="btn btn-primary" type="button">Save changes</button>
           <button class="btn btn-secondary" type="button" lang="ko">변경사항 저장</button>
           <button class="btn btn-ghost" type="button">Cancel</button>
           <button class="btn btn-danger" type="button" lang="ko">영구 삭제</button>
-          <button class="btn btn-accent" type="button" title="accent — deprecated v6.19, removal at 7.0"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Ask agent (deprecated)</button>
+          <button class="btn btn-accent" type="button" title="accent = the point color (v6.51): conversational-AI CTA only, max 1/screen"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Ask agent</button>
           <button class="btn" disabled type="button">Disabled</button>
           <button class="btn btn-primary" type="button"><span class="spinner" style="border-top-color: var(--sy-action-primary-fg);"></span>Saving…</button>
         </div>
@@ -1447,7 +1447,7 @@ team: finance</pre>
             <span style="margin-left:auto;"></span>
             <button class="btn btn-ghost btn-sm" type="button" data-model><span style="font-family: var(--sy-font-mono); font-size: 12px;">Claude Sonnet 5</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
             <button class="btn btn-ghost btn-icon" type="button" aria-label="음성 입력"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
-            <button class="btn btn-primary" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+            <button class="btn btn-accent" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
           </div>
         </div>
         <h3 class="sub">Agent picker — search, groups, submenu escape, request footer (v6.15 · model moved to its own selector, v6.42)</h3>
@@ -1696,7 +1696,7 @@ team: finance</pre>
                     <span style="margin-left:auto;"></span>
                     <button class="btn btn-ghost btn-sm" type="button" data-model><span style="font-family: var(--sy-font-mono); font-size: 12px;">Claude Sonnet 5</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
                     <button class="btn btn-ghost btn-icon" type="button" aria-label="음성 입력"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
-                    <button class="btn btn-primary" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+                    <button class="btn btn-accent" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
                   </div>
                 </div>
               </div>
@@ -1917,7 +1917,7 @@ team: finance</pre>
                     <span style="margin-left:auto;"></span>
                     <button class="btn btn-ghost btn-sm" type="button" data-model><span style="font-family: var(--sy-font-mono); font-size: 12px;">Claude Sonnet 5</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
                     <button class="btn btn-ghost btn-icon" type="button" aria-label="음성 입력"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
-                    <button class="btn btn-primary" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+                    <button class="btn btn-accent" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
                   </div>
                 </div>
               </div>
@@ -2721,7 +2721,7 @@ team: finance</pre>
         var send = frame.querySelector('button[aria-label="Send"]');
         if (send) send.addEventListener('click', function () {
           var stopped = send.classList.contains('btn-secondary');
-          send.classList.toggle('btn-primary', stopped); send.classList.toggle('btn-secondary', !stopped);
+          send.classList.toggle('btn-accent', stopped); send.classList.toggle('btn-secondary', !stopped);
           send.innerHTML = stopped ? '<svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>' : '<svg class="icon" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/></svg>';
           send.setAttribute('aria-label', stopped ? 'Send' : 'Stop');
         });

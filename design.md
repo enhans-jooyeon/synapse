@@ -1,6 +1,6 @@
 # Synapse — design system for AgentOS
 
-**Version 6.50.0 · Enhans · This file is the entry point. Read it before generating any UI.**
+**Version 6.51.0 · Enhans · This file is the entry point. Read it before generating any UI.**
 
 Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. It is built to be operated primarily by AI agents on behalf of non-designers, which means it is written as a *contract*, not an inspiration board: closed sets, enumerated options, explicit decision rules. An agent following this file mechanically should produce UI indistinguishable from designer-made AgentOS screens.
 
@@ -27,7 +27,7 @@ Figma and any other design-tool representation of Synapse are **generated views*
 
 ## 2. Identity in one paragraph
 
-Neutral, black-key, borders-first, engineered restraint. The UI is built from a cool-gray ramp; black (white in dark mode) is the brand action color; AI surfaces and marks are slate (v6.19); blue exists only as functional signal (focus rings, links, informational status); status colors are desaturated and semantic-only. Pretendard serves Korean and English equally as the sole UI face; Artific (display family) appears at most once per screen, only at brand moments, and only on English copy — KO locale keeps Artific titles in English (v6.48); JetBrains Mono marks machine-significant text. Density is architectural: every screen region is either `focus` (curated, spacious) or `dense` (data-heavy), decided by page archetype, never by taste.
+Neutral, black-key, borders-first, engineered restraint. The UI is built from a cool-gray ramp; black (white in dark mode) is the brand action color; AI surfaces and marks are slate (v6.19); the **point color** `#0A84FF` (v6.51) is the one vivid accent, restricted to brand-identity objects and AI emphasis (conversational-AI CTAs + active AI running states); functional blue `#3155C6` stays the quiet signal for focus rings, links, and informational status; status colors are desaturated and semantic-only. Pretendard serves Korean and English equally as the sole UI face; Artific (display family) appears at most once per screen, only at brand moments, and only on English copy — KO locale keeps Artific titles in English (v6.48); JetBrains Mono marks machine-significant text. Density is architectural: every screen region is either `focus` (curated, spacious) or `dense` (data-heavy), decided by page archetype, never by taste.
 
 ## 3. Hard rules (the agent contract)
 

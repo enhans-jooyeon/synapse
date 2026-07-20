@@ -1,5 +1,13 @@
 # Synapse changelog
 
+## 6.51.0 — 2026-07-15
+
+- **Point color re-introduced (maintainer decision).** Blue returns as `#0A84FF` (the branding team's point blue) — the system's one vivid accent. Black stays the brand/action color; slate stays the AI surface. Jurisdiction is tight: **brand identity** (workspace monogram tile, docs-hub/preview brand mark, Artific brand-hero, logo/marketing) and **AI emphasis** (conversational-AI CTAs + active AI running states). New `brand.point`/`brand.point-fg` tokens + `primitive.color.point`.
+- **`accent` Button revived** (reverses the v6.19 deprecation) as the point-color conversational-AI CTA: Composer send + Ask agent, max 1/screen. Operational agent actions (Run/Retry/Resume) stay primary/black. Composer send ↔ stop morph swaps accent→secondary.
+- **AI running-state indicators go blue:** `ai.solid` repointed slate→point, so the live-agent beacon and in-progress ai ProgressBar read blue while working; slate returns when idle/complete. Never blue-text-on-slate — the v6.19 'colors mixed up' rejection still holds; point is a solid accent only.
+- **Functional blue unchanged:** links/focus/status.info keep the calmer indigo `#3155C6` — a separate role and hue so function never collides with brand/AI-emphasis.
+- Contrast: white on `#0A84FF` = 3.63:1 → rides the §8 solid-label ≥3:1 + 600-weight policy; SY contrast pairs for action-accent + brand-point set to the 3:1 policy threshold. Brand tile + hub 'S' mark now point blue.
+
 ## 6.50.0 — 2026-07-15
 
 - **Korean docs (maintainer request — Korean colleagues need to read the specs).** Full KO translation of all 8 spec files (design/foundations/content/icons/components/recipes/ai-patterns/patterns → `.ko.md`), glossary-faithful (content.md §3 canonical terms, 합니다체). CHANGELOG stays EN (append-only history). The hub gains an EN/한국어 toggle: it loads the per-doc `.ko.md` when Korean is selected and falls back to the English source (with a notice) for any untranslated doc.

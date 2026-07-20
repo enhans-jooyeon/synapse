@@ -139,9 +139,11 @@
   --sy-action-primary-fg: #FFFFFF;
   --sy-action-secondary-bg: #F4F4F6;
   --sy-action-secondary-bg-hover: #ECECEF;
-  --sy-action-accent-bg: #3D63DD;
-  --sy-action-accent-bg-hover: #3155C6;
-  --sy-action-accent-bg-active: #3155C6;
+  --sy-action-accent-bg: #0A84FF;
+  --sy-action-accent-bg-hover: #006BD6;
+  --sy-action-accent-bg-active: #006BD6;
+  --sy-brand-point: #0A84FF;
+  --sy-brand-point-fg: #FFFFFF;
   --sy-action-accent-fg: #FFFFFF;
 
   --sy-status-info: #3155C6;
@@ -174,7 +176,7 @@
   --sy-emphasis-fg: #4F5D6F;
   --sy-emphasis-fg-soft: #6B7A8D;
   --sy-ai-fg: #4F5D6F;
-  --sy-ai-solid: #4F5D6F;
+  --sy-ai-solid: #0A84FF;
 
   --sy-meter-fill: #83838D;
 }
@@ -218,9 +220,11 @@
   --sy-action-primary-fg: #09090B;
   --sy-action-secondary-bg: #33333A;
   --sy-action-secondary-bg-hover: #4A4A52;
-  --sy-action-accent-bg: #3D63DD;
-  --sy-action-accent-bg-hover: #3155C6;
-  --sy-action-accent-bg-active: #3155C6;
+  --sy-action-accent-bg: #0A84FF;
+  --sy-action-accent-bg-hover: #006BD6;
+  --sy-action-accent-bg-active: #006BD6;
+  --sy-brand-point: #0A84FF;
+  --sy-brand-point-fg: #FFFFFF;
   --sy-action-accent-fg: #FFFFFF;
 
   --sy-status-info: #9DB3EE;
@@ -253,7 +257,7 @@
   --sy-emphasis-fg: #C2CCD9;
   --sy-emphasis-fg-soft: #93A1B3;
   --sy-ai-fg: #C2CCD9;
-  --sy-ai-solid: #6B7A8D;
+  --sy-ai-solid: #0A84FF;
 
   --sy-meter-fill: #A9A9B2;
 
