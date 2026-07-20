@@ -516,7 +516,7 @@
 <body class="sy-root">
 <div class="app">
   <nav class="side" id="sidenav" aria-label="Stories">
-    <div class="brand">Synapse <span class="v">v6.47.5</span></div>
+    <div class="brand">Synapse <span class="v">v6.49.0</span></div>
   </nav>
   <div class="main">
     <div class="topbar">
@@ -537,9 +537,9 @@
       </div>
 
       <div class="story" data-group="Foundations" data-title="Type families" data-doc="foundations.md §2.1" id="s-type-families">
-        <p class="desc">Pretendard for all UI · Artific for brand moments (Hangul falls back to Pretendard by design) · JetBrains Mono for machine-significant text.</p>
+        <p class="desc">Pretendard for all UI · Artific for brand moments, English-only — KO locale keeps the English copy verbatim (v6.48; Artific has no Hangul) · JetBrains Mono for machine-significant text.</p>
         <div class="col">
-          <div><div class="sy-type-display">Work moves itself</div><div class="sy-type-display" lang="ko">일이 스스로 움직입니다</div></div>
+          <div><div class="sy-type-display">Work moves itself</div><div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);" lang="ko">Artific은 영문 전용입니다 — KO 로케일에서도 브랜드 타이틀은 영문 원문을 그대로 유지합니다 (§2.1)</div></div>
           <p style="max-width: 640px;">Body text with <em>weight emphasis, never italics</em>. <span lang="ko">강조는 굵기로 표현합니다.</span></p>
           <p>Run <span class="sy-code-inline">agent deploy --env prod</span> or press <span class="sy-kbd">⌘</span> <span class="sy-kbd">K</span>.</p>
           <pre class="sy-code-block">POST /v1/runs
@@ -2165,7 +2165,7 @@ team: finance</pre>
   var styles = [
     ['display-xl','Artific','44/56','700','Work moves itself'],
     ['display','Artific','36/48','600','Work moves itself'],
-    ['display-sm','Artific','30/40','600','일이 스스로 움직입니다'],
+    ['display-sm','Artific','30/40','600','Work moves itself'],
     ['heading-xl','Pretendard','24/34','600','Page title — 에이전트 실행 기록'],
     ['heading-lg','Pretendard','18/27','600','Section and card titles'],
     ['heading-md','Pretendard','16/24','600','Subsection titles'],

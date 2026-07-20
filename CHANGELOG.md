@@ -1,5 +1,18 @@
 # Synapse changelog
 
+## 6.49.0 — 2026-07-15
+
+- **Docs hub (index.html) — the Vercel app is now the source-of-truth site** (maintainer request). Left-nav across every spec (Overview/design, Foundations, Content, Icons, Components, Recipes, AI patterns, Page patterns, Changelog) + a link to the live component browser (preview.html). The hub fetches the actual .md files at runtime and renders them client-side (marked@12) — no build step, and the docs can never drift from the specs because they ARE the specs. On-page TOC from H2s, light/dark toggle, version read live from tokens $version.
+- The hub dogfoods the system: built entirely from --sy-* tokens (passes the same validate.py gate as preview.html — SY001/SY002 clean).
+- Vercel: `/` now serves the hub; preview.html remains the live browser, linked from the hub and nav. `.vercelignore` switched from a browser-only allowlist to shipping index.html + preview.html + all rendered .md + tokens.
+- Note: runtime .md fetch works on the Vercel origin; confirm on the preview deploy (can't be exercised from the sandbox, which has no served origin reachable by a browser).
+
+## 6.48.0 — 2026-07-15
+
+- **Artific is English-only (hard rule, maintainer):** Artific may style Latin copy only — a `.sy-display`/`sy-type-display*` element must not contain Hangul. New SY016 validator rule enforces it (gate now catches Hangul inside any display element, incl. nested). foundations §2.1 + design.md + content §8 updated.
+- **KO localization of an Artific brand title keeps the English copy verbatim:** a short display hero (Guided/empty-state/HOME) is a brand moment, not localizable UI copy — the KO locale renders the same English words in Artific, never translated, never a Pretendard-Korean fallback. The lone documented exception to "all UI text localizes." If a heading must be Korean, it isn't a brand moment: drop Artific, use Pretendard bold at display size.
+- Preview: typography specimen replaced its KO Artific example with the rule demo; display-sm specimen sample switched to English; type intro line updated. Gate green.
+
 ## 6.47.5 — 2026-07-15
 
 - Vercel deploy config (infra, no spec changes): the deployment is EXACTLY the component browser — allowlist-style `.vercelignore` ships only preview.html + tokens/, and `/` rewrites to preview.html. Specs, tools, proposals, and the stale Storybook scaffold are not deployed (they remain in the repo). Artific stays uncommitted per license; fallback renders by design.

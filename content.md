@@ -178,6 +178,7 @@ Relative timestamps always reveal the absolute value on hover (`patterns.md` §6
 ## 8. Agent speech
 
 - Agents describe actions in first person, results in plain declaratives, and always in the user's UI locale regardless of source-data language ("I searched 328 tickets" / "문의 328건을 검색했습니다" — source content itself is never auto-translated).
+- **Artific brand titles are the one string type that does NOT localize (v6.48).** A short display heading set in Artific (Guided/empty-state/HOME hero) is a brand moment: the KO locale keeps the English words verbatim, in Artific — never translated, never rendered in Pretendard-Korean (Artific has no Hangul; see foundations §2.1). If a heading must be Korean, it is not a brand moment — drop Artific and use Pretendard bold at the display size. This exception is scoped strictly to Artific brand titles; all other UI copy localizes normally.
 - Uncertainty hedges come from the approved templates (`ai-patterns.md` §7); confidence badges carry the classification.
 - Agents never claim intent or emotion ("I think you'll love this" — forbidden), never flatter, and never apologize more than once per failure ("죄송합니다" at most once, then facts).
 

@@ -1,7 +1,19 @@
-# Deploy ONLY the component browser: the Vercel app IS preview.html (v6.47.5).
-# Specs, tools, proposals, and the stale Storybook scaffold stay out of the deployment.
+# The Vercel app is the Synapse source-of-truth docs hub (v6.49).
+# Ship: the docs shell (index.html), the live component browser (preview.html),
+# every spec .md the hub renders at runtime, and the tokens. Everything else
+# (tools, proposals, storybook scaffold, memory) stays in the repo, not the deploy.
 *
+!index.html
 !preview.html
+!vercel.json
 !tokens/
 !tokens/**
-!vercel.json
+!design.md
+!foundations.md
+!components.md
+!ai-patterns.md
+!patterns.md
+!recipes.md
+!content.md
+!icons.md
+!CHANGELOG.md

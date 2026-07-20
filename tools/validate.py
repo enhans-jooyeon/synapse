@@ -19,6 +19,7 @@ Rules (E = error, W = warning):
   SY006 E text-transform: uppercase — foundations §2.3.7
   SY007 W letter-spacing declared (verify it never applies to Hangul) — foundations §2.3
   SY015 E backdrop-filter outside the glass material — foundations §5 (only blur(var(--sy-glass-blur)))
+  SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §5
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
@@ -210,6 +211,7 @@ class UILinter(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.path, self.defined = path, defined
         self.lang_stack = ["en"]
+        self.display_stack = [False]     # True while inside an Artific display element (SY016)
         self.region_stack = []          # (tag, primary_count)
         self.in_style = False
         self.in_script = False
@@ -218,6 +220,9 @@ class UILinter(HTMLParser):
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         self.lang_stack.append(a.get("lang", self.lang_stack[-1]))
+        cls_tokens = a.get("class", "").split()
+        is_display = any(t == "sy-display" or t.startswith("sy-type-display") for t in cls_tokens)
+        self.display_stack.append(self.display_stack[-1] or is_display)
         if tag in ("section", "main") or "data-density" in a:
             self.region_stack.append([tag, 0])
         if tag == "style":
@@ -240,6 +245,8 @@ class UILinter(HTMLParser):
     def handle_endtag(self, tag):
         if len(self.lang_stack) > 1:
             self.lang_stack.pop()
+        if len(self.display_stack) > 1:
+            self.display_stack.pop()
         if self.region_stack and self.region_stack[-1][0] == tag:
             self.region_stack.pop()
         if tag == "script":
@@ -264,6 +271,8 @@ class UILinter(HTMLParser):
             return
         if HANGUL.search(txt) and self.lang_stack[-1] != "ko":
             report("E", "SY011", self.path, ln, f"Hangul outside lang=\"ko\" scope: '{txt[:30]}'")
+        if HANGUL.search(txt) and self.display_stack[-1]:
+            report("E", "SY016", self.path, ln, f"Hangul in Artific display element (English-only): '{txt[:30]}'")
         for term in FORBIDDEN_TERMS:
             if term in txt:
                 report("E", "SY012", self.path, ln, f"forbidden term '{term}' (content.md §3)")

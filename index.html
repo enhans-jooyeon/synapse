@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synapse — AgentOS design system</title>
+<meta name="description" content="Synapse is Enhans' design system for AgentOS. The single source of truth: foundations, components, AI patterns, content rules, and a live component browser.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.0/index.min.css">
+<link rel="stylesheet" href="tokens/synapse.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--sy-bg-page); color: var(--sy-fg-primary);
+    font: var(--sy-weight-regular) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--sy-fg-link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---- shell ---- */
+  .shell { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: 100vh; }
+
+  .topbar {
+    grid-column: 1 / -1; position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; gap: var(--sy-space-12);
+    height: 56px; padding: 0 var(--sy-space-24);
+    background: var(--sy-bg-page); border-bottom: 1px solid var(--sy-border-subtle);
+  }
+  .brand { display: flex; align-items: center; gap: var(--sy-space-8); font-weight: var(--sy-weight-semibold); }
+  .brand .mark {
+    width: 22px; height: 22px; border-radius: var(--sy-radius-sm);
+    background: var(--sy-bg-inverse); color: var(--sy-fg-inverse);
+    display: flex; align-items: center; justify-content: center; font-weight: var(--sy-weight-bold);
+    font-size: var(--sy-text-13);
+  }
+  .ver {
+    font-family: var(--sy-font-mono); font-size: var(--sy-text-12); color: var(--sy-fg-tertiary);
+    padding: var(--sy-space-2) var(--sy-space-6); border: 1px solid var(--sy-border-subtle);
+    border-radius: var(--sy-radius-full);
+  }
+  .top-actions { margin-left: auto; display: flex; align-items: center; gap: var(--sy-space-8); }
+  .btn {
+    display: inline-flex; align-items: center; gap: var(--sy-space-6); height: 32px;
+    padding: 0 var(--sy-space-12); border-radius: var(--sy-radius-sm);
+    border: 1px solid var(--sy-border-default); background: var(--sy-bg-raised);
+    color: var(--sy-fg-primary); font: var(--sy-weight-medium) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
+    cursor: pointer; transition: background var(--sy-duration-fast, 120ms) ease;
+  }
+  .btn:hover { background: var(--sy-bg-hover); text-decoration: none; }
+  .btn-ghost { border-color: transparent; background: transparent; }
+  .btn-primary { background: var(--sy-action-primary-bg); color: var(--sy-fg-on-solid); border-color: transparent; }
+
+  /* ---- sidebar ---- */
+  .side {
+    position: sticky; top: 56px; align-self: start; height: calc(100vh - 56px);
+    overflow-y: auto; border-right: 1px solid var(--sy-border-subtle);
+    padding: var(--sy-space-16) var(--sy-space-12); background: var(--sy-bg-surface);
+  }
+  .nav-group { margin-bottom: var(--sy-space-20); }
+  .nav-label {
+    font-size: var(--sy-text-11); line-height: var(--sy-text-11-lh); font-weight: var(--sy-weight-medium);
+    color: var(--sy-fg-tertiary); padding: 0 var(--sy-space-8) var(--sy-space-4);
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: var(--sy-space-8);
+    padding: var(--sy-space-6) var(--sy-space-8); border-radius: var(--sy-radius-sm);
+    color: var(--sy-fg-secondary); cursor: pointer; font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh);
+    transition: background var(--sy-duration-fast, 120ms) ease;
+  }
+  .nav-item:hover { background: var(--sy-bg-hover); text-decoration: none; }
+  .nav-item.active { background: var(--sy-bg-selected); color: var(--sy-fg-primary); font-weight: var(--sy-weight-medium); }
+  .nav-item .ext { margin-left: auto; color: var(--sy-fg-tertiary); }
+
+  /* ---- content layout ---- */
+  .content { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: var(--sy-space-32); padding: var(--sy-space-40) var(--sy-space-40) var(--sy-space-48); }
+  .doc { max-width: 820px; min-width: 0; }
+  .toc { position: sticky; top: 80px; align-self: start; max-height: calc(100vh - 96px); overflow-y: auto; }
+  .toc-label {
+    font-size: var(--sy-text-11); line-height: var(--sy-text-11-lh); font-weight: var(--sy-weight-medium);
+    color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-8);
+  }
+  .toc a { display: block; color: var(--sy-fg-secondary); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); padding: var(--sy-space-4) 0; }
+  .toc a:hover { color: var(--sy-fg-primary); text-decoration: none; }
+  .toc a.h3 { padding-left: var(--sy-space-12); color: var(--sy-fg-tertiary); }
+
+  /* ---- rendered markdown ---- */
+  .doc h1 { font-size: var(--sy-text-30); line-height: var(--sy-text-30-lh); font-weight: var(--sy-weight-bold); margin: 0 0 var(--sy-space-8); }
+  .doc h2 {
+    font-size: var(--sy-text-20); line-height: var(--sy-text-20-lh); font-weight: var(--sy-weight-semibold);
+    margin: var(--sy-space-40) 0 var(--sy-space-12); padding-top: var(--sy-space-16);
+    border-top: 1px solid var(--sy-border-subtle); scroll-margin-top: 72px;
+  }
+  .doc h3 { font-size: var(--sy-text-16); line-height: var(--sy-text-16-lh); font-weight: var(--sy-weight-semibold); margin: var(--sy-space-24) 0 var(--sy-space-8); scroll-margin-top: 72px; }
+  .doc h4 { font-size: var(--sy-text-14); line-height: var(--sy-text-14-lh); font-weight: var(--sy-weight-semibold); margin: var(--sy-space-20) 0 var(--sy-space-4); }
+  .doc p, .doc li { font-size: var(--sy-text-14); line-height: var(--sy-text-14-lh); color: var(--sy-fg-secondary); }
+  .doc p { margin: 0 0 var(--sy-space-12); }
+  .doc ul, .doc ol { margin: 0 0 var(--sy-space-16); padding-left: var(--sy-space-20); }
+  .doc li { margin-bottom: var(--sy-space-4); }
+  .doc strong { color: var(--sy-fg-primary); font-weight: var(--sy-weight-semibold); }
+  .doc code {
+    font-family: var(--sy-font-mono); font-size: var(--sy-text-12);
+    background: var(--sy-bg-sunken); border: 1px solid var(--sy-border-subtle);
+    border-radius: var(--sy-radius-sm); padding: 0 var(--sy-space-4);
+  }
+  .doc pre {
+    background: var(--sy-bg-sunken); border: 1px solid var(--sy-border-subtle);
+    border-radius: var(--sy-radius-md); padding: var(--sy-space-16); overflow-x: auto; margin: 0 0 var(--sy-space-16);
+  }
+  .doc pre code { background: none; border: none; padding: 0; font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); }
+  .doc blockquote {
+    margin: 0 0 var(--sy-space-16); padding: var(--sy-space-4) 0 var(--sy-space-4) var(--sy-space-16);
+    border-left: 2px solid var(--sy-border-strong); color: var(--sy-fg-secondary);
+  }
+  .doc table { border-collapse: collapse; width: 100%; margin: 0 0 var(--sy-space-16); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); }
+  .doc th, .doc td { text-align: left; padding: var(--sy-space-8) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle); vertical-align: top; }
+  .doc th { color: var(--sy-fg-tertiary); font-weight: var(--sy-weight-medium); }
+  .doc td { color: var(--sy-fg-secondary); }
+  .doc hr { border: none; border-top: 1px solid var(--sy-border-subtle); margin: var(--sy-space-24) 0; }
+  .doc a { color: var(--sy-fg-link); }
+  .doc-status { color: var(--sy-fg-tertiary); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); padding: var(--sy-space-24); }
+
+  @media (max-width: 1080px) { .content { grid-template-columns: minmax(0,1fr); } .toc { display: none; } }
+  @media (max-width: 720px) { .shell { grid-template-columns: 1fr; } .side { display: none; } .content { padding: var(--sy-space-24); } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <span class="brand"><span class="mark" aria-hidden="true">S</span>Synapse</span>
+    <span class="ver" id="ver">—</span>
+    <div class="top-actions">
+      <button class="btn btn-ghost" id="theme" type="button" aria-label="Toggle theme">Theme</button>
+      <a class="btn" href="preview.html">Component browser →</a>
+      <a class="btn btn-ghost" href="https://github.com/enhans-jooyeon/synapse" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </header>
+
+  <nav class="side" id="side"></nav>
+
+  <div class="content">
+    <article class="doc" id="doc"><div class="doc-status">Loading…</div></article>
+    <aside class="toc"><div class="toc-label">On this page</div><div id="toc"></div></aside>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script>
+  var NAV = [
+    { group: "Start", items: [
+      { id: "overview", label: "Overview", file: "design.md" }
+    ]},
+    { group: "Foundations", items: [
+      { id: "foundations", label: "Foundations", file: "foundations.md" },
+      { id: "content", label: "Content & voice", file: "content.md" },
+      { id: "icons", label: "Icon registry", file: "icons.md" }
+    ]},
+    { group: "Library", items: [
+      { id: "components", label: "Components", file: "components.md" },
+      { id: "recipes", label: "Recipes", file: "recipes.md" }
+    ]},
+    { group: "AI & pages", items: [
+      { id: "ai-patterns", label: "AI patterns", file: "ai-patterns.md" },
+      { id: "patterns", label: "Page patterns", file: "patterns.md" }
+    ]},
+    { group: "Reference", items: [
+      { id: "changelog", label: "Changelog", file: "CHANGELOG.md" }
+    ]}
+  ];
+  var FILES = {};
+  NAV.forEach(function (g) { g.items.forEach(function (it) { FILES[it.id] = it; }); });
+
+  // sidebar
+  var side = document.getElementById("side");
+  NAV.forEach(function (g) {
+    var wrap = document.createElement("div"); wrap.className = "nav-group";
+    var lab = document.createElement("div"); lab.className = "nav-label"; lab.textContent = g.group; wrap.appendChild(lab);
+    g.items.forEach(function (it) {
+      var a = document.createElement("a"); a.className = "nav-item"; a.href = "#/" + it.id;
+      a.dataset.id = it.id; a.textContent = it.label; wrap.appendChild(a);
+    });
+    side.appendChild(wrap);
+  });
+  // live browser row in nav
+  (function () {
+    var wrap = document.createElement("div"); wrap.className = "nav-group";
+    var lab = document.createElement("div"); lab.className = "nav-label"; lab.textContent = "Live"; wrap.appendChild(lab);
+    var a = document.createElement("a"); a.className = "nav-item"; a.href = "preview.html";
+    a.innerHTML = "Component browser <span class='ext' aria-hidden='true'>↗</span>"; wrap.appendChild(a);
+    side.appendChild(wrap);
+  })();
+
+  function slug(s) { return s.toLowerCase().replace(/[^\w가-힣]+/g, "-").replace(/^-+|-+$/g, ""); }
+
+  var docEl = document.getElementById("doc");
+  var tocEl = document.getElementById("toc");
+  var cache = {};
+
+  function render(id) {
+    var entry = FILES[id] || FILES.overview;
+    document.querySelectorAll(".nav-item").forEach(function (n) { n.classList.toggle("active", n.dataset.id === entry.id); });
+    if (cache[entry.id]) { paint(cache[entry.id]); return; }
+    docEl.innerHTML = "<div class='doc-status'>Loading " + entry.file + "…</div>";
+    tocEl.innerHTML = "";
+    fetch(entry.file).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      return r.text();
+    }).then(function (md) {
+      var html = marked.parse(md);
+      cache[entry.id] = html; paint(html);
+    }).catch(function () {
+      docEl.innerHTML = "<div class='doc-status'>Could not load " + entry.file + ".</div>";
+    });
+  }
+
+  function paint(html) {
+    docEl.innerHTML = html;
+    var toc = [];
+    docEl.querySelectorAll("h2, h3").forEach(function (h) {
+      var id = slug(h.textContent); h.id = id;
+      toc.push({ id: id, text: h.textContent, lvl: h.tagName === "H3" ? 3 : 2 });
+    });
+    tocEl.innerHTML = "";
+    toc.filter(function (t) { return t.lvl === 2; }).forEach(function (t) {
+      var a = document.createElement("a"); a.href = "#" + t.id; a.textContent = t.text;
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        var el = document.getElementById(t.id); if (el) el.scrollIntoView({ behavior: "smooth" });
+      });
+      tocEl.appendChild(a);
+    });
+    document.querySelector(".content").scrollTop = 0; window.scrollTo(0, 0);
+  }
+
+  function route() {
+    var h = location.hash.replace(/^#\//, "");
+    render(h || "overview");
+  }
+  window.addEventListener("hashchange", route);
+
+  // theme
+  var themeBtn = document.getElementById("theme");
+  var saved = null;
+  try { saved = localStorage.getItem("sy-docs-theme"); } catch (e) {}
+  if (saved) document.documentElement.setAttribute("data-theme", saved);
+  themeBtn.addEventListener("click", function () {
+    var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("sy-docs-theme", next); } catch (e) {}
+  });
+
+  // version from the token source of truth
+  fetch("tokens/synapse.tokens.json").then(function (r) { return r.json(); }).then(function (j) {
+    if (j && j.$version) document.getElementById("ver").textContent = "v" + j.$version;
+  }).catch(function () {});
+
+  route();
+</script>
+</body>
+</html>
