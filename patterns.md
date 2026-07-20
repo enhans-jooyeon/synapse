@@ -1,6 +1,6 @@
 # Synapse patterns
 
-How components compose into pages. This layer is what makes agent-generated screens *look like AgentOS* instead of a component pile. Page archetypes are the primary decision mechanism: every new screen MUST be classified into exactly one archetype before any layout work, because the archetype fixes the density mode, layout grid, and allowed regions.
+How components compose into pages. This layer is what makes agent-generated screens *look like AgentOS* instead of a component pile. Page archetypes are the primary decision mechanism: every new screen MUST be classified into exactly one archetype before any layout work, because the archetype fixes the layout grid and allowed regions, and recommends a density (a default, not a rule — v6.52).
 
 ---
 

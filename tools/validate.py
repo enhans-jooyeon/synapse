@@ -309,7 +309,6 @@ def check_page(path):
     arch = intent.get("archetype")
     if arch not in ARCHETYPE_DENSITY:
         report("E", "SY101", path, 0, f"archetype '{arch}' not in {sorted(ARCHETYPE_DENSITY)}"); return
-    default_d = ARCHETYPE_DENSITY[arch]
 
     regions = intent.get("regions") or []
     if not regions:
@@ -319,10 +318,6 @@ def check_page(path):
         d = r.get("density")
         if d not in ("focus", "dense"):
             report("E", "SY103", path, 0, f"region '{rid}': density '{d}' invalid")
-        elif d != default_d and not r.get("boundary"):
-            report("E", "SY104", path, 0,
-                   f"region '{rid}': density '{d}' differs from archetype default '{default_d}' "
-                   "but declares no boundary (splitpanel/divider/panel-edge) — patterns.md §1")
         for c in r.get("components", []):
             if c not in known:
                 report("E", "SY105", path, 0, f"region '{rid}': component '{c}' not in manifest (closed set)")

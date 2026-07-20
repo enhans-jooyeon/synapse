@@ -113,11 +113,11 @@ Typography is set through named **styles**, never through ad-hoc size/weight com
 | `heading-xl` | sans 24/34 bold, −1% Latin tracking | Page title. One per page. |
 | `heading-lg` | sans 18/27 semibold, −1% Latin tracking | Section, card, modal, drawer titles. |
 | `heading-md` | sans 16/24 semibold | Subsections, empty-state titles, settings group titles. |
-| `heading-sm` | sans body-size semibold (density-bound) | Group titles inside cards, dense panel headers. |
+| `heading-sm` | sans 14/22 semibold | Group titles inside cards, dense panel headers. |
 | `body-lg` | sans 16/24 regular | Long-form reading: agent reports, docs, onboarding prose. Max width 680px. |
-| `body` | sans density-bound regular (14/22 · 13/20) | Default text everywhere. |
+| `body` | sans 14/22 regular | Default text everywhere. |
 | `body-sm` | sans 13/20 regular (fixed) | Menu items, toast text, meta sentences that must not scale with density. |
-| `label` | sans density-bound medium (13/20 · 12/18) | Form labels, table headers, buttons. |
+| `label` | sans 13/20 medium | Form labels, table headers, buttons. |
 | `label-sm` | sans 12/18 medium | Compact labels, secondary table headers. |
 | `caption` | sans 12/18 regular | Helper text, footnotes, attribution rows. |
 | `micro` | sans 11/16 semibold | Badges, kbd hints. NEVER sentences. The floor size carries the reinforced weight: 500 fuzzes at 11px (especially Hangul), 700 clogs counters. |
@@ -127,7 +127,7 @@ Typography is set through named **styles**, never through ad-hoc size/weight com
 
 Rules:
 
-- Density-bound styles (`heading-sm`, `body`, `label`) MUST use the density variables — this is what makes regions re-typeset when density changes.
+- Type is a single scale — `heading-sm`/`body`/`label` are fixed sizes, not density-bound (v6.52). Density compacts chrome and spacing, never text.
 - Hierarchy within one surface needs at least a 2-step style gap or a color change (`fg.primary` vs `fg.secondary`) — adjacent styles alone (16 vs 14) read as an accident.
 - NEVER use weights other than 400/500/600/700; NEVER 600+ for body-length text; NEVER a raw `font-size` where a style exists.
 - Stat styles always carry `tabular-nums`; they are for numerals and units, not sentences.
@@ -159,17 +159,14 @@ These exist because Korean and English versions of the same string differ system
 
 ---
 
-## 4. Density architecture
+## 4. Density
 
-This is Synapse's mechanism for serving both curated, whitespace-led pages and data-heavy screens with one component set. It is a **regional mode**, not a component prop.
+A region MAY compact itself for data-heavy work. This is a **regional option**, not a component prop and not an architecture to reason hard about.
 
-- Two modes: **`focus`** (default; spacious, content max-width 760px, controls 36px) and **`dense`** (compact; fluid width, controls 28px, 36px table rows).
-- A mode is declared once per screen region via `data-density` on the region root. Components inside automatically resize through the density variables.
-- **NEVER mix densities within one region.** A page MAY contain both (e.g. focus header above a dense table workspace) only when regions are separated by an explicit structural boundary (divider, background change, panel edge).
-- Overlays (modals, drawers, popovers) inherit the density of the region that opened them, except full-screen data drawers which MAY be dense.
-- Which mode to use is decided by page archetype, not taste — see `patterns.md` §1. If unsure: settings/onboarding/detail = focus; tables/monitoring/multi-panel = dense.
-
----
+- Two modes: **`focus`** (default; spacious, content max-width 760px, controls 36px) and **`dense`** (compact; fluid width, controls 28px, 36px table rows, tighter spacing).
+- What density changes: **control heights, control padding/gap, page/section/card/stack spacing, and table row/cell size.** It does NOT change type — body/label/heading-sm are a single scale everywhere (v6.52; the old 1px re-typeset was removed as noise).
+- Set once per region via `data-density` on the region root; components inside resize through the density variables. Never set it on individual components.
+- Archetypes recommend a density (`patterns.md` §1) — Workbench leans dense, curated surfaces lean focus — but it is a default, not a rule: regions may differ freely, and no structural-boundary declaration is required. Use dense when a region is genuinely data-heavy (tables, monitoring); otherwise focus.
 
 ## 5. Elevation & borders
 

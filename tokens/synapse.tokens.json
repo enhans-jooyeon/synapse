@@ -1,7 +1,7 @@
 {
   "$schema": "https://design-tokens.github.io/community-group/format/",
   "$description": "Synapse design tokens — source of truth for AgentOS. Primitives are mode-independent raw values. Semantic tokens resolve per color mode via $extensions.synapse.modes and per density via $extensions.synapse.density. Agents MUST reference semantic tokens, never primitives, in generated UI. See design.md §3.",
-  "$version": "6.51.0",
+  "$version": "6.52.3",
 
   "primitive": {
     "color": {
@@ -236,18 +236,18 @@
   "semantic": {
     "$description": "Mode-aware tokens. 'light' / 'dark' under $extensions.synapse.modes. These are the ONLY color tokens agents may reference.",
     "type": {
-      "$description": "Typography styles — the ONLY way agents set typography. Each style = family + size/lineHeight + weight. Rendered as .sy-type-* classes in synapse.css. body/label/heading-sm bind to density variables. Styles marked 'display' use the display family (Latin) with Pretendard Hangul fallback.",
+      "$description": "Typography styles — the ONLY way agents set typography. Each style = family + size/lineHeight + weight. Rendered as .sy-type-* classes in synapse.css. Styles marked 'display' use the display family (Latin) with Pretendard Hangul fallback.",
       "display-xl":  { "$value": { "family": "display", "size": "{primitive.font.size.44}", "lineHeight": "{primitive.font.lineHeight.44}", "weight": 700 }, "$description": "Marketing-adjacent heroes only." },
       "display":     { "$value": { "family": "display", "size": "{primitive.font.size.36}", "lineHeight": "{primitive.font.lineHeight.36}", "weight": 600 }, "$description": "Guided-archetype heroes, empty-state heroes." },
       "display-sm":  { "$value": { "family": "display", "size": "{primitive.font.size.30}", "lineHeight": "{primitive.font.lineHeight.30}", "weight": 600 }, "$description": "Compact brand moments." },
       "heading-xl":  { "$value": { "family": "sans", "size": "{primitive.font.size.24}", "lineHeight": "{primitive.font.lineHeight.24}", "weight": 700, "letterSpacing": "-0.01em (Latin only)" }, "$description": "Page title. One per page. Bold + tight Latin tracking (v4.0)." },
       "heading-lg":  { "$value": { "family": "sans", "size": "{primitive.font.size.18}", "lineHeight": "{primitive.font.lineHeight.18}", "weight": 600 }, "$description": "Section / card / modal titles." },
       "heading-md":  { "$value": { "family": "sans", "size": "{primitive.font.size.16}", "lineHeight": "{primitive.font.lineHeight.16}", "weight": 600 }, "$description": "Subsections, drawer titles, empty-state titles." },
-      "heading-sm":  { "$value": { "family": "sans", "size": "density:body", "lineHeight": "density:body", "weight": 600 }, "$description": "Group titles inside cards, dense panel headers. Density-bound." },
+      "heading-sm":  { "$value": { "family": "sans", "size": "{primitive.font.size.14}", "lineHeight": "{primitive.font.lineHeight.14}", "weight": 600 }, "$description": "Group titles inside cards, dense panel headers. Fixed 14/22 (v6.52 — no longer density-bound)." },
       "body-lg":     { "$value": { "family": "sans", "size": "{primitive.font.size.16}", "lineHeight": "{primitive.font.lineHeight.16}", "weight": 400 }, "$description": "Long-form reading: agent reports, docs, onboarding prose." },
-      "body":        { "$value": { "family": "sans", "size": "density:body", "lineHeight": "density:body", "weight": 400 }, "$description": "Default text. Density-bound (14/22 focus · 13/20 dense)." },
+      "body":        { "$value": { "family": "sans", "size": "{primitive.font.size.14}", "lineHeight": "{primitive.font.lineHeight.14}", "weight": 400 }, "$description": "Default text. Fixed 14/22 (v6.52 — density type re-typesetting removed)." },
       "body-sm":     { "$value": { "family": "sans", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 400 }, "$description": "Secondary prose fixed at 13 regardless of density (menu items, toast, meta sentences)." },
-      "label":       { "$value": { "family": "sans", "size": "density:label", "lineHeight": "density:label", "weight": 500 }, "$description": "Form labels, table headers, buttons. Density-bound (13/20 · 12/18)." },
+      "label":       { "$value": { "family": "sans", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 500 }, "$description": "Form labels, table headers, buttons. Fixed 13/20 (v6.52 — no longer density-bound)." },
       "label-sm":    { "$value": { "family": "sans", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 500 }, "$description": "Compact labels, nav group headers pair with micro." },
       "caption":     { "$value": { "family": "sans", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 400 }, "$description": "Helper text, footnotes, attribution rows." },
       "micro":       { "$value": { "family": "sans", "size": "{primitive.font.size.11}", "lineHeight": "{primitive.font.lineHeight.11}", "weight": 600 }, "$description": "Badges, kbd hints. Never sentences. Weight 600 by rule: the floor size carries the reinforced weight — 500 fuzzes at 11px, especially Hangul; 700 clogs counters." },
@@ -362,7 +362,7 @@
   },
 
   "density": {
-    "$description": "Density-aware tokens. Every screen region declares exactly one density mode: 'focus' (curated, spacious) or 'dense' (data-heavy). Values resolve via $extensions.synapse.density. Mixing modes within one region is forbidden — see design.md §4.",
+    "$description": "Density-aware tokens (v6.52 lighten). A region MAY set data-density='dense' to compact controls, spacing, and table rows for data-heavy surfaces ('focus' is the default). Type is a single scale — NOT density-bound. Archetypes recommend a density; it is not enforced and regions may differ freely.",
     "control": {
       "$type": "dimension",
       "height-sm": { "$value": "32px", "$extensions": { "synapse": { "density": { "focus": "32px", "dense": "24px" } } } },
@@ -370,13 +370,6 @@
       "height-lg": { "$value": "40px", "$extensions": { "synapse": { "density": { "focus": "40px", "dense": "32px" } } } },
       "padding-x": { "$value": "12px", "$extensions": { "synapse": { "density": { "focus": "12px", "dense": "8px" } } } },
       "gap":       { "$value": "8px",  "$extensions": { "synapse": { "density": { "focus": "8px",  "dense": "6px" } } } }
-    },
-    "text": {
-      "$type": "dimension",
-      "body":      { "$value": "14px", "$extensions": { "synapse": { "density": { "focus": "14px", "dense": "13px" } } } },
-      "body-lh":   { "$value": "22px", "$extensions": { "synapse": { "density": { "focus": "22px", "dense": "20px" } } } },
-      "label":     { "$value": "13px", "$extensions": { "synapse": { "density": { "focus": "13px", "dense": "12px" } } } },
-      "label-lh":  { "$value": "20px", "$extensions": { "synapse": { "density": { "focus": "20px", "dense": "18px" } } } }
     },
     "layout": {
       "$type": "dimension",

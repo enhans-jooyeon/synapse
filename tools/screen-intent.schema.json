@@ -16,8 +16,7 @@
           "id": { "type": "string" },
           "density": { "enum": ["focus", "dense"] },
           "components": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-          "recipes": { "type": "array", "items": { "pattern": "^R([1-9]|1[0-2])$" } },
-          "boundary": { "enum": ["splitpanel", "divider", "panel-edge"], "description": "Required on any region whose density differs from the archetype default." }
+          "recipes": { "type": "array", "items": { "pattern": "^R([1-9]|1[0-2])$" } }
         }
       }
     },

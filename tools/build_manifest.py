@@ -151,7 +151,6 @@ def build():
                   "components or variants outside this manifest", "icons outside icons.md registry",
                   "italics, ALL-CAPS, fixed-width text containers, line-height below paired floor",
                   ">1 primary button or Banner per region; the deprecated accent variant anywhere (v6.19)",
-                  "mixed densities inside one region (SplitPanel divider is the sanctioned boundary)",
                   "carousels; infinite scroll in tables; nested modals; custom scrollbars; per-client theming; arbitrary z-index",
                   "gradients; glow; blur outside the glass material (scrimmed overlays only, v6.22); rotation outside MediaGroup's generated-media fan",
                   "particle attached to a variable in Korean; concatenated sentence fragments",

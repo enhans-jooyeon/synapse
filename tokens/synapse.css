@@ -267,8 +267,9 @@
 }
 
 /* ---------------------------------------------------------------- */
-/* Density modes — set data-density per screen REGION, never per     */
-/* individual component. Default (no attribute) resolves to focus.   */
+/* Density modes (v6.52 lighten) — set data-density per REGION to compact  */
+/* controls, spacing, and table rows for data-heavy surfaces. Type is a    */
+/* single scale (not density-bound). Regions may differ freely.            */
 /* ---------------------------------------------------------------- */
 
 :root, [data-density="focus"] {
@@ -299,10 +300,6 @@
   --sy-control-padding-x: 8px;
   --sy-control-gap: 6px;
 
-  --sy-body-size: 13px;
-  --sy-body-lh: 20px;
-  --sy-label-size: 12px;
-  --sy-label-lh: 18px;
 
   --sy-page-padding: 24px;
   --sy-section-gap: 20px;

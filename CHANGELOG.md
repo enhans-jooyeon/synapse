@@ -1,5 +1,40 @@
 # Synapse changelog
 
+## 6.52.3 — 2026-07-15
+
+- Overview gallery: per-component illustrations (maintainer: wanted each card customized to its pattern, like the reference). Replaced the shared per-section glyphs with a bespoke simple illustration for all 58 stories — each hints at that specific component/pattern (e.g. Composer = input + / + send circle, Command palette = search bar + keycap, ProposalCard = card + approve/reject, Table = grid, DatePicker = calendar, Follow-up chips = chip row, MediaGroup = fanned tiles, Batch input = progress-row stack, Stepper = connected numbered circles). Section illustrations retained as fallback. Monochrome stroke+tint, consistent style. Tooling only.
+
+## 6.52.2 — 2026-07-15
+
+- Overview gallery thumbnails are now simple section illustrations (replacing the scaled live clones): a clean stroke+tint glyph per section hinting at its component type — Actions=button pair, Forms & selection=field+checkbox, Data display=bar chart, Navigation=tabs, Overlays=dialog-over-page, Feedback=banner+progress, Foundations=Aa+swatches, AI patterns=agent star+chat, Recipes=layout blocks, Sample pages=app window. Monochrome (fg-tertiary, darkening on hover); consistent at any card size. Tooling only.
+
+## 6.52.1 — 2026-07-15
+
+- Overview gallery: fixed 5 thumbnails per row by default, stepping down 5→4→3→2→1 as the window narrows (breakpoints 1280/1000/720/520). Overview now uses full canvas width so the 5 columns have room. Tooling only.
+
+## 6.52.0 — 2026-07-15
+
+Density lightened (proposals/2026-07-15-density-lighten.md — maintainer: the mechanism was over-spec'd for its value). Kept the compaction that earns its keep; dropped the ceremony.
+
+- **Type is one scale now** — body 14/22, label 13/20, heading-sm 14/22, fixed regardless of density. Removed the `density.text` token group + the dense-block type overrides + the ~"density-bound" caveats. Dense regions compact chrome, not text.
+- **"Never mix within a region / declare a structural boundary" rule removed** — regions may differ in density freely. Screen-intent `boundary` field and validator **SY104** deleted.
+- **Archetype density is now a recommended default, not a mandate** (design.md rules 5–6, patterns.md §1, foundations §4 reworded). ARCHETYPE map retained for reference/SY101 validity only.
+- **Kept:** the `data-density` region mechanism for control heights, control padding/gap, page/section/card/stack spacing, and table row/cell; the preview density toggle (now changes controls/spacing/tables, not type).
+- foundations §4 retitled "Density" and cut to a short note. KO refreshed for the touched docs.
+
+## 6.51.3 — 2026-07-15
+
+- Overview gallery: thumbnails shrunk (cards 300→220 min, preview 200→116px tall, scale 0.36→0.26) so more fit per row; each group + Components sub-category header now carries a stylized stroke icon hinting at its contents (Foundations=type, Components=grid, AI patterns=agent glyph, Recipes=layout, Sample pages=window; Actions=pointer, Forms & selection=field, Data display=bars, Navigation=compass, Overlays=stacked panels, Feedback=bell). Icon in a small sunken tile beside the group title; inline before category labels. Tooling only.
+
+## 6.51.2 — 2026-07-15
+
+- Overview gallery gets real thumbnails (maintainer reference: aiuxplayground card grid). Each card now renders an inert, scaled-down live clone of the component in a preview area (ids stripped, pointer-events off, description/section-headers hidden so only the component shows), over a category eyebrow · title · one-line blurb. Cards widened to 300px min; hover lifts with shadow. Tooling only — no design-contract change.
+
+## 6.51.1 — 2026-07-15
+
+- Component browser cleanup (tooling; no design-contract change). Left nav: the 30-item Components list is now sub-grouped into Actions / Forms & selection / Data display / Navigation / Overlays / Feedback with per-category + per-group count badges; groups are collapsible (state persists); a search field filters all 58 stories live (hiding empty categories/groups). Topbar shows a Group › Category › Component breadcrumb. New **Overview** landing: a categorized card gallery of every story, click-to-open — the default view. In-story rhythm tidied (section dividers, consistent spacing). Curated within-category order preserved.
+- Note: gallery cards are titled/doc'd cards, not live visual thumbnails (rendering 58 live mini-previews is fragile) — flag if you want real thumbnails later.
+
 ## 6.51.0 — 2026-07-15
 
 - **Point color re-introduced (maintainer decision).** Blue returns as `#0A84FF` (the branding team's point blue) — the system's one vivid accent. Black stays the brand/action color; slate stays the AI surface. Jurisdiction is tight: **brand identity** (workspace monogram tile, docs-hub/preview brand mark, Artific brand-hero, logo/marketing) and **AI emphasis** (conversational-AI CTAs + active AI running states). New `brand.point`/`brand.point-fg` tokens + `primitive.color.point`.

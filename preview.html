@@ -51,8 +51,48 @@
   .story .desc { font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
     color: var(--sy-fg-secondary); max-width: 680px; margin-bottom: var(--sy-space-24); }
   .story .desc code { font-family: var(--sy-font-mono); font-size: 12px; }
-  h3.sub { font: var(--sy-weight-semibold) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); margin: var(--sy-space-24) 0 var(--sy-space-8); }
-  .story > h3.sub:first-of-type { margin-top: 0; }
+  h3.sub { font: var(--sy-weight-semibold) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); margin: var(--sy-space-32) 0 var(--sy-space-12); padding-top: var(--sy-space-16); border-top: 1px solid var(--sy-border-subtle); }
+  .story > h3.sub:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+  .topbar .t .crumb-sep { color: var(--sy-fg-tertiary); margin: 0 var(--sy-space-6); font-weight: var(--sy-weight-regular); }
+
+  /* browser chrome (v6.51.1): search · collapsible nav · overview gallery */
+  .nav-search { display: flex; align-items: center; gap: var(--sy-space-6); margin: var(--sy-space-4) var(--sy-space-4) var(--sy-space-8); padding: 0 var(--sy-space-8); height: 32px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-sm); flex: none; }
+  .nav-search svg { width: 14px; height: 14px; color: var(--sy-fg-tertiary); flex: none; }
+  .nav-search input { border: none; outline: none; background: none; flex: 1; min-width: 0; font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-fg-primary); }
+  .nav-grp-head { display: flex; align-items: center; gap: var(--sy-space-6); width: 100%; border: none; background: none; cursor: pointer; text-align: left;
+    font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); padding: var(--sy-space-12) var(--sy-space-8) var(--sy-space-4); }
+  .nav-grp-head .chev { width: 12px; height: 12px; flex: none; transition: transform var(--sy-duration-fast) var(--sy-ease-standard); }
+  .nav-grp-head.collapsed .chev { transform: rotate(-90deg); }
+  .nav-grp-head .cnt, .nav-cat-head .cnt { margin-left: auto; font-family: var(--sy-font-mono); font-size: 11px; font-weight: var(--sy-weight-regular); color: var(--sy-fg-tertiary); }
+  .nav-cat-head { display: flex; align-items: center; padding: var(--sy-space-8) var(--sy-space-8) var(--sy-space-2) var(--sy-space-16); font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); }
+  .nav-item.in-cat { padding-left: var(--sy-space-16); }
+  .nav-grp-items { display: flex; flex-direction: column; gap: var(--sy-space-2); }
+  .nav-collapsed { display: none; }
+
+  .gallery { display: none; }
+  .gallery.on { display: block; }
+  .gal-head { display: flex; align-items: center; gap: var(--sy-space-8); margin: var(--sy-space-32) 0 var(--sy-space-12); }
+  .gal-head:first-child { margin-top: 0; }
+  .gallery h2 { font: var(--sy-weight-semibold) var(--sy-text-20)/var(--sy-text-20-lh) var(--sy-font-sans); margin: 0; }
+  .gal-ico { width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; background: var(--sy-bg-sunken); border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-sm); }
+  .gal-ico svg { width: 16px; height: 16px; color: var(--sy-fg-secondary); }
+  .gallery .cat-label { display: flex; align-items: center; gap: var(--sy-space-6); font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); margin: var(--sy-space-20) 0 var(--sy-space-8); }
+  .gallery .cat-label svg { width: 14px; height: 14px; color: var(--sy-fg-tertiary); flex: none; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--sy-space-12); }
+  @media (max-width: 1280px) { .gallery-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (max-width: 1000px) { .gallery-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 720px)  { .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px)  { .gallery-grid { grid-template-columns: 1fr; } }
+  .gcard { display: flex; flex-direction: column; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); background: var(--sy-bg-raised); cursor: pointer; text-align: left; padding: 0; overflow: hidden;
+    transition: border-color var(--sy-duration-fast) var(--sy-ease-standard), box-shadow var(--sy-duration-fast) var(--sy-ease-standard); }
+  .gcard:hover { border-color: var(--sy-border-strong); box-shadow: var(--sy-shadow-overlay); }
+  .gcard .thumb { height: 116px; display: flex; align-items: center; justify-content: center; background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle); }
+  .gcard .thumb svg { height: 62px; width: auto; color: var(--sy-fg-tertiary); }
+  .gcard:hover .thumb svg { color: var(--sy-fg-secondary); }
+  .gcard .meta { display: flex; flex-direction: column; gap: var(--sy-space-2); padding: var(--sy-space-12); }
+  .gcard .eyebrow { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); }
+  .gcard .nm { font: var(--sy-weight-semibold) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); color: var(--sy-fg-primary); }
+  .gcard .blurb { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); color: var(--sy-fg-secondary); margin-top: var(--sy-space-2); }
   .note { font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-12); max-width: 680px; }
   .row { display: flex; gap: var(--sy-space-12); flex-wrap: wrap; align-items: center; }
   .col { display: flex; flex-direction: column; gap: var(--sy-space-16); }
@@ -516,7 +556,8 @@
 <body class="sy-root">
 <div class="app">
   <nav class="side" id="sidenav" aria-label="Stories">
-    <div class="brand">Synapse <span class="v">v6.51.0</span></div>
+    <div class="brand">Synapse <span class="v">v6.52.3</span></div>
+    <label class="nav-search"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="navSearch" type="text" placeholder="Search components…" aria-label="Search components"></label>
   </nav>
   <div class="main">
     <div class="topbar">
@@ -531,8 +572,10 @@
     </div>
     <div class="canvas"><div class="canvas-inner" id="canvas" data-density="focus">
 
+      <div class="gallery" id="overview"></div>
+
       <div class="story" data-group="Foundations" data-title="Typography" data-doc="foundations.md §2.2" id="s-typography">
-        <p class="desc">Nineteen closed typography styles — the only way to set type. Each row shows family · size/line-height · weight. Density-bound styles (<code>heading-sm</code>, <code>body</code>, <code>label</code>) re-typeset with the canvas density toggle above.</p>
+        <p class="desc">Nineteen closed typography styles — the only way to set type. Each row shows family · size/line-height · weight. Type is a single scale (v6.52): it no longer changes with density — the toggle above now compacts control sizing, spacing, and table rows only.</p>
         <div id="specrows"></div>
       </div>
 
@@ -2111,40 +2154,249 @@ team: finance</pre>
   var canvas = document.getElementById('canvas');
   var stories = Array.prototype.slice.call(document.querySelectorAll('.story'));
   var nav = document.getElementById('sidenav');
-  var groups = {};
-  stories.forEach(function (s) {
-    var g = s.getAttribute('data-group');
-    (groups[g] = groups[g] || []).push(s);
+  var overview = document.getElementById('overview');
+  var byId = {}; stories.forEach(function (s) { byId[s.id] = s; });
+  function titleOf(s) { return s.getAttribute('data-title'); }
+
+  // Components sub-categories (ids in curated source order within each)
+  var CAT = {
+    'Actions': ['s-button', 's-buttongroup'],
+    'Forms & selection': ['s-input', 's-select', 's-combobox', 's-datepicker', 's-choices', 's-segmented', 's-slider-choice', 's-fileupload', 's-chip'],
+    'Data display': ['s-badge', 's-avatar', 's-card', 's-table', 's-desclist', 's-chart', 's-timeline', 's-tree-code', 's-calendar-sheet', 's-contextcard'],
+    'Navigation': ['s-nav', 's-accordion', 's-splitpanel'],
+    'Overlays': ['s-modal', 's-contextual'],
+    'Feedback': ['s-banner', 's-toast', 's-loading', 's-empty']
+  };
+  var catOf = {}; Object.keys(CAT).forEach(function (c) { CAT[c].forEach(function (id) { catOf[id] = c; }); });
+
+  // group -> stories (source order)
+  var groups = {}, groupOrder = [];
+  stories.forEach(function (s) { var g = s.getAttribute('data-group'); if (!groups[g]) { groups[g] = []; groupOrder.push(g); } groups[g].push(s); });
+
+  var collapsed = {};
+  try { collapsed = JSON.parse(localStorage.getItem('sy-nav-collapsed') || '{}'); } catch (e) {}
+  function saveCollapsed() { try { localStorage.setItem('sy-nav-collapsed', JSON.stringify(collapsed)); } catch (e) {} }
+
+  function makeItem(s, cat) {
+    var b = document.createElement('button'); b.type = 'button';
+    b.className = 'nav-item' + (cat ? ' in-cat' : ''); b.textContent = titleOf(s);
+    b.dataset.target = s.id; if (cat) b.dataset.cat = cat;
+    b.addEventListener('click', function () { location.hash = s.id; });
+    return b;
+  }
+  // Overview entry
+  var ov = document.createElement('button'); ov.type = 'button'; ov.className = 'nav-item'; ov.id = 'nav-overview';
+  ov.textContent = 'Overview'; ov.dataset.target = 'overview';
+  ov.addEventListener('click', function () { location.hash = 'overview'; });
+  nav.appendChild(ov);
+  // Groups (collapsible) + Components sub-categories
+  groupOrder.forEach(function (g) {
+    var head = document.createElement('button'); head.type = 'button';
+    head.className = 'nav-grp-head' + (collapsed[g] ? ' collapsed' : '');
+    head.innerHTML = '<svg class="icon chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>' + g + '<span class="cnt">' + groups[g].length + '</span>';
+    var wrap = document.createElement('div'); wrap.className = 'nav-grp-items' + (collapsed[g] ? ' nav-collapsed' : '');
+    head.addEventListener('click', function () { collapsed[g] = !collapsed[g]; head.classList.toggle('collapsed'); wrap.classList.toggle('nav-collapsed'); saveCollapsed(); });
+    if (g === 'Components') {
+      Object.keys(CAT).forEach(function (cat) {
+        var ch = document.createElement('div'); ch.className = 'nav-cat-head'; ch.dataset.cat = cat;
+        ch.innerHTML = cat + '<span class="cnt">' + CAT[cat].length + '</span>'; wrap.appendChild(ch);
+        CAT[cat].forEach(function (id) { if (byId[id]) wrap.appendChild(makeItem(byId[id], cat)); });
+      });
+    } else {
+      groups[g].forEach(function (s) { wrap.appendChild(makeItem(s, null)); });
+    }
+    nav.appendChild(head); nav.appendChild(wrap);
   });
-  Object.keys(groups).forEach(function (g) {
-    var h = document.createElement('div');
-    h.className = 'nav-group';
-    h.textContent = g;
-    nav.appendChild(h);
-    groups[g].forEach(function (s) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'nav-item';
-      b.textContent = s.getAttribute('data-title');
-      b.dataset.target = s.id;
-      b.addEventListener('click', function () { location.hash = s.id; });
-      nav.appendChild(b);
+
+  // Overview gallery — each card carries an inert, scaled live clone of the component
+  function blurbOf(s) {
+    var d = s.querySelector('.desc'); if (!d) return '';
+    var t = (d.textContent || '').trim().split('. ')[0].trim().replace(/\.$/, '');
+    if (t.length > 90) t = t.slice(0, 88).trim() + '…';
+    return t;
+  }
+  // simple section illustrations (hint at the kind of component; viewBox 0 0 80 48)
+  var ILLU = {
+    'Actions': '<rect x="10" y="14" width="34" height="20" rx="6" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="2"/><rect x="50" y="14" width="22" height="20" rx="6" stroke="currentColor" stroke-width="2"/>',
+    'Forms & selection': '<path d="M12 12h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="12" y="18" width="40" height="16" rx="4" fill="currentColor" fill-opacity="0.10" stroke="currentColor" stroke-width="2"/><rect x="58" y="19" width="13" height="13" rx="3" stroke="currentColor" stroke-width="2"/><path d="m61 25 2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+    'Data display': '<path d="M14 9v29h53" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="24" y="24" width="9" height="13" rx="1.5" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="2"/><rect x="39" y="18" width="9" height="19" rx="1.5" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="2"/><rect x="54" y="13" width="9" height="24" rx="1.5" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="2"/>',
+    'Navigation': '<path d="M14 18h13M33 18h13M52 18h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 30h56" stroke="currentColor" stroke-width="2"/><path d="M14 30h13" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>',
+    'Overlays': '<rect x="8" y="8" width="64" height="32" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-width="2"/><rect x="24" y="15" width="32" height="21" rx="4" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="2"/>',
+    'Feedback': '<rect x="12" y="11" width="56" height="13" rx="4" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/><circle cx="21" cy="17.5" r="2.5" fill="currentColor"/><rect x="12" y="31" width="56" height="6" rx="3" fill="currentColor" fill-opacity="0.10"/><rect x="12" y="31" width="30" height="6" rx="3" fill="currentColor" fill-opacity="0.4"/>',
+    'Foundations': '<path d="M13 35l8-21 8 21M16 28h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="40" y="15" width="11" height="11" rx="2" fill="currentColor" fill-opacity="0.3"/><rect x="54" y="15" width="11" height="11" rx="2" fill="currentColor" fill-opacity="0.16"/><rect x="47" y="29" width="11" height="8" rx="2" stroke="currentColor" stroke-width="2"/>',
+    'AI patterns': '<path d="M21 11l2.6 7.2L31 21l-7.4 2.8L21 31l-2.6-7.2L11 21l7.4-2.8z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M41 17h26M41 25h19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    'Recipes': '<rect x="12" y="9" width="56" height="30" rx="3" stroke="currentColor" stroke-width="2"/><path d="M12 18h56M31 18v21" stroke="currentColor" stroke-width="2"/><rect x="16" y="12" width="12" height="3" rx="1.5" fill="currentColor" fill-opacity="0.4"/><rect x="36" y="23" width="27" height="4" rx="2" fill="currentColor" fill-opacity="0.22"/><rect x="36" y="31" width="18" height="4" rx="2" fill="currentColor" fill-opacity="0.14"/>',
+    'Sample pages': '<rect x="8" y="8" width="64" height="32" rx="4" stroke="currentColor" stroke-width="2"/><path d="M8 16h64M26 16v24" stroke="currentColor" stroke-width="2"/><rect x="12" y="21" width="8" height="3" rx="1.5" fill="currentColor" fill-opacity="0.4"/><rect x="12" y="27" width="8" height="3" rx="1.5" fill="currentColor" fill-opacity="0.25"/><rect x="31" y="22" width="34" height="4" rx="2" fill="currentColor" fill-opacity="0.22"/><rect x="31" y="30" width="24" height="4" rx="2" fill="currentColor" fill-opacity="0.14"/>'
+  };
+  var ILLU2 = {
+    's-typography': '<path d="M14 36 24 12l10 24M17.5 28h13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M44 36l6-14 6 14M46 31h8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    's-type-families': '<path d="M10 34 17 16l7 18M12.5 28h9" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="32" y="17" width="15" height="15" rx="2" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="2"/><path d="M56 20l-4 4 4 4M68 20l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    's-primitives': '<rect x="10" y="18" width="12" height="12" rx="2" fill="currentColor" fill-opacity="0.38"/><rect x="25" y="18" width="12" height="12" rx="2" fill="currentColor" fill-opacity="0.26"/><rect x="40" y="18" width="12" height="12" rx="2" fill="currentColor" fill-opacity="0.15"/><rect x="55" y="18" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>',
+    's-color': '<rect x="15" y="12" width="34" height="24" rx="4" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2"/><rect x="31" y="17" width="34" height="24" rx="4" fill="currentColor" fill-opacity="0.24" stroke="currentColor" stroke-width="2"/>',
+    's-space': '<rect x="14" y="8" width="52" height="32" rx="4" stroke="currentColor" stroke-width="2"/><rect x="24" y="16" width="32" height="16" rx="3" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="2"/>',
+    's-button': '<rect x="12" y="14" width="32" height="20" rx="6" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="2"/><rect x="50" y="14" width="20" height="20" rx="6" stroke="currentColor" stroke-width="2"/>',
+    's-buttongroup': '<rect x="14" y="15" width="52" height="18" rx="5" stroke="currentColor" stroke-width="2"/><path d="M31 15v18M48 15v18" stroke="currentColor" stroke-width="2"/>',
+    's-input': '<path d="M14 13h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="14" y="19" width="52" height="16" rx="4" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2"/><path d="M22 23v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    's-select': '<rect x="14" y="13" width="52" height="15" rx="4" stroke="currentColor" stroke-width="2"/><path d="m54 19 3 3 3-3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 34h40M18 40h26" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.45"/>',
+    's-combobox': '<rect x="14" y="14" width="52" height="16" rx="4" stroke="currentColor" stroke-width="2"/><circle cx="55" cy="22" r="3.5" stroke="currentColor" stroke-width="2"/><path d="m58 25 3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18 37h32" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.45"/>',
+    's-datepicker': '<rect x="18" y="10" width="44" height="30" rx="3" stroke="currentColor" stroke-width="2"/><path d="M18 18h44" stroke="currentColor" stroke-width="2"/><path d="M27 10V7M53 10V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="24" y="23" width="6" height="5" rx="1" fill="currentColor" fill-opacity="0.4"/><rect x="34" y="23" width="6" height="5" rx="1" fill="currentColor" fill-opacity="0.15"/><rect x="44" y="23" width="6" height="5" rx="1" fill="currentColor" fill-opacity="0.15"/><rect x="24" y="31" width="6" height="5" rx="1" fill="currentColor" fill-opacity="0.15"/>',
+    's-choices': '<rect x="10" y="18" width="13" height="13" rx="3" stroke="currentColor" stroke-width="2"/><path d="m13 24 2.5 2.5 4-4.5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="40" cy="24.5" r="7" stroke="currentColor" stroke-width="2"/><circle cx="40" cy="24.5" r="3" fill="currentColor"/><rect x="53" y="18" width="20" height="13" rx="6.5" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="2"/><circle cx="65" cy="24.5" r="4" fill="currentColor"/>',
+    's-segmented': '<rect x="12" y="16" width="56" height="16" rx="5" stroke="currentColor" stroke-width="2"/><rect x="14" y="18" width="17" height="12" rx="3" fill="currentColor" fill-opacity="0.2"/><path d="M31 16v16M49 16v16" stroke="currentColor" stroke-width="1.5"/>',
+    's-badge': '<rect x="12" y="20" width="20" height="10" rx="5" fill="currentColor" fill-opacity="0.2"/><rect x="38" y="20" width="15" height="10" rx="5" stroke="currentColor" stroke-width="1.5"/><circle cx="64" cy="25" r="3" fill="currentColor"/>',
+    's-chip': '<rect x="13" y="19" width="25" height="12" rx="6" stroke="currentColor" stroke-width="1.5"/><path d="M31 23l4 4M35 23l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="44" y="19" width="23" height="12" rx="6" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="1.5"/>',
+    's-avatar': '<circle cx="26" cy="24" r="11" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="2"/><circle cx="26" cy="20.5" r="3.5" stroke="currentColor" stroke-width="2"/><path d="M19.5 30a6.5 6.5 0 0 1 13 0" stroke="currentColor" stroke-width="2" fill="none"/><rect x="44" y="13" width="22" height="22" rx="5" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="2"/>',
+    's-card': '<rect x="18" y="10" width="44" height="28" rx="4" stroke="currentColor" stroke-width="2"/><path d="M25 19h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M25 26h30M25 31h22" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/>',
+    's-banner': '<rect x="12" y="16" width="56" height="16" rx="4" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/><circle cx="22" cy="24" r="3" fill="currentColor"/><path d="M30 24h24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    's-toast': '<rect x="12" y="10" width="24" height="12" rx="3" stroke="currentColor" stroke-width="1.5" opacity="0.55"/><rect x="30" y="26" width="40" height="14" rx="4" fill="currentColor" fill-opacity="0.16" stroke="currentColor" stroke-width="2"/><path d="M36 33h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    's-loading': '<path d="M14 15h40M14 24h52M14 33h30" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity="0.28"/><path d="M66 20a8 8 0 1 1-8-8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>',
+    's-table': '<rect x="12" y="12" width="56" height="26" rx="2" stroke="currentColor" stroke-width="2"/><path d="M12 20h56M32 12v26M50 12v26" stroke="currentColor" stroke-width="1.5"/><rect x="15" y="14" width="14" height="4" rx="1" fill="currentColor" fill-opacity="0.3"/>',
+    's-nav': '<path d="M14 15h12M30 15h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 24h30" stroke="currentColor" stroke-width="1.5"/><path d="M14 24h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="33" r="2" fill="currentColor"/><circle cx="58" cy="33" r="2" fill="currentColor" fill-opacity="0.4"/><circle cx="66" cy="33" r="2" fill="currentColor" fill-opacity="0.4"/>',
+    's-accordion': '<rect x="14" y="9" width="52" height="11" rx="2" stroke="currentColor" stroke-width="2"/><path d="m56 12 3 3 3-3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="23" width="52" height="16" rx="2" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2"/>',
+    's-fileupload': '<rect x="16" y="10" width="48" height="30" rx="4" stroke="currentColor" stroke-width="2" stroke-dasharray="5 4"/><path d="M40 31V19M35 24l5-5 5 5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    's-contextcard': '<rect x="16" y="15" width="48" height="18" rx="4" stroke="currentColor" stroke-width="2"/><rect x="21" y="19" width="10" height="10" rx="2" fill="currentColor" fill-opacity="0.2"/><path d="M36 21h22M36 27h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55"/>',
+    's-splitpanel': '<rect x="12" y="12" width="56" height="24" rx="3" stroke="currentColor" stroke-width="2"/><path d="M44 12v24" stroke="currentColor" stroke-width="2"/><path d="M18 19h18M18 25h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/>',
+    's-chart': '<path d="M14 10v29h53" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 32 32 23l10 6 14-14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    's-modal': '<rect x="8" y="8" width="64" height="32" rx="4" fill="currentColor" fill-opacity="0.07" stroke="currentColor" stroke-width="2"/><rect x="24" y="15" width="32" height="21" rx="4" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="2"/>',
+    's-desclist': '<path d="M16 15h13M16 24h13M16 33h13" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.45"/><path d="M38 15h22M38 24h16M38 33h24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    's-empty': '<circle cx="40" cy="21" r="11" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2"/><path d="M35 21h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M28 38h24" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/>',
+    's-timeline': '<path d="M20 9v30" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="16" r="3.5" fill="currentColor"/><circle cx="20" cy="31" r="3.5" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="2"/><path d="M30 16h30M30 31h22" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55"/>',
+    's-tree-code': '<path d="M14 12h9M14 12v20M20 22h5M20 32h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M46 16l-5 8 5 8M64 16l5 8-5 8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    's-slider-choice': '<path d="M14 17h44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="40" cy="17" r="5" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2"/><rect x="14" y="28" width="28" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M52 30v8M48 34h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    's-contextual': '<rect x="12" y="12" width="34" height="22" rx="4" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2"/><path d="M18 20h20M18 27h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55"/><rect x="52" y="17" width="18" height="21" rx="3" stroke="currentColor" stroke-width="2"/><path d="M56 23h10M56 29h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>',
+    's-calendar-sheet': '<rect x="16" y="10" width="48" height="30" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 18h48" stroke="currentColor" stroke-width="2"/><rect x="22" y="23" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.35"/><rect x="32" y="23" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/><rect x="42" y="23" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/><rect x="52" y="23" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/><rect x="22" y="31" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/><rect x="32" y="31" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/>',
+    's-streaming': '<rect x="14" y="12" width="52" height="24" rx="7" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="2"/><circle cx="29" cy="24" r="2.6" fill="currentColor"/><circle cx="40" cy="24" r="2.6" fill="currentColor" fill-opacity="0.6"/><circle cx="51" cy="24" r="2.6" fill="currentColor" fill-opacity="0.3"/>',
+    's-agentstep': '<circle cx="18" cy="15" r="4.5" stroke="currentColor" stroke-width="2"/><path d="m15.7 15 1.6 1.6 3.2-3.2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 20v6" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="31" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M30 15h30M30 31h22" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55"/>',
+    's-proposal': '<rect x="15" y="9" width="50" height="30" rx="4" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="2"/><path d="M22 18h30" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55"/><rect x="22" y="26" width="16" height="8" rx="2" fill="currentColor" fill-opacity="0.28"/><rect x="42" y="26" width="16" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>',
+    's-provenance': '<path d="M16 15h32M16 23h36" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/><circle cx="56" cy="15" r="4" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="1.5"/><rect x="16" y="31" width="20" height="9" rx="4.5" fill="currentColor" fill-opacity="0.14" stroke="currentColor" stroke-width="1.5"/>',
+    's-console': '<rect x="10" y="8" width="60" height="32" rx="4" stroke="currentColor" stroke-width="2"/><rect x="16" y="13" width="24" height="7" rx="3.5" fill="currentColor" fill-opacity="0.1"/><rect x="40" y="22" width="24" height="7" rx="3.5" fill="currentColor" fill-opacity="0.22"/><rect x="16" y="33" width="48" height="3" rx="1.5" fill="currentColor" fill-opacity="0.4"/>',
+    's-palette': '<rect x="13" y="14" width="54" height="20" rx="5" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="2"/><rect x="19" y="20" width="9" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M33 24h22" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/>',
+    's-followups': '<rect x="9" y="19" width="24" height="11" rx="5.5" stroke="currentColor" stroke-width="1.5"/><rect x="37" y="19" width="18" height="11" rx="5.5" stroke="currentColor" stroke-width="1.5"/><rect x="59" y="19" width="12" height="11" rx="5.5" stroke="currentColor" stroke-width="1.5"/>',
+    's-mediagroup': '<rect x="23" y="15" width="22" height="22" rx="3" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2" transform="rotate(-8 34 26)"/><rect x="36" y="13" width="22" height="22" rx="3" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2" transform="rotate(8 47 24)"/>',
+    's-batch-input': '<rect x="14" y="12" width="52" height="6" rx="3" fill="currentColor" fill-opacity="0.1"/><rect x="14" y="12" width="52" height="6" rx="3" fill="currentColor" fill-opacity="0.38"/><rect x="14" y="22" width="52" height="6" rx="3" fill="currentColor" fill-opacity="0.1"/><rect x="14" y="22" width="34" height="6" rx="3" fill="currentColor" fill-opacity="0.38"/><rect x="14" y="32" width="52" height="6" rx="3" fill="currentColor" fill-opacity="0.1"/><rect x="14" y="32" width="15" height="6" rx="3" fill="currentColor" fill-opacity="0.38"/>',
+    's-composer': '<rect x="12" y="12" width="56" height="24" rx="6" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="2"/><path d="M21 21v6M18 24h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="59" cy="24" r="6.5" fill="currentColor" fill-opacity="0.28"/><path d="M59 27.5v-7M55.8 23.7 59 20.5l3.2 3.2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    's-response-toolbar': '<path d="M16 13h44M16 20h32" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/><rect x="16" y="29" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="30" y="29" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="44" y="29" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>',
+    's-reasoning': '<path d="m15 14 3 3 3-3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 15h28" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/><path d="M48 25l8-3 8 3v5c0 4-4 6-8 7-4-1-8-3-8-7z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+    's-usage': '<path d="M17 35a17 17 0 1 1 46 0" fill="none" stroke="currentColor" stroke-width="3" opacity="0.2" stroke-linecap="round"/><path d="M17 35a17 17 0 0 1 11-16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="40" cy="35" r="2.5" fill="currentColor"/><path d="M40 35 51 27" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    's-r-header': '<path d="M14 15h26" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="48" y="10" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="60" y="10" width="10" height="10" rx="2" fill="currentColor" fill-opacity="0.28"/><path d="M14 30h56" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>',
+    's-r-stats': '<rect x="12" y="12" width="17" height="24" rx="3" stroke="currentColor" stroke-width="2"/><rect x="32" y="12" width="17" height="24" rx="3" stroke="currentColor" stroke-width="2"/><rect x="52" y="12" width="16" height="24" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 29h9M35 29h9M56 29h8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>',
+    's-r-filter': '<rect x="12" y="17" width="26" height="14" rx="4" stroke="currentColor" stroke-width="2"/><circle cx="19" cy="24" r="3" stroke="currentColor" stroke-width="1.5"/><path d="m21 26 2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="44" y="18" width="14" height="12" rx="6" fill="currentColor" fill-opacity="0.16"/><rect x="62" y="18" width="9" height="12" rx="6" stroke="currentColor" stroke-width="1.5"/>',
+    's-r-stepper': '<circle cx="18" cy="24" r="5" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="2"/><path d="M23 24h14" stroke="currentColor" stroke-width="2"/><circle cx="42" cy="24" r="5" stroke="currentColor" stroke-width="2"/><path d="M47 24h14" stroke="currentColor" stroke-width="2" opacity="0.4"/><circle cx="66" cy="24" r="5" stroke="currentColor" stroke-width="2" opacity="0.4"/>',
+    's-sample-home': '<rect x="10" y="8" width="60" height="32" rx="4" stroke="currentColor" stroke-width="2"/><path d="M18 18h24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="18" y="28" width="44" height="7" rx="3.5" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="1.5"/>',
+    's-sample-workbench': '<rect x="10" y="10" width="60" height="28" rx="3" stroke="currentColor" stroke-width="2"/><path d="M10 17h60M28 17v21M48 17v21" stroke="currentColor" stroke-width="1.5"/><rect x="13" y="12" width="12" height="3" rx="1" fill="currentColor" fill-opacity="0.3"/>',
+    's-sample-console': '<rect x="10" y="8" width="60" height="32" rx="4" stroke="currentColor" stroke-width="2"/><rect x="16" y="13" width="22" height="6" rx="3" fill="currentColor" fill-opacity="0.1"/><rect x="38" y="21" width="22" height="6" rx="3" fill="currentColor" fill-opacity="0.22"/><rect x="16" y="32" width="48" height="3" rx="1.5" fill="currentColor" fill-opacity="0.4"/>',
+    's-sample-settings': '<rect x="10" y="8" width="60" height="32" rx="4" stroke="currentColor" stroke-width="2"/><path d="M18 16h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/><rect x="18" y="21" width="44" height="7" rx="3" stroke="currentColor" stroke-width="1.5"/><rect x="18" y="31" width="20" height="6" rx="3" fill="currentColor" fill-opacity="0.25"/>',
+    's-sample-object': '<rect x="10" y="8" width="60" height="32" rx="4" stroke="currentColor" stroke-width="2"/><path d="M46 8v32" stroke="currentColor" stroke-width="2"/><path d="M16 16h22M16 23h18M16 30h22" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/>',
+    's-sample-guided': '<circle cx="40" cy="18" r="9" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/><path d="M36 18l3 3 5-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 33h20" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/><rect x="52" y="30" width="14" height="8" rx="4" fill="currentColor" fill-opacity="0.25"/>',
+  };
+  function makeCard(s) {
+    var g = s.getAttribute('data-group'), cat = catOf[s.id];
+    var card = document.createElement('div'); card.className = 'gcard'; card.dataset.target = s.id;
+    card.setAttribute('role', 'button'); card.tabIndex = 0;
+    var thumb = document.createElement('div'); thumb.className = 'thumb';
+    thumb.innerHTML = '<svg viewBox="0 0 80 48" fill="none" aria-hidden="true">' + (ILLU2[s.id] || ILLU[cat || g] || ILLU['Data display']) + '</svg>';
+    card.appendChild(thumb);
+    var meta = document.createElement('div'); meta.className = 'meta';
+    var eb = document.createElement('span'); eb.className = 'eyebrow'; eb.textContent = cat || g;
+    var nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = titleOf(s);
+    meta.appendChild(eb); meta.appendChild(nm);
+    var bl = blurbOf(s); if (bl) { var b = document.createElement('span'); b.className = 'blurb'; b.textContent = bl; meta.appendChild(b); }
+    card.appendChild(meta);
+    card.addEventListener('click', function () { location.hash = s.id; });
+    card.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); location.hash = s.id; } });
+    return card;
+  }
+  function grid(items) {
+    var g = document.createElement('div'); g.className = 'gallery-grid';
+    items.forEach(function (s) { if (s) g.appendChild(makeCard(s)); });
+    return g;
+  }
+  // stylized group / category icons (lucide-style stroke glyphs hinting at each group's contents)
+  var GICON = {
+    'Foundations': '<path d="M4 20h16"/><path d="m7 16 5-12 5 12"/><path d="M9 12h6"/>',
+    'Components': '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+    'AI patterns': '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',
+    'Recipes': '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>',
+    'Sample pages': '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><path d="M6 6.5h.01"/>'
+  };
+  var CICON = {
+    'Actions': '<path d="m3 3 7.5 18 2.1-7.4L20 11.4z"/>',
+    'Forms & selection': '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h7"/><path d="M7 14h4"/>',
+    'Data display': '<path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="13" y="7" width="3" height="11"/>',
+    'Navigation': '<circle cx="12" cy="12" r="9"/><path d="m9.5 9.5 5-1.5-1.5 5-5 1.5z"/>',
+    'Overlays': '<rect x="8" y="3" width="13" height="13" rx="2"/><path d="M16 21H5a2 2 0 0 1-2-2V8"/>',
+    'Feedback': '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>'
+  };
+  function ico(paths, cls) { return '<svg class="icon" ' + (cls ? '' : '') + 'viewBox="0 0 24 24">' + paths + '</svg>'; }
+
+  (function buildGallery() {
+    groupOrder.forEach(function (gname) {
+      var head = document.createElement('div'); head.className = 'gal-head';
+      head.innerHTML = '<span class="gal-ico">' + ico(GICON[gname] || GICON['Components']) + '</span><h2>' + gname + '</h2>';
+      overview.appendChild(head);
+      if (gname === 'Components') {
+        Object.keys(CAT).forEach(function (cat) {
+          var cl = document.createElement('div'); cl.className = 'cat-label';
+          cl.innerHTML = ico(CICON[cat] || '') + '<span>' + cat + '</span>';
+          overview.appendChild(cl);
+          overview.appendChild(grid(CAT[cat].map(function (id) { return byId[id]; })));
+        });
+      } else {
+        overview.appendChild(grid(groups[gname]));
+      }
     });
+  })();
+
+  // Search filter
+  var search = document.getElementById('navSearch');
+  search.addEventListener('input', function () {
+    var q = search.value.trim().toLowerCase();
+    nav.querySelectorAll('.nav-item').forEach(function (b) {
+      if (b.id === 'nav-overview') return;
+      b.style.display = (!q || b.textContent.toLowerCase().indexOf(q) >= 0) ? '' : 'none';
+    });
+    if (q) nav.querySelectorAll('.nav-grp-items').forEach(function (w) { w.classList.remove('nav-collapsed'); });
+    // hide empty category heads
+    nav.querySelectorAll('.nav-cat-head').forEach(function (ch) {
+      var any = Array.prototype.some.call(nav.querySelectorAll('.nav-item[data-cat="' + ch.dataset.cat + '"]'), function (b) { return b.style.display !== 'none'; });
+      ch.style.display = any ? '' : 'none';
+    });
+    // hide empty group heads + collapse-restore when cleared
+    var heads = nav.querySelectorAll('.nav-grp-head');
+    var wraps = nav.querySelectorAll('.nav-grp-items');
+    for (var i = 0; i < heads.length; i++) {
+      var vis = Array.prototype.some.call(wraps[i].querySelectorAll('.nav-item'), function (b) { return b.style.display !== 'none'; });
+      heads[i].style.display = vis ? '' : 'none';
+      if (!q) {
+        var gname = heads[i].textContent.replace(/\d+$/, '').trim();
+        wraps[i].classList.toggle('nav-collapsed', !!collapsed[gname]);
+      }
+    }
   });
+
   function show(id) {
-    var target = document.getElementById(id);
-    if (!target || !target.classList.contains('story')) target = stories[0];
-    stories.forEach(function (s) { s.classList.toggle('on', s === target); });
+    var isOverview = (id === 'overview' || !id);
+    var target = isOverview ? null : document.getElementById(id);
+    if (!isOverview && (!target || !target.classList.contains('story'))) { target = stories[0]; }
+    overview.classList.toggle('on', isOverview);
+    stories.forEach(function (s) { s.classList.toggle('on', !isOverview && s === target); });
+    var activeTarget = isOverview ? 'overview' : target.id;
     Array.prototype.forEach.call(nav.querySelectorAll('.nav-item'), function (b) {
-      b.classList.toggle('active', b.dataset.target === target.id);
+      b.classList.toggle('active', b.dataset.target === activeTarget);
     });
-    document.getElementById('canvas').classList.toggle('full', target.getAttribute('data-group') === 'Sample pages');
-    document.getElementById('storyTitle').textContent = target.getAttribute('data-title');
-    document.getElementById('storyDoc').textContent = target.getAttribute('data-doc') || '';
+    var title = document.getElementById('storyTitle'), doc = document.getElementById('storyDoc');
+    if (isOverview) {
+      canvas.classList.add('full');
+      title.textContent = 'Overview'; doc.textContent = stories.length + ' components';
+    } else {
+      canvas.classList.toggle('full', target.getAttribute('data-group') === 'Sample pages');
+      var g = target.getAttribute('data-group'), cat = catOf[target.id], sep = ' <span class="crumb-sep">›</span> ';
+      title.innerHTML = g + (cat ? sep + cat : '') + sep + titleOf(target);
+      doc.textContent = target.getAttribute('data-doc') || '';
+    }
     document.querySelector('.canvas').scrollTop = 0;
   }
   window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
-  show(location.hash.slice(1) || stories[0].id);
+  show(location.hash.slice(1) || 'overview');
 
   var themeBtn = document.getElementById('themeBtn');
   themeBtn.addEventListener('click', function () {
