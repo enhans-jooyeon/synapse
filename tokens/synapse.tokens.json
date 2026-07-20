@@ -1,7 +1,7 @@
 {
   "$schema": "https://design-tokens.github.io/community-group/format/",
-  "$description": "Synapse design tokens — source of truth for AgentOS. Primitives are mode-independent raw values. Semantic tokens resolve per color mode via $extensions.synapse.modes and per density via $extensions.synapse.density. Agents MUST reference semantic tokens, never primitives, in generated UI. See design.md §3.",
-  "$version": "6.52.3",
+  "$description": "Synapse design tokens — source of truth for AgentOS. Primitives are mode-independent raw values. Semantic tokens resolve per color mode via $extensions.synapse.modes. Agents MUST reference semantic tokens, never primitives, in generated UI. See design.md §3.",
+  "$version": "6.53.0",
 
   "primitive": {
     "color": {
@@ -362,24 +362,24 @@
   },
 
   "density": {
-    "$description": "Density-aware tokens (v6.52 lighten). A region MAY set data-density='dense' to compact controls, spacing, and table rows for data-heavy surfaces ('focus' is the default). Type is a single scale — NOT density-bound. Archetypes recommend a density; it is not enforced and regions may differ freely.",
+    "$description": "Control & layout dimensions (v6.53 — density modes removed; single scale). Tables use the compact table-row/table-cell-x by default. content-max is the reading-column cap; data regions go fluid as a layout choice.",
     "control": {
       "$type": "dimension",
-      "height-sm": { "$value": "32px", "$extensions": { "synapse": { "density": { "focus": "32px", "dense": "24px" } } } },
-      "height-md": { "$value": "36px", "$extensions": { "synapse": { "density": { "focus": "36px", "dense": "28px" } } } },
-      "height-lg": { "$value": "40px", "$extensions": { "synapse": { "density": { "focus": "40px", "dense": "32px" } } } },
-      "padding-x": { "$value": "12px", "$extensions": { "synapse": { "density": { "focus": "12px", "dense": "8px" } } } },
-      "gap":       { "$value": "8px",  "$extensions": { "synapse": { "density": { "focus": "8px",  "dense": "6px" } } } }
+      "height-sm": { "$value": "32px" },
+      "height-md": { "$value": "36px" },
+      "height-lg": { "$value": "40px" },
+      "padding-x": { "$value": "12px" },
+      "gap":       { "$value": "8px" }
     },
     "layout": {
       "$type": "dimension",
-      "page-padding":   { "$value": "32px", "$extensions": { "synapse": { "density": { "focus": "32px", "dense": "24px" } } } },
-      "section-gap":    { "$value": "40px", "$extensions": { "synapse": { "density": { "focus": "40px", "dense": "20px" } } } },
-      "card-padding":   { "$value": "28px", "$extensions": { "synapse": { "density": { "focus": "28px", "dense": "16px" } } } },
-      "stack-gap":      { "$value": "16px", "$extensions": { "synapse": { "density": { "focus": "16px", "dense": "8px" } } } },
-      "table-row":      { "$value": "52px", "$extensions": { "synapse": { "density": { "focus": "52px", "dense": "36px" } } } },
-      "table-cell-x":   { "$value": "16px", "$extensions": { "synapse": { "density": { "focus": "16px", "dense": "12px" } } } },
-      "content-max":    { "$value": "760px", "$extensions": { "synapse": { "density": { "focus": "760px", "dense": "none" } } } }
+      "page-padding":   { "$value": "32px" },
+      "section-gap":    { "$value": "40px" },
+      "card-padding":   { "$value": "28px" },
+      "stack-gap":      { "$value": "16px" },
+      "table-row":      { "$value": "36px", "$description": "Compact by default (v6.53) — tables run tight regardless of context." },
+      "table-cell-x":   { "$value": "12px" },
+      "content-max":    { "$value": "760px", "$description": "Reading-column cap; workbench/data regions go fluid per patterns.md §1 (a layout choice, not a density mode)." }
     }
   }
 }

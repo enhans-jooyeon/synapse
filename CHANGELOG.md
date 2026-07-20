@@ -1,5 +1,20 @@
 # Synapse changelog
 
+## 6.53.0 — 2026-07-15
+
+Density mode removed entirely (proposals/2026-07-15-density-removal.md — maintainer: the mode created confusion). Synapse now uses ONE size scale (the former focus scale); Table alone runs compact by default (36px row / 12px cell) — a plain Table metric, not a mode.
+
+- Tokens: collapsed the focus/dense token pairs to single values; removed `data-density` from CSS and the `$extensions.synapse.density` from JSON; content-max is now just the reading-column cap (data regions go fluid as a layout choice).
+- foundations §4 "Density" → "Sizing" (single scale); design.md dropped the archetype→density rule + density workflow/checklist lines; patterns.md dropped `(focus)`/`(dense)` archetype labels and `data-density=` layout notes (width behavior kept as a layout rule); components.md collapsed all "(N dense)" dual sizes to the single value; ai-patterns/recipes de-densified.
+- Validator: removed SY103 density check (and added `home` to the valid-archetype set — a latent gap); screen-intent schema dropped the region `density` field; manifest dropped `densities` + the archetype→density map (archetypes now a plain list).
+- Preview: removed the focus/dense toggle + all `data-density` attributes.
+- Also fixed a stale v6.51 holdover: design.md rule 7 still called `accent` deprecated — it's the point color now.
+- KO refreshed for all six touched specs.
+
+## 6.52.4 — 2026-07-15
+
+- Fix Usage meter gallery illustration (maintainer: looked weird) — the gauge arc had a radius smaller than its endpoint span, so SVG distorted it. Replaced with a clean meter bar (track + ~65% fill + limit tick + label line). Tooling only.
+
 ## 6.52.3 — 2026-07-15
 
 - Overview gallery: per-component illustrations (maintainer: wanted each card customized to its pattern, like the reference). Replaced the shared per-section glyphs with a bespoke simple illustration for all 58 stories — each hints at that specific component/pattern (e.g. Composer = input + / + send circle, Command palette = search bar + keycap, ProposalCard = card + approve/reject, Table = grid, DatePicker = calendar, Follow-up chips = chip row, MediaGroup = fanned tiles, Batch input = progress-row stack, Stepper = connected numbered circles). Section illustrations retained as fallback. Monochrome stroke+tint, consistent style. Tooling only.

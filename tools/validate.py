@@ -226,7 +226,7 @@ class UILinter(HTMLParser):
         cls_tokens = a.get("class", "").split()
         is_display = any(t == "sy-display" or t.startswith("sy-type-display") for t in cls_tokens)
         self.display_stack.append(self.display_stack[-1] or is_display)
-        if tag in ("section", "main") or "data-density" in a:
+        if tag in ("section", "main"):
             self.region_stack.append([tag, 0])
         if tag == "style":
             self.in_style, self.style_line = True, self.getpos()[0]
@@ -293,8 +293,7 @@ def check_ui(paths):
 
 # ---------------------------------------------------------------- page mode
 
-ARCHETYPE_DENSITY = {"workbench": "dense", "object": "focus", "settings": "focus",
-                     "guided": "focus", "console": "focus"}
+ARCHETYPES = {"workbench", "object", "settings", "guided", "console", "home"}
 
 def check_page(path):
     """Validate a screen-intent declaration (SY1xx rules) against the manifest + contract."""
@@ -307,17 +306,14 @@ def check_page(path):
     known = set(manifest["components"].keys())
 
     arch = intent.get("archetype")
-    if arch not in ARCHETYPE_DENSITY:
-        report("E", "SY101", path, 0, f"archetype '{arch}' not in {sorted(ARCHETYPE_DENSITY)}"); return
+    if arch not in ARCHETYPES:
+        report("E", "SY101", path, 0, f"archetype '{arch}' not in {sorted(ARCHETYPES)}"); return
 
     regions = intent.get("regions") or []
     if not regions:
         report("E", "SY102", path, 0, "no regions declared")
     for r in regions:
         rid = r.get("id", "?")
-        d = r.get("density")
-        if d not in ("focus", "dense"):
-            report("E", "SY103", path, 0, f"region '{rid}': density '{d}' invalid")
         for c in r.get("components", []):
             if c not in known:
                 report("E", "SY105", path, 0, f"region '{rid}': component '{c}' not in manifest (closed set)")

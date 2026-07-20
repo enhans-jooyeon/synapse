@@ -556,7 +556,7 @@
 <body class="sy-root">
 <div class="app">
   <nav class="side" id="sidenav" aria-label="Stories">
-    <div class="brand">Synapse <span class="v">v6.52.3</span></div>
+    <div class="brand">Synapse <span class="v">v6.53.0</span></div>
     <label class="nav-search"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="navSearch" type="text" placeholder="Search components…" aria-label="Search components"></label>
   </nav>
   <div class="main">
@@ -564,18 +564,14 @@
       <span class="t" id="storyTitle">—</span>
       <span class="doc" id="storyDoc"></span>
       <span class="spacer"></span>
-      <div class="seg" id="densitySeg" title="Canvas density region">
-        <button type="button" class="on" data-d="focus">focus</button>
-        <button type="button" data-d="dense">dense</button>
-      </div>
       <button class="btn btn-secondary btn-sm" id="themeBtn" type="button">Dark mode</button>
     </div>
-    <div class="canvas"><div class="canvas-inner" id="canvas" data-density="focus">
+    <div class="canvas"><div class="canvas-inner" id="canvas">
 
       <div class="gallery" id="overview"></div>
 
       <div class="story" data-group="Foundations" data-title="Typography" data-doc="foundations.md §2.2" id="s-typography">
-        <p class="desc">Nineteen closed typography styles — the only way to set type. Each row shows family · size/line-height · weight. Type is a single scale (v6.52): it no longer changes with density — the toggle above now compacts control sizing, spacing, and table rows only.</p>
+        <p class="desc">Nineteen closed typography styles — the only way to set type. Each row shows family · size/line-height · weight. One scale throughout (v6.53 — density modes removed).</p>
         <div id="specrows"></div>
       </div>
 
@@ -1109,9 +1105,9 @@
       <div class="story" data-group="Components" data-title="SplitPanel" data-doc="components.md · SplitPanel" id="s-splitpanel">
         <p class="desc">Resizable workbench panes; the divider is the sanctioned mixed-density boundary.</p>
         <div class="split">
-          <div class="pane" style="width: 40%;" data-density="dense"><span class="region-tag">pane 1 · dense list</span><div class="col" style="gap: var(--sy-space-4);"><div class="skel" style="height:12px;width:80%"></div><div class="skel" style="height:12px;width:70%"></div><div class="skel" style="height:12px;width:75%"></div></div></div>
+          <div class="pane" style="width: 40%;"><span class="region-tag">pane 1 · list</span><div class="col" style="gap: var(--sy-space-4);"><div class="skel" style="height:12px;width:80%"></div><div class="skel" style="height:12px;width:70%"></div><div class="skel" style="height:12px;width:75%"></div></div></div>
           <div class="div" role="separator" aria-valuenow="40"></div>
-          <div class="pane" style="flex:1;" data-density="focus"><span class="region-tag">pane 2 · focus detail</span><div class="col" style="gap: var(--sy-space-8);"><div class="skel" style="height:16px;width:50%"></div><div class="skel" style="height:12px;width:90%"></div></div></div>
+          <div class="pane" style="flex:1;"><span class="region-tag">pane 2 · detail</span><div class="col" style="gap: var(--sy-space-8);"><div class="skel" style="height:16px;width:50%"></div><div class="skel" style="height:12px;width:90%"></div></div></div>
         </div>
       </div>
 
@@ -1671,7 +1667,7 @@ team: finance</pre>
 
 
 
-      <div class="story" data-group="Sample pages" data-title="Home (focus)" data-doc="patterns.md §1F · R4 · Composer" id="s-sample-home">
+      <div class="story" data-group="Sample pages" data-title="Home" data-doc="patterns.md §1F · R4 · Composer" id="s-sample-home">
         <p class="desc">The workspace's start surface (§1F, v6.39): Artific greeting moment, hero metric strip with the actionable number emphasized, the human-in-the-loop approval queue first, agent shelf — and the Composer pinned at the bottom (sending opens a Console). <strong>Interactive:</strong> topbar as in Workbench.</p>
         <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
@@ -1748,7 +1744,7 @@ team: finance</pre>
         </div>
       </div>
 
-      <div class="story" data-group="Sample pages" data-title="Workbench (dense)" data-doc="patterns.md §1A · R1/R4/R6/R10" id="s-sample-workbench">
+      <div class="story" data-group="Sample pages" data-title="Workbench" data-doc="patterns.md §1A · R1/R4/R6/R10" id="s-sample-workbench">
         <p class="desc">Full dense workbench: topbar (R10), sidebar, filter bar, stat grid, framed table with dot statuses and totals, SplitPanel detail pane, pagination. One accent on the whole screen — the conversational entry. <strong>Interactive:</strong> bell → NotificationCenter · avatar &amp; workspace → menus · 🔍 → CommandPalette · table row → detail Drawer.</p>
         <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
@@ -1771,7 +1767,7 @@ team: finance</pre>
             <div class="nav-item" lang="ko"><span style="width:8px; height:8px; border-radius:50%; background: var(--sy-viz-2); flex:none;"></span>주간 보고</div>
             <div class="nav-item" lang="ko"><span style="width:8px; height:8px; border-radius:50%; background: var(--sy-viz-5); flex:none;"></span>고객 응대</div>
           </nav>
-            <div data-density="dense" style="flex: 1.6; min-width: 0; padding: var(--sy-page-padding); display: flex; flex-direction: column; gap: var(--sy-section-gap); border-right: 1px solid var(--sy-border-default);">
+            <div style="flex: 1.6; min-width: 0; padding: var(--sy-page-padding); display: flex; flex-direction: column; gap: var(--sy-section-gap); border-right: 1px solid var(--sy-border-default);">
               <div>
                 <div style="display: flex; align-items: center; gap: var(--sy-space-12);">
                   <span class="sy-type-heading-xl" lang="ko">실행 기록</span>
@@ -1812,7 +1808,7 @@ team: finance</pre>
                 <span class="sum" lang="ko">총 284건 중 1–24</span>
               </div>
             </div>
-            <div style="flex: 1; min-width: 0; padding: var(--sy-space-16); display:flex; flex-direction:column; gap: var(--sy-space-16);" data-density="focus">
+            <div style="flex: 1; min-width: 0; padding: var(--sy-space-16); display:flex; flex-direction:column; gap: var(--sy-space-16);">
               <div style="display:flex; align-items:center; gap: var(--sy-space-8);">
                 <span class="sy-type-heading-md">Run #482</span>
                 <span style="display:inline-flex;align-items:center;gap:var(--sy-space-6);font-size:var(--sy-body-size);color:var(--sy-fg-secondary);"><span style="width:8px;height:8px;border-radius:50%;background:var(--sy-status-success-bg-solid);flex:none;"></span><span>Completed</span></span>
@@ -1969,7 +1965,7 @@ team: finance</pre>
         </div>
       </div>
 
-      <div class="story" data-group="Sample pages" data-title="Settings (focus)" data-doc="patterns.md §1C" id="s-sample-settings">
+      <div class="story" data-group="Sample pages" data-title="Settings" data-doc="patterns.md §1C" id="s-sample-settings">
         <p class="desc">Settings archetype: 760px column, tabs, form card with save pair, switch rows, usage meter, danger zone. Zero accent — nothing here prompts an AI. <strong>Interactive:</strong> 워크스페이스 삭제 → destructive Modal → Toast · topbar as in Workbench.</p>
         <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
@@ -2037,7 +2033,7 @@ team: finance</pre>
         </div>
       </div>
 
-      <div class="story" data-group="Sample pages" data-title="Object detail (focus)" data-doc="patterns.md §1B · R1/R11" id="s-sample-object">
+      <div class="story" data-group="Sample pages" data-title="Object detail" data-doc="patterns.md §1B · R1/R11" id="s-sample-object">
         <p class="desc">Focus object page: R1 header (Run is `primary` — operational, v6.2.1), tabs, key-value flat card, trend chart, embedded dense runs table, agent proposal, activity. No accent — the ask-entry lives in chrome (⌘K).</p>
         <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); padding: var(--sy-page-padding); min-width: 960px; max-width: 1440px;">
           <div style="max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--sy-space-24);">
@@ -2085,7 +2081,7 @@ team: finance</pre>
                 <span class="sy-type-heading-lg" lang="ko">최근 실행</span>
                 <button class="btn btn-ghost btn-sm" type="button" style="margin-left:auto;" lang="ko">전체 보기</button>
               </div>
-              <div class="tframe" data-density="dense">
+              <div class="tframe">
                 <table>
                   <thead><tr><th>Run ID</th><th>Status</th><th class="num">Duration</th><th class="num" lang="ko">시작</th></tr></thead>
                   <tbody>
@@ -2276,7 +2272,7 @@ team: finance</pre>
     's-composer': '<rect x="12" y="12" width="56" height="24" rx="6" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="2"/><path d="M21 21v6M18 24h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="59" cy="24" r="6.5" fill="currentColor" fill-opacity="0.28"/><path d="M59 27.5v-7M55.8 23.7 59 20.5l3.2 3.2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
     's-response-toolbar': '<path d="M16 13h44M16 20h32" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/><rect x="16" y="29" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="30" y="29" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="44" y="29" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/>',
     's-reasoning': '<path d="m15 14 3 3 3-3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 15h28" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/><path d="M48 25l8-3 8 3v5c0 4-4 6-8 7-4-1-8-3-8-7z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
-    's-usage': '<path d="M17 35a17 17 0 1 1 46 0" fill="none" stroke="currentColor" stroke-width="3" opacity="0.2" stroke-linecap="round"/><path d="M17 35a17 17 0 0 1 11-16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="40" cy="35" r="2.5" fill="currentColor"/><path d="M40 35 51 27" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    's-usage': '<path d="M14 14h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.5"/><rect x="14" y="21" width="52" height="11" rx="5.5" fill="currentColor" fill-opacity="0.12"/><rect x="14" y="21" width="33" height="11" rx="5.5" fill="currentColor" fill-opacity="0.4"/><path d="M57 17v19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
     's-r-header': '<path d="M14 15h26" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="48" y="10" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="60" y="10" width="10" height="10" rx="2" fill="currentColor" fill-opacity="0.28"/><path d="M14 30h56" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>',
     's-r-stats': '<rect x="12" y="12" width="17" height="24" rx="3" stroke="currentColor" stroke-width="2"/><rect x="32" y="12" width="17" height="24" rx="3" stroke="currentColor" stroke-width="2"/><rect x="52" y="12" width="16" height="24" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 29h9M35 29h9M56 29h8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>',
     's-r-filter': '<rect x="12" y="17" width="26" height="14" rx="4" stroke="currentColor" stroke-width="2"/><circle cx="19" cy="24" r="3" stroke="currentColor" stroke-width="1.5"/><path d="m21 26 2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="44" y="18" width="14" height="12" rx="6" fill="currentColor" fill-opacity="0.16"/><rect x="62" y="18" width="9" height="12" rx="6" stroke="currentColor" stroke-width="1.5"/>',
@@ -2404,14 +2400,6 @@ team: finance</pre>
     var next = el.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
     el.setAttribute('data-theme', next);
     themeBtn.textContent = next === 'light' ? 'Dark mode' : 'Light mode';
-  });
-  var seg = document.getElementById('densitySeg');
-  Array.prototype.forEach.call(seg.querySelectorAll('button'), function (b) {
-    b.addEventListener('click', function () {
-      Array.prototype.forEach.call(seg.querySelectorAll('button'), function (x) { x.classList.remove('on'); });
-      b.classList.add('on');
-      canvas.setAttribute('data-density', b.dataset.d);
-    });
   });
 
   var styles = [

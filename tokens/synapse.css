@@ -5,9 +5,8 @@
  *
  * Usage:
  *   <html data-theme="light">            color mode: "light" | "dark"
- *   <main data-density="focus">          density mode: "focus" | "dense" — set per region
  *
- * Agents: reference ONLY --sy-* semantic and density variables in generated UI.
+ * Agents: reference ONLY --sy-* semantic variables in generated UI.
  * Raw hex values and primitive scales are intentionally not exposed.
  */
 
@@ -267,12 +266,11 @@
 }
 
 /* ---------------------------------------------------------------- */
-/* Density modes (v6.52 lighten) — set data-density per REGION to compact  */
-/* controls, spacing, and table rows for data-heavy surfaces. Type is a    */
-/* single scale (not density-bound). Regions may differ freely.            */
+/* Sizing — single scale (v6.53; density modes removed). Tables run       */
+/* compact by default; everything else uses the standard scale.           */
 /* ---------------------------------------------------------------- */
 
-:root, [data-density="focus"] {
+:root {
   --sy-control-height-sm: 32px;
   --sy-control-height-md: 36px;
   --sy-control-height-lg: 40px;
@@ -288,26 +286,9 @@
   --sy-section-gap: 40px;
   --sy-card-padding: 28px;
   --sy-stack-gap: 16px;
-  --sy-table-row: 52px;
-  --sy-table-cell-x: 16px;
-  --sy-content-max: 760px;
-}
-
-[data-density="dense"] {
-  --sy-control-height-sm: 24px;
-  --sy-control-height-md: 28px;
-  --sy-control-height-lg: 32px;
-  --sy-control-padding-x: 8px;
-  --sy-control-gap: 6px;
-
-
-  --sy-page-padding: 24px;
-  --sy-section-gap: 20px;
-  --sy-card-padding: 16px;
-  --sy-stack-gap: 8px;
   --sy-table-row: 36px;
   --sy-table-cell-x: 12px;
-  --sy-content-max: none;
+  --sy-content-max: 760px;
 }
 
 /* ---------------------------------------------------------------- */

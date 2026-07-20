@@ -16,7 +16,7 @@ space-4
 [heading-xl page title]  [Badge status, size lg] [actions: ≤1 primary/accent + ≤1 secondary + overflow menu]
 space-4
 [caption fg.tertiary meta line: owner · updated timestamp · id]
-space-24 (focus) / space-16 (dense)
+space-24
 ```
 
 Title truncation forbidden; long titles wrap. Actions right-aligned, vertically centered on the title line. Meta line items separated by "·".
@@ -40,7 +40,7 @@ Inside Card: `heading-md` (or `heading-lg` for page-dominant cards) + optional t
 
 ## R4 · Stat grid
 
-2–6 `stat` Cards in an equal-column grid, gutter `space-16` (dense) / `space-24` (focus).
+2–6 `stat` Cards in an equal-column grid, gutter `space-24`.
 
 Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking, v6.4) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row** (v6.4): 12px `trend-up`/`trend-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비").
 
@@ -99,7 +99,7 @@ Full content-area EmptyState, Guided styling: `display` style title permitted, `
 
 ## R13 · Error page (403 / 404 / 500)
 
-Full content-area EmptyState on the page background, focus density: error icon in the 48px circle · `heading-md` title · one-sentence `body` explanation · one action.
+Full content-area EmptyState on the page background: error icon in the 48px circle · `heading-md` title · one-sentence `body` explanation · one action.
 
 - **403**: "You don't have access to this page" / "이 페이지에 접근할 권한이 없습니다" + the permission-aware reason rule (patterns §6) + "Go to home" secondary. Never reveal what the page contains.
 - **404**: "This page doesn't exist" / "존재하지 않는 페이지입니다" — likely-deleted objects get the object-specific not-found copy (content.md §5) + "Go back" secondary.

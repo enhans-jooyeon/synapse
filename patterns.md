@@ -1,6 +1,6 @@
 # Synapse patterns
 
-How components compose into pages. This layer is what makes agent-generated screens *look like AgentOS* instead of a component pile. Page archetypes are the primary decision mechanism: every new screen MUST be classified into exactly one archetype before any layout work, because the archetype fixes the layout grid and allowed regions, and recommends a density (a default, not a rule — v6.52).
+How components compose into pages. This layer is what makes agent-generated screens *look like AgentOS* instead of a component pile. Page archetypes are the primary decision mechanism: every new screen MUST be classified into exactly one archetype before any layout work, because the archetype fixes the layout grid and allowed regions.
 
 ---
 
@@ -10,46 +10,46 @@ How components compose into pages. This layer is what makes agent-generated scre
 
 ```
 Is the page's job to display many records or live metrics at once?
-├── yes → WORKBENCH (dense)
+├── yes → WORKBENCH
 └── no
-    ├── Is it a single object's detail or editing view? → OBJECT (focus, may embed dense regions)
-    ├── Is it configuration, preferences, or account? → SETTINGS (focus)
-    ├── Is it a first-run, wizard, or decision moment? → GUIDED (focus)
-    ├── Is it conversation with an agent? → CONSOLE (focus, own layout)
-    └── Is it the workspace's start/today surface? → HOME (focus, composer pinned)
+    ├── Is it a single object's detail or editing view? → OBJECT (may embed data tables)
+    ├── Is it configuration, preferences, or account? → SETTINGS
+    ├── Is it a first-run, wizard, or decision moment? → GUIDED
+    ├── Is it conversation with an agent? → CONSOLE (own layout)
+    └── Is it the workspace's start/today surface? → HOME (composer pinned)
 ```
 
-### A. Workbench — dense
+### A. Workbench
 
 Data tables, dashboards, monitoring, queues, logs.
 
-- `data-density="dense"`, fluid width, `--sy-page-padding` 24.
-- Structure top-to-bottom: **toolbar row** (page title 24/34 left; filters, search Input, primary action right; height 40, single row) → optional **metric strip** (2–6 stat Cards in a grid, dense padding) → **data region** (Table, or Card grid for visual records) → Pagination.
+- Fluid width (fills the region); standard `--sy-page-padding`.
+- Structure top-to-bottom: **toolbar row** (page title 24/34 left; filters, search Input, primary action right; height 40, single row) → optional **metric strip** (2–6 stat Cards in a grid) → **data region** (Table, or Card grid for visual records) → Pagination.
 - Charts live in Cards with a 16-semibold header and one chart each; `viz` palette in fixed order; max 4 metric colors per dashboard view.
-- Multi-panel workbenches (list + detail) use SplitPanel (default 40/60); the detail pane is an inline OBJECT region (focus) — this is the sanctioned mixed-density case, boundary = the divider.
+- Multi-panel workbenches (list + detail) use SplitPanel (default 40/60); the detail pane is an inline OBJECT region — the divider is the boundary.
 
-### B. Object — focus
+### B. Object
 
 Detail view of one entity (a project, an agent run, a document).
 
-- `data-density="focus"`; content max-width `--sy-content-max` (760px) centered, except when embedding a dense child table which MAY extend to 1200px.
+- Content max-width `--sy-content-max` (760px) centered, except when embedding a data table which MAY extend to 1200px.
 - Structure: Breadcrumb → **header block** (title 24/34, meta line of Badges + `fg.tertiary` timestamps, actions right: max primary + secondary + overflow menu) → Tabs (if the object has facets) → stacked content sections (`--sy-section-gap`).
-- Related records inside an Object page render as an embedded dense Table region — with a visible container boundary (Card frame).
+- Related records inside an Object page render as an embedded Table region — with a visible container boundary (Card frame).
 
-### C. Settings — focus
+### C. Settings
 
 - Max-width 760px. Left-anchored section list (Sidebar level-2 or Tabs) for >3 sections.
 - Each section = Card with header; rows are label+control pairs: label + caption description left, control right, `border.subtle` row dividers. Instant-effect rows use Switch; form-style sections end with a right-aligned Save (primary) + Cancel.
 - One Save per Card. NEVER a global sticky save bar and per-card saves simultaneously.
 
-### D. Guided — focus
+### D. Guided
 
 Onboarding, wizards, empty first-run, irreversible decisions. The only archetype where Display type (30/40, 36/48) and `lg` buttons are permitted.
 
 - Single centered column, max-width 560px, generous `--sy-space-64` top offset.
 - Multi-step flows: step indicator (13 medium, `fg.tertiary` "2/4" or dot row — composed from primitives, this is the sanctioned "stepper"), one decision per step, primary continue + ghost back.
 
-### E. Console — focus
+### E. Console
 
 Agent conversation surface.
 
@@ -59,11 +59,11 @@ Agent conversation surface.
 
 ---
 
-### F. Home — focus (v6.39)
+### F. Home (v6.39)
 
 The workspace's start surface: today's state plus the conversational entry.
 
-- `data-density="focus"`; content max-width 760 centered in a full-region scroller (scrollbar at the region edge); the **Composer is pinned at the bottom** — the Console's composer anatomy without a thread. Sending opens a Console conversation.
+- Content max-width 760 centered in a full-region scroller (scrollbar at the region edge); the **Composer is pinned at the bottom** — the Console's composer anatomy without a thread. Sending opens a Console conversation.
 - Structure top-to-bottom: **greeting block** (the screen's one sanctioned Display moment — `display-sm`, may use the display family; date + today-summary `caption` beneath) → **metric strip** (R4, ≤3 cards, uniform — no emphasized card since v6.40; urgency lives in the approval queue below, not in card tint) → **approval queue** (pending ProposalCards — the human-in-the-loop backlog surfaces here before anywhere else; "모두 보기" Link when >2) → **agent shelf** (interactive Cards: squared Avatar, name, status dot + schedule caption; click opens the agent).
 - Suggestion chips are NOT sanctioned here (Console/empty states only); the composer placeholder carries the invitation.
 - **One viewport, no page scroll (v6.39.1):** Home always fits the window — ≤3 uniform metric cards (`stat-sm` numerals, 16 card padding — Home compacts the R4 metrics), ≤2 queued proposals (then "모두 보기"), one shelf row, 16px section gaps. If content would overflow, cut content — never scroll, and never push the Composer out of view.
@@ -73,9 +73,8 @@ The workspace's start surface: today's state plus the conversational entry.
 
 - App frame: Sidebar (240/64) + main area. Main area holds one archetype. **Scroll containers span the region (v6.17.5):** when content is a centered reading column inside a wider region (Console thread, focus documents), the scroll container is the full-width region and the column is centered inside it — the scrollbar sits at the region's edge, never beside the column. A mid-canvas scrollbar reads as a broken layout.
 
-**App chrome is density-independent (v6.2.5):** the Topbar (R10) and Sidebar always render at focus metrics — page density governs content regions, never the frame around them (density-shifting chrome makes the same app feel different per page).
-- Content grids use CSS grid with `--sy-space-16` (dense) / `--sy-space-24` (focus) gutters. Column counts: metric cards 2–6; card grids 2–4; never 12-column decorative grids.
-- Breakpoints: <768 single column + collapsed sidebar; 768–1280 standard; >1440 workbenches keep fluid, focus archetypes stay at max-width (whitespace is intentional — do not fill it).
+- Content grids use CSS grid with `--sy-space-24` gutters. Column counts: metric cards 2–6; card grids 2–4; never 12-column decorative grids.
+- Breakpoints: <768 single column + collapsed sidebar; 768–1280 standard; >1440 workbenches keep fluid, reading archetypes stay at max-width (whitespace is intentional — do not fill it).
 
 ### 2.1 Narrow-window contract (v6.1 — web-only; browser windows get narrow, devices don't exist)
 

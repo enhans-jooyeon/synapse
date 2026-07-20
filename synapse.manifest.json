@@ -1,17 +1,14 @@
 {
- "$version": "6.52.3",
+ "$version": "6.53.0",
  "$generated_by": "tools/build_manifest.py — regenerate after any components.md change; never hand-edit",
  "authority": "design.md > tokens/synapse.tokens.json > foundations.md > components.md > recipes.md > ai-patterns.md > content.md",
- "archetypes": {
-  "workbench": "dense",
-  "object": "focus",
-  "settings": "focus",
-  "guided": "focus",
-  "console": "focus"
- },
- "densities": [
-  "focus",
-  "dense"
+ "archetypes": [
+  "workbench",
+  "object",
+  "settings",
+  "guided",
+  "console",
+  "home"
  ],
  "locales": [
   "en",
@@ -184,14 +181,14 @@
    ]
   },
   "Table": {
-   "purpose": "Workhorse of dense mode: records with aligned columns.",
+   "purpose": "Workhorse for data-heavy records with aligned columns.",
    "key_rules": [
     "18 closed cell renderers fix alignment/format per column; empty cell = em dash",
     "header row: label-size medium fg.tertiary, transparent fill (v6.5), hairline rule only; sort glyph space reserved",
     "selection column: 40px, zero padding, centered both axes — control cell, not text cell (v6.24.1)",
     "emphasis column opt-in (v6.11): emphasis.surface fill marks current period/totals, max 1/table",
     "status columns default dot+text; solid opt-in for ops walls",
-    "focus tables frameless (bare header); dense/scrolling tables framed",
+    "frameless by default (bare header); scrolling/pinned-column tables framed",
     "column menu closed set; bulk selection bar; inline edit for text/number/select cells; 1-level grouping; virtualize >200 rows",
     "no zebra striping"
    ]
@@ -215,7 +212,7 @@
    "purpose": "Exclusive 2–5-way switch, immediate effect (not Tabs, not Radio).",
    "key_rules": [
     "content-based widths; disabled whole-control only",
-    "concentric geometry (v6.8): radius-sm container, 4px padding, radius-xs segments — inner = outer − inset; assembled control = 36 focus / 32 dense"
+    "concentric geometry (v6.8): radius-sm container, 4px padding, radius-xs segments — inner = outer − inset; assembled control = 36"
    ]
   },
   "Accordion": {
@@ -234,9 +231,9 @@
    ]
   },
   "SplitPanel": {
-   "purpose": "Resizable workbench panes; the divider is the sanctioned mixed-density boundary.",
+   "purpose": "Resizable workbench panes with a draggable divider.",
    "key_rules": [
-    "≤3 panes; min widths 280/200; ratio persists; not in focus archetypes",
+    "≤3 panes; min widths 280/200; ratio persists; not in fixed-layout archetypes (Settings/Guided)",
     "container = section shell: radius xl + hairline, flush panes (v6.9)"
    ]
   },
@@ -280,7 +277,7 @@
   "Drawer": {
    "purpose": "Side detail/edit without leaving context; right side only; 480/640.",
    "key_rules": [
-    "inherits opener density (full-screen data drawers may be dense)",
+    "full-screen data drawers for review surfaces",
     "wide 800 variant for data review (DiffView)",
     "opaque bg.raised always (v6.31 — glass retired from scrimmed layers)",
     "z.drawer"
@@ -401,7 +398,7 @@
    "purpose": "Actions on an agent message: copy · regenerate · thumbs · overflow.",
    "key_rules": [
     "agent messages only; fixed order",
-    "hover-reveal default, persistent in dense consoles",
+    "hover-reveal default, persistent where hover is unreliable",
     "regenerate on latest message only — creates variant N+1, never destroys; answer header carries the ‹n/N› pager (v6.25 §22)",
     "thumbs selected = stroke + bg.selected circle, never filled icons",
     "no destructive actions",
@@ -472,7 +469,7 @@
   "Tree": {
    "purpose": "Hierarchy display/selection; folders, org units.",
    "key_rules": [
-    "rows 28/24; indent 20/level; max 4 levels then drill-in",
+    "rows 28; indent 20/level; max 4 levels then drill-in",
     "checkbox mode uses mixed-state parents",
     "drop target = focus insertion line",
     "no guide lines; middle-out truncation + tooltip"
@@ -538,7 +535,7 @@
    ]
   },
   "ContextMenu": {
-   "purpose": "Right-click Menu on dense data surfaces.",
+   "purpose": "Right-click Menu on data surfaces.",
    "key_rules": [
     "same Menu component at pointer",
     "duplication rule: every action also exists in visible UI",

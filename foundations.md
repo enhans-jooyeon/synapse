@@ -87,7 +87,7 @@ One sans for both scripts eliminates cross-language baseline drift, weight misma
 
 **Display family (Artific) rules.** Artific exists to create visual impact at brand moments; scarcity is what makes it read as branding.
 
-- Permitted ONLY at Display sizes (30/40, 36/48) and ONLY in: Guided-archetype heroes (onboarding, login, first-run), empty-state hero titles, and marketing-adjacent surfaces. NEVER in body text, controls, tables, navigation, or any dense region.
+- Permitted ONLY at Display sizes (30/40, 36/48) and ONLY in: Guided-archetype heroes (onboarding, login, first-run), empty-state hero titles, and marketing-adjacent surfaces. NEVER in body text, controls, tables, navigation, or any data-heavy region.
 - Max one display-family element per screen.
 - Weights 600/700 only, via `.sy-display`. The family's Thin–Medium weights and all oblique styles are excluded from the system.
 - **Artific is English-only (v6.48 — hard rule).** The family has no Hangul glyphs, so Artific may style **Latin/English copy only**. A `.sy-display` / `sy-type-display*` element MUST NOT contain Hangul — this is not a fallback situation to tolerate, it is a content constraint to design around (SY016 enforces). Do not attempt mixed-family styling within one string, and never substitute a different stylized Korean face without a system proposal.
@@ -127,7 +127,7 @@ Typography is set through named **styles**, never through ad-hoc size/weight com
 
 Rules:
 
-- Type is a single scale — `heading-sm`/`body`/`label` are fixed sizes, not density-bound (v6.52). Density compacts chrome and spacing, never text.
+- Type is a single scale — `heading-sm`/`body`/`label` are fixed sizes (v6.52). Synapse uses one size scale throughout (v6.53 — the focus/dense mode was removed).
 - Hierarchy within one surface needs at least a 2-step style gap or a color change (`fg.primary` vs `fg.secondary`) — adjacent styles alone (16 vs 14) read as an accident.
 - NEVER use weights other than 400/500/600/700; NEVER 600+ for body-length text; NEVER a raw `font-size` where a style exists.
 - Stat styles always carry `tabular-nums`; they are for numerals and units, not sentences.
@@ -154,19 +154,18 @@ These exist because Korean and English versions of the same string differ system
 
 - Related items: 4–8. Grouped controls: 8–12. Between groups: 16–24. Between sections: `--sy-section-gap`. Page padding: `--sy-page-padding`.
 - **Dividers span their container edge to edge.** Inside padded surfaces (menus, cards, lists), a divider extends into the padding (negative margin equal to the container padding) — a divider that stops short of the edges reads as an accident. If a divider *shouldn't* reach the edge, use spacing instead of a divider: every gap is either clearly intentional or absent.
-- Layout-level spacing (page padding, section gaps, card padding, stack gaps) MUST use the density variables, not raw scale values, so regions re-space when density changes.
+- Layout-level spacing (page padding, section gaps, card padding, stack gaps) MUST use the `--sy-*` spacing tokens, not raw scale values.
 - Vertical rhythm rule of thumb: the gap *above* a heading should be ~2× the gap below it.
 
 ---
 
-## 4. Density
+## 4. Sizing
 
-A region MAY compact itself for data-heavy work. This is a **regional option**, not a component prop and not an architecture to reason hard about.
+Synapse uses a **single size scale** (v6.53 — the former `focus`/`dense` density modes were removed as needless complexity). Controls, spacing, and type are one scale everywhere; there is no `data-density` and no per-region mode to reason about.
 
-- Two modes: **`focus`** (default; spacious, content max-width 760px, controls 36px) and **`dense`** (compact; fluid width, controls 28px, 36px table rows, tighter spacing).
-- What density changes: **control heights, control padding/gap, page/section/card/stack spacing, and table row/cell size.** It does NOT change type — body/label/heading-sm are a single scale everywhere (v6.52; the old 1px re-typeset was removed as noise).
-- Set once per region via `data-density` on the region root; components inside resize through the density variables. Never set it on individual components.
-- Archetypes recommend a density (`patterns.md` §1) — Workbench leans dense, curated surfaces lean focus — but it is a default, not a rule: regions may differ freely, and no structural-boundary declaration is required. Use dense when a region is genuinely data-heavy (tables, monitoring); otherwise focus.
+- The one exception is **Table**, which runs compact by default (`--sy-table-row` 36, `--sy-table-cell-x` 12) so data walls stay scannable — this is Table's normal metric, not a mode.
+- Layout width is an archetype choice, not a density one: reading archetypes cap content at `--sy-content-max` (760px); workbench/data regions go fluid (`patterns.md` §1).
+- All sizing/spacing MUST come from the `--sy-*` control and layout tokens, never raw values.
 
 ## 5. Elevation & borders
 
@@ -208,7 +207,7 @@ Motion confirms causality; it never decorates. Durations: `instant` 100ms (hover
 ## 7. Iconography
 
 - Single icon family, stroke-based, 1.5px stroke at 20px grid (Lucide). The usable set is the **closed concept→icon registry in `icons.md`** (v5.1) — unlisted concepts get no icon; unlisted Lucide names are violations.
-- Sizes: 16px (inline, dense controls), 20px (default controls, navigation), 24px (empty states, feature moments). No other sizes.
+- Sizes: 16px (inline, compact controls), 20px (default controls, navigation), 24px (empty states, feature moments). No other sizes.
 - Icons inherit text color of their context. Icon-only buttons MUST have an accessible label and are only allowed for actions from the approved icon-action list (`components.md` §Button).
 - NEVER use emoji as UI iconography.
 
@@ -218,7 +217,7 @@ Motion confirms causality; it never decorates. Durations: `instant` 100ms (hover
 
 **Documented deviation — solid status labels.** By explicit maintainer decision (v3.5–3.7), white text on `success`/`warning`/`danger` solid fills runs ~3.4–3.5:1 — below AA's 4.5:1 for normal text, above the 3:1 hard floor. The deviation is bounded: it applies ONLY to solid Badge labels, solid Banner strips, and danger Button resting state (short labels, never sentences or body text; danger hover darkens back to AA), and the validator enforces ≥3:1 on these pairs while holding 4.5:1 everywhere else. **Weight compensation is mandatory:** text on any solid fill running below 4.5:1 is semibold (600) minimum — low contrast punishes thin strokes hardest (badges: `micro`/600 by default; `lg` solid badges upgrade to 600; solid Banner text is 13px semibold, not `body-sm` regular; danger Button labels are 600 because the resting fill runs ~3.4:1). Solid fills that pass AA (primary, accent) keep their normal label weight. Consequence to keep in view: this line item will surface in any formal WCAG/VPAT audit. If strict conformance becomes a requirement, revert these two fills to their 600-level primitives.
 
-Otherwise, WCAG 2.1 AA is the floor for everything: contrast (see §1.2), visible focus (2px `border.focus` ring, 2px offset, on every interactive element — never removed, only restyled within these rules), full keyboard operability, pointer targets ≥ 24×24px even in dense mode (WCAG 2.5.8; dense 24px controls meet this exactly — do not shrink further), and correct `lang` attributes per region for screen readers to switch synthesis language.
+Otherwise, WCAG 2.1 AA is the floor for everything: contrast (see §1.2), visible focus (2px `border.focus` ring, 2px offset, on every interactive element — never removed, only restyled within these rules), full keyboard operability, pointer targets ≥ 24×24px (WCAG 2.5.8; the smallest control is 32px, comfortably above the floor), and correct `lang` attributes per region for screen readers to switch synthesis language.
 
 **Focus management (v6.1).** Deterministic, per overlay type:
 

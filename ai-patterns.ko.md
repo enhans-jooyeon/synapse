@@ -1,9 +1,9 @@
-<!-- sy-source: 704325c4e85e8d6d -->
+<!-- sy-source: 05a60bbe8c9cc5fe -->
 # Synapse AI 패턴
 
 AgentOS에서 에이전트 동작에 대한 상호작용 규칙입니다. 이 패턴들은 AI 에이전트가 행동하고, 말하고, 제안하고, 콘텐츠를 생성하는 모든 표면을 규율합니다. `components.md`와 동일한 계약적 효력을 가지며, 여기에 정의된 상태와 구조는 닫힌 집합입니다.
 
-기본 시스템 위에 적용됩니다. 아키타입과 밀도는 `patterns.md`에서, 컴포넌트는 `components.md`에서 가져옵니다(v1.2에서 추가된 AI 전용 컴포넌트 포함: AgentStep, ProposalCard, SourceChip, ProgressBar, CommandPalette).
+기본 시스템 위에 적용됩니다. 아키타입은 `patterns.md`에서, 컴포넌트는 `components.md`에서 가져옵니다(v1.2에서 추가된 AI 전용 컴포넌트 포함: AgentStep, ProposalCard, SourceChip, ProgressBar, CommandPalette).
 
 ---
 

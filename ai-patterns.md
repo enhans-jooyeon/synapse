@@ -2,7 +2,7 @@
 
 Interaction conventions for agent behavior in AgentOS. These patterns govern every surface where an AI agent acts, speaks, proposes, or produces content. They carry the same contractual force as `components.md` — the states and anatomies here are closed sets.
 
-Applies on top of the base system: archetypes and density from `patterns.md`, components from `components.md` (including the AI-specific components added in v1.2: AgentStep, ProposalCard, SourceChip, ProgressBar, CommandPalette).
+Applies on top of the base system: archetypes from `patterns.md`, components from `components.md` (including the AI-specific components added in v1.2: AgentStep, ProposalCard, SourceChip, ProgressBar, CommandPalette).
 
 ---
 

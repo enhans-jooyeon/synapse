@@ -1,6 +1,6 @@
 # Synapse — design system for AgentOS
 
-**Version 6.52.3 · Enhans · This file is the entry point. Read it before generating any UI.**
+**Version 6.53.0 · Enhans · This file is the entry point. Read it before generating any UI.**
 
 Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. It is built to be operated primarily by AI agents on behalf of non-designers, which means it is written as a *contract*, not an inspiration board: closed sets, enumerated options, explicit decision rules. An agent following this file mechanically should produce UI indistinguishable from designer-made AgentOS screens.
 
@@ -11,13 +11,13 @@ Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. I
 | `design.md` (this file) | contract, hard rules, workflow, governance | Highest — overrides everything |
 | `tokens/synapse.tokens.json` | canonical token values (DTCG) | Source of truth for all values |
 | `tokens/synapse.css` | generated CSS custom properties | Implementation artifact — regenerate from JSON, never hand-edit values |
-| `foundations.md` | color, type, spacing, density, elevation, motion, a11y — the *why* and usage rules | Governs token usage |
+| `foundations.md` | color, type, spacing, sizing, elevation, motion, a11y — the *why* and usage rules | Governs token usage |
 | `components.md` | the closed set of components (52 entries) | Governs all UI structure |
 | `recipes.md` | preset multi-component assemblies (headers, stat grids, filter bars, footers) | Governs recurring compositions — use before composing from scratch |
 | `patterns.md` | page archetypes, layout, forms, feedback, bilingual patterns | Governs composition |
 | `ai-patterns.md` | agent interaction conventions: streaming, steps, approval, provenance, uncertainty, failure | Governs every AI surface |
 | `content.md` | voice, KO/EN terminology glossary (closed), register, error catalog, formats | Governs all UI text |
-| `preview.html` | living render of the system in both modes/densities | Reference only, not authority |
+| `preview.html` | living render of the system in light + dark | Reference only, not authority |
 | `icons.md` | closed concept→icon registry — unlisted concepts get no icon | Governs all iconography |
 | `synapse.manifest.json` | machine-readable index of the entire system (built by `tools/build_manifest.py`, never hand-edited) | Agents load this first; prose specs remain authoritative |
 | `tools/screen-intent.schema.json` | the declaration an agent completes before generating a screen | Gate input |
@@ -40,9 +40,8 @@ These are absolute. Violating any of these means the output is wrong regardless 
 
 **Structure**
 4. The component set in `components.md` is closed (one `##` entry per component). NEVER invent a component, add a variant, or restyle an existing one. Unmet needs → §6 escalation.
-5. Every screen MUST be classified into exactly one archetype (`patterns.md` §1) before layout begins. The archetype recommends a density (not enforced).
-6. Density is set per region via `data-density` (never on individual components). Regions may differ freely — no boundary declaration required (v6.52).
-7. Max one `primary` button and one Banner per region (the Composer counts as its own region — its send is that region's one primary, v6.19). The `accent` variant is DEPRECATED (v6.19; removal at the next major): the conversational-AI entry uses `primary`. Operational agent actions (Run/Retry/Resume) follow the normal hierarchy: "executes an agent" never earns a special color (v6.2.1).
+5. Every screen MUST be classified into exactly one archetype (`patterns.md` §1) before layout begins.
+7. Max one `primary` button and one Banner per region (the Composer counts as its own region — its send is that region's one primary, v6.19). The conversational-AI entry (Ask agent / Composer send) uses the `accent` point color `#0A84FF` (v6.51; max one per region). Operational agent actions (Run/Retry/Resume) stay `primary`/black: "executes an agent" never earns the point color (v6.2.1).
 7a. AI presence is marked only by the squared avatar (primary marker) and the `ai.*` slate treatments (`ai-patterns.md` §1). Consequential agent actions always pass through ProposalCard — no silent execution, no auto-approval.
 
 **Language**
@@ -60,9 +59,9 @@ These are absolute. Violating any of these means the output is wrong regardless 
 
 When asked to produce a screen or feature UI, follow this sequence — do not skip steps:
 
-1. **Declare** — complete a screen-intent (`tools/screen-intent.schema.json`): archetype, regions with densities, component inventory (manifest keys), locales, states, viewer permissions. Run `validate.py page` on it — errors mean stop and fix the declaration, not the rendering.
+1. **Declare** — complete a screen-intent (`tools/screen-intent.schema.json`): archetype, regions, component inventory (manifest keys), locales, states, viewer permissions. Run `validate.py page` on it — errors mean stop and fix the declaration, not the rendering.
 2. **Inventory** — components come from `synapse.manifest.json`; load only the entries you declared. If something is missing from the set, escalate now, not after building.
-3. **Compose** — check `recipes.md` first for standard assemblies (page header, filter bar, stat grid, footers); lay out the rest per the archetype's structure. Use density variables for all sizing/spacing so the region responds to its mode.
+3. **Compose** — check `recipes.md` first for standard assemblies (page header, filter bar, stat grid, footers); lay out the rest per the archetype's structure. Use the `--sy-*` sizing/spacing tokens throughout.
 4. **Bilingualize** — provide both EN and KO strings for every label; check the widest against the layout.
 5. **State-complete** — specify empty, loading, error, and disabled states. A screen spec without them is unfinished.
 6. **Self-audit** — run the checklist in §5. Fix violations before presenting.
@@ -76,7 +75,7 @@ Before presenting any generated UI, verify mechanically:
 - [ ] No raw hex/rgb values; every color is a `--sy-*` token
 - [ ] No off-scale spacing/type/radius values
 - [ ] Only components from `components.md`, only their enumerated variants
-- [ ] One archetype declared; one density per region
+- [ ] One archetype declared
 - [ ] ≤1 primary button per region (Composer = its own region); the deprecated `accent` variant appears nowhere
 - [ ] EN + KO strings supplied; nothing fixed-width, italic, or uppercase-transformed
 - [ ] Terminology, statuses, and actions match the `content.md` glossary; KO is 합니다체; no particle attached to a variable; no exclamation marks
@@ -105,7 +104,7 @@ The system is closed to inline modification but open to proposals. This is the m
 ## 7. Working with this system as an LLM
 
 - Load order for context budgets: `design.md` → `synapse.manifest.json` (the compact index: components, rules, never-list) → the relevant archetype section of `patterns.md` → full prose specs only for components whose manifest entry doesn't answer the question. `foundations.md` for judgment calls; `icons.md` before placing any icon.
-- Quote rule numbers when explaining decisions ("dense mode per patterns §1A", "no italics per foundations §2.3.2") — it keeps generations auditable.
+- Quote rule numbers when explaining decisions ("scroll container spans the region per patterns §1", "no italics per foundations §2.3.2") — it keeps generations auditable.
 - When two rules seem to conflict, the file-map authority order (§1) resolves it; if still ambiguous, choose the more restrictive reading and note the ambiguity as a proposal.
 - Do not "improve" the system opportunistically. Restraint is the design language; an output that feels too plain is more likely correct than one that feels rich.
 

@@ -2,9 +2,9 @@
 
 **This is a closed set.** The 50 component entries below (a `##` heading each; some entries group sibling controls, e.g. Checkbox · Radio · Switch) are the only building blocks permitted in generated UI. Common multi-component assemblies are specified in `recipes.md` — check there before composing from scratch. If a need cannot be met by these components or their documented composition (`patterns.md`), the correct action is to escalate per `design.md` §6 — never to invent a variant, add a prop, or restyle an existing component.
 
-Every spec follows the same schema. `variants` and `sizes` are exhaustive enumerations. `forbidden` lists the modifications agents most commonly attempt and must not. All components automatically respond to the region's density mode via density variables — density is never set on a component.
+Every spec follows the same schema. `variants` and `sizes` are exhaustive enumerations. `forbidden` lists the modifications agents most commonly attempt and must not. Components use the single system size scale; Table runs compact by default (foundations §4).
 
-Conventions: heights refer to `--sy-control-height-*` (focus/dense values in `tokens/synapse.css`). "Focus ring" = 2px `--sy-border-focus` outline with 2px offset.
+Conventions: heights refer to `--sy-control-height-*` (`tokens/synapse.css`). "Focus ring" = 2px `--sy-border-focus` outline with 2px offset.
 
 ---
 
@@ -22,10 +22,10 @@ Conventions: heights refer to `--sy-control-height-*` (focus/dense values in `to
 | `danger` | `status.danger-bg-solid` fill (light-leaning red.400, ~3.4:1 — §8 policy), white text at semibold 600; hover/pressed darkens to `danger-bg-solid-hover` (red.500, AA) | Destructive confirmation only, inside confirm dialogs or after explicit intent. |
 | `accent` | `action.accent-bg` fill | **The POINT color `#0A84FF` (revived v6.51 from the v6.19 deprecation).** Jurisdiction: conversational-AI CTAs ONLY — Ask agent / Composer send, max 1/screen. Operational agent actions (Run/Retry/Resume) stay `primary`/black — executing a configured run never earns the point color; only conversationally invoking the agent does. White label rides the §8 solid-label ≥3:1 + 600-weight policy. |
 
-**Sizes:** `sm` (height-sm, label 13/12), `md` (height-md, default), `lg` (height-lg, focus-mode heroes only).
+**Sizes:** `sm` (height-sm, label 13/12), `md` (height-md, default), `lg` (height-lg, heroes only).
 **States:** default, hover (`primary`: bg-hover; `secondary`: `secondary-bg-hover`; `ghost`: `bg.hover`), active/pressed (identical to hover by design — pressed feedback comes from the click itself, not a third fill), focus-visible (ring), disabled (`fg.disabled`, `bg.disabled` fill; 40% opacity is forbidden), loading (spinner 16px replaces leading icon; label stays; width MUST NOT change).
 **Pill option (v5.0):** `primary` buttons in Guided-archetype heroes and empty-state first-use moments MAY use `radius.full`. NEVER in forms, toolbars, tables, or dense regions — the pill silhouette is a hero mark, not a general style.
-**Anatomy:** optional leading icon (16px) + label. **Optical padding trim (v6.17.2):** on icon+text buttons, the icon side's padding is `--sy-control-padding-x` minus 2px (a 16px stroke icon carries internal whitespace, so equal padding reads heavier on the icon side); applies per side — leading icon trims left, trailing chevron/external mark trims right; icon-only buttons are exempt (they're squares). Icon-only buttons allowed only for: close, more (⋯), edit, delete, copy, refresh, expand/collapse, settings — and MUST have `aria-label`. **Icon-only buttons are always square** (v6.2.4): width equals the size's control height (sm 32→32, md 36→36, per density) — a non-square icon button is a bug, not a variant.
+**Anatomy:** optional leading icon (16px) + label. **Optical padding trim (v6.17.2):** on icon+text buttons, the icon side's padding is `--sy-control-padding-x` minus 2px (a 16px stroke icon carries internal whitespace, so equal padding reads heavier on the icon side); applies per side — leading icon trims left, trailing chevron/external mark trims right; icon-only buttons are exempt (they're squares). Icon-only buttons allowed only for: close, more (⋯), edit, delete, copy, refresh, expand/collapse, settings — and MUST have `aria-label`. **Icon-only buttons are always square** (v6.2.4): width equals the size's control height (sm 32→32, md 36→36) — a non-square icon button is a bug, not a variant.
 
 **Label & icon rules (v5.0.3 — closed policy):**
 
@@ -52,7 +52,7 @@ Conventions: heights refer to `--sy-control-height-*` (focus/dense values in `to
 
 **Anatomy (v5.0 — filled):** label (required, `--sy-label-size` medium, above) · field (height-md, `bg.sunken` fill, borderless, radius `sm`) · optional helper text (caption, `fg.secondary`) · error text (caption, `status.danger`, replaces helper).
 **States:** default (filled, borderless), hover (fill steps to `bg.selected-hover`), focus (1px `border.focus-input` perimeter — neutral, v6.10 — + fill switches to `bg.page`: the field "opens" for entry. Entry surfaces focus in the neutral key tone because click-to-type shows focus constantly and blue overexposed the accent; non-entry controls keep the blue `border.focus` offset ring. No offset ring on filled fields (v6.8.1) — border swap + fill change form the compound indicator. Error fields keep `border.error` while focused; the fill change carries focus), disabled (`bg.disabled`, `fg.disabled`), error (1px `border.error` on the filled field + error text; error text MUST name the fix, not just "invalid"), read-only (`bg.surface`, no hover response). Select, Combobox, and DatePicker triggers inherit this filled anatomy.
-**Sizes:** `md` only (dense mode compacts it automatically).
+**Sizes:** `md` only.
 **Affixes (v6.0):** optional leading registry icon (16px, `fg.tertiary` — search's magnifier is one instance of this general slot) and/or trailing affix: a unit/format suffix (`fg.tertiary`, e.g. "KRW", "%") or one registry icon (e.g. eye/eye-off reveal on password). One leading + one trailing max; affixes sit inside the fill and never receive focus.
 
 **Forbidden:** placeholder as label (placeholder is example content only, `fg.tertiary`); floating labels (break with Hangul metrics); fixed field widths under 240px for translatable content; hiding the label visually except in table inline-edit cells.
@@ -189,12 +189,12 @@ One size per view, as with shape.
 
 ## Table
 
-**Purpose:** the workhorse of dense mode. Structured records with aligned columns.
+**Purpose:** the workhorse for data-heavy screens. Structured records with aligned columns.
 
 **Selection column (v6.24.1):** 40px fixed, zero cell padding, contents centered both axes (`vertical-align: middle` on the checkbox) — the selection cell holds a control, not text, so it never inherits text-cell padding/alignment. Header checkbox = select-all with the mixed state per the Checkbox rules.
 
-**Anatomy (emphasis opt-in, v6.11):** one column or cell range MAY take the `emphasis.surface` fill (+ `emphasis.fg` for its header label) to mark the current period, totals, or the comparison target — max one emphasized column per table, never combined with row selection tint on the same cells. Header row (`--sy-label-size` medium, `fg.tertiary`, **no fill** — v6.5: header background is transparent on framed and bare tables alike; the hairline bottom rule alone marks the header, and sort glyphs get reserved space so columns never shift on sort, sticky) · rows (height `--sy-table-row`, `border.subtle` dividers) · optional footer/pagination. **Framing (v4.0):** focus tables are frameless — bare header on the page background with a single hairline rule below, no outer border, no header fill; dense and horizontally-scrolling tables keep the frame (1px `border.default`, radius `md`, clipped, `bg.surface` header) because pinned columns and scroll edges need the boundary.
-**Column rules:** text left-aligned; numbers right-aligned with `font-variant-numeric: tabular-nums` (mono for IDs); dates/times in one consistent format per table; status as Badge; row actions as ghost icon-buttons at row-end, visible on hover in dense mode, always visible in focus mode.
+**Anatomy (emphasis opt-in, v6.11):** one column or cell range MAY take the `emphasis.surface` fill (+ `emphasis.fg` for its header label) to mark the current period, totals, or the comparison target — max one emphasized column per table, never combined with row selection tint on the same cells. Header row (`--sy-label-size` medium, `fg.tertiary`, **no fill** — v6.5: header background is transparent on framed and bare tables alike; the hairline bottom rule alone marks the header, and sort glyphs get reserved space so columns never shift on sort, sticky) · rows (height `--sy-table-row`, `border.subtle` dividers) · optional footer/pagination. **Framing (v4.0):** tables are frameless by default — bare header on the page background with a single hairline rule below, no outer border, no header fill; horizontally-scrolling tables (or those with pinned columns) keep the frame (1px `border.default`, radius `md`, clipped, `bg.surface` header) because scroll edges need the boundary.
+**Column rules:** text left-aligned; numbers right-aligned with `font-variant-numeric: tabular-nums` (mono for IDs); dates/times in one consistent format per table; status as Badge; row actions as ghost icon-buttons at row-end, revealed on row hover.
 **Behavior:** hover `bg.hover`; selected `bg.selected` + leading checkbox; sortable headers get trailing 12px arrow (active sort column only, one at a time). Empty state: EmptyState component inside the frame, never a bare "no data" string. Loading: Skeleton rows, matching column layout.
 **States per cell:** truncation with tooltip allowed (the only sanctioned truncation site besides list rows).
 **Forbidden:** zebra striping (dividers suffice); >1 accent color inside a table; horizontal scroll without a pinned first column; card-per-row layouts pretending to be tables.
@@ -206,7 +206,7 @@ One size per view, as with shape.
 - **Bulk selection.** Leading checkbox column (header checkbox = all-on-page, indeterminate for partial). When ≥1 row is selected, the table toolbar is replaced by a selection bar: `bg.selected` strip, "14 selected" / "14개 선택됨" (13 medium), up to 4 action buttons (`ghost`) + overflow menu + Clear. Destructive bulk actions confirm via Modal with counts.
 - **Inline edit.** Sanctioned only for text, number, and select cells. Enter edit via double-click or Enter on the focused cell; the editor is borderless inside the cell with the standard focus ring (this is the sanctioned hidden-label exception). Enter commits, Esc cancels, Tab commits + moves. Invalid values: `status.danger` cell border + Tooltip naming the fix; the cell does not exit edit until valid or cancelled.
 - **Row grouping.** One level only. Group header rows: 32px, `bg.surface`, 13 medium label + count Badge, collapsible with chevron. Aggregations (sum/count) render right-aligned in the group header, tabular-nums.
-- **Virtualization.** Required above 200 rows. Row heights are fixed per density mode for this reason — variable-height rows are forbidden in virtualized tables.
+- **Virtualization.** Required above 200 rows. Row heights are fixed for this reason — variable-height rows are forbidden in virtualized tables.
 - **Expandable rows.** Leading chevron column; expanding reveals a detail panel (`bg.surface`, full row width, own padding) below the row. One level; an expanded panel MAY contain a `flat` Card or DescriptionList, never another table.
 - **Totals/summary row.** Pinned bottom row, `bg.surface`, `label` type, values tabular-nums; states the aggregation in the cell ("Σ 1,204" or "avg 4m 02s") — never an unlabeled number.
 - **Header extras.** Column headers MAY carry an info icon (13px, opens Tooltip with the column definition) and a unit suffix in `fg.tertiary` ("Duration *(min)*" — unit in the header, never repeated per cell).
@@ -216,12 +216,12 @@ One size per view, as with shape.
 | Renderer | Spec |
 |---|---|
 | `text` | left, `body`, single-line ellipsis + Tooltip |
-| `text-2line` | primary `body` + secondary `caption` `fg.secondary`; only in focus-density tables |
+| `text-2line` | primary `body` + secondary `caption` `fg.secondary`; only in reading-oriented tables (never in compact data walls) |
 | `number` | right, tabular-nums |
 | `currency` | right, tabular-nums, locale format (content.md §6) |
 | `percent` | right, tabular-nums, "12%" |
 | `delta` | right, signed, `status.success`/`status.danger` text + ▲▼ marker (never color alone) |
-| `date` / `datetime` | left, ISO in dense tables, locale format in focus |
+| `date` / `datetime` | left; one consistent format per table (ISO for machine/log tables, locale format otherwise) |
 | `duration` | right, tabular-nums, "4m 12s" |
 | `id` | left, `code-sm` mono, `fg.secondary`, middle-out truncation, copy on click |
 | `status` | Badge `dot` + plain text — the standard in status columns (v5.0, per the sleek restyle): the quietest rendering, and dots have no fill to melt into row highlights. `solid` is the sanctioned opt-in for ops/monitoring views where states must scream across a wall of rows. |
@@ -268,8 +268,8 @@ Empty cell value is always an em dash "—" in `fg.tertiary` — never blank, ne
 
 **Variants (closed):** `date` (default) · `range` · `datetime` · `time`.
 
-**Calendar anatomy:** header (month/year label 14 semibold + prev/next icon-buttons) · weekday row (11 medium, `fg.tertiary`) · 7×6 day grid. Day cells 32px (28 dense), radius `sm`: today = `emphasis.surface` fill + `emphasis.border` inset hairline + `emphasis.fg` semibold numeral (v6.11 — the now-marker job); selected = `action.primary-bg` fill; range interior = `bg.selected` with squared edges, endpoints filled; other-month days `fg.disabled`; disabled dates `fg.disabled` + strikethrough forbidden — use no-hover + `aria-disabled` instead.
-**`range`:** two calendars side-by-side (one in dense/narrow contexts); preset rail on the left — closed preset set: Today, Last 7 days, Last 30 days, This month, Last month, Custom ("오늘", "지난 7일", "지난 30일", "이번 달", "지난달", "직접 선택"). When the underlying value is a datetime window (schedule windows, log queries), each endpoint MAY carry a time field per the `datetime` rules; otherwise range is date-only.
+**Calendar anatomy:** header (month/year label 14 semibold + prev/next icon-buttons) · weekday row (11 medium, `fg.tertiary`) · 7×6 day grid. Day cells 32px, radius `sm`: today = `emphasis.surface` fill + `emphasis.border` inset hairline + `emphasis.fg` semibold numeral (v6.11 — the now-marker job); selected = `action.primary-bg` fill; range interior = `bg.selected` with squared edges, endpoints filled; other-month days `fg.disabled`; disabled dates `fg.disabled` + strikethrough forbidden — use no-hover + `aria-disabled` instead.
+**`range`:** two calendars side-by-side (one in narrow contexts); preset rail on the left — closed preset set: Today, Last 7 days, Last 30 days, This month, Last month, Custom ("오늘", "지난 7일", "지난 30일", "이번 달", "지난달", "직접 선택"). When the underlying value is a datetime window (schedule windows, log queries), each endpoint MAY carry a time field per the `datetime` rules; otherwise range is date-only.
 **`datetime`:** the calendar Popover gains a footer time row below a full-bleed `border.subtle` rule: 16px clock icon + time field + timezone label (`caption`, `fg.tertiary` — mandatory, never ambiguous). Time entry is typed, 24-hour `HH:MM` (content.md §6); arrow keys step by 15 minutes on the focused segment; typed values normalize on blur ("930" → 09:30). The trigger displays the combined locale format ("2026년 1월 9일 14:02 KST" / "Jan 9, 2026, 14:02 KST").
 **`time`:** standalone time field (no calendar) — same entry rules, width to content. For durations use Input `number` + unit, never a time picker.
 **Formats:** display per locale — EN `Jan 9, 2026`, KO `2026년 1월 9일`; typed entry accepts the locale's numeric format (`01/09/2026` / `2026-01-09`) and normalizes on blur. Week start follows locale convention (both ko-KR and en-US: Sunday; honor explicit workspace override). When timezone matters (schedules, logs), show the tz label next to the value — never leave it ambiguous.
@@ -282,7 +282,7 @@ Empty cell value is always an em dash "—" in `fg.tertiary` — never blank, ne
 
 **Purpose:** exclusive switch between 2–5 peer views or parameters with immediate effect — chart periods (1D/7D/30D), layout toggles (list/grid). Not Tabs (object facets), not Radio (form data, deferred effect).
 
-**Anatomy:** container `bg.sunken`, radius `sm`, **4px inner padding** (v6.8 — concentric-corner rule, foundations §5: inner radius = outer − inset; 8 − 4 = 4 keeps both radii on-scale, and the assembled control lands exactly on control heights: 36 focus / 32 dense). Segments: height 28 (24 dense), radius `xs`, padding-x 12, 13 medium, `fg.secondary`; selected segment `bg.page` fill + 1px `border.default` + `fg.primary`. Equal-content-based widths; the control sizes to its content.
+**Anatomy:** container `bg.sunken`, radius `sm`, **4px inner padding** (v6.8 — concentric-corner rule, foundations §5: inner radius = outer − inset; 8 − 4 = 4 keeps both radii on-scale, and the assembled control lands exactly on the control height (36). Segments: height 28, radius `xs`, padding-x 12, 13 medium, `fg.secondary`; selected segment `bg.page` fill + 1px `border.default` + `fg.primary`. Equal-content-based widths; the control sizes to its content.
 **States:** default, hover (`fg.primary`), selected, disabled (whole control only — never individual segments), focus-visible ring on the active segment.
 **A11y:** `radiogroup` semantics; arrow keys move selection.
 **Forbidden:** >5 segments (use Select); icon-only segments outside the approved icon list; mixed icon+text and text-only segments in one control; using it for navigation or form submission.
@@ -294,7 +294,7 @@ Empty cell value is always an em dash "—" in `fg.tertiary` — never blank, ne
 
 **Purpose:** progressive disclosure of secondary content — advanced settings, FAQ-style detail, raw payloads.
 
-**Anatomy:** items separated by `border.subtle`. Header row: 40px (32 dense), chevron (16px, rotates 90°→ down at `fast`), 14 medium title, optional right-aligned meta (`fg.tertiary`, 13). Panel: body text, padding 0 0 16px, indented to the title edge. Height animates at `base` — the sanctioned height-animation exception.
+**Anatomy:** items separated by `border.subtle`. Header row: 40px, chevron (16px, rotates 90°→ down at `fast`), 14 medium title, optional right-aligned meta (`fg.tertiary`, 13). Panel: body text, padding 0 0 16px, indented to the title edge. Height animates at `base` — the sanctioned height-animation exception.
 **Behavior:** multiple items may be open simultaneously (default); single-open mode allowed for step-like content. State persists within the session.
 **States:** collapsed, expanded, disabled item (`fg.disabled`, no chevron rotation).
 **A11y:** header is a `<button>` with `aria-expanded` and `aria-controls`.
@@ -319,8 +319,7 @@ Empty cell value is always an em dash "—" in `fg.tertiary` — never blank, ne
 
 **Anatomy:** 2 panes (max 3) separated by a 1px `border.default` divider with an invisible 8px drag hit-area. Divider on hover/drag: `border.strong`, cursor `col-resize`. Optional collapse chevron centered on the divider (collapses the secondary pane to nothing; a re-open affordance stays at the edge).
 **Behavior:** drag resizes within min widths (content pane ≥ 280px, rail/inspector ≥ 200px); double-click the divider resets the default ratio; the ratio persists per user per view. Panes scroll independently.
-**Density:** each pane declares its own density region — SplitPanel dividers are a sanctioned mixed-density boundary (patterns.md §1A).
-**Forbidden:** more than 3 panes; nested splits beyond one horizontal + one vertical level; SplitPanel in focus archetypes (their layouts are fixed); panes without min widths (KO labels need the floor).
+**Forbidden:** more than 3 panes; nested splits beyond one horizontal + one vertical level; SplitPanel in fixed-layout archetypes (Settings, Guided); panes without min widths (KO labels need the floor).
 **A11y:** divider is `role="separator"` with `aria-valuenow`, keyboard-resizable via arrow keys when focused.
 
 ---
@@ -334,7 +333,7 @@ Empty cell value is always an em dash "—" in `fg.tertiary` — never blank, ne
 **Color:** `viz-1…8` in fixed order; single series = `viz-1`; status-encoding charts use `status.*` tokens instead. Never gradients, never opacity ramps as a third dimension.
 **Scale rules:** bar charts start y at 0, always. Line charts may baseline above 0 only with a visible axis-break marker. Number and date axis labels format per locale; abbreviations use locale conventions (1.2k / 1.2천).
 **States:** loading = skeleton plot (gray bar/line silhouette, pulsing); empty = EmptyState inside the plot area; error = error EmptyState with Retry. Data updates snap — no transition animation on refresh; initial draw may animate once at `base`.
-**Sizes:** focus min-height 240px; dense 160px; sparkline 24px.
+**Sizes:** min-height 240px; sparkline 24px.
 **Forbidden:** 3D, dual y-axes, pie beyond 3 slices, >8 series (aggregate the tail into "Other" / "기타"), decorative icons inside plots, y-axis label rotation (widen or abbreviate instead).
 
 ---
@@ -342,7 +341,7 @@ Empty cell value is always an em dash "—" in `fg.tertiary` — never blank, ne
 ## Tabs
 
 **Purpose:** switch between peer views of the same object. 2–7 tabs.
-Style: text tabs (`--sy-body-size` medium), `fg.secondary` at rest, active tab `fg.primary` + 2px `bg.inverse` underline; container has `border.subtle` bottom rule. Height 40px (focus) / 32px (dense). Optional count Badge after label.
+Style: text tabs (`--sy-body-size` medium), `fg.secondary` at rest, active tab `fg.primary` + 2px `bg.inverse` underline; container has `border.subtle` bottom rule. Height 40px. Optional count Badge after label.
 **Forbidden:** boxed/pill tab styles; tabs for sequential steps (compose a stepper per `patterns.md`); >7 tabs (restructure); icon-only tabs.
 **Bilingual:** tab width from content; total overflow scrolls horizontally with fade edges, never wraps to two lines.
 
@@ -373,7 +372,7 @@ Path context for pages deeper than 2 levels. 13px, `fg.tertiary` links with `fg.
 
 ## Drawer
 
-Side panel for detail/edit without leaving context. Slides from right, width 480px (max 640px; **`wide` variant 800px (v6.0)** for data-review surfaces — DiffView, run inspection — where 640 forces unusable wrapping), full height, `shadow.modal`, opaque `bg.raised` panel (v6.31 — glass retired from scrimmed layers, foundations §5), same header pattern as Modal. Non-blocking variant (no scrim) allowed in dense workspaces. Inherits density of its opener except full-screen data drawers (MAY be dense).
+Side panel for detail/edit without leaving context. Slides from right, width 480px (max 640px; **`wide` variant 800px (v6.0)** for data-review surfaces — DiffView, run inspection — where 640 forces unusable wrapping), full height, `shadow.modal`, opaque `bg.raised` panel (v6.31 — glass retired from scrimmed layers, foundations §5), same header pattern as Modal. Non-blocking variant (no scrim) allowed in data workspaces.
 **Forbidden:** left-side drawers (reserved for Sidebar); nested drawers.
 
 ---
@@ -527,7 +526,7 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 
 **Purpose:** key–value display — the backbone of Object detail views, drawers, and expanded table rows. (Added v2.0 gap audit: previously improvised with ad-hoc label/value stacks.)
 
-**Anatomy:** rows of term + description. Two layouts: `side-by-side` (term `label` `fg.secondary` left column, min-width 120px sized to the widest term of the active locale, max 200px; description `body` right) and `stacked` (term above description; use in narrow panes <360px). Rows separated by `--sy-space-8` (focus) / `--sy-space-4` (dense); optional full-bleed `border.subtle` row dividers in dense mode.
+**Anatomy:** rows of term + description. Two layouts: `side-by-side` (term `label` `fg.secondary` left column, min-width 120px sized to the widest term of the active locale, max 200px; description `body` right) and `stacked` (term above description; use in narrow panes <360px). Rows separated by `--sy-space-8`; optional full-bleed `border.subtle` row dividers.
 **Description content:** plain text, or exactly one inline component: Badge, Chip list, user/agent (Avatar 20 + name), `code-sm` ID, Link, or timestamp. Empty value = "—" (`fg.tertiary`).
 **Optional row action:** trailing ghost icon-button (copy, edit) visible on row hover.
 **Forbidden:** more than ~10 rows without grouping under `heading-sm` titles; two-column term/value grids (KO/EN term widths diverge — one list per column region instead); using it as a form (labels + inputs = form, `patterns.md` §3).
@@ -590,7 +589,7 @@ Split follows its main button's variant (`primary` or `secondary`; `accent` is t
 
 **Purpose:** hierarchy display and selection — folders, org units, nested resources. (P3.)
 
-**Anatomy:** rows 28px (24 dense): disclosure chevron (rotates, `fast`) · optional registry icon 16 · label (`body-sm`) · optional trailing count Badge. Indent 20px per level; max 4 rendered levels — deeper hierarchies drill in, never scroll horizontally (labels truncate middle-out + Tooltip).
+**Anatomy:** rows 28px: disclosure chevron (rotates, `fast`) · optional registry icon 16 · label (`body-sm`) · optional trailing count Badge. Indent 20px per level; max 4 rendered levels — deeper hierarchies drill in, never scroll horizontally (labels truncate middle-out + Tooltip).
 **Selection:** single (row `bg.selected`) or checkbox mode with mixed-state parents (the cross-component mixed convention).
 **Keyboard:** arrows navigate/expand/collapse, roving tabindex, type-ahead.
 **Drag:** re-parent only where the model allows; drop target = 2px `border.focus` insertion line.

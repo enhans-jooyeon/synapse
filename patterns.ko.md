@@ -1,7 +1,7 @@
-<!-- sy-source: 3203849d7ca2e903 -->
+<!-- sy-source: 9332f75966c5d78a -->
 # Synapse 패턴
 
-컴포넌트가 어떻게 페이지로 조합되는지를 다룹니다. 이 계층이 에이전트가 생성한 화면을 컴포넌트 더미가 아니라 *AgentOS처럼 보이게* 만듭니다. 페이지 아키타입이 주된 결정 메커니즘입니다: 모든 새 화면은 레이아웃 작업 전에 정확히 하나의 아키타입으로 분류되어야 합니다. 아키타입이 레이아웃 그리드와 허용된 영역을 고정하고 밀도를 권장하기 때문입니다(기본값이며 규칙은 아님 — v6.52).
+컴포넌트가 어떻게 페이지로 조합되는지를 다룹니다. 이 계층이 에이전트가 생성한 화면을 컴포넌트 더미가 아니라 *AgentOS처럼 보이게* 만듭니다. 페이지 아키타입이 주된 결정 메커니즘입니다: 모든 새 화면은 레이아웃 작업 전에 정확히 하나의 아키타입으로 분류되어야 합니다. 아키타입이 레이아웃 그리드와 허용된 영역을 고정하기 때문입니다.
 
 ---
 
@@ -11,46 +11,46 @@
 
 ```
 Is the page's job to display many records or live metrics at once?
-├── yes → WORKBENCH (dense)
+├── yes → WORKBENCH
 └── no
-    ├── Is it a single object's detail or editing view? → OBJECT (focus, may embed dense regions)
-    ├── Is it configuration, preferences, or account? → SETTINGS (focus)
-    ├── Is it a first-run, wizard, or decision moment? → GUIDED (focus)
+    ├── Is it a single object's detail or editing view? → OBJECT (may embed data tables)
+    ├── Is it configuration, preferences, or account? → SETTINGS
+    ├── Is it a first-run, wizard, or decision moment? → GUIDED
     ├── Is it conversation with an agent? → CONSOLE (focus, own layout)
     └── Is it the workspace's start/today surface? → HOME (focus, composer pinned)
 ```
 
-### A. Workbench — dense
+### A. Workbench
 
 데이터 테이블, 대시보드, 모니터링, 대기열, 로그.
 
-- `data-density="dense"`, 유동 너비, `--sy-page-padding` 24.
-- 위에서 아래로의 구조: **툴바 행**(페이지 제목 24/34 왼쪽; 필터, 검색 Input, 주 행동 오른쪽; 높이 40, 단일 행) → 선택적 **메트릭 스트립**(그리드의 stat Card 2–6개, dense 패딩) → **데이터 영역**(Table, 또는 시각적 레코드용 Card 그리드) → Pagination.
+- 유동 너비(영역을 채움); 표준 `--sy-page-padding`.
+- 위에서 아래로의 구조: **툴바 행**(페이지 제목 24/34 왼쪽; 필터, 검색 Input, 주 행동 오른쪽; 높이 40, 단일 행) → 선택적 **메트릭 스트립**(그리드의 stat Card 2–6개) → **데이터 영역**(Table, 또는 시각적 레코드용 Card 그리드) → Pagination.
 - 차트는 16-semibold 헤더와 각각 하나의 차트가 있는 Card에 삽니다; `viz` 팔레트는 고정 순서로; 대시보드 뷰당 최대 4개의 메트릭 색상.
-- 다중 패널 워크벤치(목록 + 상세)는 SplitPanel(기본 40/60)을 사용합니다; 상세 페인은 인라인 OBJECT 영역(focus)입니다 — 이것이 승인된 혼합 밀도 사례이며, 경계 = 분할선.
+- 다중 패널 워크벤치(목록 + 상세)는 SplitPanel(기본 40/60)을 사용합니다; 상세 페인은 인라인 OBJECT 영역입니다 — 경계 = 분할선.
 
-### B. Object — focus
+### B. Object
 
 하나의 엔티티(프로젝트, 에이전트 실행, 문서)의 상세 뷰.
 
-- `data-density="focus"`; 콘텐츠 최대 너비 `--sy-content-max`(760px) 중앙 정렬, 단 dense 자식 테이블을 임베드할 때는 1200px까지 확장할 수 있습니다.
+- 콘텐츠 최대 너비 `--sy-content-max`(760px) 중앙 정렬, 단 데이터 테이블을 임베드할 때는 1200px까지 확장할 수 있습니다.
 - 구조: Breadcrumb → **헤더 블록**(제목 24/34, Badge + `fg.tertiary` 타임스탬프의 메타 줄, 행동 오른쪽: 최대 primary + secondary + 오버플로 메뉴) → Tabs(객체에 패싯이 있으면) → 쌓인 콘텐츠 섹션(`--sy-section-gap`).
-- Object 페이지 내부의 관련 레코드는 임베드된 dense Table 영역으로 렌더링됩니다 — 가시적 컨테이너 경계(Card 프레임)와 함께.
+- Object 페이지 내부의 관련 레코드는 임베드된 Table 영역으로 렌더링됩니다 — 가시적 컨테이너 경계(Card 프레임)와 함께.
 
-### C. Settings — focus
+### C. Settings
 
 - 최대 너비 760px. 3개를 초과하는 섹션에는 왼쪽 앵커 섹션 목록(Sidebar 레벨 2 또는 Tabs).
 - 각 섹션 = 헤더가 있는 Card; 행은 레이블+컨트롤 쌍입니다: 레이블 + 캡션 설명 왼쪽, 컨트롤 오른쪽, `border.subtle` 행 분할선. 즉시 효력 행은 Switch를 사용; 폼 스타일 섹션은 오른쪽 정렬 Save(primary) + Cancel로 끝납니다.
 - Card당 하나의 Save. 절대 전역 고정 저장 바와 카드별 저장을 동시에 두지 마세요.
 
-### D. Guided — focus
+### D. Guided
 
 온보딩, 마법사, 빈 첫 실행, 되돌릴 수 없는 결정. Display 타입(30/40, 36/48)과 `lg` 버튼이 허용되는 유일한 아키타입입니다.
 
 - 단일 중앙 열, 최대 너비 560px, 넉넉한 `--sy-space-64` 상단 오프셋.
 - 다단계 흐름: 스텝 표시자(13 medium, `fg.tertiary` "2/4" 또는 점 행 — 프리미티브로 구성된, 승인된 "스테퍼"), 스텝당 하나의 결정, 주 계속 + ghost 뒤로.
 
-### E. Console — focus
+### E. Console
 
 에이전트 대화 표면.
 
@@ -60,11 +60,11 @@ Is the page's job to display many records or live metrics at once?
 
 ---
 
-### F. Home — focus (v6.39)
+### F. Home (v6.39)
 
 워크스페이스의 시작 표면: 오늘의 상태와 대화형 진입.
 
-- `data-density="focus"`; 콘텐츠 최대 너비 760이 전체 영역 스크롤러 안에 중앙 정렬(스크롤바는 영역 가장자리에); **Composer는 하단에 고정** — 스레드가 없는 Console의 composer 구조. 전송하면 Console 대화가 열립니다.
+- 콘텐츠 최대 너비 760이 전체 영역 스크롤러 안에 중앙 정렬(스크롤바는 영역 가장자리에); **Composer는 하단에 고정** — 스레드가 없는 Console의 composer 구조. 전송하면 Console 대화가 열립니다.
 - 위에서 아래로의 구조: **인사 블록**(화면의 유일하게 승인된 Display 순간 — `display-sm`, display 계열 사용 가능; 아래에 날짜 + 오늘 요약 `caption`) → **메트릭 스트립**(R4, ≤3 카드, 균일 — v6.40 이후 강조 카드 없음; 긴급함은 카드 틴트가 아니라 아래 승인 대기열에 삶) → **승인 대기열**(대기 중인 ProposalCard — 사람 개입 백로그가 다른 어디보다 먼저 여기 표면화; >2일 때 "모두 보기" Link) → **에이전트 선반**(상호작용 Card: 사각형 Avatar, 이름, 상태 점 + 예약 캡션; 클릭하면 에이전트 열림).
 - 제안 칩은 여기서 승인되지 않습니다(Console/빈 상태 전용); composer 플레이스홀더가 초대를 전달합니다.
 - **하나의 뷰포트, 페이지 스크롤 없음(v6.39.1):** Home은 항상 창에 맞습니다 — ≤3 균일 메트릭 카드(`stat-sm` 숫자, 16 카드 패딩 — Home은 R4 메트릭을 압축), ≤2 대기 제안(그다음 "모두 보기"), 하나의 선반 행, 16px 섹션 간격. 콘텐츠가 넘칠 것 같으면 콘텐츠를 잘라내세요 — 절대 스크롤하지 말고, Composer를 뷰 밖으로 밀지 마세요.
@@ -74,9 +74,8 @@ Is the page's job to display many records or live metrics at once?
 
 - 앱 프레임: Sidebar(240/64) + 주 영역. 주 영역은 하나의 아키타입을 담습니다. **스크롤 컨테이너는 영역을 가로지릅니다(v6.17.5):** 콘텐츠가 더 넓은 영역 안의 중앙 정렬 읽기 열일 때(Console 스레드, focus 문서), 스크롤 컨테이너는 전체 폭 영역이고 열은 그 안에 중앙 정렬됩니다 — 스크롤바는 영역의 가장자리에 앉으며, 절대 열 옆이 아닙니다. 캔버스 중앙의 스크롤바는 깨진 레이아웃으로 읽힙니다.
 
-**앱 크롬은 밀도 독립적입니다(v6.2.5):** Topbar(R10)와 Sidebar는 항상 focus 메트릭으로 렌더링됩니다 — 페이지 밀도는 콘텐츠 영역을 규율하지, 그 주위의 프레임을 규율하지 않습니다(밀도 전환 크롬은 같은 앱을 페이지마다 다르게 느껴지게 함).
-- 콘텐츠 그리드는 `--sy-space-16`(dense) / `--sy-space-24`(focus) 거터로 CSS 그리드를 사용합니다. 열 수: 메트릭 카드 2–6; 카드 그리드 2–4; 절대 12열 장식 그리드 안 됨.
-- 브레이크포인트: <768 단일 열 + 접힌 사이드바; 768–1280 표준; >1440 워크벤치는 유동 유지, focus 아키타입은 최대 너비 유지(여백은 의도적임 — 채우지 마세요).
+- 콘텐츠 그리드는 `--sy-space-24` 거터로 CSS 그리드를 사용합니다. 열 수: 메트릭 카드 2–6; 카드 그리드 2–4; 절대 12열 장식 그리드 안 됨.
+- 브레이크포인트: <768 단일 열 + 접힌 사이드바; 768–1280 표준; >1440 워크벤치는 유동 유지, 읽기 아키타입은 최대 너비 유지(여백은 의도적임 — 채우지 마세요).
 
 ### 2.1 좁은 창 계약(v6.1 — 웹 전용; 브라우저 창은 좁아지고, 기기는 존재하지 않음)
 
