@@ -2,8 +2,8 @@ import React, { forwardRef } from "react";
 import "./Button.css";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** components.md · Button. `accent` = conversational-AI entry ONLY (Ask agent / Composer send), max one per screen. Operational agent actions (Run/Retry/Resume) use primary/secondary — executing an agent never earns blue (hard rule 7, v6.2.1). */
-  variant?: "primary" | "secondary" | "ghost" | "danger" | "accent";
+  /** components.md · Button. `brand` = the point color (v6.58, renamed from `accent`): brand-identity objects + conversational-AI CTAs (Ask agent / Composer send), max one per screen. Operational agent actions (Run/Retry/Resume) use primary/secondary — executing an agent never earns blue (hard rule 7, v6.2.1). */
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "brand";
   size?: "sm" | "md" | "lg";
   /**
    * Pill silhouette — JURISDICTION: Guided-archetype heroes and empty-state
@@ -14,7 +14,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   loading?: boolean;
   /**
    * Leading icon — policy v5.0.3: text-only is the default. Permitted only for
-   * accent AI actions and toolbar/filter contexts with registry icons.
+   * brand AI actions and toolbar/filter contexts with registry icons.
    */
   icon?: React.ReactNode;
 }

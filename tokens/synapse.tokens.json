@@ -1,7 +1,7 @@
 {
   "$schema": "https://design-tokens.github.io/community-group/format/",
   "$description": "Synapse design tokens — source of truth for AgentOS. Primitives are mode-independent raw values. Semantic tokens resolve per color mode via $extensions.synapse.modes. Agents MUST reference semantic tokens, never primitives, in generated UI. See design.md §3.",
-  "$version": "6.53.0",
+  "$version": "6.60.2",
 
   "primitive": {
     "color": {
@@ -204,7 +204,8 @@
       "$description": "Synapse is borders-first; shadows only for floating layers. See foundations.md §5.",
       "raised":  { "$value": "0 1px 2px rgba(9, 9, 11, 0.05)" },
       "overlay": { "$value": "0 8px 24px rgba(9, 9, 11, 0.08)" },
-      "modal":   { "$value": "0 24px 48px rgba(9, 9, 11, 0.12)" }
+      "modal":   { "$value": "0 24px 48px rgba(9, 9, 11, 0.12)" },
+      "thumb":   { "$value": "0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16)" }
     },
     "z": {
       "$type": "number",
@@ -304,10 +305,10 @@
         "primary-fg":        { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.black}" } } } },
         "secondary-bg":       { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.800}" } } }, "$description": "Tonal secondary button fill (v5.0 — replaced the outlined secondary). Ghost stays transparent." },
         "secondary-bg-hover": { "$value": "{primitive.color.gray.150}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.150}", "dark": "{primitive.color.gray.700}" } } } },
-        "accent-bg":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } }, "$description": "The POINT color (v6.51, revived from the v6.19 deprecation): #0A84FF. Jurisdiction = conversational-AI CTAs ONLY (Ask agent / Composer send), max 1 per screen. Operational agent actions (Run/Retry/Resume) stay primary/black — invoking the agent conversationally is the sanctioned blue moment, executing a configured run is not." },
-        "accent-bg-hover":   { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.600}" } } } },
-        "accent-bg-active":  { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.600}" } } }, "$description": "Aliases hover." },
-        "accent-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } },
+        "brand-bg":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } }, "$description": "The POINT / brand color (v6.51; button variant renamed accent→brand v6.58): #0A84FF. Jurisdiction = brand-identity objects + conversational-AI CTAs (Ask agent / Composer send), max 1 per screen. Operational agent actions (Run/Retry/Resume) stay primary/black — invoking the agent conversationally is the sanctioned blue moment, executing a configured run is not." },
+        "brand-bg-hover":   { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.600}" } } } },
+        "brand-bg-active":  { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.600}" } } }, "$description": "Aliases hover." },
+        "brand-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } },
         "danger-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } }
       },
       "status": {
@@ -331,7 +332,7 @@
       },
       "meter": {
         "$description": "Progress/meter fills. Non-text elements — 3:1 floor against the sunken track.",
-        "fill": { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.400}" } } }, "$description": "Default (user-initiated work). AI runs use action.accent-bg; failed uses status.danger-bg-solid." }
+        "fill": { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.400}" } } }, "$description": "Default (user-initiated work). AI runs use action.brand-bg; failed uses status.danger-bg-solid." }
       },
       "brand": {
         "$description": "Brand-identity objects (v6.51). The point color #0A84FF marks the brand: the topbar workspace monogram tile, the docs-hub/preview brand mark, and the sanctioned Artific brand-hero moment. Logo lockups & marketing surfaces also use point. NOT for general chrome — the frame stays monochrome; the point is the single deliberate brand pop.",

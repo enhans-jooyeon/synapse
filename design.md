@@ -1,6 +1,6 @@
 # Synapse — design system for AgentOS
 
-**Version 6.53.0 · Enhans · This file is the entry point. Read it before generating any UI.**
+**Version 6.60.2 · Enhans · This file is the entry point. Read it before generating any UI.**
 
 Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. It is built to be operated primarily by AI agents on behalf of non-designers, which means it is written as a *contract*, not an inspiration board: closed sets, enumerated options, explicit decision rules. An agent following this file mechanically should produce UI indistinguishable from designer-made AgentOS screens.
 
@@ -41,7 +41,7 @@ These are absolute. Violating any of these means the output is wrong regardless 
 **Structure**
 4. The component set in `components.md` is closed (one `##` entry per component). NEVER invent a component, add a variant, or restyle an existing one. Unmet needs → §6 escalation.
 5. Every screen MUST be classified into exactly one archetype (`patterns.md` §1) before layout begins.
-7. Max one `primary` button and one Banner per region (the Composer counts as its own region — its send is that region's one primary, v6.19). The conversational-AI entry (Ask agent / Composer send) uses the `accent` point color `#0A84FF` (v6.51; max one per region). Operational agent actions (Run/Retry/Resume) stay `primary`/black: "executes an agent" never earns the point color (v6.2.1).
+7. Max one `primary` button and one Banner per region (the Composer counts as its own region — its send is that region's one primary, v6.19). The conversational-AI entry (Ask agent / Composer send) uses the `brand` point color `#0A84FF` (v6.51; variant renamed accent→brand v6.58; max one per region). Operational agent actions (Run/Retry/Resume) stay `primary`/black: "executes an agent" never earns the point color (v6.2.1).
 7a. AI presence is marked only by the squared avatar (primary marker) and the `ai.*` slate treatments (`ai-patterns.md` §1). Consequential agent actions always pass through ProposalCard — no silent execution, no auto-approval.
 
 **Language**
@@ -76,7 +76,7 @@ Before presenting any generated UI, verify mechanically:
 - [ ] No off-scale spacing/type/radius values
 - [ ] Only components from `components.md`, only their enumerated variants
 - [ ] One archetype declared
-- [ ] ≤1 primary button per region (Composer = its own region); the deprecated `accent` variant appears nowhere
+- [ ] ≤1 primary button per region (Composer = its own region); the `accent` variant name appears nowhere (renamed to `brand`, v6.58)
 - [ ] EN + KO strings supplied; nothing fixed-width, italic, or uppercase-transformed
 - [ ] Terminology, statuses, and actions match the `content.md` glossary; KO is 합니다체; no particle attached to a variable; no exclamation marks
 - [ ] Empty/loading/error/disabled states specified

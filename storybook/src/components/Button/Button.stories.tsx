@@ -19,7 +19,7 @@ export const Variants: Story = {
       <Button variant="secondary" lang="ko">변경사항 저장</Button>
       <Button variant="ghost">Cancel</Button>
       <Button variant="danger" lang="ko">영구 삭제</Button>
-      <Button variant="accent">Ask agent</Button>
+      <Button variant="brand">Ask agent</Button>
       <Button disabled>Disabled</Button>
       <Button variant="primary" loading>Saving…</Button>
     </div>

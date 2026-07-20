@@ -19,7 +19,7 @@
 .sy-badge--solid.sy-badge--warning { background: var(--sy-status-warning-bg-solid); color: var(--sy-fg-on-solid); }
 .sy-badge--solid.sy-badge--danger { background: var(--sy-status-danger-bg-solid); color: var(--sy-fg-on-solid); }
 .sy-badge--solid.sy-badge--neutral { background: var(--sy-bg-inverse); color: var(--sy-fg-inverse); }
-.sy-badge--solid.sy-badge--ai { background: var(--sy-action-accent-bg); color: var(--sy-action-accent-fg); border-color: transparent; }
+.sy-badge--solid.sy-badge--ai { background: var(--sy-action-brand-bg); color: var(--sy-action-brand-fg); border-color: transparent; }
 .sy-badge--outline { background: transparent; }
 .sy-badge--outline.sy-badge--info { border-color: var(--sy-status-info); }
 .sy-badge--outline.sy-badge--success { border-color: var(--sy-status-success); }

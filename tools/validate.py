@@ -82,7 +82,7 @@ CONTRAST_PAIRS = [
     ("fg-primary on bg-selected", "--sy-fg-primary", "--sy-bg-selected", 4.5),
     ("fg-link-inverse on bg-inverse", "--sy-fg-link-inverse", "--sy-bg-inverse", 4.5),
     ("action-primary-fg on action-primary-bg", "--sy-action-primary-fg", "--sy-action-primary-bg", 4.5),
-    ("action-accent-fg on action-accent-bg [point, policy 3:1]", "--sy-action-accent-fg", "--sy-action-accent-bg", 3.0),
+    ("action-brand-fg on action-brand-bg [point, policy 3:1]", "--sy-action-brand-fg", "--sy-action-brand-bg", 3.0),
     ("brand-point-fg on brand-point [policy 3:1]", "--sy-brand-point-fg", "--sy-brand-point", 3.0),
     ("action-danger-fg on status-danger-bg-solid [policy 3:1]", "--sy-action-danger-fg", "--sy-status-danger-bg-solid", 3.0),
     ("status-info on status-info-bg", "--sy-status-info", "--sy-status-info-bg", 4.5),
@@ -175,8 +175,10 @@ def lint_css_text(text, path, line_of, defined):
         if prop == "letter-spacing":
             report("W", "SY007", path, ln, "letter-spacing declared — must never apply to Hangul")
         if prop == "box-shadow" and "var(--sy-shadow" not in val and val != "none":
-            # sanctioned exemption: inset 1px ring using a border/focus token is a border substitute, not elevation
-            is_ring = val.startswith("inset 0 0 0") and ("var(--sy-border" in val or "var(--sy-ai-border" in val or "var(--sy-emphasis-border" in val)
+            # sanctioned exemption: a zero-blur, zero-offset ring (inset OR outset) using a token is a
+            # border substitute / focus ring, not elevation (foundations §5). Elevation needs blur → a shadow token.
+            stripped = val[6:].lstrip() if val.startswith("inset ") else val
+            is_ring = stripped.startswith("0 0 0 ") and "var(--sy-" in val
             if not is_ring:
                 report("E", "SY009", path, ln, f"raw box-shadow '{val}' — use --sy-shadow-* tokens")
         if prop in ("color", "background", "background-color", "border-color", "fill", "stroke", "border",

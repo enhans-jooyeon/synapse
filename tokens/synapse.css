@@ -71,6 +71,7 @@
   --sy-shadow-raised: 0 1px 2px rgba(9, 9, 11, 0.05);
   --sy-shadow-overlay: 0 8px 24px rgba(9, 9, 11, 0.08);
   --sy-shadow-modal: 0 24px 48px rgba(9, 9, 11, 0.12);
+  --sy-shadow-thumb: 0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16);
 
   /* stacking — every floating/pinned element takes exactly one; arbitrary z-index forbidden */
   --sy-z-sticky: 100;
@@ -138,12 +139,12 @@
   --sy-action-primary-fg: #FFFFFF;
   --sy-action-secondary-bg: #F4F4F6;
   --sy-action-secondary-bg-hover: #ECECEF;
-  --sy-action-accent-bg: #0A84FF;
-  --sy-action-accent-bg-hover: #006BD6;
-  --sy-action-accent-bg-active: #006BD6;
+  --sy-action-brand-bg: #0A84FF;
+  --sy-action-brand-bg-hover: #006BD6;
+  --sy-action-brand-bg-active: #006BD6;
   --sy-brand-point: #0A84FF;
   --sy-brand-point-fg: #FFFFFF;
-  --sy-action-accent-fg: #FFFFFF;
+  --sy-action-brand-fg: #FFFFFF;
 
   --sy-status-info: #3155C6;
   --sy-status-info-bg: #E4EAFB;
@@ -219,12 +220,12 @@
   --sy-action-primary-fg: #09090B;
   --sy-action-secondary-bg: #33333A;
   --sy-action-secondary-bg-hover: #4A4A52;
-  --sy-action-accent-bg: #0A84FF;
-  --sy-action-accent-bg-hover: #006BD6;
-  --sy-action-accent-bg-active: #006BD6;
+  --sy-action-brand-bg: #0A84FF;
+  --sy-action-brand-bg-hover: #006BD6;
+  --sy-action-brand-bg-active: #006BD6;
   --sy-brand-point: #0A84FF;
   --sy-brand-point-fg: #FFFFFF;
-  --sy-action-accent-fg: #FFFFFF;
+  --sy-action-brand-fg: #FFFFFF;
 
   --sy-status-info: #9DB3EE;
   --sy-status-info-bg: #1B2C60;
@@ -263,6 +264,7 @@
   --sy-shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4);
   --sy-shadow-overlay: 0 8px 24px rgba(0, 0, 0, 0.5);
   --sy-shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.6);
+  --sy-shadow-thumb: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 3px rgba(255, 255, 255, 0.22);
 }
 
 /* ---------------------------------------------------------------- */

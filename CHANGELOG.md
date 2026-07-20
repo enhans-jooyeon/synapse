@@ -1,5 +1,139 @@
 # Synapse changelog
 
+## 6.60.2 — 2026-07-21
+
+- Component browser: split the two borderline trios into individual stories too — HoverCard · Popconfirm · ContextMenu → three, and Reasoning · Guardrail · Handoff → three (nav + guidance + illustration wired). Every previously-combined story that wasn't one clear UX umbrella is now standalone.
+
+## 6.60.1 — 2026-07-21
+
+- Component browser: split four combined detail pages whose members were not one UX umbrella, each into its own story (nav + guidance + illustration wired): Tree · CodeBlock · DiffView → **Tree** + **CodeBlock · DiffView**; Slider · NumberInput · ChoiceCard → **Slider · NumberInput** + **ChoiceCard**; Timeline · NotificationCenter → **Timeline** + **NotificationCenter**; Toast · Tooltip → **Toast** + **Tooltip**. Clearly-related bundles (Input·Textarea, Checkbox·Radio·Switch, Skeleton·Spinner·Progress, Tabs·Breadcrumb·Pagination, Modal·Drawer, Select·Menu, HoverCard·Popconfirm·ContextMenu, Provenance·Uncertainty, Reasoning·Guardrail·Handoff) kept grouped. Browser-only; no spec/token change.
+
+## 6.60.0 — 2026-07-21
+
+- Shape-of-AI refinement tranche (five, all threaded into ai-patterns.md + KO):
+  - §4 **Connector freshness & failure**: connector-sourced ContextCards carry last-synced state, a `neutral` "cached" Badge when stale, and an in-flow "Reconnect" ghost action on failure; connected content is treated as untrusted input (prompt-injection), never silently authorizing a side effect. Browser: ContextCard story gains a connector-state row.
+  - §9 **Disclosure names the action** ("Summarized by agent"), not a generic "AI" tag; actor identity persists across handoffs.
+  - §19 **Follow-ups grouped refine (zoom-in) vs pivot (zoom-out)** with micro-label headers + a divider — grouping signals *why* a row is offered without breaking chip honesty. Browser: follow-up panel demo regrouped.
+  - §24 **Reviewable prompt-rewrite**: the refiner briefly highlights what it added (one-shot `emphasis.surface`) and keeps the pre-rewrite draft one Undo away.
+  - §31 (new) **Editing existing content**: agent edits to user-owned content preview as a diff/highlight with Accept/Discard — never a silent overwrite; auto-fill obeys the same pending-until-accepted rule; consequential edits still pass the ProposalCard.
+- Chosen from the audit's Part A; policy-gated items (verification opt-out, pause/resume, cost-before-selection) deferred to the decision register.
+
+## 6.59.2 — 2026-07-15
+
+- NotificationCenter footer "View all" button now sits with equal padding on all four sides — the gap to the full-bleed divider matches its side/bottom padding (was an asymmetric 4/4/2). New spec rule (components.md Dividers): an inset control against a full-bleed divider takes equal padding all around, divider gap included; full-bleed hover rows (menu escape rows) are exempt as a separate pattern. Spec + KO synced.
+
+## 6.59.1 — 2026-07-15
+
+- NotificationCenter refinements from review: (1) per-item hover controls now float as an overlay over the row's right edge instead of swapping in for the timestamp — the timestamp stays visible and the row no longer changes height on hover (reveal-on-hover only adds, never removes/reflows); (2) footer reworked — the two competing bottom links are gone; settings moved to a header gear icon-button, and "View all" is a single full-width ghost button. Spec + KO synced.
+
+## 6.59.0 — 2026-07-15
+
+- NotificationCenter upgraded (all four directions): (1) visual polish — items restructured with a body/meta column, cleaner unread/read treatment, scroll region; (2) a filter SegmentedControl (All / Unread / Mentions) under the header, immediate filter, no counts (bell overlay stays the only count); (3) per-item hover controls — toggle read/unread and dismiss (×), replacing the timestamp on hover — plus header mark-all-read, all wired live in the browser; (4) richer typed items (run / approval / mention / comment / system) with a leading actor Avatar or neutral type medallion; approval carries the one inline "Review" that only opens the ProposalCard. Compact empty state shown when a filter yields nothing or the list is cleared. The static detail-page demo now renders the real interactive component. Spec (components.md) + KO synced. Browser + spec; no token changes.
+
+## 6.58.2 — 2026-07-15
+
+- Component-browser detail layout: widened the Examples column (doc-grid ratio 1 : 2.1, was 1 : 1.15) and the detail page max-width (1440, was 1200) so example content — tables especially — has room and stops feeling cramped. The doc text column caps its own line length, so the extra width goes to examples. Single-column collapse raised to ≤1100px. Browser layout only; tooling.
+
+## 6.58.1 — 2026-07-15
+
+- Button focus ring reworked: `outline` → a `box-shadow` ring so it follows `border-radius` (outline left a gap at the rounded corners), and lightened to a ~50% `color-mix` tint of each variant's color (softer, and — because a box-shadow ring sits outside the button on the page — more visible than the same-color flush outline it replaces). A transparent `outline` is kept for forced-colors/high-contrast mode. Applied in preview.html + storybook Button.css.
+- SY009 gate extended: a zero-blur `0 0 0` ring (inset OR outset) using a token is a sanctioned border/focus-ring substitute, not elevation. Previously only inset rings were exempt. foundations §5 documents it; §8 + components conventions updated. KO (foundations, components) synced.
+
+## 6.58.0 — 2026-07-15
+
+- **Button `accent` variant renamed to `brand`.** The point-color (#0A84FF) button is now the `brand` variant; its jurisdiction is reframed to brand-identity objects + conversational-AI CTAs (Ask agent / Composer send). Token `action.accent-*` → `action.brand-*` across tokens (JSON + CSS), preview.html, the storybook Button/Badge components + stories, and validate.py's contrast-check pair. Spec (foundations §1.1, components Button table + Composer + split-button, ai-patterns §2/§18/§27/§30-area, design.md rule 7 + checklist) and all four KO translations updated. Also corrected a pre-existing KO drift in design.ko (still described accent as v6.19-deprecated/primary).
+- **Per-variant button focus ring.** Focus rings on Buttons now take the button's own color, flush (outline-offset 0): primary→primary bg, danger→danger solid, brand→point blue, secondary/ghost→fg.primary. All non-button controls keep the `border.focus` flush ring. foundations §8 + components conventions updated. NOTE: per the earlier accessibility flag, a same-color flush ring on a filled button (primary/danger/brand) has low ring-to-fill contrast; this was chosen deliberately.
+- Storybook buttons also brought from the old 2px-offset ring to flush (they had not yet received v6.57.12).
+
+## 6.57.12 — 2026-07-15
+
+- Focus ring geometry: system-wide focus rings are now flush (outline-offset 0) instead of 2px offset, adopting the ChoiceCard halo's no-gap look — but they KEEP the accessible blue `border.focus` (not the gray halo, which would fail focus-contrast and collide with selection). Focus and selection stay distinct signals. Updated foundations §8 (WCAG floor), components.md conventions + Input states wording ("offset ring" → "flush ring"), preview `.btn:focus-visible` + the interactive state demo. Spec + KO (foundations, components) synced.
+
+## 6.57.11 — 2026-07-15
+
+- ChoiceCard selected state: outer halo lightened from `border.default` to `border.subtle` (#ECECEF, the lightest border token). Spec + KO updated. Tooling only.
+
+## 6.57.10 — 2026-07-15
+
+- ChoiceCard selected state: outer gray halo thickened to 4px. Spec + KO updated. Tooling only.
+
+## 6.57.9 — 2026-07-15
+
+- ChoiceCard selected state: outer gray halo thickened from 1px to 2px so it clearly reads as a band against the thin selected border. Spec + KO updated. Tooling only.
+
+## 6.57.8 — 2026-07-15
+
+- ChoiceCard selected state: outer gray outline is now flush (outline-offset 0) against the `border.selected` border — no gap — so the two lines read as one continuous two-tone halo rather than a ring separated from the card. Spec + KO updated. Tooling only.
+
+## 6.57.7 — 2026-07-15
+
+- ChoiceCard selected state: added a quiet outer ring — a lighter `border.default` outline offset 2px outside the 1px `border.selected` border (CSS `outline`, not a box-shadow, so no SY009 concern). Two-tone selection (crisp selected border + soft gray halo) without thickening the border. Spec + KO updated. Tooling only.
+
+## 6.57.6 — 2026-07-15
+
+- ChoiceCard selected state: dropped the inset 1px ring that stacked on top of the `border.selected` border (the two together read as a 2px outline). Now a single 1px `border.selected` border + the corner check — matching the Card `selected` modifier spec (components.md §Card), which mandates 1px. Browser conformance fix. Tooling only.
+
+## 6.57.5 — 2026-07-15
+
+- New `shadow.thumb` token: a firmer, all-around ambient shadow (grounding + symmetric halo) so a borderless white slider handle defines its full circle against the near-white track — the earlier `overlay` shadow was soft and downward-only, leaving the top/right edge dissolving into the track (read as "cut off"). Dark theme uses a faint light halo for the same effect on the dark track. Slider thumb now uses `shadow.thumb`.
+
+## 6.57.4 — 2026-07-15
+
+- Slider handle: white (`bg.page`) fill, no outline, with the `overlay` shadow doing the separation against the light examples panel. Tooling only.
+
+## 6.57.3 — 2026-07-15
+
+- Slider handle: removed the 2px outline (border) on the thumb; the handle is now a solid `action.primary` fill with the `raised` shadow. Tooling only.
+
+## 6.57.2 — 2026-07-15
+
+- Slider audit fix: the thumb was being clipped by the track's `overflow: hidden` (inherited from `.pbar`), so only a 4px sliver showed — the real cause of the "weird"/hard-to-see handle. Slider now sets `overflow: visible` so the full 16px thumb + shadow render, and the thumb shadow switched from the heavy overlay to the crisp `raised` token. Tooling only.
+
+## 6.57.1 — 2026-07-15
+
+- Sample-page descriptions span the full page width (maintainer): the 640px reading-column cap is dropped on full-bleed sample pages since there's no examples column beside them; component/AI detail pages keep the capped reading measure. Tooling only.
+
+## 6.57.0 — 2026-07-15
+
+- Interactive example demos (maintainer request): the browser now wires the previously-static demos — Tabs switch, SegmentedControls toggle, Accordions expand/collapse, ChoiceCards select (radio semantics), and **Sliders are draggable** (fill, thumb, and value readout update live). Delegated on the canvas; native controls (checkbox/radio/switch) already worked.
+- Slider drag handle gets a drop shadow (maintainer: hard to see) so it lifts off the track. Tooling only.
+
+## 6.56.2 — 2026-07-15
+
+- Sample-page descriptions reorganized: each now gets a proper header (eyebrow · title · spec ref) and the run-on "Interactive: …" hint is split out of the paragraph into its own labeled "Interactive" note below the description. Clear description → interactive-hint → mockup order. Tooling only.
+
+## 6.56.1 — 2026-07-15
+
+- Sidebar nav refinement: pinned header (point-blue "S" monogram + wordmark + version, plus the search field) that stays put while the list scrolls; nav items on-spec at 32px; an iconed Overview entry; group headers get a hover state. Matches our own Sidebar component metrics and the docs-hub brand mark. Tooling only.
+
+## 6.56.0 — 2026-07-15
+
+- Component-browser finish pass (reference: aiuxplayground pattern pages). Detail pages made calmer and more editorial: larger bold title (30px), a prominent lead definition (16px), and section headers that separate by generous spacing (18px, 40px top margin) rather than hairline rules — matching the reference's airy hierarchy. Two-column detail (docs · sticky preview panel) and the bg.page preview surface retained. Tooling only.
+
+## 6.55.3 — 2026-07-15
+
+- Examples panel body now uses the real AgentOS page background (`bg.page` — white in light, near-black in dark) so components preview on the surface they'll actually sit on (maintainer request); the panel stays distinct via its border and a subtly tinted (`bg.surface`) header bar. Tooling only.
+
+## 6.55.2 — 2026-07-15
+
+- Examples column now reads as a distinct framed preview panel (maintainer request): bordered `bg.surface` card with radius, and the "Examples" label becomes a full-bleed header bar with a hairline rule — clearly separating the live UI from the docs column. No overflow clipping (demo popovers/menus stay visible). Tooling only.
+
+## 6.55.1 — 2026-07-15
+
+- Component/AI-pattern detail pages are now two-column (maintainer request): docs (definition + When/Not/Anti/Where + Related) on the left, a dedicated **sticky Examples column** on the right so the live UI stays visible while scrolling the guidance. Detail pages widen to 1200px; collapses to one column under 1000px. Foundations/Recipes stay single-column; Sample pages unchanged. Tooling only.
+
+## 6.55.0 — 2026-07-15
+
+- Component-browser detail pages now carry the four reference-style guidance sections (maintainer request): **When to use · When not to use · Anti-patterns · Where it's used in AgentOS** — authored for all 30 components + 13 AI patterns (43 stories), sourced from each component's Purpose (when to use), boundary (when not to), Forbidden line + governance rules (anti-patterns), and archetype usage (where). Sample pages/foundations exempt. Rendered from a GUIDE map in the browser; "how products use it" was reframed to AgentOS usage (no external-product claims to keep accurate). Browser tooling only — not added to the spec .md, so no KO impact.
+
+## 6.54.0 — 2026-07-15
+
+- Component browser: each story is now a structured detail page (reference: aiuxplayground pattern pages). Consistent header — eyebrow (category · group) · large title · spec reference — then the definition (existing description), an "Examples" section label over the live demos, and a "Related" footer chipping sibling components/patterns (click to navigate). Sample pages (full-screen mockups) are exempt. Tooling only. Note: the reference's prose sections (When to use / When not to / Anti-patterns) live in the spec files and hub; the browser links to them via the spec reference rather than duplicating.
+
+## 6.53.1 — 2026-07-15
+
+- Component browser: the Dark/Light text button is now a sun/moon segmented toggle — both icons always visible as indicators, the active mode highlighted. Tooling only.
+
 ## 6.53.0 — 2026-07-15
 
 Density mode removed entirely (proposals/2026-07-15-density-removal.md — maintainer: the mode created confusion). Synapse now uses ONE size scale (the former focus scale); Table alone runs compact by default (36px row / 12px cell) — a plain Table metric, not a mode.

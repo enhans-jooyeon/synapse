@@ -10,7 +10,12 @@
   transition: background var(--sy-duration-instant) var(--sy-ease-standard),
               color var(--sy-duration-instant) var(--sy-ease-standard);
 }
-.sy-btn:focus-visible { outline: 2px solid var(--sy-border-focus); outline-offset: 2px; }
+.sy-btn:focus-visible { outline: 2px solid transparent; outline-offset: 0; box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-border-focus) 50%, transparent); }
+.sy-btn--primary:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-action-primary-bg) 45%, transparent); }
+.sy-btn--secondary:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-fg-primary) 40%, transparent); }
+.sy-btn--ghost:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-fg-primary) 40%, transparent); }
+.sy-btn--danger:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-status-danger-bg-solid) 55%, transparent); }
+.sy-btn--brand:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-action-brand-bg) 55%, transparent); }
 .sy-btn--sm { height: var(--sy-control-height-sm); }
 .sy-btn--icon { width: var(--sy-control-height-md); padding: 0; }
 .sy-btn--icon.sy-btn--sm { width: var(--sy-control-height-sm); }
@@ -25,8 +30,8 @@
 .sy-btn--danger { background: var(--sy-status-danger-bg-solid); color: var(--sy-action-danger-fg);
   font-weight: var(--sy-weight-semibold); /* §8 weight compensation */ }
 .sy-btn--danger:hover, .sy-btn--danger:active { background: var(--sy-status-danger-bg-solid-hover); }
-.sy-btn--accent { background: var(--sy-action-accent-bg); color: var(--sy-action-accent-fg); }
-.sy-btn--accent:hover, .sy-btn--accent:active { background: var(--sy-action-accent-bg-hover); }
+.sy-btn--brand { background: var(--sy-action-brand-bg); color: var(--sy-action-brand-fg); }
+.sy-btn--brand:hover, .sy-btn--brand:active { background: var(--sy-action-brand-bg-hover); }
 .sy-btn:disabled { background: var(--sy-bg-disabled); color: var(--sy-fg-disabled); cursor: not-allowed; }
 .sy-btn--pill { border-radius: var(--sy-radius-full); padding: 0 var(--sy-space-20); }
 .sy-btn__spinner {

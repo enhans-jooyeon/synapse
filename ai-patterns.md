@@ -15,7 +15,7 @@ Every agent surface must make agency **visible** (users always know when AI is a
 **The two AI markers.** AI presence is signaled by exactly two devices, used consistently and used nowhere else:
 
 1. The **squared avatar** (radius `sm` vs. round human avatars) on any actor row, message, or attribution chip.
-2. The **`ai.*` token family** (`--sy-ai-surface`, `--sy-ai-border`, `--sy-ai-fg`) on surfaces that contain agent output or agent proposals, and the **`accent` (blue) fill** on the screen's single conversational-AI entry point only (v6.2.1 — Ask agent / Composer send; one per screen). Operational agent actions (Run/Retry/Resume) use the normal hierarchy — "executes an agent" never earns blue.
+2. The **`ai.*` token family** (`--sy-ai-surface`, `--sy-ai-border`, `--sy-ai-fg`) on surfaces that contain agent output or agent proposals, and the **`brand` (point-color) fill** on the screen's single conversational-AI entry point only (v6.2.1 — Ask agent / Composer send; one per screen). Operational agent actions (Run/Retry/Resume) use the normal hierarchy — "executes an agent" never earns blue.
 
 NEVER mark AI presence any other way — no sparkle gradients, no purple, no robot iconography beyond the standard agent glyph. NEVER use `ai.*` tokens on non-AI surfaces, and never substitute `status.info-*` for `ai.*` or vice versa, even though the families are related.
 
@@ -52,6 +52,7 @@ All agent activity between "request" and "answer" renders as **AgentStep** rows 
 - Inputs and outputs are collapsed by default; expanding shows `.sy-code-block` with copy button. Redact secrets by default (`••••`, reveal requires explicit click and permission).
 - **Model selection (v6.42):** a per-conversation Composer control beside the agent picker (reversal of the v6.41 in-picker placement). Defaults from the selected agent's config; switching agents resets it to that agent's default; org policy MAY lock it read-only. Model choice NEVER changes permissions, tool access, or approval rules.
 - **User tool control (v6.41):** the Composer's tools popover toggles which capabilities/connectors the agent may use in this conversation (defaults from agent config). Disabling a tool the agent needs → the agent asks for it by name, never silently fails or silently re-enables. Enabling a tool NEVER bypasses approval: the next rule holds regardless of toggles.
+- **Connector freshness & failure (v6.60):** a connector-sourced ContextCard or reference carries its state — a `last-synced` caption ("2분 전 동기화" / "Synced 2m ago"), a `neutral` "cached" Badge when the data is stale, and, on a failed pull, an in-flow "Reconnect" / "다시 연결" ghost action rather than a silent empty result (failure copy per §10). Connected content is **untrusted input** (a prompt-injection surface): it can inform an answer but never silently authorizes a side effect — the ProposalCard rule below holds regardless of where the instruction originated.
 - Tool calls with **external side effects** (sending, posting, purchasing, deleting, writing to third-party systems) MUST pass through a ProposalCard (§5) unless the user has granted standing approval for that specific tool+scope, in which case the step shows a "pre-approved" Badge (`neutral`).
 
 ## 5. Human-in-the-loop approval — ProposalCard
@@ -94,6 +95,7 @@ The agent never performs a consequential action silently. It proposes; the human
 - Agent-produced artifacts (documents, table rows, configs) carry an attribution row: squared avatar + agent name + timestamp, 12px `fg.tertiary`.
 - When a human edits agent output, attribution flips to "AI-drafted · edited by June" / "AI 초안 · June 편집" — the AI origin never silently disappears, and the human edit is never presented as AI output.
 - In mixed lists (human and agent actors), every row shows its actor's avatar; shape alone (round vs squared) must be sufficient to scan authorship.
+- **Name the action, not just "AI" (v6.60):** a disclosure label states *what was done*, not a generic tag — "AI가 요약함" / "Summarized by agent", "AI 초안 · 주간 보고서 에이전트", not a bare "AI" chip. The actor identity (squared avatar + name) persists across a handoff (§16) so any passage can be traced to who or what produced it. Disclosure is an affordance (the AI treatment — squared avatar, point-color mark) reserved for AI-touched content and never applied decoratively elsewhere.
 
 ## 10. Failure & recovery
 
@@ -124,7 +126,7 @@ Agent output is markdown; without fixed rendering rules every message improvises
 
 ## 13. CommandPalette as the AI entry point
 
-The palette (⌘K / Ctrl+K, see `components.md`) is the universal entry surface: navigation, actions, and the "Ask agent" escape hatch as its final item when no result matches ("Ask agent: '{query}'" with the accent treatment). This gives every screen an AI affordance without scattering accent buttons across the chrome — preserve that scarcity.
+The palette (⌘K / Ctrl+K, see `components.md`) is the universal entry surface: navigation, actions, and the "Ask agent" escape hatch as its final item when no result matches ("Ask agent: '{query}'" with the brand treatment). This gives every screen an AI affordance without scattering brand buttons across the chrome — preserve that scarcity.
 
 ## 14. Reasoning disclosure (v5.2)
 
@@ -150,7 +152,7 @@ When an agent escalates to a person (or a person takes over):
 
 - The transfer renders as a conversation row: transfer icon + "Handed off to {name}" / "{name}님에게 전달됨" (`caption`, `fg.tertiary`) with the assignee's round Avatar — from that row on, the actor shape flips and stays flipped. The avatar shape system (round=human, squared=agent) carries the state; no extra chrome.
 - The waiting state is a status Badge: "Needs review" / "확인 필요" (`warning` subtle) on the run/task wherever it appears in lists.
-- Handing *back* to the agent is an explicit action — `primary` or `secondary` per the region's hierarchy ("Resume agent" / "에이전트 계속하기"); it is operational, not a conversational entry, so never `accent`. Agents never silently reclaim a task a human took.
+- Handing *back* to the agent is an explicit action — `primary` or `secondary` per the region's hierarchy ("Resume agent" / "에이전트 계속하기"); it is operational, not a conversational entry, so never `brand`. Agents never silently reclaim a task a human took.
 - In mixed activity feeds, handoffs are first-class events, never inferred from adjacent rows.
 
 ## 17. Usage & limits (v5.2)
@@ -174,6 +176,8 @@ Selected text inside an agent message is a first-class conversational object.
 Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it: **glass material** (v6.23 — the one anchored exception to the scrim-gating in foundations §5: the panel floats over thread content like a mini-palette, is static while open, and dismisses on esc/typing; reduced-transparency falls back opaque) with `border.overlay`, `shadow.overlay`, radius `md`, 6px padding, 32px rows at radius `xs`; rows lead with the 12px follow-up arrow, full-bleed keyboard header row in keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). **Placement (v6.23.1–2):** the panel is absolutely anchored **8px above the Composer's top edge** (a floating layer detaches from its anchor — flush contact reads as part of the input; anchored menus use 4px, the panel's larger mass earns 8) and OVERLAYS the last thread messages — it never pushes content down (layout shift on open is forbidden, and the glass material is meaningless without content behind it). Max 4 rows; selecting inserts the text into the Composer (never auto-sends). Chips and panel never show simultaneously.
 
 **Chip honesty (v6.47, adopted law):** a suggestion chip's visible label IS the query it sends — never a longer or different hidden prompt. If the real query needs more words than the chip can show, the chip inserts into the Composer for editing instead of sending.
+
+**Refine vs pivot (v6.60):** follow-up rows carry intent, and the panel orders them by it — **refine** rows (zoom in on the current answer — "결제 오류 47건의 원인을 분석해 줘") sit above **pivot** rows (zoom out to a related next step — "보고서로 만들기", "#ops에 공유하기"), split by the standard full-bleed divider. When both kinds are present each group MAY carry a `micro-label` header ("더 자세히" / "다음 단계") — that grouping is how the panel signals *why* a row is offered; it never adds a per-row rationale line, which would break chip honesty (the label is still the query). Rows stay ranked within a group and capped at 4 total.
 
 ## 20. Answer anatomy & named working states (v6.13)
 
@@ -200,7 +204,7 @@ Agent-generated media renders as a MediaGroup fan (see components.md). Media-onl
 ## 24. Authoring coach (v6.25)
 
 **Quality hint:** while the Composer is focused, ONE `caption` `fg.tertiary` line MAY appear below it naming a concrete improvement ("기간을 지정하면 더 정확한 결과를 얻습니다"). Anti-nag rules are absolute: max one hint visible, never blocks or delays send, disappears on send or edit, never reappears for the same draft after dismissal, never uses warning/danger color — coaching is an offer, not a gate.
-**Refine prompt (extended v6.27 — assisted editing):** the pen-line `ghost` icon-button (contextual, v6.44: floats at the input's top-right only while the draft is non-empty) opens a small menu of **preset refinements** — a CLOSED set: 전체 다듬기 (general; relabeled from 프롬프트 다듬기 in v6.47.3 — that string became the menu's micro-label header, and a row must never duplicate its header), 더 자세히, 더 간결하게, 기간·범위 구체화, 형식 지정. Menu anatomy matches the picker family (v6.47.3): `micro-label` header + rows + separator before the preset group; the preset list is part of this spec and extends only by governance (freeform "rewrite styles" are forbidden — that is glossary drift into the input). The chosen rewrite REPLACES the composer text with an Undo Toast (reversible-lite); on an empty draft the button is NOT RENDERED (v6.44 — visibility replaces disablement: a contextual affordance appears when applicable rather than sitting disabled). Never automatic; the rewritten text is the user's to edit — no provenance marking inside the input (authorship stays with the user).
+**Refine prompt (extended v6.27 — assisted editing):** the pen-line `ghost` icon-button (contextual, v6.44: floats at the input's top-right only while the draft is non-empty) opens a small menu of **preset refinements** — a CLOSED set: 전체 다듬기 (general; relabeled from 프롬프트 다듬기 in v6.47.3 — that string became the menu's micro-label header, and a row must never duplicate its header), 더 자세히, 더 간결하게, 기간·범위 구체화, 형식 지정. Menu anatomy matches the picker family (v6.47.3): `micro-label` header + rows + separator before the preset group; the preset list is part of this spec and extends only by governance (freeform "rewrite styles" are forbidden — that is glossary drift into the input). The chosen rewrite REPLACES the composer text with an Undo Toast (reversible-lite); on an empty draft the button is NOT RENDERED (v6.44 — visibility replaces disablement: a contextual affordance appears when applicable rather than sitting disabled). Never automatic; the rewritten text is the user's to edit — no provenance marking inside the input (authorship stays with the user). **Reviewable rewrite (v6.60):** the change is not silent — on apply, the material text the refinement *added* is briefly marked with a one-shot `emphasis.surface` highlight that clears on the next keystroke, and the pre-rewrite draft stays one Undo away. The user sees what the coach changed and keeps authorship. No diff panel — the input is not a document (that is §31); the highlight plus Undo is the whole affordance.
 **Not adopted:** generative inline autocomplete of prompt text. Ghost completion stays closed-glossary — model output inside the user's input muddies authorship where provenance cannot mark it.
 
 ## 25. Threads (v6.25)
@@ -251,3 +255,13 @@ Whole-prompt continuations MAY render as ghost text after the caret: `fg.placeho
 - Suppressed entirely while Hangul composition is active (compositionstart→compositionend) — ghost text inside composing syllables is unreadable.
 - Continue typing = dismiss; no explicit dismiss control. Ghost text never changes what send submits — only accepted text is real.
 - Sources: closed — the action glossary, the user's own recent prompts, and template titles. Freeform model-generated continuations require a governance proposal (latency + wrong-ghost cost: bad ghost text is worse than none).
+
+## 31. Editing existing content (v6.60)
+
+When an agent edits content the user already owns — a document, a form field, table cells, a config — the edit is a **reviewable suggestion, never a silent overwrite**. (Distinct from agent *output*, which is append-only per §9/provenance, and from a user refining their *own* draft, §24.)
+
+- The proposed change previews as a **diff** — DiffView (components.md) for blocks and configs, an inline `emphasis.surface` highlight for a single field or cell — with the original still legible and an explicit **Accept / Discard** pair. Nothing is written until Accept.
+- Edit scope is the user's: a change targets the selected region, not the whole document, unless the user chose whole-document. Widening/narrowing the scope is the user's call, not the agent's.
+- **Auto-fill** (extending one action across many fields, rows, or records) obeys the same rule: filled values render in a distinct pending state (`emphasis.surface`, not committed styling) and are accepted per-row or all-at-once. Agent-filled fields **never overwrite human-entered values** without an explicit accept; the fill prompt is inspectable before it runs.
+- High-stakes edits (facts, figures, citations, anything a reader would act on) carry the reasoning inline (§14) so the user can judge the change before accepting it.
+- A diff preview is *review, not authorization*: an edit that also writes to a third-party system still passes the ProposalCard (§5).

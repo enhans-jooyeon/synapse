@@ -21,17 +21,25 @@
   .app { display: flex; height: 100vh; }
 
   .side { width: 264px; flex: none; background: var(--sy-bg-surface); border-right: 1px solid var(--sy-border-subtle);
-    overflow-y: auto; padding: var(--sy-space-12); display: flex; flex-direction: column; gap: var(--sy-space-4); }
-  .side .brand { display: flex; align-items: baseline; gap: var(--sy-space-8); padding: var(--sy-space-8);
+    overflow-y: auto; padding: 0 var(--sy-space-12) var(--sy-space-16); display: flex; flex-direction: column; gap: var(--sy-space-2); }
+  /* pinned header — brand + search stay put while the list scrolls */
+  .side-head { position: sticky; top: 0; z-index: 2; background: var(--sy-bg-surface);
+    margin: 0 calc(-1 * var(--sy-space-12)) var(--sy-space-8); padding: var(--sy-space-12) var(--sy-space-12) var(--sy-space-8);
+    border-bottom: 1px solid var(--sy-border-subtle); display: flex; flex-direction: column; gap: var(--sy-space-8); }
+  .side .brand { display: flex; align-items: center; gap: var(--sy-space-8); padding: 0 var(--sy-space-4);
     font: var(--sy-weight-semibold) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); }
-  .side .brand .v { font: var(--sy-weight-regular) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-mono); color: var(--sy-fg-tertiary); }
+  .side-mark { width: 22px; height: 22px; flex: none; border-radius: var(--sy-radius-sm); background: var(--sy-brand-point); color: var(--sy-brand-point-fg);
+    display: flex; align-items: center; justify-content: center; font: var(--sy-weight-bold) var(--sy-text-13)/1 var(--sy-font-sans); }
+  .side .brand .v { margin-left: auto; font: var(--sy-weight-regular) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-mono); color: var(--sy-fg-tertiary); }
   .nav-group { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans);
     color: var(--sy-fg-tertiary); padding: var(--sy-space-12) var(--sy-space-8) var(--sy-space-4); }
-  .nav-item { display: flex; align-items: center; gap: var(--sy-space-8); height: 28px; padding: 0 var(--sy-space-8);
+  .nav-item { display: flex; align-items: center; gap: var(--sy-space-8); height: 32px; padding: 0 var(--sy-space-8);
     border-radius: var(--sy-radius-sm); font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
     color: var(--sy-fg-secondary); cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
+  .nav-item .icon { width: 16px; height: 16px; flex: none; color: var(--sy-fg-tertiary); }
   .nav-item:hover { background: var(--sy-bg-hover); }
   .nav-item.active { background: var(--sy-bg-selected); color: var(--sy-fg-primary); font-weight: var(--sy-weight-medium); }
+  .nav-item.active .icon { color: var(--sy-fg-secondary); }
   .sample-side { display: flex; flex-direction: column; gap: var(--sy-space-4); background: var(--sy-bg-surface); flex: none; }
   .sample-side .nav-item { height: 32px; font-weight: var(--sy-weight-medium); flex: none; }
   .sample-side .nav-group { padding: var(--sy-space-16) var(--sy-space-8) 0; color: var(--sy-fg-tertiary); }
@@ -63,6 +71,7 @@
     font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); padding: var(--sy-space-12) var(--sy-space-8) var(--sy-space-4); }
   .nav-grp-head .chev { width: 12px; height: 12px; flex: none; transition: transform var(--sy-duration-fast) var(--sy-ease-standard); }
   .nav-grp-head.collapsed .chev { transform: rotate(-90deg); }
+  .nav-grp-head:hover { color: var(--sy-fg-secondary); }
   .nav-grp-head .cnt, .nav-cat-head .cnt { margin-left: auto; font-family: var(--sy-font-mono); font-size: 11px; font-weight: var(--sy-weight-regular); color: var(--sy-fg-tertiary); }
   .nav-cat-head { display: flex; align-items: center; padding: var(--sy-space-8) var(--sy-space-8) var(--sy-space-2) var(--sy-space-16); font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); }
   .nav-item.in-cat { padding-left: var(--sy-space-16); }
@@ -93,6 +102,41 @@
   .gcard .eyebrow { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); }
   .gcard .nm { font: var(--sy-weight-semibold) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); color: var(--sy-fg-primary); }
   .gcard .blurb { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); color: var(--sy-fg-secondary); margin-top: var(--sy-space-2); }
+
+  /* story detail page (v6.54 — aiuxplayground-style structure) */
+  .doc-header { margin-bottom: var(--sy-space-24); }
+  .doc-header .eyebrow { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-6); }
+  .doc-header h1 { font: var(--sy-weight-bold) var(--sy-text-30)/var(--sy-text-30-lh) var(--sy-font-sans); margin: 0; }
+  .doc-header .specref { display: inline-flex; align-items: center; gap: var(--sy-space-4); margin-top: var(--sy-space-12); font-family: var(--sy-font-mono); font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); color: var(--sy-fg-tertiary); }
+  /* prominent definition (the lead paragraph) */
+  .doc-main > .desc, .story > .desc { font-size: var(--sy-text-16); line-height: var(--sy-text-16-lh); max-width: 640px; margin: var(--sy-space-12) 0 var(--sy-space-16); }
+  .try-note { font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); color: var(--sy-fg-tertiary); max-width: 680px; margin: 0 0 var(--sy-space-24); }
+  .try-label { display: inline-flex; align-items: center; height: 18px; padding: 0 var(--sy-space-6); margin-right: var(--sy-space-6); border-radius: var(--sy-radius-full); background: var(--sy-bg-sunken); color: var(--sy-fg-secondary); font: var(--sy-weight-medium) 11px/1 var(--sy-font-sans); vertical-align: middle; }
+  /* sample pages are full-bleed (no examples column) — let their description use the full width */
+  .canvas-inner.full .story > .desc, .canvas-inner.full .try-note { max-width: none; }
+  /* calm section headers — spacing, not rules (reference finish) */
+  .sec-label { font: var(--sy-weight-semibold) var(--sy-text-18)/var(--sy-text-18-lh) var(--sy-font-sans); color: var(--sy-fg-primary); margin: var(--sy-space-40) 0 var(--sy-space-12); }
+  .related { margin-top: var(--sy-space-40); padding-top: var(--sy-space-16); border-top: 1px solid var(--sy-border-subtle); }
+  .related .rel-label { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-8); }
+  .related .rel-links { display: flex; flex-wrap: wrap; gap: var(--sy-space-8); }
+  .rel-chip { display: inline-flex; align-items: center; padding: var(--sy-space-4) var(--sy-space-12); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-full); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); color: var(--sy-fg-secondary); cursor: pointer; text-decoration: none;
+    transition: border-color var(--sy-duration-fast) var(--sy-ease-standard), color var(--sy-duration-fast) var(--sy-ease-standard); }
+  .rel-chip:hover { border-color: var(--sy-border-strong); color: var(--sy-fg-primary); }
+  .guide-p { font: var(--sy-weight-regular) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); color: var(--sy-fg-secondary); max-width: 680px; margin: 0 0 var(--sy-space-12); }
+  .guide-list { margin: 0 0 var(--sy-space-8); padding-left: var(--sy-space-20); max-width: 680px; }
+  .guide-list li { font: var(--sy-weight-regular) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); color: var(--sy-fg-secondary); margin-bottom: var(--sy-space-4); }
+
+  /* two-column detail layout (v6.55.1): docs left · dedicated sticky Examples column right */
+  .canvas-inner.detail { max-width: 1440px; }
+  .doc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.1fr); gap: var(--sy-space-40); align-items: start; }
+  .doc-main { min-width: 0; }
+  /* preview body uses the real AgentOS page background (bg.page) so components render truthfully */
+  .doc-aside { min-width: 0; position: sticky; top: var(--sy-space-8); align-self: start;
+    background: var(--sy-bg-page); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); padding: var(--sy-space-20); }
+  /* "Examples" becomes the panel header bar (subtly tinted), full-bleed to the panel edges */
+  .doc-aside > .sec-label:first-child { margin: calc(-1 * var(--sy-space-20)) calc(-1 * var(--sy-space-20)) var(--sy-space-20); padding: var(--sy-space-12) var(--sy-space-20); border-top: none; border-bottom: 1px solid var(--sy-border-subtle); background: var(--sy-bg-surface); border-radius: var(--sy-radius-lg) var(--sy-radius-lg) 0 0; }
+  .doc-aside > h3.sub:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+  @media (max-width: 1100px) { .doc-grid { grid-template-columns: minmax(0, 1fr); } .doc-aside { position: static; } }
   .note { font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-12); max-width: 680px; }
   .row { display: flex; gap: var(--sy-space-12); flex-wrap: wrap; align-items: center; }
   .col { display: flex; flex-direction: column; gap: var(--sy-space-16); }
@@ -104,6 +148,8 @@
     background: none; cursor: pointer; font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans);
     color: var(--sy-fg-secondary); }
   .seg button.on { background: var(--sy-bg-page); border-color: var(--sy-border-default); color: var(--sy-fg-primary); }
+  .theme-toggle button { display: inline-flex; align-items: center; justify-content: center; padding: 0 var(--sy-space-8); }
+  .theme-toggle svg { width: 14px; height: 14px; }
 
   .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: var(--sy-space-8); }
   .swatch { border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); overflow: hidden; }
@@ -116,7 +162,14 @@
     font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans);
     color: var(--sy-fg-primary); background: transparent;
     transition: background var(--sy-duration-instant) var(--sy-ease-standard), border-color var(--sy-duration-instant) var(--sy-ease-standard); }
-  .btn:focus-visible { outline: 2px solid var(--sy-border-focus); outline-offset: 2px; }
+  /* per-variant focus ring (v6.58.1): a box-shadow ring hugs border-radius (no corner gap that outline leaves);
+     lightened to a ~50% tint of the button's own color via color-mix. transparent outline preserved for forced-colors mode. */
+  .btn:focus-visible { outline: 2px solid transparent; outline-offset: 0; box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-border-focus) 50%, transparent); }
+  .btn-primary:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-action-primary-bg) 45%, transparent); }
+  .btn-secondary:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-fg-primary) 40%, transparent); }
+  .btn-ghost:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-fg-primary) 40%, transparent); }
+  .btn-danger:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-status-danger-bg-solid) 55%, transparent); }
+  .btn-brand:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-action-brand-bg) 55%, transparent); }
   /* optical trim (v6.17.2): the icon side of icon+text buttons reads heavier — trim 2px on that side */
   .btn:not(.btn-icon):has(> .icon:first-child) { padding-left: calc(var(--sy-control-padding-x) - var(--sy-space-2)); }
   .btn:not(.btn-icon):has(> .icon:last-child) { padding-right: calc(var(--sy-control-padding-x) - var(--sy-space-2)); }
@@ -134,8 +187,8 @@
   .btn-ghost:hover { background: var(--sy-bg-hover); }
   .btn-danger { background: var(--sy-status-danger-bg-solid); color: var(--sy-action-danger-fg); font-weight: var(--sy-weight-semibold); }
   .btn-danger:hover { background: var(--sy-status-danger-bg-solid-hover); }
-  .btn-accent { background: var(--sy-action-accent-bg); color: var(--sy-action-accent-fg); }
-  .btn-accent:hover { background: var(--sy-action-accent-bg-hover); }
+  .btn-brand { background: var(--sy-action-brand-bg); color: var(--sy-action-brand-fg); }
+  .btn-brand:hover { background: var(--sy-action-brand-bg-hover); }
   .btn[disabled] { background: var(--sy-bg-sunken); color: var(--sy-fg-disabled); border-color: transparent; cursor: not-allowed; }
   .btn-icon { width: var(--sy-control-height-md); padding: 0; }
   .btn-icon.btn-sm { width: var(--sy-control-height-sm); }
@@ -458,11 +511,28 @@
   .notif { width: 360px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-overlay); border-radius: var(--sy-radius-md);
     box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-6); animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
   .notif .n-h { display: flex; align-items: center; padding: var(--sy-space-4) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-8); margin: 0 calc(-1 * var(--sy-space-6)) var(--sy-space-4); border-bottom: 1px solid var(--sy-border-subtle); }
-  .notif .n-item { display: flex; gap: var(--sy-space-8); align-items: flex-start; padding: var(--sy-space-8); border-radius: var(--sy-radius-xs); cursor: pointer; }
+  .notif .n-filter { padding: var(--sy-space-4) var(--sy-space-4) var(--sy-space-8); }
+  .notif .n-filter .seg { display: flex; width: 100%; }
+  .notif .n-filter .seg button { flex: 1; }
+  .notif .n-scroll { max-height: 380px; overflow-y: auto; margin: 0 calc(-1 * var(--sy-space-4)); padding: 0 var(--sy-space-4); }
+  .notif .n-item { position: relative; display: flex; gap: var(--sy-space-8); align-items: flex-start; padding: var(--sy-space-8); border-radius: var(--sy-radius-xs); cursor: pointer; }
   .notif .n-item:hover { background: var(--sy-bg-hover); }
   .notif .n-item.unread { background: var(--sy-bg-surface); }
   .notif .n-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sy-status-info-bg-solid); flex: none; margin-top: var(--sy-space-6); }
-  .notif .n-f { display: flex; justify-content: space-between; padding: var(--sy-space-8) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-4); margin: var(--sy-space-4) calc(-1 * var(--sy-space-6)) 0; border-top: 1px solid var(--sy-border-subtle); }
+  .notif .n-item.read .n-dot { visibility: hidden; }
+  .notif .n-body { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: var(--sy-space-2); }
+  .notif .n-meta { display: flex; align-items: center; gap: var(--sy-space-8); min-height: 20px; }
+  .notif .n-time { color: var(--sy-fg-tertiary); }
+  .notif .n-type { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: var(--sy-radius-xs); flex: none; background: var(--sy-bg-sunken); color: var(--sy-fg-tertiary); }
+  .notif .n-type .icon { width: 12px; height: 12px; }
+  .notif .n-actions { position: absolute; top: var(--sy-space-6); right: var(--sy-space-6); display: flex; align-items: center; gap: var(--sy-space-2); opacity: 0; pointer-events: none; transition: opacity var(--sy-duration-fast) var(--sy-ease-standard); background: var(--sy-bg-raised); border-radius: var(--sy-radius-xs); box-shadow: 0 0 0 4px var(--sy-bg-raised); }
+  .notif .n-item:hover .n-actions, .notif .n-item:focus-within .n-actions { opacity: 1; pointer-events: auto; }
+  .notif .n-act { width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border: none; background: transparent; border-radius: var(--sy-radius-xs); cursor: pointer; color: var(--sy-fg-tertiary); }
+  .notif .n-act:hover { background: var(--sy-bg-hover); color: var(--sy-fg-secondary); }
+  .notif .n-act .icon { width: 14px; height: 14px; }
+  .notif .n-item.hidden, .notif .grp.hidden { display: none; }
+  .notif .n-f { padding: var(--sy-space-6); margin: var(--sy-space-4) calc(-1 * var(--sy-space-6)) calc(-1 * var(--sy-space-6)); border-top: 1px solid var(--sy-border-subtle); }
+  .notif .n-f .btn { width: 100%; gap: var(--sy-space-6); }
   .kv-row { display: flex; gap: var(--sy-space-16); padding: var(--sy-space-8) 0; border-bottom: 1px solid var(--sy-border-subtle); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); }
   .kv-row .k { min-width: 96px; flex: none; color: var(--sy-fg-tertiary); }
   #s-sample-workbench tbody tr { cursor: pointer; }
@@ -533,6 +603,12 @@
     font: var(--sy-weight-medium) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); color: var(--sy-fg-primary); }
   .acc-h .meta { margin-left: auto; font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); }
   .acc-b { padding: 0 var(--sy-space-16) var(--sy-space-16) 40px; color: var(--sy-fg-secondary); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
+  .acc-h[aria-expanded="false"] + .acc-b { display: none; }
+  .sldr { cursor: pointer; touch-action: none; overflow: visible; }
+  .sldr-thumb { box-shadow: var(--sy-shadow-thumb); }
+  .card.cc-sel { border-color: var(--sy-border-selected); outline: 4px solid var(--sy-border-subtle); outline-offset: 0; }
+  .cc-check { color: var(--sy-action-primary-bg); }
+  .card:not(.cc-sel) .cc-check { display: none; }
   .dropzone { border: 1px dashed var(--sy-border-strong); border-radius: var(--sy-radius-lg); padding: var(--sy-space-32) var(--sy-space-24);
     display: flex; flex-direction: column; align-items: center; gap: var(--sy-space-8); max-width: 480px; }
   .dropzone .dz-i { width: 48px; height: 48px; border-radius: 50%; background: var(--sy-bg-sunken); position: relative;
@@ -556,15 +632,17 @@
 <body class="sy-root">
 <div class="app">
   <nav class="side" id="sidenav" aria-label="Stories">
-    <div class="brand">Synapse <span class="v">v6.53.0</span></div>
-    <label class="nav-search"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="navSearch" type="text" placeholder="Search components…" aria-label="Search components"></label>
+    <div class="side-head">
+      <div class="brand"><span class="side-mark" aria-hidden="true">S</span>Synapse<span class="v">v6.60.2</span></div>
+      <label class="nav-search"><svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="navSearch" type="text" placeholder="Search components…" aria-label="Search components"></label>
+    </div>
   </nav>
   <div class="main">
     <div class="topbar">
       <span class="t" id="storyTitle">—</span>
       <span class="doc" id="storyDoc"></span>
       <span class="spacer"></span>
-      <button class="btn btn-secondary btn-sm" id="themeBtn" type="button">Dark mode</button>
+      <div class="seg theme-toggle" id="themeToggle" role="group" aria-label="Theme"><button type="button" class="on" data-set-theme="light" aria-label="Light mode" title="Light mode"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-set-theme="dark" aria-label="Dark mode" title="Dark mode"><svg class="icon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></button></div>
     </div>
     <div class="canvas"><div class="canvas-inner" id="canvas">
 
@@ -624,7 +702,7 @@
           <button class="btn btn-secondary" type="button" lang="ko">변경사항 저장</button>
           <button class="btn btn-ghost" type="button">Cancel</button>
           <button class="btn btn-danger" type="button" lang="ko">영구 삭제</button>
-          <button class="btn btn-accent" type="button" title="accent = the point color (v6.51): conversational-AI CTA only, max 1/screen"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Ask agent</button>
+          <button class="btn btn-brand" type="button" title="brand = the point color (v6.51): brand identity + conversational-AI CTA, max 1/screen"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Ask agent</button>
           <button class="btn" disabled type="button">Disabled</button>
           <button class="btn btn-primary" type="button"><span class="spinner" style="border-top-color: var(--sy-action-primary-fg);"></span>Saving…</button>
         </div>
@@ -974,17 +1052,19 @@
         <div id="bannerMatrix"></div>
       </div>
 
-      <div class="story" data-group="Components" data-title="Toast · Tooltip" data-doc="components.md · Toast / Tooltip" id="s-toast">
-        <p class="desc">Same-scheme surfaces (v2.0): raised-2 + border + overlay shadow in both modes.</p>
-        <div class="row" style="align-items: flex-start; gap: var(--sy-space-32);">
-          <div class="col" style="gap: var(--sy-space-8);">
-            <div class="toast"><svg class="icon" viewBox="0 0 24 24" style="color: var(--sy-status-success);"><path d="m5 13 4 4L19 7"/></svg>Agent deployed to production<span class="act">View</span></div>
-            <div class="toast" lang="ko"><svg class="icon" viewBox="0 0 24 24" style="color: var(--sy-status-danger);"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>실행에 실패했습니다<span class="act">다시 시도</span></div>
-          </div>
-          <div class="col" style="gap: var(--sy-space-8); align-items: flex-start;">
-            <span class="tooltip">Copy run ID <span class="sy-kbd" style="margin-left:4px;">⌘C</span></span>
-            <span class="tooltip" lang="ko">실행 ID 복사</span>
-          </div>
+      <div class="story" data-group="Components" data-title="Toast" data-doc="components.md · Toast" id="s-toast">
+        <p class="desc">Transient outcome notification — bottom-right, max 3, auto-dismiss — carrying the Undo convention for reversible-lite mutations. Same-scheme surface (v2.0): raised-2 + border + overlay shadow in both modes.</p>
+        <div class="col" style="gap: var(--sy-space-8); align-items: flex-start;">
+          <div class="toast"><svg class="icon" viewBox="0 0 24 24" style="color: var(--sy-status-success);"><path d="m5 13 4 4L19 7"/></svg>Agent deployed to production<span class="act">View</span></div>
+          <div class="toast" lang="ko"><svg class="icon" viewBox="0 0 24 24" style="color: var(--sy-status-danger);"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>실행에 실패했습니다<span class="act">다시 시도</span></div>
+        </div>
+      </div>
+
+      <div class="story" data-group="Components" data-title="Tooltip" data-doc="components.md · Tooltip" id="s-tooltip">
+        <p class="desc">A brief ≤10-word clarification of an icon or truncated string; teaches shortcuts via the kbd slot. Same-scheme surface in both modes; never carries interactive content and never sits on a plainly labeled element.</p>
+        <div class="col" style="gap: var(--sy-space-8); align-items: flex-start;">
+          <span class="tooltip">Copy run ID <span class="sy-kbd" style="margin-left:4px;">⌘C</span></span>
+          <span class="tooltip" lang="ko">실행 ID 복사</span>
         </div>
       </div>
 
@@ -1068,6 +1148,7 @@
           </div>
           <div class="acc-item">
             <button class="acc-h" type="button" aria-expanded="false"><svg class="icon" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span lang="ko">원본 페이로드</span><span class="meta">2.4 KB</span></button>
+            <div class="acc-b"><span class="sy-type-code" style="color: var(--sy-fg-secondary);">{ "run": "482", "retries": 3, "timeout_s": 120 }</span></div>
           </div>
         </div>
       </div>
@@ -1100,6 +1181,11 @@
         </div>
         <h3 class="sub">Compact — inline @-mention in Composer</h3>
         <div class="row"><span class="ctx" style="padding: var(--sy-space-2) var(--sy-space-8); gap: var(--sy-space-6);"><span class="c-i" style="width:16px;height:16px;"><svg class="icon" style="width:11px;height:11px;" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></span><span class="c-t"><span class="t" style="font-size: var(--sy-text-12);" lang="ko">주간_고객문의.csv</span></span></span></div>
+        <h3 class="sub">Connector state (v6.60) — freshness · cached · reconnect</h3>
+        <div class="row" style="gap: var(--sy-space-24); align-items: flex-start; padding-top: var(--sy-space-8);">
+          <span class="ctx"><span class="c-i"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></span><span class="c-t"><div class="t" lang="ko">Q3_재무요약.gdoc</div><div class="m" style="display:inline-flex; align-items:center; gap: var(--sy-space-6);"><span lang="ko">Google Drive · 2분 전 동기화</span><span class="badge" style="flex:none;" lang="ko">캐시됨</span></div></span></span>
+          <span class="ctx"><span class="c-i" style="color: var(--sy-status-danger);"><svg class="icon" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><span class="c-t"><div class="t" lang="ko">#ops 채널</div><div class="m" style="color: var(--sy-status-danger);" lang="ko">Slack · 연결 끊김</div></span><button class="btn btn-ghost btn-sm" type="button" style="flex:none;" lang="ko">다시 연결</button></span>
+        </div>
       </div>
 
       <div class="story" data-group="Components" data-title="SplitPanel" data-doc="components.md · SplitPanel" id="s-splitpanel">
@@ -1215,31 +1301,34 @@
       </div>
 
 
-      <div class="story" data-group="Components" data-title="Timeline · NotificationCenter" data-doc="components.md (P3)" id="s-timeline">
-        <p class="desc">Audit feeds: actor shape carries authorship, verbs from the content system, absolute time on hover, history never editable. Notifications navigate — consequential actions only open their surface.</p>
-        <h3 class="sub">Timeline</h3>
+      <div class="story" data-group="Components" data-title="Timeline" data-doc="components.md · Timeline" id="s-timeline">
+        <p class="desc">Audit feed: actor shape carries authorship, verbs from the content system, absolute time on hover, history never editable.</p>
         <div style="max-width: 560px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-4) 0;"><span style="flex:1; height:1px; background: var(--sy-border-subtle);"></span><span class="sy-type-label-sm" style="color: var(--sy-fg-tertiary);" lang="ko">오늘</span><span style="flex:1; height:1px; background: var(--sy-border-subtle);"></span></div>
           <div style="display:flex; gap: var(--sy-space-8); align-items:center; padding: var(--sy-space-6) 0;"><span class="avatar av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;">JC</span><span class="sy-type-body-sm"><span style="font-weight:500;">June</span><span lang="ko">님이 </span><a class="sy-link" href="#" lang="ko">주간 보고서</a><span lang="ko"> 일정을 수정했습니다</span></span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-left:auto;" lang="ko">5분 전</span></div>
           <div style="display:flex; gap: var(--sy-space-8); align-items:center; padding: var(--sy-space-6) 0;"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-6) 20%, transparent); color: var(--sy-viz-6); flex:none;"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span><span class="sy-type-body-sm"><span style="font-weight:500;" lang="ko">분류 에이전트</span><span lang="ko">가 실행을 완료했습니다 · </span><a class="sy-link" href="#">run_a3f8…c92e</a></span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-left:auto;">14:02</span></div>
           <div style="display:flex; gap: var(--sy-space-8); align-items:center; padding: var(--sy-space-6) 0;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary); margin:0 4px;" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4M20 7H4M8 21l-4-4 4-4M4 17h16"/></svg><span class="sy-type-body-sm" style="color: var(--sy-fg-secondary);" lang="ko">에이전트가 June님에게 전달했습니다</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-left:auto;">13:40</span></div>
         </div>
-        <h3 class="sub">NotificationCenter</h3>
-        <div class="menu" style="width: 340px; padding: 0;">
-          <div style="display:flex; align-items:center; padding: var(--sy-space-8) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle);"><span class="sy-type-heading-sm" lang="ko">알림</span><button class="btn btn-ghost btn-icon btn-sm" type="button" style="margin-left:auto;" aria-label="Mark all read"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 7 17l-5-5M22 10l-7.5 7.5L13 16"/></svg></button></div>
-          <div style="display:flex; gap: var(--sy-space-8); align-items:flex-start; padding: var(--sy-space-8) var(--sy-space-12); background: var(--sy-bg-surface); position:relative;"><span style="position:absolute; left:4px; top:16px; width:8px; height:8px; border-radius:50%; background: var(--sy-status-info-bg-solid);"></span><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-6) 20%, transparent); color: var(--sy-viz-6); flex:none;"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span><span class="sy-type-body-sm" lang="ko"><span style="font-weight:500;">주간 보고서</span> 실행이 확인을 기다립니다<br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">10분 전</span></span></div>
-          <div style="display:flex; gap: var(--sy-space-8); align-items:flex-start; padding: var(--sy-space-8) var(--sy-space-12);"><span class="avatar av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;">JC</span><span class="sy-type-body-sm"><span style="font-weight:500;">MK</span><span lang="ko">님이 워크스페이스에 참여했습니다</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">어제</span></span></div>
-        </div>
       </div>
 
-      <div class="story" data-group="Components" data-title="Tree · CodeBlock · DiffView" data-doc="components.md (P3)" id="s-tree-code">
-        <p class="desc">Hierarchy (max 4 levels, then drill-in), display-only code with one muted theme, diffs with gutter markers so color is never the only signal.</p>
-        <h3 class="sub">Tree — checkbox mode with mixed parent</h3>
+      <div class="story" data-group="Components" data-title="NotificationCenter" data-doc="components.md · NotificationCenter" id="s-notifications">
+        <p class="desc">The bell's panel of what happened while you were away — filter tabs, Today/Earlier groups, per-item read/dismiss. Notifications navigate; consequential actions only open their surface (never approve from here).</p>
+        <p class="note">Live: filter tabs, per-item mark read/unread and dismiss (hover a row), and mark-all-read all work here.</p>
+        <div id="notifDemoHost"></div>
+      </div>
+
+      <div class="story" data-group="Components" data-title="Tree" data-doc="components.md · Tree" id="s-tree">
+        <p class="desc">Hierarchy up to 4 levels, then drill-in; checkbox mode carries mixed-parent state. No connecting guide lines; not for flat or 2-level data (use a grouped list).</p>
+        <h3 class="sub">Checkbox mode with mixed parent</h3>
         <div style="max-width: 360px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-6); height:28px;"><svg class="icon" style="width:12px;height:12px; transform:rotate(90deg); color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span style="width:16px;height:16px;border-radius:var(--sy-radius-xs);background:var(--sy-action-primary-bg);display:inline-flex;align-items:center;justify-content:center;flex:none;"><span style="width:8px;height:2px;background:var(--sy-action-primary-fg);"></span></span><svg class="icon" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg><span class="sy-type-body-sm" lang="ko">고객 문의</span><span class="badge badge-neutral" style="margin-left:auto;">12</span></div>
           <div style="display:flex; align-items:center; gap: var(--sy-space-6); height:28px; padding-left:20px;"><span style="width:12px;"></span><label class="choice" style="gap: var(--sy-space-6);"><input type="checkbox" checked><svg class="icon" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg><span class="sy-type-body-sm">payment-errors.csv</span></label></div>
           <div style="display:flex; align-items:center; gap: var(--sy-space-6); height:28px; padding-left:20px; border-top: 2px solid var(--sy-border-focus);"><span style="width:12px;"></span><label class="choice" style="gap: var(--sy-space-6);"><input type="checkbox"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg><span class="sy-type-body-sm" lang="ko">로그인_문제.csv</span></label><span class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-left:auto;">← drop line</span></div>
         </div>
+      </div>
+
+      <div class="story" data-group="Components" data-title="CodeBlock · DiffView" data-doc="components.md · CodeBlock / DiffView" id="s-code">
+        <p class="desc">The two monospace display surfaces: CodeBlock shows code, logs, and config in one muted theme; DiffView compares changes with +/− gutter markers so color is never the only signal. Both are display, not editors.</p>
         <h3 class="sub">CodeBlock</h3>
         <div style="max-width: 560px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); overflow:hidden;">
           <div style="display:flex; align-items:center; padding: var(--sy-space-4) var(--sy-space-8);"><span class="sy-type-micro" style="font-family: var(--sy-font-mono); color: var(--sy-fg-tertiary);">yaml</span><button class="btn btn-ghost btn-icon btn-sm" type="button" style="margin-left:auto;" aria-label="Copy"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div>
@@ -1259,55 +1348,59 @@ team: finance</pre>
         </div>
       </div>
 
-      <div class="story" data-group="Components" data-title="Slider · NumberInput · ChoiceCard" data-doc="components.md (P3)" id="s-slider-choice">
-        <p class="desc">Sliders where position is meaning (never without a visible value); steppers for precision; choice cards for 2–6 described options.</p>
+      <div class="story" data-group="Components" data-title="Slider · NumberInput" data-doc="components.md · Slider / NumberInput" id="s-slider">
+        <p class="desc">Sliders where position is the meaning (never without a visible numeric value); NumberInput steppers for precision. The two are usually paired.</p>
         <h3 class="sub">Slider + NumberInput pair</h3>
         <div class="row" style="gap: var(--sy-space-24); align-items:flex-end; max-width: 560px;">
           <div style="flex:1;">
             <div class="plabel"><span lang="ko">실패 시 재시도 한도</span><span class="n">3</span></div>
-            <div class="pbar" style="position:relative;"><div style="width: 30%; background: var(--sy-action-primary-bg);"></div><span style="position:absolute; left:30%; top:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:50%; background: var(--sy-bg-page); border: 2px solid var(--sy-action-primary-bg);"></span></div>
+            <div class="pbar sldr" style="position:relative;"><div style="width: 30%; background: var(--sy-action-primary-bg);"></div><span class="sldr-thumb" style="position:absolute; left:30%; top:50%; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:50%; background: var(--sy-bg-page);"></span></div>
           </div>
           <div class="field" style="width: 120px;">
             <label lang="ko">한도</label>
             <div class="ctrl"><input value="3" style="font-variant-numeric: tabular-nums; padding-right: 28px;"><span style="position:absolute; right:6px; display:flex; flex-direction:column;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span></div>
           </div>
         </div>
-        <h3 class="sub">ChoiceCard — radio semantics, selected ring + check</h3>
+      </div>
+
+      <div class="story" data-group="Components" data-title="ChoiceCard" data-doc="components.md · ChoiceCard" id="s-choicecard">
+        <p class="desc">One-/many-of selection where each option deserves a title and description — 2–6 options; &gt;6 or bare labels go to Radio/Select. Selected = halo + corner check.</p>
+        <h3 class="sub">Radio semantics — selected halo + check</h3>
         <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--sy-space-12); max-width: 640px;">
-          <div class="card" role="radio" aria-checked="true" tabindex="0" style="padding: var(--sy-space-16); position:relative; border-color: var(--sy-border-selected); box-shadow: inset 0 0 0 1px var(--sy-border-selected);"><svg class="icon" style="position:absolute; top:12px; right:12px;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><svg class="icon" style="width:20px;height:20px; margin-bottom: var(--sy-space-8);" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg><div class="sy-type-heading-sm" lang="ko">보고서 에이전트</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">주기적으로 데이터를 요약합니다</div></div>
-          <div class="card" role="radio" aria-checked="false" tabindex="0" style="padding: var(--sy-space-16);"><svg class="icon" style="width:20px;height:20px; margin-bottom: var(--sy-space-8);" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><div class="sy-type-heading-sm" lang="ko">분류 에이전트</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">문의를 자동으로 배정합니다</div></div>
-          <div class="card" role="radio" aria-checked="false" tabindex="0" style="padding: var(--sy-space-16);"><svg class="icon" style="width:20px;height:20px; margin-bottom: var(--sy-space-8);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div class="sy-type-heading-sm" lang="ko">모니터링 에이전트</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">이상 징후를 감시합니다</div></div>
+          <div class="card cc-sel" role="radio" aria-checked="true" tabindex="0" style="padding: var(--sy-space-16); position:relative;"><svg class="icon cc-check" style="position:absolute; top:12px; right:12px;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><svg class="icon" style="width:20px;height:20px; margin-bottom: var(--sy-space-8);" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg><div class="sy-type-heading-sm" lang="ko">보고서 에이전트</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">주기적으로 데이터를 요약합니다</div></div>
+          <div class="card" role="radio" aria-checked="false" tabindex="0" style="padding: var(--sy-space-16); position:relative;"><svg class="icon cc-check" style="position:absolute; top:12px; right:12px;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><svg class="icon" style="width:20px;height:20px; margin-bottom: var(--sy-space-8);" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg><div class="sy-type-heading-sm" lang="ko">분류 에이전트</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">문의를 자동으로 배정합니다</div></div>
+          <div class="card" role="radio" aria-checked="false" tabindex="0" style="padding: var(--sy-space-16); position:relative;"><svg class="icon cc-check" style="position:absolute; top:12px; right:12px;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><svg class="icon" style="width:20px;height:20px; margin-bottom: var(--sy-space-8);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div class="sy-type-heading-sm" lang="ko">모니터링 에이전트</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary);" lang="ko">이상 징후를 감시합니다</div></div>
         </div>
       </div>
 
-      <div class="story" data-group="Components" data-title="HoverCard · Popconfirm · ContextMenu" data-doc="components.md (P3)" id="s-contextual">
-        <p class="desc">Hover is enhancement, never requirement. Popconfirm sits between no-confirm and Modal. Context menus duplicate — never the only path.</p>
-        <div class="row" style="gap: var(--sy-space-32); align-items: flex-start;">
-          <div>
-            <span class="region-tag">HoverCard</span>
-            <div class="menu" style="width: 300px;">
-              <div style="display:flex; gap: var(--sy-space-8); align-items:center; padding: var(--sy-space-8);"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-6) 20%, transparent); color: var(--sy-viz-6); flex:none;"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span><span><span class="sy-type-heading-sm" lang="ko">분류 에이전트</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">실행 중 · 매일 06:00</span></span></div>
-              <div class="menu-sep"></div>
-              <div style="padding: var(--sy-space-4) var(--sy-space-8); display:flex; gap: var(--sy-space-12);"><span class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:80px;" lang="ko">성공률</span><span class="sy-type-body-sm" style="font-variant-numeric: tabular-nums;">97.9%</span></div>
-              <div style="padding: var(--sy-space-4) var(--sy-space-8); display:flex; gap: var(--sy-space-12);"><span class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:80px;" lang="ko">소유자</span><span class="sy-type-body-sm">June</span></div>
-            </div>
+      <div class="story" data-group="Components" data-title="HoverCard" data-doc="components.md · HoverCard" id="s-hovercard">
+        <p class="desc">A rich hover/focus preview of an entity reference — hover is enhancement, never a requirement; the same content must also live on the click-through page.</p>
+        <div style="padding-top: var(--sy-space-8);">
+          <div class="menu" style="width: 300px;">
+            <div style="display:flex; gap: var(--sy-space-8); align-items:center; padding: var(--sy-space-8);"><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-6) 20%, transparent); color: var(--sy-viz-6); flex:none;"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span><span><span class="sy-type-heading-sm" lang="ko">분류 에이전트</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">실행 중 · 매일 06:00</span></span></div>
+            <div class="menu-sep"></div>
+            <div style="padding: var(--sy-space-4) var(--sy-space-8); display:flex; gap: var(--sy-space-12);"><span class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:80px;" lang="ko">성공률</span><span class="sy-type-body-sm" style="font-variant-numeric: tabular-nums;">97.9%</span></div>
+            <div style="padding: var(--sy-space-4) var(--sy-space-8); display:flex; gap: var(--sy-space-12);"><span class="sy-type-label" style="color: var(--sy-fg-secondary); min-width:80px;" lang="ko">소유자</span><span class="sy-type-body-sm">June</span></div>
           </div>
-          <div>
-            <span class="region-tag">Popconfirm</span>
-            <div class="menu" style="width: 240px; padding: var(--sy-space-12);">
-              <p class="sy-type-body-sm" style="margin-bottom: var(--sy-space-8);" lang="ko">저장된 필터를 삭제할까요?</p>
-              <div class="row" style="justify-content: flex-end; gap: var(--sy-space-4);"><button class="btn btn-ghost btn-sm" type="button" lang="ko">취소</button><button class="btn btn-danger btn-sm" type="button" lang="ko">삭제</button></div>
-            </div>
-          </div>
-          <div>
-            <span class="region-tag">ContextMenu (same Menu, at pointer)</span>
-            <div class="menu" role="menu">
-              <div class="menu-item"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy run ID</div>
-              <div class="menu-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Duplicate run</div>
-              <div class="menu-sep"></div>
-              <div class="menu-item danger" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>삭제</div>
-            </div>
-          </div>
+        </div>
+      </div>
+
+      <div class="story" data-group="Components" data-title="Popconfirm" data-doc="components.md · Popconfirm" id="s-popconfirm">
+        <p class="desc">Inline confirmation for a low-stakes, reversible-ish action — it sits between no-confirm and a Modal. Permanent loss, bulk, or named-count actions go to a Modal instead.</p>
+        <div class="menu" style="width: 240px; padding: var(--sy-space-12);">
+          <p class="sy-type-body-sm" style="margin-bottom: var(--sy-space-8);" lang="ko">저장된 필터를 삭제할까요?</p>
+          <div class="row" style="justify-content: flex-end; gap: var(--sy-space-4);"><button class="btn btn-ghost btn-sm" type="button" lang="ko">취소</button><button class="btn btn-danger btn-sm" type="button" lang="ko">삭제</button></div>
+        </div>
+      </div>
+
+      <div class="story" data-group="Components" data-title="ContextMenu" data-doc="components.md · ContextMenu" id="s-contextmenu">
+        <p class="desc">The right-click accelerator on dense data surfaces — the same Menu, opened at the pointer. Every action must also exist in visible UI; it is never the only path.</p>
+        <span class="region-tag">Same Menu, at the pointer</span>
+        <div class="menu" role="menu">
+          <div class="menu-item"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy run ID</div>
+          <div class="menu-item"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Duplicate run</div>
+          <div class="menu-sep"></div>
+          <div class="menu-item danger" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>삭제</div>
         </div>
       </div>
 
@@ -1426,15 +1519,18 @@ team: finance</pre>
 
 
       <div class="story" data-group="AI patterns" data-title="Follow-up panel" data-doc="ai-patterns.md §19" id="s-followups">
-        <p class="desc">Keyboard-first escalation of suggestion chips: anchored above the Composer, glass material (v6.23 — the one anchored glass exception: it floats over the thread like a mini-palette, static while open), ↑↓/↵/esc keycaps, max 4 rows, selecting inserts — never auto-sends. Chips and panel never show simultaneously.</p>
+        <p class="desc">Keyboard-first escalation of suggestion chips: anchored above the Composer, glass material (v6.23 — the one anchored glass exception: it floats over the thread like a mini-palette, static while open), ↑↓/↵/esc keycaps, max 4 rows, selecting inserts — never auto-sends. Chips and panel never show simultaneously. <strong>Refine vs pivot (v6.60):</strong> rows are grouped by intent — refine (zoom in) above pivot (zoom out), split by a divider with <code>micro-label</code> headers; the grouping is how the panel signals <em>why</em> a row is offered, without a per-row rationale (the label is still the query).</p>
         <div style="max-width: 640px; position: relative; padding-top: var(--sy-space-48);">
           <p lang="ko" style="color: var(--sy-fg-secondary);">지난주 문의는 총 328건으로 전주 대비 12% 증가했습니다. 상위 주제는 결제 오류(47건)와 로그인 문제(31건)입니다. 초안을 만들었습니다 — 검토 후 공유할 수 있습니다. 로그인 문제 증가는 지난주 SSO 설정 변경과 관련이 있을 수 있습니다.</p>
           <div class="followups" style="position: absolute; left: 0; right: 0; top: 0; margin-bottom: 0;">
             <div class="fu-hint"><span><span class="sy-kbd">↑</span> <span class="sy-kbd">↓</span> <span lang="ko">이동</span></span><span><span class="sy-kbd">↵</span> <span lang="ko">선택</span></span><span style="margin-left:auto;"><span class="sy-kbd">esc</span> <span lang="ko">닫기</span></span></div>
-            <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>지난달과 비교해 줘</div>
+            <div class="sy-type-micro-label" style="padding: var(--sy-space-4) var(--sy-space-8) var(--sy-space-2); color: var(--sy-fg-tertiary);" lang="ko">더 자세히</div>
             <div class="fu-row sel" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>결제 오류 47건의 원인을 분석해 줘</div>
-            <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>#ops에 공유하기</div>
+            <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>지난달과 비교해 줘</div>
+            <div style="border-top: 1px solid var(--sy-border-subtle); margin: var(--sy-space-4) calc(-1 * var(--sy-space-6)) var(--sy-space-2);"></div>
+            <div class="sy-type-micro-label" style="padding: var(--sy-space-2) var(--sy-space-8);" lang="ko">다음 단계</div>
             <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>보고서로 만들기</div>
+            <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>#ops에 공유하기</div>
           </div>
         </div>
       </div>
@@ -1486,7 +1582,7 @@ team: finance</pre>
             <span style="margin-left:auto;"></span>
             <button class="btn btn-ghost btn-sm" type="button" data-model><span style="font-family: var(--sy-font-mono); font-size: 12px;">Claude Sonnet 5</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
             <button class="btn btn-ghost btn-icon" type="button" aria-label="음성 입력"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
-            <button class="btn btn-accent" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+            <button class="btn btn-brand" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
           </div>
         </div>
         <h3 class="sub">Agent picker — search, groups, submenu escape, request footer (v6.15 · model moved to its own selector, v6.42)</h3>
@@ -1582,9 +1678,9 @@ team: finance</pre>
         </div>
       </div>
 
-      <div class="story" data-group="AI patterns" data-title="Reasoning · Guardrail · Handoff" data-doc="ai-patterns.md §14–16" id="s-reasoning">
-        <p class="desc">Reasoning is subordinate disclosure, never answer content. Guardrails are policy outcomes, never red errors. Handoffs flip the avatar shape and stay flipped.</p>
-        <h3 class="sub">Reasoning disclosure — collapsed · expanded</h3>
+      <div class="story" data-group="AI patterns" data-title="Reasoning disclosure" data-doc="ai-patterns.md §14" id="s-reasoning">
+        <p class="desc">Subordinate disclosure of the agent's working — never answer content: a collapsed row (chevron + label + duration) expands to muted reasoning text. Never fg.primary, never carries SourceChips, excluded from the ResponseToolbar.</p>
+        <h3 class="sub">Collapsed · expanded</h3>
         <div class="col" style="max-width: 560px; gap: var(--sy-space-8);">
           <div class="step"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">추론 과정</span><span class="dur">6.2s</span></div>
           <div>
@@ -1592,12 +1688,18 @@ team: finance</pre>
             <div class="sy-type-body-sm" style="background: var(--sy-bg-surface); border-radius: var(--sy-radius-md); padding: var(--sy-space-12); color: var(--sy-fg-secondary); margin-left: var(--sy-space-20);" lang="ko">문의 데이터를 주제별로 묶은 뒤 전주와 같은 기준으로 비교해야 한다. 결제 오류가 눈에 띄게 늘었으므로 원인 분석을 우선한다…</div>
           </div>
         </div>
-        <h3 class="sub">Guardrail notice — neutral, names the path forward</h3>
+      </div>
+
+      <div class="story" data-group="AI patterns" data-title="Guardrail notice" data-doc="ai-patterns.md §15" id="s-guardrail">
+        <p class="desc">A policy outcome, not an error — a neutral shield Banner on bg.sunken that names the path forward. NEVER status.danger red: red would teach users that policy is breakage.</p>
         <div style="max-width: 560px; display: flex; gap: var(--sy-space-8); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-12) var(--sy-space-16);">
           <svg class="icon" style="color: var(--sy-fg-tertiary); flex:none;" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.7 9a.6.6 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 .6-.9l7-2.9a1 1 0 0 1 .8 0l7 2.9A1 1 0 0 1 20 6z"/></svg>
           <span class="sy-type-body-sm" style="color: var(--sy-fg-secondary);" lang="ko">워크스페이스 데이터 정책에 따라 처리할 수 없는 요청입니다. 정책은 관리자가 설정에서 확인할 수 있습니다.</span>
         </div>
-        <h3 class="sub">Handoff — actor shape flips and stays flipped</h3>
+      </div>
+
+      <div class="story" data-group="AI patterns" data-title="Handoff" data-doc="ai-patterns.md §16" id="s-handoff">
+        <p class="desc">A person takeover as a first-class conversation event — the actor avatar shape flips round↔squared and stays flipped. Handing back is always explicit ("Resume agent"); agents never silently reclaim.</p>
         <div class="col" style="max-width: 560px; gap: var(--sy-space-8);">
           <div class="step"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m16 3 4 4-4 4M20 7H4M8 21l-4-4 4-4M4 17h16"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">June님에게 전달됨 · 14:02</span><span style="margin-left:auto;"><span class="badge badge-warning" lang="ko">확인 필요</span></span></div>
           <div class="row"><button class="btn btn-primary btn-sm" type="button" lang="ko">에이전트 계속하기</button><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">handing back is always explicit — agents never silently reclaim</span></div>
@@ -1735,7 +1837,7 @@ team: finance</pre>
                     <span style="margin-left:auto;"></span>
                     <button class="btn btn-ghost btn-sm" type="button" data-model><span style="font-family: var(--sy-font-mono); font-size: 12px;">Claude Sonnet 5</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
                     <button class="btn btn-ghost btn-icon" type="button" aria-label="음성 입력"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
-                    <button class="btn btn-accent" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+                    <button class="btn btn-brand" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
                   </div>
                 </div>
               </div>
@@ -1956,7 +2058,7 @@ team: finance</pre>
                     <span style="margin-left:auto;"></span>
                     <button class="btn btn-ghost btn-sm" type="button" data-model><span style="font-family: var(--sy-font-mono); font-size: 12px;">Claude Sonnet 5</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
                     <button class="btn btn-ghost btn-icon" type="button" aria-label="음성 입력"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></button>
-                    <button class="btn btn-accent" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
+                    <button class="btn btn-brand" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
                   </div>
                 </div>
               </div>
@@ -2157,11 +2259,11 @@ team: finance</pre>
   // Components sub-categories (ids in curated source order within each)
   var CAT = {
     'Actions': ['s-button', 's-buttongroup'],
-    'Forms & selection': ['s-input', 's-select', 's-combobox', 's-datepicker', 's-choices', 's-segmented', 's-slider-choice', 's-fileupload', 's-chip'],
-    'Data display': ['s-badge', 's-avatar', 's-card', 's-table', 's-desclist', 's-chart', 's-timeline', 's-tree-code', 's-calendar-sheet', 's-contextcard'],
+    'Forms & selection': ['s-input', 's-select', 's-combobox', 's-datepicker', 's-choices', 's-choicecard', 's-segmented', 's-slider', 's-fileupload', 's-chip'],
+    'Data display': ['s-badge', 's-avatar', 's-card', 's-table', 's-desclist', 's-chart', 's-timeline', 's-notifications', 's-tree', 's-code', 's-calendar-sheet', 's-contextcard'],
     'Navigation': ['s-nav', 's-accordion', 's-splitpanel'],
-    'Overlays': ['s-modal', 's-contextual'],
-    'Feedback': ['s-banner', 's-toast', 's-loading', 's-empty']
+    'Overlays': ['s-modal', 's-hovercard', 's-popconfirm', 's-contextmenu'],
+    'Feedback': ['s-banner', 's-toast', 's-tooltip', 's-loading', 's-empty']
   };
   var catOf = {}; Object.keys(CAT).forEach(function (c) { CAT[c].forEach(function (id) { catOf[id] = c; }); });
 
@@ -2182,7 +2284,8 @@ team: finance</pre>
   }
   // Overview entry
   var ov = document.createElement('button'); ov.type = 'button'; ov.className = 'nav-item'; ov.id = 'nav-overview';
-  ov.textContent = 'Overview'; ov.dataset.target = 'overview';
+  ov.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Overview';
+  ov.dataset.target = 'overview';
   ov.addEventListener('click', function () { location.hash = 'overview'; });
   nav.appendChild(ov);
   // Groups (collapsible) + Components sub-categories
@@ -2256,9 +2359,9 @@ team: finance</pre>
     's-desclist': '<path d="M16 15h13M16 24h13M16 33h13" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.45"/><path d="M38 15h22M38 24h16M38 33h24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
     's-empty': '<circle cx="40" cy="21" r="11" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2"/><path d="M35 21h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M28 38h24" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/>',
     's-timeline': '<path d="M20 9v30" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="16" r="3.5" fill="currentColor"/><circle cx="20" cy="31" r="3.5" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="2"/><path d="M30 16h30M30 31h22" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55"/>',
-    's-tree-code': '<path d="M14 12h9M14 12v20M20 22h5M20 32h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M46 16l-5 8 5 8M64 16l5 8-5 8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
-    's-slider-choice': '<path d="M14 17h44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="40" cy="17" r="5" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2"/><rect x="14" y="28" width="28" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M52 30v8M48 34h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
-    's-contextual': '<rect x="12" y="12" width="34" height="22" rx="4" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2"/><path d="M18 20h20M18 27h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55"/><rect x="52" y="17" width="18" height="21" rx="3" stroke="currentColor" stroke-width="2"/><path d="M56 23h10M56 29h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>',
+    's-tree': '<path d="M14 12h9M14 12v20M20 22h5M20 32h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M46 16l-5 8 5 8M64 16l5 8-5 8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    's-slider': '<path d="M14 17h44" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="40" cy="17" r="5" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="2"/><rect x="14" y="28" width="28" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M52 30v8M48 34h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+    's-hovercard': '<rect x="12" y="12" width="34" height="22" rx="4" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2"/><path d="M18 20h20M18 27h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55"/><rect x="52" y="17" width="18" height="21" rx="3" stroke="currentColor" stroke-width="2"/><path d="M56 23h10M56 29h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>',
     's-calendar-sheet': '<rect x="16" y="10" width="48" height="30" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 18h48" stroke="currentColor" stroke-width="2"/><rect x="22" y="23" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.35"/><rect x="32" y="23" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/><rect x="42" y="23" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/><rect x="52" y="23" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/><rect x="22" y="31" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/><rect x="32" y="31" width="6" height="4" rx="1" fill="currentColor" fill-opacity="0.2"/>',
     's-streaming': '<rect x="14" y="12" width="52" height="24" rx="7" fill="currentColor" fill-opacity="0.08" stroke="currentColor" stroke-width="2"/><circle cx="29" cy="24" r="2.6" fill="currentColor"/><circle cx="40" cy="24" r="2.6" fill="currentColor" fill-opacity="0.6"/><circle cx="51" cy="24" r="2.6" fill="currentColor" fill-opacity="0.3"/>',
     's-agentstep': '<circle cx="18" cy="15" r="4.5" stroke="currentColor" stroke-width="2"/><path d="m15.7 15 1.6 1.6 3.2-3.2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 20v6" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="31" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M30 15h30M30 31h22" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55"/>',
@@ -2369,6 +2472,173 @@ team: finance</pre>
     }
   });
 
+  var GUIDE = {"s-button": {"use": "Use a Button to trigger an action within a region, such as saving a form, running an agent, or confirming a destructive operation.", "avoid": "Never use a Button for navigation that changes the URL — that is a Link. A button acts; a link moves.", "anti": ["No fixed widths or custom colors; radius is always sm", "More than one primary button per region", "Icon-only buttons outside the approved list, or ALL-CAPS labels", "Reserving accent for anything but conversational-AI CTAs — Run/Retry/Resume stay primary"], "where": "Everywhere: Workbench toolbars and page headers, Settings form footers, Modal footers, and table row actions (ghost)."}, "s-buttongroup": {"use": "Use a ButtonGroup to visually fuse related actions — attached peer actions like zoom or prev/next, or a split button pairing a primary action with a chevron menu of its true variants.", "avoid": "Do not use attached when the real need is exclusive single-state selection — that is a SegmentedControl.", "anti": ["Attaching primary buttons to each other (one primary per region still holds)", "Split menus containing actions unrelated to the main button", "More than 4 segments in a group", "Using accent in a split button — accent is the conversational-AI CTA only"], "where": "Workbench toolbars (zoom, view toggles) and run controls where a split Run button offers Run with options or Schedule run."}, "s-input": {"use": "Use Input for single-line text entry (text, email, password, number, search); use Textarea for multi-line entry with vertical resize or the Composer-style autogrow.", "avoid": "Do not use for choosing among known options (Select/Combobox), dates (DatePicker), or agent messages (Composer).", "anti": ["Placeholder used as the label — placeholder is example content only", "Floating labels (they break with Hangul metrics)", "Fixed field widths under 240px for translatable content", "Error text that only says 'invalid' instead of naming the fix"], "where": "Settings and Object edit forms, Workbench toolbar search fields, and inline table edit cells (the sanctioned hidden-label exception)."}, "s-select": {"use": "Use Select to choose one option from 5–15 known, static options, rendered as an Input-style trigger opening a Popover/Menu listbox.", "avoid": "Under 5 options use Radio; over 15, async, or user-known values use Combobox.", "anti": ["Mixing native select styling with custom menus", "Multi-select without rendering values as input Chips", "Menus wider than 480px or narrower than the trigger", "Forms with more than a single control inside a Popover, or submenus deeper than one level"], "where": "Settings forms, Workbench filter bars, table page-size pickers, and column/row action menus."}, "s-combobox": {"use": "Use a Combobox to pick one or many values from large (>15), async-loaded, or user-known option sets, with instant type-to-filter and highlighted matches.", "avoid": "For under 5 options use Radio, and for 5–15 static options use Select — Combobox is Select's big sibling, not its replacement.", "anti": ["Combobox for fewer than 5 or 5–15 static options", "Free-text values without an explicit creatable mode (never auto-create on blur)", "Menus narrower than the trigger, or selected Chips truncating instead of wrapping", "Select-all defaulting to destructive bulk changes"], "where": "Settings and Object forms for assignees, tags, and connectors, plus Workbench filter bars and toolbar pickers using search-in-menu."}, "s-datepicker": {"use": "Use a DatePicker for date, date-range, datetime, or time selection via a formatted Input trigger plus a calendar Popover.", "avoid": "Do not use it for durations — use an Input number field plus a unit — and do not use a time picker where a plain time field suffices.", "anti": ["Text-only date entry with no picker affordance", "Dropdown-per-unit day/month/year Selects except birthdate-style historic entry", "Two calendars for a single (non-range) date", "Relative-only display without the absolute value on hover, or ambiguous timezone on schedules and logs"], "where": "Settings schedule windows, Workbench log-query and run-history range filters, and Object forms with due or effective dates."}, "s-choices": {"use": "Use Checkbox for independent on/off or multi-select in forms and lists, Radio for exactly one of 2–5 visible options, and Switch for an instant-effect toggle that applies immediately.", "avoid": "Do not use a Switch inside a form with a Save button (use Checkbox), and do not use Radio for more than 5 options (use Select).", "anti": ["Checkbox used as an instant-effect toggle", "Switch placed inside a form that has a Save button", "Radio for more than 5 options", "A Switch mixed-state track taking the key color — it falsely signals ON for an instant-effect control"], "where": "Settings rows (instant-effect Switches, form Checkboxes/Radios), Object edit forms, and Workbench table selection columns and bulk-select headers."}, "s-segmented": {"use": "Use a SegmentedControl for an exclusive switch between 2–5 peer views or parameters with immediate effect, such as chart periods (1D/7D/30D) or list/grid layout toggles.", "avoid": "It is not Tabs (object facets), not Radio (deferred form data), and not for navigation or form submission; beyond 5 options use Select.", "anti": ["More than 5 segments", "Icon-only segments outside the approved icon list", "Mixing icon+text and text-only segments in one control", "Disabling individual segments (disable the whole control only)"], "where": "Chart period switchers in Workbench dashboards and Object detail views, and list/grid layout toggles in data regions."}, "s-badge": {"use": "Use a Badge as a compact, static annotation for status, counts, or categories — a badge only informs, it never responds to interaction.", "avoid": "If it can be clicked (select, refine, remove), use a Chip instead — the static/interactive split is absolute.", "anti": ["Interactive badges (that is a Chip)", "Sentence-length content or inventing colors", "Mixing emphasis levels or shapes for the same meaning within one view", "Using solid outside its named job — neutral solid is a release marker only, ai solid is a live-activity beacon only"], "where": "Workbench table status columns and count badges on nav items/tabs, Card and Object meta rows, and page-header title annotations."}, "s-chip": {"use": "Use a Chip as a compact interactive element to select, refine, remove a value, or accept an agent suggestion — the interactive counterpart to Badge.", "avoid": "Do not use a Chip for command or destructive actions (those are Buttons), and keep suggestion chips to Console and empty states only.", "anti": ["Chips acting as command or primary/destructive buttons", "Mixing input and filter chips in one row", "Manual color selection on category chips", "Suggestion chips outside their sanctioned surfaces, or truncating labels instead of wrapping the row"], "where": "Combobox multi-value and recipient lists, Workbench and list-header filter bars, and agent suggestion chips in the Console and empty states (max 3)."}, "s-avatar": {"use": "Use an Avatar to represent a user or agent identity via image or initials, with full-radius circles for humans and squared shapes for agents so authorship scans by shape alone.", "avoid": "Do not carry a status dot on the 20px avatar (illegible at that scale — surface the state elsewhere in the row), and do not mix presence and run-state vocabularies in one view.", "anti": ["Rectangular human avatars or round agent avatars", "Status dots without an established, single vocabulary per surface", "AvatarGroups that hide the overflow count", "A status dot on the 20px avatar"], "where": "Workbench table user/agent cells, Console agent identity, Composer agent picker, and profile surfaces (56px), with AvatarGroups on shared runs and objects."}, "s-card": {"use": "Use a Card to bound a group of related content, from flat surface grouping to outlined separable objects, elevated focus moments, ai agent-output containers, and stat KPI displays.", "avoid": "Do not use cards as page layout scaffolding, and do not use the ai variant on non-agent content.", "anti": ["Shadows outside the elevated variant", "Nesting bordered cards (use flat for inner grouping)", "Cards used as page layout scaffolding", "More than one elevated card per page, or card-per-row layouts pretending to be tables"], "where": "Workbench metric strips (stat cards) and Card grids, Settings section cards, Home approval-queue and agent-shelf cards, and Console ai/proposal cards."}, "s-banner": {"use": "Use a Banner as a persistent, full-width inline notice for a whole page or section, covering info, success, warning, danger, and neutral non-status contexts.", "avoid": "Do not use a Banner for a transient outcome (Toast) or a blocking decision (Modal); the solid strip is reserved for app-wide system-critical events only.", "anti": ["More than one Banner visible per region", "Solid emphasis for anything a user can simply dismiss", "Banners used as marketing surfaces", "Tint plus a saturated outline (the forbidden wireframe formula)"], "where": "App-wide maintenance and degraded-connection notices, Settings plan-limit escalations, and page/section-level warnings in Workbench and Object views."}, "s-toast": {"use": "Use a Toast for a transient outcome notification — bottom-right, max 3, auto-dismiss — including the Undo convention for reversible-lite mutations.", "avoid": "Do not use a Toast for validation errors (inline at the field) or decisions (Modal).", "anti": ["Toasts for field validation errors", "Toasts requiring a decision, or stacking more than 3 (queue instead)", "Inverse or contrast-flipped styling"], "where": "Confirming mutations and offering Undo across Workbench and Object surfaces."}, "s-tooltip": {"use": "Use a Tooltip for a brief ≤10-word clarification of an icon or truncated string, and to teach shortcuts via the kbd slot.", "avoid": "Not for interactive content or as an error surface, and never on a plainly labeled element.", "anti": ["Tooltips carrying interactive content", "Tooltips on plainly labeled elements", "Inverse or contrast-flipped styling"], "where": "Clarifying icon-only buttons, truncated table cells, and disabled controls."}, "s-loading": {"use": "Use a Skeleton for loads over 300ms with a known layout, a Spinner inside controls or for unknown-shape loads, and a ProgressBar for long-running work like agent runs, imports, and quota meters.", "avoid": "Do not use a full-page Spinner when the layout is known (use Skeleton), and do not use a ProgressBar for static score displays (compose a stat Card).", "anti": ["Full-page spinners when the layout is known", "Skeletons that don't match the loaded layout, or free-form shapes beyond line/block/circle", "Mixing a Spinner and a Skeleton in one region, or more than one spinner per region", "ProgressBar heights other than 4px, or percent text without a known denominator"], "where": "Workbench table and Chart skeletons during load, Spinners inside pessimistic-mutation Buttons, and ai ProgressBars for agent runs plus quota meters in Settings/billing and near the Composer."}, "s-table": {"use": "The workhorse for data-heavy screens: structured records in aligned columns, compact by default, with the closed cell-renderer set fixing alignment and formatting per column.", "avoid": "For visual or preview-led records use a Card grid (2-4 col), not a Table; a single object's fields belong in DescriptionList on an Object page.", "anti": ["No zebra striping (row dividers suffice)", "No more than 1 accent color inside a table", "No horizontal scroll without a pinned first column", "No card-per-row layouts pretending to be tables"], "where": "The data region of every Workbench (tables, dashboards, monitoring, queues, logs) and embedded Table regions inside Object pages."}, "s-nav": {"use": "Tabs switch between 2-7 peer views of the same object; Breadcrumb gives path context on pages deeper than 2 levels; Pagination navigates table/list pages.", "avoid": "Tabs are object facets, not sequential steps (compose a stepper); Breadcrumb is forbidden on top-level pages; use cursor-style 'Load more' for feeds, never infinite scroll in data tables.", "anti": ["No boxed or pill tab styles; no icon-only tabs; no >7 tabs", "No Tabs for sequential steps", "No Breadcrumb on top-level pages", "No infinite scroll in data tables"], "where": "Object pages (Breadcrumb above the header block, Tabs for object facets) and the footer of Workbench Tables/lists (Pagination)."}, "s-accordion": {"use": "Progressive disclosure of secondary content: advanced settings, FAQ-style detail, and raw payloads, with height animating at base duration.", "avoid": "Never a substitute for Tabs (peer views) or table row-grouping; primary content and actions stay visible, not folded away.", "anti": ["No hiding primary content, primary actions, or error states in collapsed items", "No nesting accordions", "No accordion as a stand-in for Tabs or table grouping", "No affordance icon other than the chevron"], "where": "Settings section cards (advanced options), stacked Object detail sections, and raw-payload disclosure on agent surfaces."}, "s-fileupload": {"use": "File input with visible per-file progress and recoverable errors; constraints (types, size, count) are shown before selection and violations are named per file.", "avoid": "Never a silent or progress-less upload; don't auto-submit on drop when a form still has unfilled required fields. Dashed borders are sanctioned for drop targets only.", "anti": ["No uploads without visible progress", "No silent rejection of oversized or wrong-type files", "No auto-submit on drop while a form has unfilled required fields", "No single combined progress bar (parallel per-file)"], "where": "Settings/forms and Object edit Drawers (dropzone or compact button), and Composer attachment flows in Console."}, "s-contextcard": {"use": "A referenced object (document, meeting, table, page) rendered as a physical, flat card - the visible form of what the agent is looking at.", "avoid": "For agent-generated media use MediaGroup (the one place rotation and thumbnails live); ContextCard stays flat and preview-less for referenced or attached objects.", "anti": ["No thumbnails or content previews inside the card", "No more than one meta line", "No manual colors", "No stacks for anything but referenced objects"], "where": "Console threads and the Composer, including the compact icon+title @-mention rendered inline in the Composer text row."}, "s-splitpanel": {"use": "Resizable adjacent regions in Workbench archetypes - list + detail, editor + preview, table + inspector - with independently scrolling panes and a persisted ratio.", "avoid": "Forbidden in fixed-layout archetypes (Settings, Guided); cap at 3 panes and one nesting level. Below min-width the secondary pane becomes a Drawer, not two unusable panes.", "anti": ["No more than 3 panes", "No nested splits beyond one horizontal + one vertical level", "No SplitPanel in Settings or Guided", "No panes without min widths (KO labels need the floor)"], "where": "Multi-panel Workbenches (default 40/60), where the divider is the boundary and the detail pane is an inline Object region."}, "s-chart": {"use": "Standardized data visualization from the closed type set (line, area, bar, stacked-bar, donut, sparkline); charts live inside Cards with a 16-semibold header, one chart per Card.", "avoid": "Donut/pie only up to 3 slices - beyond that use bar; aggregate a >8-series tail into 'Other'. Period switchers use SegmentedControl, not the chart itself.", "anti": ["No 3D, no dual y-axes", "No pie beyond 3 slices, no >8 series", "No decorative icons inside plots, no y-axis label rotation", "No gradients or opacity ramps as a third dimension"], "where": "Workbench dashboards and metric strips (inside Cards) and the sparkline cell renderer inside Tables."}, "s-modal": {"use": "Modal is for a blocking decision or focused short task over a scrim; Drawer is a right-side panel for detail or edit without leaving context (wide 800px variant for data review).", "avoid": "Modal is not for non-blocking info (use Toast/Banner) or scrollable full-page content (use a Drawer or page); Drawers never open from the left (reserved for Sidebar).", "anti": ["No modals opening modals; no nested drawers", "No scrollable full-page content inside a modal", "No more than 2 footer buttons; no modals for non-blocking info", "No left-side drawers"], "where": "Destructive confirms and form/browse-library dialogs across archetypes (Template Library at 760); Drawers for Object detail/edit and DiffView or run inspection (wide 800)."}, "s-desclist": {"use": "Key-value display - the backbone of Object detail views, Drawers, and expanded table rows - with side-by-side or stacked term/description rows.", "avoid": "Not a form: label + input pairs are a form (patterns section 3). Keep one list per column region rather than two-column term/value grids.", "anti": ["No more than ~10 rows without grouping under heading-sm titles", "No two-column term/value grids (KO/EN term widths diverge)", "No using it as a form", "Empty value is an em dash, never blank"], "where": "Object detail sections, edit Drawers, expanded table rows, and the bodies of HoverCard and CalendarView popovers."}, "s-empty": {"use": "The required state for every list, table, and search: centered medallion icon, one-line title, one-line explanation, and an optional single action, in one of three flavors (first-use, no-results, error).", "avoid": "In small containers (Drawer sections, popovers, NotificationCenter, HoverCard) use the compact variant; never a full-size EmptyState inside a small overlay, and never a dead-end when an action is possible.", "anti": ["No illustrations (v1 has no illustration language)", "No multi-paragraph explanations", "No dead-end empty states lacking an available action", "No bare 'no data' string in a Table frame"], "where": "Inside Table/list/search frames, Chart empty/error states, and the compact variant in Drawers, popovers, NotificationCenter, and HoverCard bodies."}, "s-timeline": {"use": "Timeline shows chronological activity - audit trails and run-history feeds.", "avoid": "History is read-only and separate from comment threads.", "anti": ["No editable or deletable history rows", "No relative-only timestamps (absolute on hover)", "No mixing a comment thread into the audit feed"], "where": "Page-level audit/run-history feed in Workbench and Object views (compact mini-log in Cards/Drawers)."}, "s-notifications": {"use": "NotificationCenter is the bell's panel of what happened while you were away - filter tabs, Today/Earlier groups, and per-item read/dismiss.", "avoid": "It only opens consequential surfaces - approving an agent proposal happens on the ProposalCard, never from a notification.", "anti": ["No marketing content", "No more than one content inline action per item", "No unread counts anywhere except the bell overlay", "No type expressed by color alone"], "where": "The popover from the topbar bell, across every archetype."}, "s-tree": {"use": "Use a Tree to display and select hierarchy - folders, org units, nested resources.", "avoid": "Not for flat or 2-level data (use a grouped list).", "anti": ["No connecting guide lines", "No trees for 2-level data", "No tree where a grouped list reads more clearly"], "where": "Resource hierarchies in Object and Workbench views."}, "s-code": {"use": "CodeBlock displays code, logs, and config in one muted theme; DiffView is standalone change comparison - the two monospace display surfaces.", "avoid": "CodeBlock is display, not an editor; DiffView shows one signal at a time - no syntax highlighting layered on the diff.", "anti": ["CodeBlock: no editing affordances; no nested scrolling beyond the one horizontal overflow", "DiffView: no three-way diffs; no syntax highlighting inside diffs", "DiffView: no scroll-linked panes that can desynchronize"], "where": "AgentStep detail and log/config surfaces (CodeBlock); run-config/policy comparison in wide Drawers and ProposalCard payloads (DiffView)."}, "s-slider": {"use": "Slider sets bounded continuous values where position is the meaning (thresholds, sampling %, volume); NumberInput is precise numeric entry - usually paired.", "avoid": "Slider never without a visible numeric value, and never for unbounded or precision-critical values (use NumberInput).", "anti": ["No sliders for dates/times", "No steppers on non-numeric inputs", "No percent sliders whose denominator is unknown"], "where": "Settings/config panels for thresholds and sampling (Slider paired with NumberInput)."}, "s-choicecard": {"use": "Use a ChoiceCard for one-/many-of selection where each option deserves a title and description.", "avoid": "For 2-6 explained options only - >6 or bare labels go to Radio/Select.", "anti": ["No nested inputs inside a choice card", "No unequal card heights in a group", "No images or illustrations (v1 has none)"], "where": "Guided onboarding pickers like plan or agent-type choice."}, "s-hovercard": {"use": "Use a HoverCard for a rich hover/focus preview of an entity reference (user, agent, run).", "avoid": "Its content must also live on the click-through page — hover is never a requirement.", "anti": ["No forms", "No nesting", "None on elements that already open popovers"], "where": "Entity references in Console, tables, and Timeline."}, "s-popconfirm": {"use": "Use a Popconfirm for inline confirmation of a low-stakes, reversible-ish action.", "avoid": "Permanent loss, bulk, or named-count actions go to a Modal, not a Popconfirm.", "anti": ["No chaining", "No inputs", "No softening a Modal-worthy action into a Popconfirm"], "where": "Single-object row actions like unpin or clear-filter."}, "s-contextmenu": {"use": "Use a ContextMenu as the right-click accelerator on dense data surfaces — the same Menu opened at the pointer.", "avoid": "Every action must also exist in visible UI; it is never the only path.", "anti": ["No context-only actions", "No submenus beyond one level", "No overriding the browser menu on text selections"], "where": "Dense Workbench tables and Trees."}, "s-calendar-sheet": {"use": "Schedule visualization of when agents run and what ran, in month or week views with viz-tinted event dots/blocks - not a booking system.", "avoid": "Not a booking or reservation system; keep a single event color system (viz assignment only) and let empty days simply be empty.", "anti": ["No month cells scrolling internally", "No empty-day placeholders", "No more than one event color system", "No repurposing it as a booking/reservation tool"], "where": "Workbench scheduling and monitoring surfaces showing agent run schedules and history (month grid and week variant)."}, "s-streaming": {"use": "Render agent replies as they generate — append-only token streaming with a live 2px ai.fg cursor — so the user sees the answer forming and can act on it mid-flight.", "avoid": "Don't stream already-complete content; render finished text instantly. Never simulate a typewriter effect on non-streamed output.", "anti": ["No artificial typewriter effects or fake latency on already-complete content — render instantly", "Never disable or lock the Composer during generation — queue or interrupt, don't lock the user out", "A Stop control (secondary tonal Button) must stay visible without scrolling; stopping keeps partial output and captions 'Stopped by you'", "Existing streamed lines never reflow or jump — streaming is append-only, blocks render only when they close"], "where": "The Console conversation surface, and every inline ask-agent surface (Home composer replies, Workbench run views) where an agent generates text."}, "s-agentstep": {"use": "Show all agent activity between request and answer as a flat AgentStep list — verb-first summaries with a state indicator (pending/running/success/failed/skipped) and optional duration.", "avoid": "Don't use AgentStep as a generic checklist for non-agent work; compose Checkbox lists for that. Don't surface a bare spinner for work over 10s.", "anti": ["Never nest steps deeper than one level — restructure the agent's reporting instead", "No paragraph-length summaries; steps are one 13px line each", "Don't animate state transitions beyond the indicator swap", "While running show at most the last 3 steps; on completion collapse to one summary row ('5 steps · 12s')"], "where": "The Console during multi-step generation and Workbench run/run-inspection views wherever an agent run reports its work."}, "s-proposal": {"use": "Use a ProposalCard when an agent wants to perform a consequential or side-effectful action (send, post, delete, write to third-party systems) — the agent proposes, the human approves, rejects, or edits.", "avoid": "Don't wrap non-consequential acts (answering a question) in a proposal, and don't use it for standing pre-approved tool+scope calls — those show a 'pre-approved' neutral Badge on the step instead.", "anti": ["Never auto-approve by timeout or add approval countdowns — absence of response means no action", "No default-focused Approve-all in batch proposals; offer Approve all / Review individually", "Destructive proposals swap Approve for a danger Button and must name consequences by count and noun ('Deletes 14 runs permanently')", "Resolved proposals collapse to a permanent attribution row and are never removed from the transcript; approvals are always pessimistic, never optimistically rendered"], "where": "The Console inline in the thread, and the Home approval queue where pending proposals surface as the human-in-the-loop backlog before anywhere else."}, "s-provenance": {"use": "Attach numbered SourceChips after sentences derived from retrievable sources, with a 출처 sources row of ContextCards below the message; mark confidence with the three-level Verified/Likely/Unverified Badge vocabulary.", "avoid": "Don't invent citations or raw percentages when the system isn't calibrated; claims with no retrievable source get a single 'Model knowledge' neutral Badge per message instead.", "anti": ["Never fake a citation, fake numbering, or cite the agent itself (self-citation)", "Max 3 chips per sentence — synthesize rather than pile markers", "No opacity, italics, or decorative question marks to express uncertainty — use the Badge vocabulary", "Hedge in copy OR in the Badge, never duplicate; a broken source shows the status.warning chip state, never silent removal"], "where": "The Console on agent answers, and any AgentOS surface that renders agent-written documents or reports (Workbench outputs)."}, "s-console": {"use": "The Console is the agent conversation archetype — a two-column layout with a max-760 message column plus optional context Drawer, where streaming, steps, approvals, and provenance live.", "avoid": "Don't use Console for record-display or metric surfaces (that's Workbench) or single-object detail (Object); reach the agent from those via CommandPalette instead.", "anti": ["Human messages are right-anchored bg.sunken bubbles; agent messages are full-width plain text on bg.page — never blur the two", "Agent identity is the squared Avatar; never a round avatar or non-standard AI marker (no sparkles, purple, or robot glyphs)", "Never optimistically render agent output or run state — agents report, they are not predicted", "The scroll container spans the full region with the column centered — no mid-canvas scrollbar beside the message column"], "where": "The Console archetype itself; its composer anatomy is reused (thread-less) in the Home start surface and inline ask-agent surfaces."}, "s-palette": {"use": "CommandPalette (⌘K/Ctrl+K) is the universal keyboard-first entry point for navigation, actions, and asking the agent — preserving accent-button scarcity by giving every screen one AI affordance.", "avoid": "Don't use it as a form container or a mouse-only affordance; it's a keyboard-driven launcher, not an input surface.", "anti": ["Never let the palette dead-end — the final fallback row is always 'Ask agent: {query}' with ai.fg text and the squared glyph", "No more than one palette; no mouse-only affordances", "Fuzzy-match results must highlight the matched substring", "Result rows never truncate the label (truncate trailing context instead)"], "where": "Global — invoked from any archetype (Console, Workbench, Object, Home) via ⌘K or the topbar search affordance."}, "s-followups": {"use": "Offer up to 3 suggestion Chips as the passive default for next turns; when the Composer is focused, an anchored glass follow-up panel MAY open above it with up to 4 keyboard-navigable rows.", "avoid": "Don't show chips and the panel simultaneously, and don't render follow-ups in the zero state — prompt starters own the empty conversation and hand off at the first turn.", "anti": ["A chip's visible label IS the query it sends — never a longer or different hidden prompt", "Selecting a follow-up inserts into the Composer; it never auto-sends", "The panel overlays thread content and must not push content down — layout shift on open is forbidden", "Chips and panel never render together; suggestion chips are sanctioned in Console and empty states only, max 3"], "where": "The Console above the Composer once a conversation has turns (chips passive, panel on Composer focus)."}, "s-mediagroup": {"use": "Use MediaGroup to present agent-generated media (images, chart renders, previews) as a casual 2–3 card fan with ±2.5° rotation — the system's one sanctioned playful moment.", "avoid": "Don't use it for referenced or attached objects (those are always-flat ContextCards) or for thumbnails anywhere else — rotation exists nowhere else in the system.", "anti": ["ONLY agent-generated media inside agent replies — never referenced/attached objects or general thumbnails", "Rotation is confined to media the agent made; playfulness lives in the output, never in the chrome", "No fake photographic 'evidence' — generated media follows the same honesty rules as text and carries the standard attribution row", "prefers-reduced-motion renders the whole group flat and static; media-only replies use the media ResponseToolbar rail, never both rail and message toolbar"], "where": "The Console in agent replies that produce generated media (e.g. Workbench run outputs surfaced in the thread)."}, "s-batch-input": {"use": "When a user submits multiple homogeneous inputs (files, records, queries) at once, run them as a queue with a per-item row showing mono filename, a progress bar, and status — plus an aggregate footer and Table of results.", "avoid": "Don't merge homogeneous inputs into one mega-prompt, and don't block the Composer while the batch runs — the tray stays usable.", "anti": ["One failure NEVER aborts the batch — 실패 rows retry individually, each row has its own pause/cancel", "External side effects inside a batch still pass ProposalCard — batching never bypasses approval", "Report partial success as partial ('Processed 312 of 328') with a link to failures — never rounded up to success", "Pre-approved tool budgets apply per item, not per batch"], "where": "The Console and Workbench run views where an agent processes a queue of files, records, or queries."}, "s-composer": {"use": "The Composer is the single agent input tray for Console and inline ask-agent surfaces — an auto-growing textarea with agent/model pickers, tools popover, attachments, and the accent send button (the screen's one point-color CTA).", "avoid": "Don't lock or disable the Composer during generation, on quota, or on a batch run — it queues or the send morphs to Stop; never gate it behind background work.", "anti": ["Send is the ONLY sanctioned icon-only circular control and the screen's single accent CTA — max one per screen; operational actions (Run/Retry/Resume) never earn the point color", "Disabling a tool the agent needs makes the agent ask for it by name — never silently fail or silently re-enable; model choice never changes permissions, tools, or approval rules", "Capability state is never silent — the + button carries a deviation dot when tool toggles differ from the agent's defaults", "Refine-prompt rewrites and voice dictation insert for the user to edit and NEVER auto-send; hard cap of five footer icons"], "where": "The Console (pinned input), the Home start surface (thread-less composer that opens a Console on send), and inline ask-agent surfaces."}, "s-response-toolbar": {"use": "Attach a ResponseToolbar of ghost icon-buttons (copy, regenerate, thumbs-up, thumbs-down, overflow) to agent messages so users can copy the markdown, regenerate the latest reply, or give feedback.", "avoid": "Don't put it on human bubbles or ProposalCards (those have their own footer), and offer regenerate only on the latest agent message — earlier messages drop it.", "anti": ["No destructive actions in the toolbar; share/export live in the ⋯ overflow only", "Feedback icons appear nowhere except here", "Never a filled icon for the thumbs select state — stroke set only, rendered as bg.selected fill (the favorite star is the sole fill-on-active exception)", "It acts on the answer only — reasoning text is excluded from copy/regenerate; when media accompanies text the message toolbar governs and the media rail is forbidden"], "where": "The Console on agent messages (hover/focus-reveal on desktop, persistent in dense consoles); the media rail variant beside a media-only MediaGroup reply."}, "s-reasoning": {"use": "Disclose an agent's working/reasoning as a collapsed disclosure row (chevron + 'Reasoning' + duration) that expands to muted text.", "avoid": "Don't present reasoning as answer content.", "anti": ["Never uses fg.primary, never carries SourceChips, excluded from the ResponseToolbar", "Auto-expand is forbidden", "A redacted section says so plainly — never renders empty"], "where": "The Console on agent messages; Workbench run/activity feeds."}, "s-guardrail": {"use": "Render an agent refusal as a neutral Guardrail notice — a shield Banner on bg.sunken that names the path forward.", "avoid": "Never style a policy block as an error, and never disguise it as a technical failure (or the reverse).", "anti": ["NEVER status.danger — red teaches users that policy is breakage", "Never disguise a policy block as a technical failure", "Never renders empty or blames the user"], "where": "The Console on agent messages, and Workbench run feeds where 'Needs review' states surface."}, "s-handoff": {"use": "Render a person takeover as a first-class Handoff conversation event; the actor avatar shape flips round↔squared and stays flipped.", "avoid": "Don't let an agent silently reclaim a task a human took over — handing back is an explicit 'Resume agent' action.", "anti": ["Handoffs are first-class events, never inferred from adjacent rows", "The avatar flip stays flipped", "Agents never silently reclaim a handed-off task"], "where": "The Console and Workbench run/activity feeds where handoffs occur."}, "s-usage": {"use": "Show plan/token/quota consumption as a determinate ProgressBar with tabular-nums values (e.g. '1.2M / 2M tokens'), warning fill at ≥80% and danger at 100% with a plan-limit Banner.", "avoid": "Don't use it as permanent navigation chrome or for static 'score' displays (compose a stat Card); it lives in settings/billing and may appear as a compact bar near the Composer only when a limit is near.", "anti": ["The Composer never locks on quota — agents keep accepting and queue requests; the Banner carries the state", "Costs shown on runs are actuals, locale-formatted; estimates are labeled as estimates and derived from history, never invented", "No percent text without a known denominator; usage is the one sanctioned capacity meter", "At 100% escalate via the plan-limit Banner ('out of agent credits — runs are queued'), degrading gracefully rather than blocking"], "where": "Settings/billing surfaces, and a compact bar adjacent to the Home/Console Composer when a workspace limit is near."}};
+  function secLabel(t){var d=document.createElement('div');d.className='sec-label';d.textContent=t;return d;}
+  function guideP(t){var el=document.createElement('p');el.className='guide-p';el.textContent=t;return el;}
+  function guideList(arr){var ul=document.createElement('ul');ul.className='guide-list';arr.forEach(function(x){var li=document.createElement('li');li.textContent=x;ul.appendChild(li);});return ul;}
+  // Restructure each story into a documentation detail page (v6.54):
+  // header (eyebrow · title · spec ref) → definition (.desc) → Examples (demo) → Related.
+  function relatedBlock(s, g, cat) {
+    var sibs = (g === 'Components' && cat) ? CAT[cat].slice() : groups[g].map(function (x) { return x.id; });
+    var rel = sibs.filter(function (id) { return id !== s.id; });
+    if (!rel.length) return null;
+    var wrap = document.createElement('div'); wrap.className = 'related';
+    var rl = document.createElement('div'); rl.className = 'rel-label'; rl.textContent = 'Related';
+    var links = document.createElement('div'); links.className = 'rel-links';
+    rel.slice(0, 10).forEach(function (id) {
+      var st = byId[id]; if (!st) return;
+      var a = document.createElement('a'); a.className = 'rel-chip'; a.href = '#' + id; a.textContent = st.getAttribute('data-title');
+      links.appendChild(a);
+    });
+    wrap.appendChild(rl); wrap.appendChild(links); return wrap;
+  }
+  function guidanceInto(target, id) {
+    var gd = GUIDE[id]; if (!gd) return;
+    if (gd.use)   { target.appendChild(secLabel('When to use'));      target.appendChild(guideP(gd.use)); }
+    if (gd.avoid) { target.appendChild(secLabel('When not to use'));  target.appendChild(guideP(gd.avoid)); }
+    if (gd.anti && gd.anti.length) { target.appendChild(secLabel('Anti-patterns')); target.appendChild(guideList(gd.anti)); }
+    if (gd.where) { target.appendChild(secLabel("Where it's used in AgentOS")); target.appendChild(guideP(gd.where)); }
+  }
+  function enhance(s) {
+    if (s.__enhanced) return; s.__enhanced = true;
+    var g = s.getAttribute('data-group'), cat = catOf[s.id];
+    var hdr = document.createElement('div'); hdr.className = 'doc-header';
+    var eb = document.createElement('div'); eb.className = 'eyebrow'; eb.textContent = (cat ? cat + ' · ' : '') + g;
+    var h1 = document.createElement('h1'); h1.textContent = titleOf(s);
+    hdr.appendChild(eb); hdr.appendChild(h1);
+    var doc = s.getAttribute('data-doc');
+    if (doc) { var sr = document.createElement('span'); sr.className = 'specref'; sr.textContent = doc; hdr.appendChild(sr); }
+    var desc = s.querySelector('.desc');
+
+    if (g === 'Sample pages') {
+      // full-screen mockups: give them a header, and split the "Interactive:" hint into its own note
+      s.insertBefore(hdr, s.firstChild);
+      if (desc) {
+        var strong = null;
+        Array.prototype.forEach.call(desc.querySelectorAll('strong'), function (el) { if (/interactive/i.test(el.textContent)) strong = el; });
+        if (strong) {
+          var note = document.createElement('p'); note.className = 'try-note';
+          var tl = document.createElement('span'); tl.className = 'try-label'; tl.textContent = 'Interactive';
+          note.appendChild(tl); note.appendChild(document.createTextNode(' '));
+          var cur = strong.nextSibling;
+          while (cur) { var nx = cur.nextSibling; note.appendChild(cur); cur = nx; }
+          strong.remove();
+          desc.parentNode.insertBefore(note, desc.nextSibling);
+        }
+      }
+      return;
+    }
+    var twoCol = (g === 'Components' || g === 'AI patterns');
+
+    if (twoCol) {
+      // docs (left) | dedicated sticky Examples column (right)
+      var demoNodes = Array.prototype.filter.call(s.children, function (n) { return n !== desc; });
+      var main = document.createElement('div'); main.className = 'doc-main';
+      var aside = document.createElement('div'); aside.className = 'doc-aside';
+      main.appendChild(hdr);
+      if (desc) main.appendChild(desc);
+      guidanceInto(main, s.id);
+      var rel = relatedBlock(s, g, cat); if (rel) main.appendChild(rel);
+      aside.appendChild(secLabel('Examples'));
+      demoNodes.forEach(function (n) { aside.appendChild(n); });
+      var grid = document.createElement('div'); grid.className = 'doc-grid';
+      grid.appendChild(main); grid.appendChild(aside);
+      s.appendChild(grid);
+    } else {
+      // single column (Foundations, Recipes)
+      s.insertBefore(hdr, s.firstChild);
+      var firstDemo = desc ? desc.nextElementSibling : hdr.nextElementSibling;
+      if (firstDemo) {
+        var frag = document.createDocumentFragment();
+        guidanceInto(frag, s.id);
+        frag.appendChild(secLabel('Examples'));
+        s.insertBefore(frag, firstDemo);
+      }
+      var rel2 = relatedBlock(s, g, cat); if (rel2) s.appendChild(rel2);
+    }
+  }
+  stories.forEach(enhance);
+
+  // Make the example demos interactive (delegated on the canvas)
+  function reapplyNotifFilter(np) {
+    if (!np) return;
+    var active = np.querySelector('.n-filter .seg button.on');
+    var f = active ? active.getAttribute('data-nfilter') : 'all';
+    Array.prototype.forEach.call(np.querySelectorAll('.n-item'), function (it) {
+      var t = it.getAttribute('data-type');
+      var show = f === 'all' || (f === 'unread' && it.classList.contains('unread')) || (f === 'mention' && t === 'mention');
+      it.classList.toggle('hidden', !show);
+    });
+    Array.prototype.forEach.call(np.querySelectorAll('.n-scroll > .grp'), function (h) {
+      var any = false, n = h.nextElementSibling;
+      while (n && !n.classList.contains('grp')) { if (n.classList.contains('n-item') && !n.classList.contains('hidden')) { any = true; break; } n = n.nextElementSibling; }
+      h.classList.toggle('hidden', !any);
+    });
+    var scroll = np.querySelector('.n-scroll');
+    var anyItem = np.querySelector('.n-item:not(.hidden)');
+    var empty = np.querySelector('.n-empty');
+    if (!anyItem && scroll) {
+      if (!empty) { empty = document.createElement('div'); empty.className = 'n-empty'; empty.setAttribute('lang', 'ko'); empty.style.padding = 'var(--sy-space-16)'; empty.style.textAlign = 'center'; empty.innerHTML = '<span class="sy-type-body-sm" style="color: var(--sy-fg-secondary);">모두 확인했습니다</span>'; scroll.appendChild(empty); }
+    } else if (empty) { empty.parentNode.removeChild(empty); }
+  }
+
+  canvas.addEventListener('click', function (e) {
+    var nAct = e.target.closest('.notif .n-act');
+    if (nAct) {
+      var nItem = nAct.closest('.n-item'), np = nAct.closest('.notif');
+      if (nAct.classList.contains('n-dismiss')) { nItem.parentNode.removeChild(nItem); }
+      else { var wasUnread = nItem.classList.contains('unread'); nItem.classList.toggle('unread', !wasUnread); nItem.classList.toggle('read', wasUnread); }
+      reapplyNotifFilter(np); e.stopPropagation(); return;
+    }
+    var nAll = e.target.closest('.notif .n-markall');
+    if (nAll) {
+      var npAll = nAll.closest('.notif');
+      Array.prototype.forEach.call(npAll.querySelectorAll('.n-item'), function (i) { i.classList.remove('unread'); i.classList.add('read'); });
+      reapplyNotifFilter(npAll); e.stopPropagation(); return;
+    }
+    var tab = e.target.closest('.tabs .tab');
+    if (tab && tab.parentElement) {
+      Array.prototype.forEach.call(tab.parentElement.children, function (t) { if (t.classList.contains('tab')) t.classList.toggle('active', t === tab); });
+      return;
+    }
+    var seg = e.target.closest('.seg button');
+    if (seg && seg.parentElement && !seg.closest('#themeToggle')) {
+      Array.prototype.forEach.call(seg.parentElement.children, function (b) { if (b.tagName === 'BUTTON') b.classList.toggle('on', b === seg); });
+      var segNotif = seg.closest('.notif'); if (segNotif) reapplyNotifFilter(segNotif);
+      return;
+    }
+    var acch = e.target.closest('.acc-h');
+    if (acch) {
+      var open = acch.getAttribute('aria-expanded') === 'true';
+      acch.setAttribute('aria-expanded', String(!open));
+      var chev = acch.querySelector('.icon'); if (chev) chev.style.transform = open ? '' : 'rotate(90deg)';
+      return;
+    }
+    var card = e.target.closest('.card[role="radio"]');
+    if (card && card.parentElement) {
+      Array.prototype.forEach.call(card.parentElement.children, function (c) {
+        if (c.getAttribute && c.getAttribute('role') === 'radio') { var on = c === card; c.classList.toggle('cc-sel', on); c.setAttribute('aria-checked', String(on)); }
+      });
+      return;
+    }
+  });
+  // Draggable sliders — update fill, thumb, and the value readout
+  Array.prototype.forEach.call(canvas.querySelectorAll('.sldr'), function (bar) {
+    var fill = bar.querySelector('div'), thumb = bar.querySelector('.sldr-thumb');
+    var label = bar.parentElement && bar.parentElement.querySelector('.plabel .n');
+    var dragging = false;
+    function set(clientX) {
+      var r = bar.getBoundingClientRect();
+      var pct = Math.max(0, Math.min(1, (clientX - r.left) / r.width));
+      if (fill) fill.style.width = (pct * 100) + '%';
+      if (thumb) thumb.style.left = (pct * 100) + '%';
+      if (label) label.textContent = Math.round(pct * 10);
+    }
+    bar.addEventListener('pointerdown', function (e) { dragging = true; try { bar.setPointerCapture(e.pointerId); } catch (x) {} set(e.clientX); });
+    bar.addEventListener('pointermove', function (e) { if (dragging) set(e.clientX); });
+    bar.addEventListener('pointerup', function () { dragging = false; });
+  });
+
   function show(id) {
     var isOverview = (id === 'overview' || !id);
     var target = isOverview ? null : document.getElementById(id);
@@ -2381,11 +2651,12 @@ team: finance</pre>
     });
     var title = document.getElementById('storyTitle'), doc = document.getElementById('storyDoc');
     if (isOverview) {
-      canvas.classList.add('full');
+      canvas.classList.remove('detail'); canvas.classList.add('full');
       title.textContent = 'Overview'; doc.textContent = stories.length + ' components';
     } else {
-      canvas.classList.toggle('full', target.getAttribute('data-group') === 'Sample pages');
       var g = target.getAttribute('data-group'), cat = catOf[target.id], sep = ' <span class="crumb-sep">›</span> ';
+      canvas.classList.toggle('full', g === 'Sample pages');
+      canvas.classList.toggle('detail', g === 'Components' || g === 'AI patterns');
       title.innerHTML = g + (cat ? sep + cat : '') + sep + titleOf(target);
       doc.textContent = target.getAttribute('data-doc') || '';
     }
@@ -2394,12 +2665,14 @@ team: finance</pre>
   window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
   show(location.hash.slice(1) || 'overview');
 
-  var themeBtn = document.getElementById('themeBtn');
-  themeBtn.addEventListener('click', function () {
-    var el = document.documentElement;
-    var next = el.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    el.setAttribute('data-theme', next);
-    themeBtn.textContent = next === 'light' ? 'Dark mode' : 'Light mode';
+  var themeToggle = document.getElementById('themeToggle');
+  Array.prototype.forEach.call(themeToggle.querySelectorAll('button'), function (b) {
+    b.addEventListener('click', function () {
+      document.documentElement.setAttribute('data-theme', b.dataset.setTheme);
+      Array.prototype.forEach.call(themeToggle.querySelectorAll('button'), function (x) {
+        x.classList.toggle('on', x === b);
+      });
+    });
   });
 
   var styles = [
@@ -2472,7 +2745,7 @@ team: finance</pre>
     'Backgrounds — levels & interaction': ['bg-page','bg-surface','bg-raised','bg-raised-2','bg-sunken','bg-hover','bg-active','bg-selected','bg-selected-hover','bg-disabled','bg-scrim','bg-inverse'],
     'Foreground': ['fg-primary','fg-secondary','fg-tertiary','fg-placeholder','fg-disabled','fg-inverse','fg-link','fg-link-inverse','fg-on-solid'],
     'Borders': ['border-subtle','border-default','border-strong','border-focus','border-selected','border-error'],
-    'Actions': ['action-primary-bg','action-primary-bg-hover','action-primary-bg-active','action-primary-fg','action-accent-bg','action-accent-bg-hover','action-accent-bg-active','action-accent-fg','action-danger-fg'],
+    'Actions': ['action-primary-bg','action-primary-bg-hover','action-primary-bg-active','action-primary-fg','action-brand-bg','action-brand-bg-hover','action-brand-bg-active','action-brand-fg','action-danger-fg'],
     'Status': ['status-info','status-info-bg','status-info-bg-solid','status-info-inverse','status-success','status-success-bg','status-success-bg-solid','status-success-inverse','status-warning','status-warning-bg','status-warning-bg-solid','status-warning-inverse','status-danger','status-danger-bg','status-danger-bg-solid','status-danger-bg-solid-hover','status-danger-inverse'],
     'AI': ['ai-surface','ai-border','ai-fg','ai-solid'],
     'Emphasis — quiet, non-vibrant (v6.11)': ['emphasis-surface','emphasis-border','emphasis-fg']
@@ -2512,22 +2785,25 @@ team: finance</pre>
   var dash = '<span style="color: var(--sy-fg-disabled);">—</span>';
 
   var btnStates = ['default','hover','active','focus','disabled','loading'];
-  var btnVariants = ['primary','secondary','ghost','danger','accent'];
+  var btnVariants = ['primary','secondary','ghost','danger','brand'];
   var btnOverride = {
     primary:  { hover: 'background: var(--sy-action-primary-bg-hover);', active: 'background: var(--sy-action-primary-bg-active);' },
     secondary:{ hover: 'background: var(--sy-action-secondary-bg-hover);', active: 'background: var(--sy-action-secondary-bg-hover);' },
     ghost:    { hover: 'background: var(--sy-bg-hover);', active: 'background: var(--sy-bg-active);' },
     danger:   { hover: 'background: var(--sy-status-danger-bg-solid-hover);', active: 'background: var(--sy-status-danger-bg-solid-hover);' },
-    accent:   { hover: 'background: var(--sy-action-accent-bg-hover);', active: 'background: var(--sy-action-accent-bg-active);' }
+    brand:    { hover: 'background: var(--sy-action-brand-bg-hover);', active: 'background: var(--sy-action-brand-bg-active);' }
   };
   document.getElementById('btnMatrix').appendChild(matrixTable(btnStates, btnVariants, function (v, s) {
     var style = (btnOverride[v] && btnOverride[v][s]) || '';
-    if (s === 'focus') style = 'outline: 2px solid var(--sy-border-focus); outline-offset: 2px;';
+    if (s === 'focus') {
+      var ring = { primary: 'var(--sy-action-primary-bg) 45%', secondary: 'var(--sy-fg-primary) 40%', ghost: 'var(--sy-fg-primary) 40%', danger: 'var(--sy-status-danger-bg-solid) 55%', brand: 'var(--sy-action-brand-bg) 55%' }[v] || 'var(--sy-border-focus) 50%';
+      style = 'outline: 2px solid transparent; box-shadow: 0 0 0 2px color-mix(in srgb, ' + ring + ', transparent);';
+    }
     var dis = s === 'disabled' ? ' disabled' : '';
     var spin = '';
     if (s === 'loading') {
-      var sc = (v === 'primary' || v === 'danger' || v === 'accent') ? 'var(--sy-action-primary-fg)' : 'var(--sy-fg-tertiary)';
-      if (v === 'danger' || v === 'accent') sc = 'var(--sy-fg-on-solid)';
+      var sc = (v === 'primary' || v === 'danger' || v === 'brand') ? 'var(--sy-action-primary-fg)' : 'var(--sy-fg-tertiary)';
+      if (v === 'danger' || v === 'brand') sc = 'var(--sy-fg-on-solid)';
       spin = '<span class="spinner" style="border-top-color: ' + sc + ';"></span>';
     }
     return '<button type="button" class="btn btn-' + v + ' btn-sm"' + dis + (style ? ' style="' + style + '"' : '') + '>' + spin + 'Label</button>';
@@ -2640,14 +2916,25 @@ team: finance</pre>
       return o;
     }
 
+    var nActs = '<span class="n-actions">' +
+      '<button class="n-act n-read" type="button" aria-label="읽음/안읽음 전환"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/></svg></button>' +
+      '<button class="n-act n-dismiss" type="button" aria-label="지우기"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></span>';
     var notifHtml = '<div class="notif" lang="ko">' +
-      '<div class="n-h"><span class="sy-type-label">알림</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="모두 읽음 처리" style="margin-left:auto;"><svg class="icon" viewBox="0 0 24 24"><path d="m2 13 4 4L14 9"/><path d="m10 13 4 4 8-8"/></svg></button></div>' +
+      '<div class="n-h"><span class="sy-type-label">알림</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="알림 설정" style="margin-left:auto;"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-icon btn-sm n-markall" type="button" aria-label="모두 읽음 처리"><svg class="icon" viewBox="0 0 24 24"><path d="m2 13 4 4L14 9"/><path d="m10 13 4 4 8-8"/></svg></button></div>' +
+      '<div class="n-filter"><div class="seg" role="tablist"><button class="on" type="button" data-nfilter="all">전체</button><button type="button" data-nfilter="unread">읽지 않음</button><button type="button" data-nfilter="mention">멘션</button></div></div>' +
+      '<div class="n-scroll">' +
       '<div class="grp sy-type-micro-label" style="padding: var(--sy-space-4) var(--sy-space-8);">오늘</div>' +
-      '<div class="n-item unread"><span class="n-dot"></span><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;">' + agentGlyph + '</span><span style="min-width:0;"><span class="sy-type-body-sm">주간 보고서 실행이 완료되었습니다</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">10분 전</span></span></div>' +
-      '<div class="n-item unread"><span class="n-dot"></span><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-2) 20%, transparent); color: var(--sy-viz-2); flex:none;">' + agentGlyph + '</span><span style="min-width:0;"><span class="sy-type-body-sm">문의 분류 제안이 승인을 기다립니다</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">32분 전</span></span></div>' +
+      '<div class="n-item unread" data-type="approval"><span class="n-dot"></span><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-2) 20%, transparent); color: var(--sy-viz-2); flex:none;">' + agentGlyph + '</span><span class="n-body"><span class="sy-type-body-sm"><span style="font-weight:500;">문의 분류</span> 제안이 승인을 기다립니다</span><span class="n-meta"><a class="sy-link" href="#" style="font-size: var(--sy-text-12);">검토</a><span class="sy-type-caption n-time">32분 전</span>' + nActs + '</span></span></div>' +
+      '<div class="n-item unread" data-type="run"><span class="n-dot"></span><span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;">' + agentGlyph + '</span><span class="n-body"><span class="sy-type-body-sm"><span style="font-weight:500;">주간 보고서</span> 실행이 완료되었습니다</span><span class="n-meta"><span class="sy-type-caption n-time">10분 전</span>' + nActs + '</span></span></div>' +
+      '<div class="n-item unread" data-type="mention"><span class="n-dot"></span><span class="avatar av-20" style="background: color-mix(in srgb, var(--sy-viz-5) 20%, transparent); color: var(--sy-viz-5); flex:none;">MK</span><span class="n-body"><span class="sy-type-body-sm"><span style="font-weight:500;">민경</span>님이 회원님을 언급했습니다</span><span class="n-meta"><span class="sy-type-caption n-time">1시간 전</span>' + nActs + '</span></span></div>' +
       '<div class="grp sy-type-micro-label" style="padding: var(--sy-space-4) var(--sy-space-8);">이전</div>' +
-      '<div class="n-item"><span style="width:8px; flex:none;"></span><span class="avatar av-20" style="background: color-mix(in srgb, var(--sy-viz-5) 20%, transparent); color: var(--sy-viz-5); flex:none;">MK</span><span style="min-width:0;"><span class="sy-type-body-sm">민경님이 댓글을 남겼습니다</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">어제</span></span></div>' +
-      '<div class="n-f"><a class="sy-link" href="#" style="font-size: var(--sy-text-12);">알림 설정</a><a class="sy-link" href="#" style="font-size: var(--sy-text-12);">모두 보기</a></div></div>';
+      '<div class="n-item read" data-type="comment"><span class="n-dot"></span><span class="avatar av-20" style="background: color-mix(in srgb, var(--sy-viz-3) 20%, transparent); color: var(--sy-viz-3); flex:none;">JH</span><span class="n-body"><span class="sy-type-body-sm"><span style="font-weight:500;">지훈</span>님이 댓글을 남겼습니다</span><span class="n-meta"><span class="sy-type-caption n-time">어제</span>' + nActs + '</span></span></div>' +
+      '<div class="n-item read" data-type="system"><span class="n-dot"></span><span class="n-type"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span><span class="n-body"><span class="sy-type-body-sm">새 버전 v6.59가 배포되었습니다</span><span class="n-meta"><span class="sy-type-caption n-time">2일 전</span>' + nActs + '</span></span></div>' +
+      '</div>' +
+      '<div class="n-f"><button class="btn btn-ghost btn-sm" type="button">모두 보기<svg class="icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>';
+
+    var _notifHost = document.getElementById('notifDemoHost');
+    if (_notifHost) _notifHost.innerHTML = notifHtml;
 
     var profileHtml = '<div class="menu" style="width: 200px;" lang="ko">' +
       '<div style="display:flex; gap: var(--sy-space-8); align-items:center; padding: var(--sy-space-8);"><span class="avatar av-32" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;">JC</span><span style="min-width:0;"><span class="sy-type-label">조주연</span><br><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">jooyeon@enhans.ai</span></span></div>' +
@@ -2961,7 +3248,7 @@ team: finance</pre>
         var send = frame.querySelector('button[aria-label="Send"]');
         if (send) send.addEventListener('click', function () {
           var stopped = send.classList.contains('btn-secondary');
-          send.classList.toggle('btn-accent', stopped); send.classList.toggle('btn-secondary', !stopped);
+          send.classList.toggle('btn-brand', stopped); send.classList.toggle('btn-secondary', !stopped);
           send.innerHTML = stopped ? '<svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>' : '<svg class="icon" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1"/></svg>';
           send.setAttribute('aria-label', stopped ? 'Send' : 'Stop');
         });
