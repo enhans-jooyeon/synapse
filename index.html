@@ -75,7 +75,16 @@
 
   /* ---- content layout ---- */
   .content { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: var(--sy-space-32); padding: var(--sy-space-40) var(--sy-space-40) var(--sy-space-48); }
+  .doc-col { min-width: 0; }
   .doc { max-width: 820px; min-width: 0; }
+  .tnote {
+    max-width: 820px; margin-bottom: var(--sy-space-20);
+    background: var(--sy-bg-sunken); border: 1px solid var(--sy-border-subtle);
+    border-radius: var(--sy-radius-md); padding: var(--sy-space-12) var(--sy-space-16);
+    color: var(--sy-fg-secondary); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh);
+  }
+  .tnote strong { color: var(--sy-fg-primary); font-weight: var(--sy-weight-semibold); }
+  .tnote.stale { border-color: var(--sy-status-warning); }
   .toc { position: sticky; top: 80px; align-self: start; max-height: calc(100vh - 96px); overflow-y: auto; }
   .toc-label {
     font-size: var(--sy-text-11); line-height: var(--sy-text-11-lh); font-weight: var(--sy-weight-medium);
@@ -131,8 +140,9 @@
     <span class="brand"><span class="mark" aria-hidden="true">S</span>Synapse</span>
     <span class="ver" id="ver">—</span>
     <div class="top-actions">
+      <button class="btn btn-ghost" id="lang" type="button" aria-label="Language" lang="ko">한국어</button>
       <button class="btn btn-ghost" id="theme" type="button" aria-label="Toggle theme">Theme</button>
-      <a class="btn" href="preview.html">Component browser →</a>
+      <a class="btn" id="browserlink" href="preview.html">Component browser →</a>
       <a class="btn btn-ghost" href="https://github.com/enhans-jooyeon/synapse" target="_blank" rel="noopener">GitHub</a>
     </div>
   </header>
@@ -140,79 +150,135 @@
   <nav class="side" id="side"></nav>
 
   <div class="content">
+    <div class="doc-col">
+    <div class="tnote" id="tnote" hidden></div>
     <article class="doc" id="doc"><div class="doc-status">Loading…</div></article>
-    <aside class="toc"><div class="toc-label">On this page</div><div id="toc"></div></aside>
+    </div>
+    <aside class="toc"><div class="toc-label" id="toc-label">On this page</div><div id="toc"></div></aside>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <script>
   var NAV = [
-    { group: "Start", items: [
-      { id: "overview", label: "Overview", file: "design.md" }
+    { group: "Start", groupKo: "시작", items: [
+      { id: "overview", label: "Overview", labelKo: "개요", file: "design.md" }
     ]},
-    { group: "Foundations", items: [
-      { id: "foundations", label: "Foundations", file: "foundations.md" },
-      { id: "content", label: "Content & voice", file: "content.md" },
-      { id: "icons", label: "Icon registry", file: "icons.md" }
+    { group: "Foundations", groupKo: "기초", items: [
+      { id: "foundations", label: "Foundations", labelKo: "기초", file: "foundations.md" },
+      { id: "content", label: "Content & voice", labelKo: "콘텐츠 · 보이스", file: "content.md" },
+      { id: "icons", label: "Icon registry", labelKo: "아이콘 레지스트리", file: "icons.md" }
     ]},
-    { group: "Library", items: [
-      { id: "components", label: "Components", file: "components.md" },
-      { id: "recipes", label: "Recipes", file: "recipes.md" }
+    { group: "Library", groupKo: "라이브러리", items: [
+      { id: "components", label: "Components", labelKo: "컴포넌트", file: "components.md" },
+      { id: "recipes", label: "Recipes", labelKo: "레시피", file: "recipes.md" }
     ]},
-    { group: "AI & pages", items: [
-      { id: "ai-patterns", label: "AI patterns", file: "ai-patterns.md" },
-      { id: "patterns", label: "Page patterns", file: "patterns.md" }
+    { group: "AI & pages", groupKo: "AI · 페이지", items: [
+      { id: "ai-patterns", label: "AI patterns", labelKo: "AI 패턴", file: "ai-patterns.md" },
+      { id: "patterns", label: "Page patterns", labelKo: "페이지 패턴", file: "patterns.md" }
     ]},
-    { group: "Reference", items: [
-      { id: "changelog", label: "Changelog", file: "CHANGELOG.md" }
+    { group: "Reference", groupKo: "참고", items: [
+      { id: "changelog", label: "Changelog", labelKo: "체인지로그", file: "CHANGELOG.md" }
     ]}
   ];
+
+  var I18N = {
+    en: { live: "Live", browser: "Component browser", browserLink: "Component browser →",
+          toc: "On this page", loading: "Loading", fail: "Could not load", langBtn: "한국어" },
+    ko: { live: "라이브", browser: "컴포넌트 브라우저", browserLink: "컴포넌트 브라우저 →",
+          toc: "이 페이지에서", loading: "불러오는 중", fail: "불러올 수 없습니다", langBtn: "English" }
+  };
+  var lang = "en";
+  try { lang = localStorage.getItem("sy-docs-lang") === "ko" ? "ko" : "en"; } catch (e) {}
   var FILES = {};
   NAV.forEach(function (g) { g.items.forEach(function (it) { FILES[it.id] = it; }); });
 
-  // sidebar
+  // sidebar (rebuilt on language switch)
   var side = document.getElementById("side");
-  NAV.forEach(function (g) {
-    var wrap = document.createElement("div"); wrap.className = "nav-group";
-    var lab = document.createElement("div"); lab.className = "nav-label"; lab.textContent = g.group; wrap.appendChild(lab);
-    g.items.forEach(function (it) {
-      var a = document.createElement("a"); a.className = "nav-item"; a.href = "#/" + it.id;
-      a.dataset.id = it.id; a.textContent = it.label; wrap.appendChild(a);
+  function buildNav() {
+    side.innerHTML = "";
+    NAV.forEach(function (g) {
+      var wrap = document.createElement("div"); wrap.className = "nav-group";
+      var lab = document.createElement("div"); lab.className = "nav-label";
+      lab.textContent = lang === "ko" ? g.groupKo : g.group; wrap.appendChild(lab);
+      g.items.forEach(function (it) {
+        var a = document.createElement("a"); a.className = "nav-item"; a.href = "#/" + it.id;
+        a.dataset.id = it.id; a.textContent = lang === "ko" ? it.labelKo : it.label; wrap.appendChild(a);
+      });
+      side.appendChild(wrap);
     });
-    side.appendChild(wrap);
-  });
-  // live browser row in nav
-  (function () {
     var wrap = document.createElement("div"); wrap.className = "nav-group";
-    var lab = document.createElement("div"); lab.className = "nav-label"; lab.textContent = "Live"; wrap.appendChild(lab);
+    var lab = document.createElement("div"); lab.className = "nav-label"; lab.textContent = I18N[lang].live; wrap.appendChild(lab);
     var a = document.createElement("a"); a.className = "nav-item"; a.href = "preview.html";
-    a.innerHTML = "Component browser <span class='ext' aria-hidden='true'>↗</span>"; wrap.appendChild(a);
+    a.innerHTML = I18N[lang].browser + " <span class='ext' aria-hidden='true'>↗</span>"; wrap.appendChild(a);
     side.appendChild(wrap);
-  })();
+    var cur = (location.hash.replace(/^#\//, "") || "overview");
+    document.querySelectorAll(".nav-item").forEach(function (n) { n.classList.toggle("active", n.dataset.id === cur); });
+  }
 
   function slug(s) { return s.toLowerCase().replace(/[^\w가-힣]+/g, "-").replace(/^-+|-+$/g, ""); }
 
   var docEl = document.getElementById("doc");
   var tocEl = document.getElementById("toc");
-  var cache = {};
+  var tnote = document.getElementById("tnote");
+  var cache = {};   // keyed by lang+id
+
+  function koFile(file) { return file.replace(/\.md$/, ".ko.md"); }
+
+  function setNote(state) {
+    // state: "translated" | "fallback" | null
+    tnote.classList.remove("stale");
+    if (state === "translated") {
+      tnote.hidden = false;
+      tnote.innerHTML = "<strong>AI 번역본</strong> · 원문(영문)이 기준입니다. 번역이 최신 사양과 다를 수 있으니 정확한 규칙은 영문 원문을 확인하세요.";
+    } else if (state === "fallback") {
+      tnote.hidden = false;
+      tnote.innerHTML = "<strong>아직 번역되지 않은 문서입니다</strong> · 영문 원문으로 표시합니다.";
+    } else {
+      tnote.hidden = true; tnote.innerHTML = "";
+    }
+  }
 
   function render(id) {
     var entry = FILES[id] || FILES.overview;
     document.querySelectorAll(".nav-item").forEach(function (n) { n.classList.toggle("active", n.dataset.id === entry.id); });
-    if (cache[entry.id]) { paint(cache[entry.id]); return; }
-    docEl.innerHTML = "<div class='doc-status'>Loading " + entry.file + "…</div>";
-    tocEl.innerHTML = "";
+    var key = lang + ":" + entry.id;
+    if (cache[key]) { paint(cache[key].html); setNote(cache[key].note); return; }
+    docEl.innerHTML = "<div class='doc-status'>" + I18N[lang].loading + " " + entry.file + "…</div>";
+    tocEl.innerHTML = ""; setNote(null);
+
+    if (lang === "ko") {
+      // try the Korean translation, fall back to the English source
+      fetch(koFile(entry.file)).then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        return r.text();
+      }).then(function (md) {
+        var html = marked.parse(stripMeta(md));
+        cache[key] = { html: html, note: "translated" }; paint(html); setNote("translated");
+      }).catch(function () {
+        fetch(entry.file).then(function (r) { return r.text(); }).then(function (md) {
+          var html = marked.parse(md);
+          cache[key] = { html: html, note: "fallback" }; paint(html); setNote("fallback");
+        }).catch(function () {
+          docEl.innerHTML = "<div class='doc-status'>" + I18N[lang].fail + " — " + entry.file + "</div>";
+        });
+      });
+      return;
+    }
+
     fetch(entry.file).then(function (r) {
       if (!r.ok) throw new Error(r.status);
       return r.text();
     }).then(function (md) {
       var html = marked.parse(md);
-      cache[entry.id] = html; paint(html);
+      cache[key] = { html: html, note: null }; paint(html); setNote(null);
     }).catch(function () {
-      docEl.innerHTML = "<div class='doc-status'>Could not load " + entry.file + ".</div>";
+      docEl.innerHTML = "<div class='doc-status'>" + I18N[lang].fail + " — " + entry.file + "</div>";
     });
   }
+
+  // drop the leading <!-- sy-source: … --> staleness marker before rendering
+  function stripMeta(md) { return md.replace(/^<!--\s*sy-source:[^>]*-->\s*\n?/, ""); }
 
   function paint(html) {
     docEl.innerHTML = html;
@@ -239,6 +305,23 @@
   }
   window.addEventListener("hashchange", route);
 
+  // apply language to chrome (nav, labels, buttons, <html lang>)
+  function applyChrome() {
+    document.documentElement.setAttribute("lang", lang);
+    document.getElementById("toc-label").textContent = I18N[lang].toc;
+    document.getElementById("lang").textContent = I18N[lang].langBtn;
+    document.getElementById("browserlink").textContent = I18N[lang].browserLink;
+    buildNav();
+  }
+
+  // language toggle
+  document.getElementById("lang").addEventListener("click", function () {
+    lang = lang === "ko" ? "en" : "ko";
+    try { localStorage.setItem("sy-docs-lang", lang); } catch (e) {}
+    applyChrome();
+    route();   // re-render the current doc in the new language
+  });
+
   // theme
   var themeBtn = document.getElementById("theme");
   var saved = null;
@@ -255,6 +338,7 @@
     if (j && j.$version) document.getElementById("ver").textContent = "v" + j.$version;
   }).catch(function () {});
 
+  applyChrome();
   route();
 </script>
 </body>

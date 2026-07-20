@@ -128,7 +128,7 @@ One size per view, as with shape.
 
 | Emphasis | Rendering | Use |
 |---|---|---|
-NOMATCH-OK2 Standard status in tables, cards, headers. |
+| `subtle` (default) | `status.*-bg` fill, `status.*` text, no border | Standard status in tables, cards, headers. |
 | `solid` | see per-color rules below | High-visibility marks that must be scannable from across the screen. Max one solid color per view. |
 | `outline` | transparent, 1px `status.*` border, `status.*` text | Dense tables where subtle fills would tile the screen with color. |
 | `dot` | 8px `status.*-bg-solid` dot (mid value — dots are non-text, 3:1 floor; the darker `status.*` text tokens are not used for fills) + `body-sm` `fg.secondary` text, no container | The quietest option: long lists, sidebar items, legend-like rows. |

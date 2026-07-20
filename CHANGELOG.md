@@ -1,5 +1,15 @@
 # Synapse changelog
 
+## 6.50.0 — 2026-07-15
+
+- **Korean docs (maintainer request — Korean colleagues need to read the specs).** Full KO translation of all 8 spec files (design/foundations/content/icons/components/recipes/ai-patterns/patterns → `.ko.md`), glossary-faithful (content.md §3 canonical terms, 합니다체). CHANGELOG stays EN (append-only history). The hub gains an EN/한국어 toggle: it loads the per-doc `.ko.md` when Korean is selected and falls back to the English source (with a notice) for any untranslated doc.
+- **English remains authoritative.** KO pages show an "AI 번역본 · 원문(영문)이 기준" banner; the gate still runs only on EN. New **SY018** (warning, not error): each `.ko.md` carries a `sy-source` hash of its EN source; when the EN changes, the gate warns that the translation is stale — surfacing drift without blocking. This is the reconciliation of "translate everything" with the single-source-of-truth model.
+- **Source repair caught by the translation pass:** the Badge emphasis table's `subtle` (default) row in components.md had been silently corrupted (`NOMATCH-OK2`, a scar from a past failed edit the table-blind linter never caught). Reconstructed from the system's own subtle-rendering definition; EN + KO fixed.
+
+## 6.49.1 — 2026-07-15
+
+- **Local gate now mirrors CI (SY017):** `validate.py all` regenerates the manifest in-memory (no file writes) and errors if the committed `synapse.manifest.json` differs — the same check CI runs via `git diff`. Root cause of the CI failure: version-only turns ran `validate.py` but not `build_manifest.py`, so the manifest `$version` drifted while local stayed green. Now a stale manifest fails locally too. `build_manifest.py` refactored to expose `build()`/`serialize()` (pure, importable) for the shared check; output byte-identical to before.
+
 ## 6.49.0 — 2026-07-15
 
 - **Docs hub (index.html) — the Vercel app is now the source-of-truth site** (maintainer request). Left-nav across every spec (Overview/design, Foundations, Content, Icons, Components, Recipes, AI patterns, Page patterns, Changelog) + a link to the live component browser (preview.html). The hub fetches the actual .md files at runtime and renders them client-side (marked@12) — no build step, and the docs can never drift from the specs because they ARE the specs. On-page TOC from H2s, light/dark toggle, version read live from tokens $version.

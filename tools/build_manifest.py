@@ -123,14 +123,19 @@ C = {
   "key_rules": ["items templated from content verbs; unread dot + surface fill", "click navigates + marks read; consequential actions only OPEN their surface (never approve from a notification)", "30 items then View all"]},
 }
 
-def main():
+class ManifestDrift(Exception):
+    """components.md headings and the C entry set have diverged."""
+
+
+def build():
+    """Return the manifest dict from components.md + C + tokens. Raises ManifestDrift on heading drift.
+    Pure (no file writes) so validators can compare against the on-disk manifest without side effects."""
     comps = open(os.path.join(ROOT, "components.md"), encoding="utf-8").read()
     headings = re.findall(r"^## (.+)$", comps, flags=re.M)
     missing = [h for h in headings if h not in C]
     extra = [k for k in C if k not in headings]
     if missing or extra:
-        print("MANIFEST DRIFT — missing entries:", missing, "| stale entries:", extra)
-        sys.exit(1)
+        raise ManifestDrift(f"missing entries: {missing} | stale entries: {extra}")
     tokens = json.load(open(os.path.join(ROOT, "tokens", "synapse.tokens.json"), encoding="utf-8"))
     manifest = {
         "$version": tokens["$version"],
@@ -154,11 +159,24 @@ def main():
                   "optimistic rendering of agent output; marquee/auto-playing motion; white-label/per-client theming"],
         "components": {h: C[h] for h in headings},
     }
-    ts = manifest["typography_styles"]
     manifest["typography_styles"] = [k for k in tokens["semantic"]["type"] if not k.startswith("$")]
-    out = os.path.join(ROOT, "synapse.manifest.json")
-    json.dump(manifest, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    print("wrote", out, "-", len(manifest["components"]), "components")
+    return manifest
+
+
+MANIFEST_PATH = os.path.join(ROOT, "synapse.manifest.json")
+
+
+def serialize(manifest):
+    """The exact on-disk representation — keep in lockstep with main()'s json.dump call."""
+    return json.dumps(manifest, ensure_ascii=False, indent=1)
+
+
+def main():
+    manifest = build()
+    with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
+        f.write(serialize(manifest))
+    print("wrote", MANIFEST_PATH, "-", len(manifest["components"]), "components")
+
 
 if __name__ == "__main__":
     main()

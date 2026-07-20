@@ -20,6 +20,8 @@ Rules (E = error, W = warning):
   SY007 W letter-spacing declared (verify it never applies to Hangul) — foundations §2.3
   SY015 E backdrop-filter outside the glass material — foundations §5 (only blur(var(--sy-glass-blur)))
   SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
+  SY017 E synapse.manifest.json stale vs a fresh build — run tools/build_manifest.py (mirrors the CI gate locally)
+  SY018 W a .ko.md translation is stale — its EN source changed since translation (re-translate; EN stays authoritative)
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §5
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
@@ -342,6 +344,56 @@ def check_page(path):
 
 # ------------------------------------------------------------------- runner
 
+def translation_hash(en_text):
+    """Freshness hash for a .ko.md's EN source. Version numbers (X.Y.Z) are stripped first, so a
+    pure version bump — which mechanically edits design.md's header every release — does NOT mark
+    translations stale; only real content changes do. Keep this identical to tools/build_manifest.py's
+    injector logic (scripts/inject markers) so hashes compare correctly."""
+    import hashlib, re as _re
+    normalized = _re.sub(r"\d+\.\d+\.\d+", "", en_text)
+    return hashlib.sha256(normalized.encode()).hexdigest()[:16]
+
+def check_translations():
+    """SY018 (warning) — each <name>.ko.md carries a marker of the EN source hash it was translated
+    from. If the EN file has changed since, the KO is stale. Warning-only: EN is authoritative, so a
+    lagging translation never blocks the gate — it just surfaces the drift (the tradeoff of KO docs)."""
+    import hashlib, glob
+    for ko in sorted(glob.glob(os.path.join(ROOT, "*.ko.md"))):
+        en = ko[:-6] + ".md"
+        if not os.path.exists(en):
+            report("W", "SY018", ko, 0, "no matching EN source for this .ko.md")
+            continue
+        first = open(ko, encoding="utf-8").readline()
+        m = re.search(r"sy-source:\s*([0-9a-f]+)", first)
+        if not m:
+            report("W", "SY018", ko, 1, "missing sy-source marker — cannot verify translation freshness")
+            continue
+        cur = translation_hash(open(en, encoding="utf-8").read())
+        if cur != m.group(1):
+            report("W", "SY018", ko, 1,
+                   f"translation stale — {os.path.basename(en)} changed since translation; re-translate (EN is authoritative)")
+
+def check_manifest():
+    """SY017 — the committed manifest must equal a fresh build (mirrors the CI gate locally,
+    so version bumps and spec edits can't drift the manifest past a green local run)."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "build_manifest", os.path.join(ROOT, "tools", "build_manifest.py"))
+    bm = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(bm)
+        expected = bm.serialize(bm.build())
+    except bm.ManifestDrift as e:  # type: ignore
+        report("E", "SY017", bm.MANIFEST_PATH, 0, f"components.md ↔ manifest entry drift ({e}) — update tools/build_manifest.py")
+        return
+    except Exception as e:
+        report("E", "SY017", os.path.join(ROOT, "synapse.manifest.json"), 0, f"could not build manifest: {e}")
+        return
+    actual = open(bm.MANIFEST_PATH, encoding="utf-8").read()
+    if actual != expected:
+        report("E", "SY017", bm.MANIFEST_PATH, 0,
+               "synapse.manifest.json is stale — run: python3 tools/build_manifest.py && commit the result")
+
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ("tokens", "ui", "page", "all"):
         print(__doc__)
@@ -356,6 +408,8 @@ def main():
             check_page(p)
     if mode == "all":
         check_ui([os.path.join(ROOT, f) for f in os.listdir(ROOT) if f.endswith(".html")])
+        check_manifest()
+        check_translations()
     errors = [i for i in issues if i[0] == "E"]
     warnings = [i for i in issues if i[0] == "W"]
     for sev, rule, path, line, msg in issues:
