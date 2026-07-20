@@ -1,5 +1,5 @@
 {
- "$version": "6.60.2",
+ "$version": "6.61.0",
  "$generated_by": "tools/build_manifest.py — regenerate after any components.md change; never hand-edit",
  "authority": "design.md > tokens/synapse.tokens.json > foundations.md > components.md > recipes.md > ai-patterns.md > content.md",
  "archetypes": [
@@ -78,7 +78,7 @@
     "secondary (tonal)",
     "ghost",
     "danger",
-    "accent (POINT color #0A84FF, revived v6.51 — conversational-AI CTA only: Ask agent / Composer send)"
+    "accent (POINT color #0621C4, revived v6.51 — conversational-AI CTA only: Ask agent / Composer send)"
    ],
    "sizes": [
     "sm",
@@ -87,7 +87,7 @@
    ],
    "key_rules": [
     "max 1 primary per region",
-    "conversational-AI entry (Ask agent / Composer send) = accent = the point color #0A84FF (v6.51; max 1/screen); operational agent actions (Run/Retry/Resume) stay primary/black — executing a configured run never earns the point color; slate stays the AI surface, point blue is a distinct accent on top (never blue-on-slate)",
+    "conversational-AI entry (Ask agent / Composer send) = accent = the point color #0621C4 (v6.51; max 1/screen); operational agent actions (Run/Retry/Resume) stay primary/black — executing a configured run never earns the point color; slate stays the AI surface, point blue is a distinct accent on top (never blue-on-slate)",
     "text-only labels by default; icon+text only for accent AI actions and toolbar/filter contexts (approved icons)",
     "pill radius only in Guided heroes / empty-state first-use",
     "icon-only buttons are always square (width = size height)",

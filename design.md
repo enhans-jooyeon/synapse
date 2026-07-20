@@ -1,6 +1,6 @@
 # Synapse — design system for AgentOS
 
-**Version 6.60.2 · Enhans · This file is the entry point. Read it before generating any UI.**
+**Version 6.61.0 · Enhans · This file is the entry point. Read it before generating any UI.**
 
 Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. It is built to be operated primarily by AI agents on behalf of non-designers, which means it is written as a *contract*, not an inspiration board: closed sets, enumerated options, explicit decision rules. An agent following this file mechanically should produce UI indistinguishable from designer-made AgentOS screens.
 
@@ -27,7 +27,7 @@ Figma and any other design-tool representation of Synapse are **generated views*
 
 ## 2. Identity in one paragraph
 
-Neutral, black-key, borders-first, engineered restraint. The UI is built from a cool-gray ramp; black (white in dark mode) is the brand action color; AI surfaces and marks are slate (v6.19); the **point color** `#0A84FF` (v6.51) is the one vivid accent, restricted to brand-identity objects and AI emphasis (conversational-AI CTAs + active AI running states); functional blue `#3155C6` stays the quiet signal for focus rings, links, and informational status; status colors are desaturated and semantic-only. Pretendard serves Korean and English equally as the sole UI face; Artific (display family) appears at most once per screen, only at brand moments, and only on English copy — KO locale keeps Artific titles in English (v6.48); JetBrains Mono marks machine-significant text. Density is a per-region option: `dense` compacts controls, spacing, and table rows (not type) for data-heavy surfaces, `focus` is the default; archetypes recommend one but it is not enforced.
+Neutral, black-key, borders-first, engineered restraint. The UI is built from a cool-gray ramp; black (white in dark mode) is the brand action color; AI surfaces and marks are slate (v6.19); the **point color** `#0621C4` (v6.51) is the one vivid accent, restricted to brand-identity objects and AI emphasis (conversational-AI CTAs + active AI running states); functional blue `#3155C6` stays the quiet signal for focus rings, links, and informational status; status colors are desaturated and semantic-only. Pretendard serves Korean and English equally as the sole UI face; Artific (display family) appears at most once per screen, only at brand moments, and only on English copy — KO locale keeps Artific titles in English (v6.48); JetBrains Mono marks machine-significant text. Density is a per-region option: `dense` compacts controls, spacing, and table rows (not type) for data-heavy surfaces, `focus` is the default; archetypes recommend one but it is not enforced.
 
 ## 3. Hard rules (the agent contract)
 
@@ -41,7 +41,7 @@ These are absolute. Violating any of these means the output is wrong regardless 
 **Structure**
 4. The component set in `components.md` is closed (one `##` entry per component). NEVER invent a component, add a variant, or restyle an existing one. Unmet needs → §6 escalation.
 5. Every screen MUST be classified into exactly one archetype (`patterns.md` §1) before layout begins.
-7. Max one `primary` button and one Banner per region (the Composer counts as its own region — its send is that region's one primary, v6.19). The conversational-AI entry (Ask agent / Composer send) uses the `brand` point color `#0A84FF` (v6.51; variant renamed accent→brand v6.58; max one per region). Operational agent actions (Run/Retry/Resume) stay `primary`/black: "executes an agent" never earns the point color (v6.2.1).
+7. Max one `primary` button and one Banner per region (the Composer counts as its own region — its send is that region's one primary, v6.19). The conversational-AI entry (Ask agent / Composer send) uses the `brand` point color `#0621C4` (v6.51; variant renamed accent→brand v6.58; max one per region). Operational agent actions (Run/Retry/Resume) stay `primary`/black: "executes an agent" never earns the point color (v6.2.1).
 7a. AI presence is marked only by the squared avatar (primary marker) and the `ai.*` slate treatments (`ai-patterns.md` §1). Consequential agent actions always pass through ProposalCard — no silent execution, no auto-approval.
 
 **Language**

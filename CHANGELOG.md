@@ -1,5 +1,10 @@
 # Synapse changelog
 
+## 6.61.0 — 2026-07-21
+
+- Point color retargeted to the Claude Design System value: `--color-point-blue` **#0621C4** (deep royal blue), replacing the old brand-team-repo azure #0A84FF. Updated point.500 #0621C4, point.600 hover #051AA0, point.50 tint #EBEDFA across tokens (JSON + CSS), preview.html, storybook via var(), and build_manifest. `action.brand-*`, `brand.point`, and `ai.solid` all follow.
+- Accessibility improved as a side effect: white-on-point jumps from 3.63:1 to ~10:1, so the point/brand button label now clears AA outright — dropped the ≥3:1 solid-label exemption for point (spec §1.1 + components Button + KO); validator brand contrast pairs raised from the 3:1 policy floor to standard AA 4.5. Provenance reworded (Claude Design System, not the brand-team palette).
+
 ## 6.60.2 — 2026-07-21
 
 - Component browser: split the two borderline trios into individual stories too — HoverCard · Popconfirm · ContextMenu → three, and Reasoning · Guardrail · Handoff → three (nav + guidance + illustration wired). Every previously-combined story that wasn't one clear UX umbrella is now standalone.
