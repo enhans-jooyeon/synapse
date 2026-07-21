@@ -35,7 +35,7 @@ Build out the component library toward `synapse.manifest.json` parity — at min
 2. Add a bundler (`tsup` or Vite lib mode) producing ESM + `.d.ts` into `dist/`.
 3. Bundle tokens (`synapse.css` + `synapse.tokens.json`) into `dist/` so the product's Tailwind preset (`tooling/product-gates/tailwind.synapse.cjs`) can resolve them from the package.
 4. `prepublishOnly` runs the DS gate — never publish a spec-noncompliant build.
-5. Version in **lockstep** with the design-system version (currently 6.62.0). Publishing 6.62.0 means the components match the 6.62.0 specs.
+5. Version in **lockstep** with the design-system version (currently 1.0.0). Publishing 1.0.0 means the components match the 1.0.0 specs.
 6. `npm publish --access restricted` (or your private registry). Requires npm auth — a human step, not automatable here.
 
 ## Consumers then

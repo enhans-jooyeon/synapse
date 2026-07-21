@@ -1,6 +1,6 @@
 # Synapse — design system for AgentOS
 
-**Version 6.62.0 · Enhans · This file is the entry point. Read it before generating any UI.**
+**Version 1.0.0 · Enhans · This file is the entry point. Read it before generating any UI.**
 
 Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. It is built to be operated primarily by AI agents on behalf of non-designers, which means it is written as a *contract*, not an inspiration board: closed sets, enumerated options, explicit decision rules. An agent following this file mechanically should produce UI indistinguishable from designer-made AgentOS screens.
 
@@ -95,7 +95,7 @@ The system is closed to inline modification but open to proposals. This is the m
 2. File a proposal: what was needed, why existing components fail, the concrete use case, suggested spec. Record it in `proposals/` as a dated markdown file (e.g. `proposals/2026-07-09-split-button.md`).
 3. A maintainer accepts (spec added to `components.md`/tokens, version bumped) or rejects with the sanctioned alternative documented.
 
-**Versioning.** Semver on this system as a whole: patch = value tweaks and doc clarifications; minor = additive tokens/variants/components; major = breaking renames or removals, which require a migration note in `CHANGELOG.md`. Generated Figma libraries and code themes are rebuilt on every minor.
+**Versioning.** One version number in lockstep across `tokens/synapse.tokens.json` (`$version`), the `design.md` header, and `preview.html`. **The version marks a team-facing release, not each internal edit** (release-based since 1.0.0): ongoing changes accumulate under `## Unreleased` in `CHANGELOG.md`, and the number bumps only when a release is cut for the team. Bumps follow semver — patch = value tweaks and doc clarifications, minor = additive tokens/variants/components, major = breaking renames or removals (with a migration note). Generated Figma libraries and code themes rebuild on each released minor. (History before 1.0.0 is the internal 6.x pre-release line, retained in `CHANGELOG.md`.)
 
 **The one-way door rule.** Nothing ships into product UI that isn't expressible in these files. If the product needs it, the system gets it *first*, then the product uses it. This ordering is the entire defense against unruly edits.
 

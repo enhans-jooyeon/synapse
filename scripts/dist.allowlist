@@ -1,0 +1,33 @@
+# Curated distribution allowlist — the ONLY files that ship to the team harness repo.
+# One path per line; a trailing "/" copies a directory recursively. Blank lines and
+# lines starting with "#" are ignored. Anything not listed here stays private in the
+# source repo (proposals, HANDOFF, DISTRIBUTION, preview.html, storybook internals, …).
+# build-dist.mjs also GENERATES: README.md (consumer) + CHANGELOG.md (released versions only).
+
+# --- The contract + specs (bilingual; EN authoritative) ---
+design.md
+design.ko.md
+foundations.md
+foundations.ko.md
+components.md
+components.ko.md
+recipes.md
+recipes.ko.md
+patterns.md
+patterns.ko.md
+ai-patterns.md
+ai-patterns.ko.md
+content.md
+content.ko.md
+icons.md
+icons.ko.md
+
+# --- Tokens + machine index (load-first for agents) ---
+tokens/synapse.tokens.json
+tokens/synapse.css
+synapse.manifest.json
+
+# --- Generation prompt + team workflow ---
+docs/process/템플릿-PRD.md
+docs/process/디자인-리뷰-프로토콜.md
+tooling/product-gates/

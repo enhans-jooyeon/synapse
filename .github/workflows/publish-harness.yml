@@ -1,0 +1,47 @@
+# Publish the curated team harness on each release tag.
+# Cutting a release = pushing a vX.Y.Z tag from the source repo. This gate-checks,
+# builds the curated bundle from scripts/dist.allowlist, and mirrors it to the
+# separate team repo (enhans-jooyeon/synapse-harness). Internal docs never ship.
+#
+# One-time setup (see docs/DISTRIBUTION.md):
+#   1. Create the empty repo  enhans-jooyeon/synapse-harness
+#   2. Add repo secret  HARNESS_DEPLOY_TOKEN  = a PAT with write access to synapse-harness
+name: Publish team harness
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Gate must be green before publishing
+        run: python3 tools/validate.py all
+
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Build curated bundle
+        run: node scripts/build-dist.mjs
+
+      - name: Mirror ./dist to the team harness repo
+        env:
+          DEPLOY_TOKEN: ${{ secrets.HARNESS_DEPLOY_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/enhans-jooyeon/synapse-harness.git" out
+          find out -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          cp -R dist/. out/
+          cd out
+          git config user.name "synapse-bot"
+          git config user.email "synapse-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "release ${TAG}" || { echo "no changes to publish"; exit 0; }
+          git push
+          git tag "${TAG}"
+          git push origin "${TAG}"

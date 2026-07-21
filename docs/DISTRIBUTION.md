@@ -8,7 +8,7 @@ The failure mode is treating "distribute Synapse" as shipping one thing. It is f
 
 | Artifact | Consumer | Channel | Status |
 |---|---|---|---|
-| Doctrine / specs (`design.md`, `synapse.manifest.json`, tokens, `*.md`) | AI generation tools + humans | This git repo (source of truth) + tool adapters | **Ready** (v6.62.0) |
+| Doctrine / specs (`design.md`, `synapse.manifest.json`, tokens, `*.md`) | AI generation tools + humans | This git repo (source of truth) + tool adapters | **Ready** (v1.0.0) |
 | Component library `@enhans/synapse` (React + tokens) | The product codebase | Versioned **npm package** | **Seed only** — 4 of 52 components; not published |
 | The gates | CI in the **product** repo | `tooling/product-gates/` drop-in | **Provided, not wired** |
 | Process docs (protocol, PRD template, PR template) | The team | In-repo (`docs/process/`, `.github/`) | **Ready** |
@@ -18,7 +18,7 @@ The failure mode is treating "distribute Synapse" as shipping one thing. It is f
 
 The protocol's entire model is "**CI enforces, humans don't**" (§2). That requires two things that do not exist yet:
 
-1. **An installable `@enhans/synapse`** — the `storybook/` workspace is `private: true`, was version-drifted (fixed to 6.62.0), and implements Button · Badge · Input · Card only. You cannot ship a design system that implements 4 of 52 components. Until the library is built out, authors have little to import and the "component provenance" gate (§6) has nothing to check against.
+1. **An installable `@enhans/synapse`** — the `storybook/` workspace is `private: true`, now aligned to 1.0.0, and implements Button · Badge · Input · Card only. You cannot ship a design system that implements 4 of 52 components. Until the library is built out, authors have little to import and the "component provenance" gate (§6) has nothing to check against.
 2. **Product-repo gates** — the protocol §6 gates are a JS/TS stack (Tailwind arbitrary-value ban, ESLint `no-restricted-syntax`, CVA/TS variant typing, Storybook coverage, axe). `tools/validate.py` is a *Python* linter for HTML/CSS strings; it enforces this repo's own artifacts and **cannot enforce a React product repo.** The JS equivalents are scaffolded in `tooling/product-gates/` but must be installed in the product repo's CI.
 
 **Consequence:** the team can *read and adopt the system today*; they cannot yet *generate production UI under enforcement*. Distributing before the gate exists hands out the guidebook and calls it a guardrail — which §2 explicitly warns against ("읽었다 ≠ 준수했다").
@@ -35,6 +35,26 @@ The protocol promises authors use any generation tool. Keep the doctrine **tool-
 4. **Land the process docs + PR template in the product repo** (they already self-specify their locations).
 5. **Pilot one real screen** — one PM-engineer pair, one full PRD → generate → gate → review loop — before team-wide rollout. Protocol §11 is a pre-mortem; run one live case to see which failure modes actually bite.
 6. **Broaden** distribution and add per-tool adapters as the team settles on tooling.
+
+## Curated team package — the two-repo workflow (set up)
+
+You and one other designer maintain the **full source repo** (this one: proposals, HANDOFF, audits, 6.x history — all of it). The team consumes a **curated bundle** that is *generated*, never hand-edited, so it can't drift from source.
+
+**How it works:**
+- `scripts/dist.allowlist` is the single declarative list of what ships (specs + KO, tokens, manifest, PRD template, review protocol, product-gates). Anything not listed stays private — new internal docs never leak.
+- `scripts/build-dist.mjs` copies the allowlist into `./dist` and generates a consumer README + a slim CHANGELOG (released versions only — no `Unreleased`, no 6.x history). Preview locally any time: `node scripts/build-dist.mjs` then look in `./dist`.
+- `.github/workflows/publish-harness.yml` runs on a **release tag** (`vX.Y.Z`): it gate-checks, builds the bundle, and mirrors `./dist` to the separate team repo. Internal docs are excluded by construction.
+
+**One-time setup (yours — needs your GitHub account):**
+1. Create an empty repo `enhans-jooyeon/synapse-harness` (this is what the team clones/points their LLM tools at).
+2. In the **source** repo → Settings → Secrets and variables → Actions → add `HARNESS_DEPLOY_TOKEN` = a PAT (or fine-grained token) with **write access to `synapse-harness`**.
+3. That's it. From then on, cutting a release publishes automatically.
+
+**Your day-to-day:** vibe-code freely in the source repo; changes land under `## Unreleased`. When a round is ready for the team, cut a release:
+```bash
+git tag v1.1.0 && git push origin v1.1.0
+```
+The Action regenerates the curated `synapse-harness` at that version. The team just `git pull`s it.
 
 ## What requires your credentials / environment (I cannot do these)
 

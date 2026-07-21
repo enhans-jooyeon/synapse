@@ -2,7 +2,7 @@
 
 The design system for **AgentOS** (Enhans) — written as a machine-enforceable **contract** for AI-driven UI generation, not an inspiration board. Non-designers (PMs, engineers) generate production-seed UI under the harness; designers review only judgment; CI enforces compliance.
 
-Web-only · bilingual **KO/EN** (EN authoritative) · current version **6.62.0**.
+Web-only · bilingual **KO/EN** (EN authoritative) · current version **1.0.0**.
 
 ---
 
@@ -48,7 +48,7 @@ python3 tools/build_manifest.py                              # after any compone
 
 ## Status (read before adopting)
 
-The **doctrine is mature** (52 components, AI patterns, tokens, gate, bilingual specs at 6.62.0). The **consumption layer is not finished**: the React library in `storybook/` is a 4-of-52 seed and is not yet published as an installable `@enhans/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
+The **doctrine is mature** (52 components, AI patterns, tokens, gate, bilingual specs at 1.0.0). The **consumption layer is not finished**: the React library in `storybook/` is a 4-of-52 seed and is not yet published as an installable `@enhans/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
 
 ## Governance
 

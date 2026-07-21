@@ -1,5 +1,19 @@
 # Synapse changelog
 
+Versioning is **release-based** (design.md §6): ongoing work lands under **Unreleased**; the version bumps only when a release is cut for the team.
+
+## Unreleased
+
+_Nothing yet._
+
+## 1.0.0 — 2026-07-21 — Initial team release
+
+The first public/team release. Re-baselined from the internal 6.x pre-release line to **1.0.0** and adopted release-based versioning (the number now marks a team release, not each internal edit). **No spec or token changes in this bump** — it renumbers the system; everything shipped through internal 6.62.0 is the content of 1.0.0. The 6.x history below is retained as the pre-release record (its inline `(v6.xx)` provenance tags in the specs are left as-is on purpose — they record when each rule was actually decided).
+
+---
+
+## Internal pre-release history (6.x)
+
 ## 6.62.0 — 2026-07-21
 
 - AI side-surface tranche (design-centered, from the AI UX Playground patterns audit `proposals/2026-07-21-aiux-patterns-catalog-audit.md`), threaded into ai-patterns.md + KO:

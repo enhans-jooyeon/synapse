@@ -1,4 +1,4 @@
-<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-07-21, at v6.62.0 (large uncommitted batch — needs a push). -->
+<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-07-21, at v1.0.0 (initial team release; re-baselined from internal 6.x). -->
 
 # Synapse — session handoff
 
@@ -25,6 +25,7 @@ The system's character: neutral, black-key, borders-first, engineered restraint 
 - `docs/process/` — the process doctrine (review protocol + PRD template, Korean). `.github/PULL_REQUEST_TEMPLATE/ui_review.md` — the review/PR template.
 - `docs/DISTRIBUTION.md` — how the harness reaches the team; the five-artifact split + sequenced rollout.
 - `tooling/product-gates/` — drop-in JS/TS gates for the PRODUCT repo (ESLint/Tailwind/raw-value/state-coverage/CI) — the protocol §6 gate that validate.py can't be.
+- `scripts/dist.allowlist` + `scripts/build-dist.mjs` — the curated team-package builder (allowlist → `dist/`; internal docs excluded by construction). `.github/workflows/publish-harness.yml` mirrors `dist/` to the separate `synapse-harness` repo on each release tag. Two-repo workflow doc: `docs/DISTRIBUTION.md`.
 - `tools/validate.py` — the DS-repo gate (SY001–SY018). `tools/build_manifest.py` — regenerates `synapse.manifest.json`.
 - `proposals/` — governance/audit docs (not gated, no KO required).
 
@@ -32,7 +33,7 @@ The system's character: neutral, black-key, borders-first, engineered restraint 
 
 Every change is spec law and is versioned in lockstep. For any change:
 
-1. **Version bump in lockstep:** `tokens/synapse.tokens.json` `$version` == `design.md` `**Version` header == `preview.html` `<span class="v">vX.Y.Z</span>`. Patch for browser/fixes, minor for new capabilities/token-value changes.
+1. **Version is release-based (since 1.0.0).** The three locations stay in lockstep — `tokens/synapse.tokens.json` `$version` == `design.md` `**Version` header == `preview.html` `<span class="v">vX.Y.Z</span>` — but the number marks a TEAM RELEASE, not each edit. Ongoing work lands under `## Unreleased` in `CHANGELOG.md` at the SAME version; bump (semver: patch/minor/major) only when June cuts a release, and only then update the three locations + rebuild manifest. The gate enforces tokens==design.md, not a per-edit bump.
 2. **CHANGELOG.md** entry at the top for every bump.
 3. **Run `python3 tools/build_manifest.py`** after any version bump (or SY017 fails — stale manifest).
 4. **Gate must be clean:** `python3 tools/validate.py all` → `0 error(s), 0 warning(s)`.
@@ -44,7 +45,7 @@ Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (
 
 ## Current state
 
-**Version: 6.62.0.** Gate is green (0/0). **Large uncommitted batch — needs a push from June's Mac.** Since the last push (v6.61.0), this session added: the v6.62.0 AI side-surface tranche (ai-patterns §32–35 + KO + components.md + preview stories + CHANGELOG), and a **team-distribution layer** (new README, `docs/process/` doctrine, `.github/PULL_REQUEST_TEMPLATE/ui_review.md`, `docs/DISTRIBUTION.md`, `tooling/product-gates/`, `storybook/PUBLISHING.md` + storybook version fixed 6.1.1→6.62.0), plus cleanup (removed the rejected permissions-lifecycle draft + pycache). Vercel deploys the docs hub + preview; after pushes that touch token values or storybook, confirm the build is green.
+**Version: 1.0.0 (initial team release).** Gate is green (0/0). The prior work (AI side-surface tranche §32–35 + the team-distribution layer: README, `docs/process/`, `.github/PULL_REQUEST_TEMPLATE/ui_review.md`, `docs/DISTRIBUTION.md`, `tooling/product-gates/`, `storybook/PUBLISHING.md`) was pushed as commit `d2e8bbd` (internal 6.62.0). This session then **re-baselined the version to 1.0.0**, switched to release-based versioning (design.md §6), and added the **curated-distribution workflow** (`scripts/build-dist.mjs` + `dist.allowlist` + `.github/workflows/publish-harness.yml`) that publishes a cleaned-up bundle to a separate `synapse-harness` repo on release tags. All of that is **uncommitted; needs a push from June's Mac** (working folder is now the real clone `~/Claude/Projects/synapse-clone`). Two-repo setup steps (create `synapse-harness`, add `HARNESS_DEPLOY_TOKEN` secret) are in `docs/DISTRIBUTION.md`. Vercel deploys the docs hub + preview; after pushes that touch token values or storybook, confirm the build is green.
 
 ## Key maintainer rulings / recent decisions (this session)
 
@@ -62,7 +63,7 @@ Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (
 ## Open threads / what's next
 
 - **Team distribution (biggest open thread).** `docs/DISTRIBUTION.md` has the full plan. The doctrine is team-ready to *read*; it is NOT ready to *use under enforcement* because two things don't exist yet: (1) an installable `@enhans/synapse` — the `storybook/` lib is 4 of 52 components (`storybook/PUBLISHING.md`); (2) the product-repo gates are provided in `tooling/product-gates/` but not wired into a product repo. Critical path: build out components → publish package → wire product gates → land process docs in product repo → pilot one screen → broaden. `npm publish`, product-repo CI, and the git push all require June's creds/environment.
-- **v6.62.0 side-surface tranche** shipped from `proposals/2026-07-21-aiux-patterns-catalog-audit.md`: ai-patterns §32 Artifacts, §33 Source browser, §34 Conversation summary, §35 Feedback. Next-strongest catalog item still open: **Plan & Execute** (pre-flight editable plan). The catalog + framework audits (`proposals/2026-07-21-*`) list the rest.
+- **Side-surface tranche** (shipped, from `proposals/2026-07-21-aiux-patterns-catalog-audit.md`): ai-patterns §32 Artifacts, §33 Source browser, §34 Conversation summary, §35 Feedback. Next-strongest catalog item still open: **Plan & Execute** (pre-flight editable plan). The catalog + framework audits (`proposals/2026-07-21-*`) list the rest.
 - **Shape-of-AI gaps** are documented in two new proposal docs: `proposals/2026-07-20-shapeof-ai-pattern-audit.md` (full pattern audit) and `proposals/2026-07-20-ai-gap-policy-decisions.md` + `proposals/2026-07-20-ai-gap-decision-register.xlsx` (policy decisions the team's DRIs must settle before UI — Memory, Incognito, Data ownership, pre-flight Action plan, pre-run Cost estimates, Branches/Variations, Voice & tone, etc.). These are **blocked on policy calls**, not design.
 - **Open question from June:** whether other tokens in the Claude Design System differ from ours (only the point blue was retargeted so far). If she provides the Claude DS palette, sync the rest in one pass.
 - Media-playground patterns (inpainting, restyle/preset styles, watermarks, etc.) were deliberately marked out-of-domain in the audit.
