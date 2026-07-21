@@ -27,6 +27,7 @@ The system's character: neutral, black-key, borders-first, engineered restraint 
 - `tooling/product-gates/` — drop-in JS/TS gates for the PRODUCT repo (ESLint/Tailwind/raw-value/state-coverage/CI) — the protocol §6 gate that validate.py can't be.
 - `scripts/dist.allowlist` + `scripts/build-dist.mjs` — the curated team-package builder (allowlist → `dist/`; internal docs excluded by construction). `.github/workflows/publish-harness.yml` mirrors `dist/` to the separate `synapse-harness` repo on each release tag. Two-repo workflow doc: `docs/DISTRIBUTION.md`.
 - `tools/validate.py` — the DS-repo gate (SY001–SY018). `tools/build_manifest.py` — regenerates `synapse.manifest.json`.
+- `app-generation/` — the App Generation (App Builder) feature's ECharts chart/component catalog + design task list, **reconciled from the old azure `#0a84ff` token system to v1.0.0** (`app-generation/tokens-map.md`). Un-gated by design (ECharts JS must hardcode hex — can't be `--sy-*`-linted); consistency held by the value reconciliation. Open item: the chart blue ramp was computed from `#0621C4` (Synapse has no blue ramp) and wants a designer's eye, or a governance token-ramp addition.
 - `proposals/` — governance/audit docs (not gated, no KO required).
 
 ## The working discipline (IMPORTANT — follow exactly)

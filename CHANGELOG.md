@@ -10,6 +10,8 @@ _Nothing yet._
 
 The first public/team release. Re-baselined from the internal 6.x pre-release line to **1.0.0** and adopted release-based versioning (the number now marks a team release, not each internal edit). **No spec or token changes in this bump** — it renumbers the system; everything shipped through internal 6.62.0 is the content of 1.0.0. The 6.x history below is retained as the pre-release record (its inline `(v6.xx)` provenance tags in the specs are left as-is on purpose — they record when each rule was actually decided).
 
+Also added in 1.0.0: **`app-generation/`** — the App Generation feature's ECharts chart/component catalog, **reconciled from its old azure `#0a84ff` token system to the v1.0.0 tokens** (brand → `#0621C4`, neutrals/borders/text → `--sy-*` values, radius → on-scale, Pretendard). Mapping in `app-generation/tokens-map.md`. The chart blue data ramp was computed from `#0621C4` (Synapse has no blue ramp token) and is flagged for a designer's review.
+
 ---
 
 ## Internal pre-release history (6.x)

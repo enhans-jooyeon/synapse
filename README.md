@@ -36,6 +36,7 @@ Anything a machine can check — token use, component provenance, contrast, requ
 | **Process doctrine** | `docs/process/` (review protocol, PRD template) + `.github/PULL_REQUEST_TEMPLATE/ui_review.md` |
 | **Distribution & rollout** | [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) — how this reaches the team + current status |
 | Product-repo gate bundle | `tooling/product-gates/` — drop-in ESLint/Tailwind/coverage gates for the product CI |
+| App Generation catalog | `app-generation/` — the App Builder's ECharts chart/component catalog, reconciled to v1.0.0 tokens (`app-generation/tokens-map.md`) |
 | Governance proposals / audits | `proposals/` (dated; not gated) |
 
 ## Quick checks (DS-repo)

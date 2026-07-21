@@ -31,3 +31,6 @@ synapse.manifest.json
 docs/process/템플릿-PRD.md
 docs/process/디자인-리뷰-프로토콜.md
 tooling/product-gates/
+
+# --- App Generation feature: chart/component catalog (reconciled to v1.0.0) ---
+app-generation/
