@@ -1,5 +1,15 @@
 # Synapse changelog
 
+## 6.62.0 — 2026-07-21
+
+- AI side-surface tranche (design-centered, from the AI UX Playground patterns audit `proposals/2026-07-21-aiux-patterns-catalog-audit.md`), threaded into ai-patterns.md + KO:
+  - §32 **Artifacts — the side surface**: substantial agent output (docs, code, diagrams, tables) opens in a dedicated side surface — the Drawer `wide` variant in Console, a SplitPanel pane in the workbench archetype — not an ever-growing inline block. Link back to the originating message (ContextCard), versioned like §22 (never silent overwrite), edited under the §31 diff/Accept rule, always a copy/export path, standard attribution (§9). Not a new component — Drawer/SplitPanel content.
+  - §33 **Source browser** (extends §6): retrieved sources shown beside the answer with grounding excerpts and bidirectional SourceChip ↔ excerpt highlighting; opens on demand (chip click / sources-count), slide-over on narrow viewports, never auto-opens full-width, never lists titles without the excerpt.
+  - §34 **Conversation summary**: agent-generated thread recap on `ai.surface` with attribution — refreshable, never replaces the transcript (append-only), each point links back to its source turns (§6), never states a decision absent from the thread (§10).
+  - §35 **Feedback capture** (completes ResponseToolbar): confirm receipt, never force a rating modal (anti-nag §24), never attach feedback to streaming tokens (§2).
+- components.md: Drawer gains the AI side-surface note (artifacts + source browser as `wide`/SplitPanel content); ResponseToolbar gains the feedback-completeness rules. No new components, no token changes; manifest rebuilt for the version bump.
+- preview.html: three new AI-patterns stories (Artifacts, Source browser, Conversation summary) with When/When-not/Anti/Where guidance, plus the §35 feedback rule on the ResponseToolbar story. Browser-only.
+
 ## 6.61.0 — 2026-07-21
 
 - Point color retargeted to the Claude Design System value: `--color-point-blue` **#0621C4** (deep royal blue), replacing the old brand-team-repo azure #0A84FF. Updated point.500 #0621C4, point.600 hover #051AA0, point.50 tint #EBEDFA across tokens (JSON + CSS), preview.html, storybook via var(), and build_manifest. `action.brand-*`, `brand.point`, and `ai.solid` all follow.

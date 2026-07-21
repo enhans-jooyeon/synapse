@@ -1,5 +1,5 @@
 {
- "$version": "6.61.0",
+ "$version": "6.62.0",
  "$generated_by": "tools/build_manifest.py — regenerate after any components.md change; never hand-edit",
  "authority": "design.md > tokens/synapse.tokens.json > foundations.md > components.md > recipes.md > ai-patterns.md > content.md",
  "archetypes": [

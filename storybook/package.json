@@ -1,7 +1,8 @@
 {
   "name": "@enhans/synapse",
-  "version": "6.1.1",
+  "version": "6.62.0",
   "private": true,
+  "//publish": "PRIVATE until the library reaches component parity — it currently implements 4 of 52 components. To publish, follow PUBLISHING.md (add exports/build/types, flip private→false). Version tracks the design-system version.",
   "description": "Synapse design system — React implementation + Storybook. Specs in ../ are the contract; this workspace renders it.",
   "type": "module",
   "scripts": {

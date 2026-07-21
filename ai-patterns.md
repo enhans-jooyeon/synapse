@@ -265,3 +265,41 @@ When an agent edits content the user already owns — a document, a form field, 
 - **Auto-fill** (extending one action across many fields, rows, or records) obeys the same rule: filled values render in a distinct pending state (`emphasis.surface`, not committed styling) and are accepted per-row or all-at-once. Agent-filled fields **never overwrite human-entered values** without an explicit accept; the fill prompt is inspectable before it runs.
 - High-stakes edits (facts, figures, citations, anything a reader would act on) carry the reasoning inline (§14) so the user can judge the change before accepting it.
 - A diff preview is *review, not authorization*: an edit that also writes to a third-party system still passes the ProposalCard (§5).
+
+## 32. Artifacts — the side surface (v6.62)
+
+Substantial agent output — a document, a code file, a diagram, a structured table — does NOT live as an ever-growing block inside the thread. It opens in a **dedicated side surface** the user can read, edit, and iterate on while the conversation stays legible. (Distinct from inline agent-markdown, §12, which remains the default for ordinary replies.)
+
+- **Surface — existing components, not a new one.** The artifact opens in a **Drawer** (`wide` 800 variant — the data-review width, `components.md`) in Console/thread layouts, or occupies a **SplitPanel** pane in the workbench archetype. Right side only (Drawer law). On narrow viewports it is a full-height Drawer over the thread, never a cramped dual pane.
+- **When.** Output worth a surface: multi-paragraph documents, code/config files, diagrams, tables meant for editing or export. NOT one-line answers, short conversational replies, or anything with nothing to act on beyond reading — those stay inline (§12). A disposable output in its own panel is chrome noise.
+- **Link back.** The originating message carries a ContextCard reference that opens (and re-opens) the artifact; the artifact header names the turn that produced it. An artifact orphaned from its message breaks provenance — forbidden.
+- **Versions.** Regenerating or editing an artifact creates a new version, never a silent overwrite — the variant model (§22) applies: prior versions are retained, switchable, each with its own attribution. Content the user owns is edited under the diff/Accept rule (§31); code renders as CodeBlock, prose changes as DiffView.
+- **Export.** Every artifact carries a copy and an export path (formats per `content.md` §6; the send-elsewhere actions live in the ⋯ overflow, never the toolbar face). Output trapped in a panel with no way out is an anti-pattern.
+- **Attribution.** The artifact carries the standard agent attribution row (§9); a human edit flips it to "AI-drafted · edited by {name}" / "AI 초안 · {name} 편집" like any agent output.
+- **Forbidden:** left-side artifact surfaces (Drawer law); an artifact with no link back to its message; overwrite-on-regenerate with no version history; a panel that cannot resize or collapse.
+
+## 33. Source browser (v6.62 — extends §6)
+
+When an answer draws on retrievable sources, the user can open the **sources beside the answer**, not only as inline SourceChips (§6).
+
+- **Surface.** The same side surface as §32 — a **Drawer** (or SplitPanel pane in the workbench archetype) listing each source with its **grounding excerpt**, not just a filename. On narrow viewports, a slide-over Sources view, never a permanent dual pane that eats the reading column.
+- **Span ↔ excerpt mapping.** Clicking an inline SourceChip `[n]` opens the browser scrolled to that source and highlights the passage that grounded the claim; the mapping is visual and bidirectional (the card ↔ marker hover linkage of §6). A highlight that does not match the cited sentence trains users to distrust the panel — forbidden.
+- **On demand, never theater.** It opens from a chip click or a sources-count affordance — never auto-opens full-width and pushes the answer off-screen on every query. Never list source titles without the grounding excerpt. Empty retrieval shows the sources row's broken/empty state (§6/§15), never an empty pane.
+- Provenance holds: the browser shows real retrieved context only and never fabricates provenance (§6 — never fake a citation).
+
+## 34. Conversation summary (v6.62)
+
+A long thread MAY offer an agent-generated **summary** (decisions, action items, open questions) so a user can catch up without rereading.
+
+- **It is agent output, marked as such.** Rendered on `ai.surface` with the squared avatar + attribution row (§9), as a collapsible block at the top of the thread or in the thread's detail Drawer — never presented as system chrome or as the user's own notes.
+- **Refreshable, not authoritative.** Regenerated on demand (a refresh `ghost` action) with a `last-generated` caption; it NEVER replaces or rewrites the transcript — the thread stays append-only (provenance law). After the conversation continues, a stale summary shows its age, never a false "current."
+- **Grounded.** Each point links back to the turns it summarizes (SourceChip-style jump, §6). A summary that cannot point at its source turns, or that states a decision not present in the thread, violates §10 honesty — forbidden.
+- **When not.** Short threads (a summary longer than the thread is noise); never summarize into a surface that widens who can see the underlying content.
+
+## 35. Feedback capture (v6.62 — completes ResponseToolbar)
+
+Answer-level feedback already lives on the ResponseToolbar (thumbs; thumbs-down MAY open the one-field "어떤 점이 아쉬웠나요?" / "What went wrong?" comment — `components.md`). Three rules complete it:
+
+- **Confirm receipt.** A registered thumb or report gets a quiet acknowledgment — the select-state persists, and a Toast confirms a submitted comment. Feedback that vanishes with no observable effect teaches users it is pointless — forbidden.
+- **Never forced.** No rating modal gates the next turn, ever; feedback is always optional and dismissible (the anti-nag law, §24).
+- **Not mid-stream.** The feedback affordance appears only once the answer has settled — never attached to streaming tokens (§2).

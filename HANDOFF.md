@@ -1,4 +1,4 @@
-<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-07-21, at v6.61.0. -->
+<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-07-21, at v6.62.0 (large uncommitted batch — needs a push). -->
 
 # Synapse — session handoff
 
@@ -15,13 +15,17 @@ The system's character: neutral, black-key, borders-first, engineered restraint 
 - `design.md` — agent entry point + the contract; read this first. Carries the `**Version X.Y.Z` header.
 - `foundations.md` — color, type, spacing, elevation, motion, a11y, keyboard (the "why").
 - `components.md` — every component's anatomy/variants/states/rules.
-- `ai-patterns.md` — agent-surface interaction rules (§1–31).
+- `ai-patterns.md` — agent-surface interaction rules (§1–35).
 - `content.md`, `patterns.md` — voice/terminology, and archetypes.
 - `*.ko.md` — Korean translations of the 8 spec files (EN-authoritative; each carries a `<!-- sy-source: HASH -->` marker).
 - `tokens/synapse.tokens.json` — **source of truth** for tokens (carries `$version`). `tokens/synapse.css` — generated CSS custom properties (`--sy-*`).
 - `preview.html` — the component browser / storybook (left sidenav + Overview gallery + per-component detail pages with When/When-not/Anti/Where guidance). Deployed to Vercel via the docs hub.
-- `storybook/` — real React component implementations (Button, Badge, …).
-- `tools/validate.py` — the gate (SY001–SY018). `tools/build_manifest.py` — regenerates `synapse.manifest.json`.
+- `storybook/` — React component implementations (SEED: Button, Badge, Input, Card only — 4 of 52). `storybook/PUBLISHING.md` — how to make `@enhans/synapse` publishable (blocked on component parity).
+- `README.md` — team-facing front door (who-you-are → start-here, repo map, status).
+- `docs/process/` — the process doctrine (review protocol + PRD template, Korean). `.github/PULL_REQUEST_TEMPLATE/ui_review.md` — the review/PR template.
+- `docs/DISTRIBUTION.md` — how the harness reaches the team; the five-artifact split + sequenced rollout.
+- `tooling/product-gates/` — drop-in JS/TS gates for the PRODUCT repo (ESLint/Tailwind/raw-value/state-coverage/CI) — the protocol §6 gate that validate.py can't be.
+- `tools/validate.py` — the DS-repo gate (SY001–SY018). `tools/build_manifest.py` — regenerates `synapse.manifest.json`.
 - `proposals/` — governance/audit docs (not gated, no KO required).
 
 ## The working discipline (IMPORTANT — follow exactly)
@@ -40,7 +44,7 @@ Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (
 
 ## Current state
 
-**Version: 6.61.0.** Gate is green (0/0). **Everything since the last successful push is uncommitted** — June needs to push from her Mac (see step 7). Vercel deploys the docs hub + preview; after pushes that touch token values or storybook, confirm the build is green.
+**Version: 6.62.0.** Gate is green (0/0). **Large uncommitted batch — needs a push from June's Mac.** Since the last push (v6.61.0), this session added: the v6.62.0 AI side-surface tranche (ai-patterns §32–35 + KO + components.md + preview stories + CHANGELOG), and a **team-distribution layer** (new README, `docs/process/` doctrine, `.github/PULL_REQUEST_TEMPLATE/ui_review.md`, `docs/DISTRIBUTION.md`, `tooling/product-gates/`, `storybook/PUBLISHING.md` + storybook version fixed 6.1.1→6.62.0), plus cleanup (removed the rejected permissions-lifecycle draft + pycache). Vercel deploys the docs hub + preview; after pushes that touch token values or storybook, confirm the build is green.
 
 ## Key maintainer rulings / recent decisions (this session)
 
@@ -57,7 +61,8 @@ Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (
 
 ## Open threads / what's next
 
-- **Push the uncommitted work** (v6.61.0 and everything above) from June's Mac.
+- **Team distribution (biggest open thread).** `docs/DISTRIBUTION.md` has the full plan. The doctrine is team-ready to *read*; it is NOT ready to *use under enforcement* because two things don't exist yet: (1) an installable `@enhans/synapse` — the `storybook/` lib is 4 of 52 components (`storybook/PUBLISHING.md`); (2) the product-repo gates are provided in `tooling/product-gates/` but not wired into a product repo. Critical path: build out components → publish package → wire product gates → land process docs in product repo → pilot one screen → broaden. `npm publish`, product-repo CI, and the git push all require June's creds/environment.
+- **v6.62.0 side-surface tranche** shipped from `proposals/2026-07-21-aiux-patterns-catalog-audit.md`: ai-patterns §32 Artifacts, §33 Source browser, §34 Conversation summary, §35 Feedback. Next-strongest catalog item still open: **Plan & Execute** (pre-flight editable plan). The catalog + framework audits (`proposals/2026-07-21-*`) list the rest.
 - **Shape-of-AI gaps** are documented in two new proposal docs: `proposals/2026-07-20-shapeof-ai-pattern-audit.md` (full pattern audit) and `proposals/2026-07-20-ai-gap-policy-decisions.md` + `proposals/2026-07-20-ai-gap-decision-register.xlsx` (policy decisions the team's DRIs must settle before UI — Memory, Incognito, Data ownership, pre-flight Action plan, pre-run Cost estimates, Branches/Variations, Voice & tone, etc.). These are **blocked on policy calls**, not design.
 - **Open question from June:** whether other tokens in the Claude Design System differ from ours (only the point blue was retargeted so far). If she provides the Claude DS palette, sync the rest in one pass.
 - Media-playground patterns (inpainting, restyle/preset styles, watermarks, etc.) were deliberately marked out-of-domain in the audit.

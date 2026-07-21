@@ -1,0 +1,37 @@
+# Synapse UI gate — GitHub Actions job for the PRODUCT repo.
+# Copy into .github/workflows/ in the product repo. Every check is a hard fail;
+# a green run is the precondition for design review (protocol §2, §6).
+name: Synapse UI gate
+
+on:
+  pull_request:
+    paths: ['src/**', 'tooling/synapse-gates/**']
+
+jobs:
+  ui-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20', cache: 'npm' }
+      - run: npm ci
+
+      - name: Types + CVA variant validity (SY variant rules)
+        run: npx tsc --noEmit
+
+      - name: Component provenance + a11y (ESLint)
+        run: npx eslint "src/**/*.{ts,tsx}"
+
+      - name: Raw values / arbitrary Tailwind (SY001/SY002 backstop)
+        run: node tooling/synapse-gates/check-raw-values.mjs "src/**/*.{ts,tsx,css}"
+
+      - name: Required-state coverage
+        run: node tooling/synapse-gates/check-state-coverage.mjs "src/**/*.states.json"
+
+      - name: Accessibility (axe over built stories)
+        run: npm run test:a11y   # wire to your Storybook + axe/Playwright setup
+
+      # Visual snapshots so the reviewer sees every state at a glance:
+      # - name: Chromatic
+      #   uses: chromaui/action@latest
+      #   with: { projectToken: ${{ secrets.CHROMATIC_TOKEN }} }

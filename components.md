@@ -373,6 +373,7 @@ Path context for pages deeper than 2 levels. 13px, `fg.tertiary` links with `fg.
 ## Drawer
 
 Side panel for detail/edit without leaving context. Slides from right, width 480px (max 640px; **`wide` variant 800px (v6.0)** for data-review surfaces — DiffView, run inspection — where 640 forces unusable wrapping), full height, `shadow.modal`, opaque `bg.raised` panel (v6.31 — glass retired from scrimmed layers, foundations §5), same header pattern as Modal. Non-blocking variant (no scrim) allowed in data workspaces.
+**AI side surfaces (v6.62):** the `wide` variant is also the home for agent **artifacts** (a generated doc/code/diagram/table opened for viewing and editing) and the **source browser** (retrieved sources shown beside the answer) — see `ai-patterns.md` §32–33. These are Drawer *content*, not new components; in the workbench archetype the same content MAY occupy a SplitPanel pane instead.
 **Forbidden:** left-side drawers (reserved for Sidebar); nested drawers.
 
 ---
@@ -496,6 +497,7 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Placement:** hover/focus-reveal on desktop focus surfaces; persistent in dense consoles (hover-dependent affordances need persistent fallbacks there).
 **Behavior:** copy copies the markdown source (Toast confirms); regenerate only on the latest agent message (earlier messages drop it); thumbs select-state = `bg.selected` fill at the button's standard radius + `fg.primary` stroke (v6.47.1 — was `border.focus` blue + circle, a v5.2 relic violating two later laws: blue is reserved for focus/links/status.info, and selection reads as fill + ink, not shape — the Composer send button stays the ONLY circular control) (NEVER a filled icon — stroke set only; the favorite star is the sole fill-on-active exception), mutually exclusive, tappable to undo. **Optical centering (v6.47.2, numeral-nudge family):** the thumbs glyphs carry asymmetric ink (up is right-heavy, down left-heavy — ~1.5px off geometric center in a 16px render); both get a ∓1px translateX so ink centers inside any visible fill. Applies wherever the thumbs pair renders (message toolbar + media rail); thumbs-down MAY open a one-field comment Popover ("What went wrong?" / "어떤 점이 아쉬웠나요?"), never required.
 **Jurisdiction:** agent messages only — never on human bubbles, never on ProposalCards (those have their own footer).
+**Feedback completeness (v6.62):** a registered thumb or comment gives a quiet acknowledgment (the select-state persists; a Toast confirms a submitted comment); feedback is never forced (no rating modal gates the next turn) and the affordance appears only after the answer settles, never on streaming tokens (`ai-patterns.md` §35).
 **Forbidden:** destructive actions in the toolbar; share/export actions outside the ⋯ overflow; feedback icons anywhere except here.
 
 ---
