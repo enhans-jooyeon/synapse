@@ -1,5 +1,5 @@
 {
-  "name": "@enhans/synapse",
+  "name": "@enhans-jooyeon/synapse",
   "version": "1.0.0",
   "private": true,
   "//publish": "PRIVATE until the library reaches component parity — it currently implements 4 of 52 components. To publish, follow PUBLISHING.md (add exports/build/types, flip private→false). Version tracks the design-system version.",

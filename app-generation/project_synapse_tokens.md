@@ -1,6 +1,6 @@
 ---
 name: Synapse Design System Color Tokens
-description: @enhans/synapse 디자인 시스템 색상 토큰 매핑 — 컴포넌트 작업 시 반드시 참조
+description: @enhans-jooyeon/synapse 디자인 시스템 색상 토큰 매핑 — 컴포넌트 작업 시 반드시 참조
 type: reference
 originSessionId: 86065e6d-1625-45ce-a895-0519665e3784
 ---

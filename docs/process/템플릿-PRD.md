@@ -18,7 +18,7 @@
 - **진입점 / 위치:** [판단 맥락]
 
 ### 생성 지시 (LLM에 넣을 때 이 블록을 위로)
-- **하네스:** `@enhans/synapse` 컴포넌트만 사용. `design.md`의 규칙과 토큰을 따를 것. [생성 지시]
+- **하네스:** `@enhans-jooyeon/synapse` 컴포넌트만 사용. `design.md`의 규칙과 토큰을 따를 것. [생성 지시]
 - **참조 패턴:** design.md의 [예: "detail-with-side-panel"] 를 확장. [생성 지시]
 - **출력 형식:** 코드로 산출. localhost에서 실행 가능해야 하며, 아래 필수 상태 각각에 대한 Storybook story를 포함. [생성 지시]
 

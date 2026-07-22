@@ -1,4 +1,4 @@
-# Publishing `@enhans/synapse`
+# Publishing `@enhans-jooyeon/synapse`
 
 This workspace is **not publishable yet** and is kept `private: true` on purpose: it implements **4 of 52 components** (Button · Badge · Input · Card). Shipping it now would give consumers a near-empty design system. This is the checklist to make it a real package when the library reaches parity.
 
@@ -41,9 +41,9 @@ Build out the component library toward `synapse.manifest.json` parity — at min
 ## Consumers then
 
 ```bash
-npm i @enhans/synapse
+npm i @enhans-jooyeon/synapse
 ```
 ```ts
-import { Button, Badge } from '@enhans/synapse';
-import '@enhans/synapse/tokens/synapse.css';
+import { Button, Badge } from '@enhans-jooyeon/synapse';
+import '@enhans-jooyeon/synapse/tokens/synapse.css';
 ```

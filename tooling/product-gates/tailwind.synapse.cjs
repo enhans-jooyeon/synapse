@@ -7,7 +7,7 @@
  * Usage in the product's tailwind.config: `presets: [require('./tooling/synapse-gates/tailwind.synapse.cjs')]`
  * Generate the theme objects from tokens/synapse.tokens.json at build time so they never drift.
  */
-const tokens = require('@enhans/synapse/tokens/synapse.tokens.json');
+const tokens = require('@enhans-jooyeon/synapse/tokens/synapse.tokens.json');
 
 // Map DTCG token groups → Tailwind scales (illustrative; wire to your token shape).
 const spacing = Object.fromEntries(

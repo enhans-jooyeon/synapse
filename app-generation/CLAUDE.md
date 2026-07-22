@@ -5,7 +5,7 @@
 
 ---
 
-## 디자인 시스템: @enhans/synapse
+## 디자인 시스템: @enhans-jooyeon/synapse
 
 ### 핵심 색상 토큰
 | 용도 | 값 |

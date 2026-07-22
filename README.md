@@ -11,7 +11,7 @@ Web-only · bilingual **KO/EN** (EN authoritative) · current version **1.0.0**.
 | You are… | Start with |
 |---|---|
 | **New to Synapse** (anyone) | This file, then [`design.md`](design.md) — the contract and hard rules |
-| **Author** (PM/engineer generating UI) | [`docs/process/디자인-리뷰-프로토콜.md`](docs/process/디자인-리뷰-프로토콜.md) → then the [PRD template](docs/process/템플릿-PRD.md) as your generation prompt |
+| **Author** (PM/engineer generating UI) | [`docs/process/design-cycle.md`](docs/process/design-cycle.md) — the step-by-step cycle — then run [`screen-intake-skill.md`](docs/process/screen-intake-skill.md) (it fills the [PRD template](docs/process/템플릿-PRD.md) for you). Don't skip intake — generic instructions produce generic UI |
 | **Reviewer** (designer) | The protocol §9 rubric (three outcomes) + the [PR/review template](.github/PULL_REQUEST_TEMPLATE/ui_review.md) |
 | **Consuming the system in product code** | [`storybook/`](storybook/) (React components) + `tokens/` — see [status](docs/DISTRIBUTION.md) |
 | **Browsing the system** | Open [`preview.html`](preview.html) in a browser (also deployed as the docs hub) |
@@ -33,7 +33,7 @@ Anything a machine can check — token use, component provenance, contrast, requ
 | DS-repo gate | `tools/validate.py` — `tokens` / `ui` / `page` modes (enforces this repo's own artifacts) |
 | Component browser + sample pages | `preview.html` |
 | React + Storybook workspace | `storybook/` (seed: Button · Badge · Input · Card) |
-| **Process doctrine** | `docs/process/` (review protocol, PRD template) + `.github/PULL_REQUEST_TEMPLATE/ui_review.md` |
+| **Process doctrine** | `docs/process/` — design-development cycle (`design-cycle.md`), guided intake (`screen-intake-skill.md`), refinement loop (`harness-refinement-protocol.md` + `harness-refinement-register.md`), review protocol + PRD template, `.github/PULL_REQUEST_TEMPLATE/ui_review.md` |
 | **Distribution & rollout** | [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) — how this reaches the team + current status |
 | Product-repo gate bundle | `tooling/product-gates/` — drop-in ESLint/Tailwind/coverage gates for the product CI |
 | App Generation catalog | `app-generation/` — the App Builder's ECharts chart/component catalog, reconciled to v1.0.0 tokens (`app-generation/tokens-map.md`) |
@@ -49,7 +49,7 @@ python3 tools/build_manifest.py                              # after any compone
 
 ## Status (read before adopting)
 
-The **doctrine is mature** (52 components, AI patterns, tokens, gate, bilingual specs at 1.0.0). The **consumption layer is not finished**: the React library in `storybook/` is a 4-of-52 seed and is not yet published as an installable `@enhans/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
+The **doctrine is mature** (52 components, AI patterns, tokens, gate, bilingual specs at 1.0.0). The **consumption layer is not finished**: the React library in `storybook/` is a 4-of-52 seed and is not yet published as an installable `@enhans-jooyeon/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
 
 ## Governance
 

@@ -1,6 +1,6 @@
 # Synapse product-repo gates
 
-The JS/TS enforcement layer for the **product repo** — the machine half of the review protocol (`docs/process/디자인-리뷰-프로토콜.md` §6). Drop these into the repo that consumes `@enhans/synapse` so CI enforces the contract before a designer reviews.
+The JS/TS enforcement layer for the **product repo** — the machine half of the review protocol (`docs/process/디자인-리뷰-프로토콜.md` §6). Drop these into the repo that consumes `@enhans-jooyeon/synapse` so CI enforces the contract before a designer reviews.
 
 `tools/validate.py` (in the DS repo) is **not** this. It lints HTML/CSS strings and guards the design-system repo's own artifacts. It cannot see React/JSX. These files re-express the same rules for product code.
 
@@ -21,7 +21,7 @@ The JS/TS enforcement layer for the **product repo** — the machine half of the
 
 1. Copy this folder into the product repo (e.g. `tooling/synapse-gates/`).
 2. Merge `.eslintrc.synapse.cjs` into the repo's ESLint config (`extends` or spread `rules`), and add `eslint-plugin-jsx-a11y`.
-3. Merge `tailwind.synapse.cjs` — the point is `future.hoverOnlyWhenSupported` aside, **arbitrary values disabled** and the theme sourced from `@enhans/synapse` tokens.
+3. Merge `tailwind.synapse.cjs` — the point is `future.hoverOnlyWhenSupported` aside, **arbitrary values disabled** and the theme sourced from `@enhans-jooyeon/synapse` tokens.
 4. Add the scripts to CI (`ui-gate.yml` is a ready GitHub Actions job).
 5. Author declares required states in a `*.states.json` next to each screen; `check-state-coverage.mjs` verifies a story per declared state.
 

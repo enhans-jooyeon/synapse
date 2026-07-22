@@ -1,4 +1,4 @@
-<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-07-21, at v1.0.0 (initial team release; re-baselined from internal 6.x). -->
+<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-07-22, at v1.0.0 — added the design-development process layer (docs/process/) and retargeted the package scope to @enhans-jooyeon/synapse. -->
 
 # Synapse — session handoff
 
@@ -20,9 +20,9 @@ The system's character: neutral, black-key, borders-first, engineered restraint 
 - `*.ko.md` — Korean translations of the 8 spec files (EN-authoritative; each carries a `<!-- sy-source: HASH -->` marker).
 - `tokens/synapse.tokens.json` — **source of truth** for tokens (carries `$version`). `tokens/synapse.css` — generated CSS custom properties (`--sy-*`).
 - `preview.html` — the component browser / storybook (left sidenav + Overview gallery + per-component detail pages with When/When-not/Anti/Where guidance). Deployed to Vercel via the docs hub.
-- `storybook/` — React component implementations (SEED: Button, Badge, Input, Card only — 4 of 52). `storybook/PUBLISHING.md` — how to make `@enhans/synapse` publishable (blocked on component parity).
+- `storybook/` — React component implementations (SEED: Button, Badge, Input, Card only — 4 of 52). `storybook/PUBLISHING.md` — how to make `@enhans-jooyeon/synapse` publishable (blocked on component parity).
 - `README.md` — team-facing front door (who-you-are → start-here, repo map, status).
-- `docs/process/` — the process doctrine (review protocol + PRD template, Korean). `.github/PULL_REQUEST_TEMPLATE/ui_review.md` — the review/PR template.
+- `docs/process/` — the process doctrine. Korean, team-facing: `디자인-리뷰-프로토콜.md` (review protocol) + `템플릿-PRD.md` (PRD template). English, agent-facing (EN-only, ungated — added 2026-07-22): `design-cycle.md` (the canonical Frame→Intake→Generate→Review→Refine spine + opening triage — the phase spine the Synapse plugin runs), `screen-intake-skill.md` (the unskippable guided intake → filled PRD + validated screen-intent JSON; refuses on hand-waving), `harness-refinement-protocol.md` + `harness-refinement-register.md` (the self-correction loop: blind assess → mine the delta vs June's feedback → root-cause RC1–RC6 → route to a harness fix; edits held for approval). `.github/PULL_REQUEST_TEMPLATE/ui_review.md` — the review/PR template.
 - `docs/DISTRIBUTION.md` — how the harness reaches the team; the five-artifact split + sequenced rollout.
 - `tooling/product-gates/` — drop-in JS/TS gates for the PRODUCT repo (ESLint/Tailwind/raw-value/state-coverage/CI) — the protocol §6 gate that validate.py can't be.
 - `scripts/dist.allowlist` + `scripts/build-dist.mjs` — the curated team-package builder (allowlist → `dist/`; internal docs excluded by construction). `.github/workflows/publish-harness.yml` mirrors `dist/` to the separate `synapse-harness` repo on each release tag. Two-repo workflow doc: `docs/DISTRIBUTION.md`.
@@ -48,7 +48,15 @@ Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (
 
 **Version: 1.0.0 (initial team release).** Gate is green (0/0). The prior work (AI side-surface tranche §32–35 + the team-distribution layer: README, `docs/process/`, `.github/PULL_REQUEST_TEMPLATE/ui_review.md`, `docs/DISTRIBUTION.md`, `tooling/product-gates/`, `storybook/PUBLISHING.md`) was pushed as commit `d2e8bbd` (internal 6.62.0). This session then **re-baselined the version to 1.0.0**, switched to release-based versioning (design.md §6), and added the **curated-distribution workflow** (`scripts/build-dist.mjs` + `dist.allowlist` + `.github/workflows/publish-harness.yml`) that publishes a cleaned-up bundle to a separate `synapse-harness` repo on release tags. All of that is **uncommitted; needs a push from June's Mac** (working folder is now the real clone `~/Claude/Projects/synapse-clone`). Two-repo setup steps (create `synapse-harness`, add `HARNESS_DEPLOY_TOKEN` secret) are in `docs/DISTRIBUTION.md`. Vercel deploys the docs hub + preview; after pushes that touch token values or storybook, confirm the build is green.
 
-## Key maintainer rulings / recent decisions (this session)
+## This session (2026-07-22) — process layer + scope retarget
+
+Focus shifted from the design system to the **harness around it**, prompted by a disappointing team test round (testers gave generic instructions, skipped the PRD, got generic UI). Work done, all **uncommitted, gate green (0/0)**:
+
+- **Added the design-development process layer** in `docs/process/` (EN, ungated — see repo map): `design-cycle.md`, `screen-intake-skill.md`, `harness-refinement-protocol.md`, `harness-refinement-register.md`. The cycle is `Triage → (Frame if net-new) → Intake (unskippable) → Generate (any tool) → Review (gate then judgment) → Refine (defects become harness edits)`.
+- **Retargeted the npm package scope** harness-wide: `@enhans/synapse` → `@enhans-jooyeon/synapse` across 14 files (incl. `storybook/package.json` name, the product-gate `eslint`/`tailwind` configs that bind a consuming repo, PUBLISHING/DISTRIBUTION, PRD template, review protocol, README, app-generation docs, this file). Left `proposals/2026-07-15-branding-system-comparison.md` intact — its `@enhans/synapse` is a true historical reference to the OLD (viralpick/CommerceOS) system.
+- **Direction agreed:** the process layer ships as a **Synapse plugin** (guided + gate) for the internal team's agent tools — repo stays source of truth, no standalone app. Frame is deliberately *optional* (triaged) to avoid research theater.
+
+## Key maintainer rulings / earlier decisions
 
 - **Point color = `#0621C4`** (Claude Design System point blue), v6.61 — replaced the old brand-team-repo azure `#0A84FF`. Hover `#051AA0`, tint `#EBEDFA`. White-on-point ≈ 10:1, so it clears AA and no longer needs the ≥3:1 solid-label exemption; validator brand contrast pairs are at AA 4.5. Flows through `action.brand-*`, `brand.point`, `ai.solid`.
 - **`accent` → `brand`** button-variant rename (v6.58): the point-color button is the `brand` variant (brand-identity + conversational-AI CTAs; Composer send). Operational agent actions (Run/Retry/Resume) stay `primary`/black.
@@ -63,7 +71,9 @@ Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (
 
 ## Open threads / what's next
 
-- **Team distribution (biggest open thread).** `docs/DISTRIBUTION.md` has the full plan. The doctrine is team-ready to *read*; it is NOT ready to *use under enforcement* because two things don't exist yet: (1) an installable `@enhans/synapse` — the `storybook/` lib is 4 of 52 components (`storybook/PUBLISHING.md`); (2) the product-repo gates are provided in `tooling/product-gates/` but not wired into a product repo. Critical path: build out components → publish package → wire product gates → land process docs in product repo → pilot one screen → broaden. `npm publish`, product-repo CI, and the git push all require June's creds/environment.
+- **AgentOS product-context layer (NEXT — blocked on June).** `product-context.md` does not exist yet; it's the source of truth the Frame + Intake phases reference for user roles (finally grounding `viewer_role`/SY109), entities/ontology, jobs-to-be-done, IA/nav, and product tone. June will **provide product docs/files**; distill them into a separate reference layer (NOT woven into design.md's closed sets), dated + ungated + reference-only. Highest-value next content — the intake/frame skills are only as good as this.
+- **Synapse plugin packaging.** Bundle the phase skills (`design-cycle.md` is the spine) into a plugin the team runs in their agent tools, each phase gating the next. Also tailor the `design` plugin's `user-research` + `research-synthesis` to AgentOS for the Frame phase. Not started.
+- **Team distribution (biggest open thread).** `docs/DISTRIBUTION.md` has the full plan. The doctrine is team-ready to *read*; it is NOT ready to *use under enforcement* because two things don't exist yet: (1) an installable `@enhans-jooyeon/synapse` — the `storybook/` lib is 4 of 52 components (`storybook/PUBLISHING.md`); (2) the product-repo gates are provided in `tooling/product-gates/` but not wired into a product repo. Critical path: build out components → publish package → wire product gates → land process docs in product repo → pilot one screen → broaden. `npm publish`, product-repo CI, and the git push all require June's creds/environment.
 - **Side-surface tranche** (shipped, from `proposals/2026-07-21-aiux-patterns-catalog-audit.md`): ai-patterns §32 Artifacts, §33 Source browser, §34 Conversation summary, §35 Feedback. Next-strongest catalog item still open: **Plan & Execute** (pre-flight editable plan). The catalog + framework audits (`proposals/2026-07-21-*`) list the rest.
 - **Shape-of-AI gaps** are documented in two new proposal docs: `proposals/2026-07-20-shapeof-ai-pattern-audit.md` (full pattern audit) and `proposals/2026-07-20-ai-gap-policy-decisions.md` + `proposals/2026-07-20-ai-gap-decision-register.xlsx` (policy decisions the team's DRIs must settle before UI — Memory, Incognito, Data ownership, pre-flight Action plan, pre-run Cost estimates, Branches/Variations, Voice & tone, etc.). These are **blocked on policy calls**, not design.
 - **Open question from June:** whether other tokens in the Claude Design System differ from ours (only the point blue was retargeted so far). If she provides the Claude DS palette, sync the rest in one pass.
@@ -80,3 +90,5 @@ Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (
 ## How June likes Claude to work
 
 Critical/analytical by default on proposals and judgment calls — lead with the strongest objections/risks, name unstated assumptions and cheaper alternatives, distinguish fact vs. judgment vs. guess, and hold a position with reasons rather than caving. Don't manufacture criticism when something's solid. Be concise and direct; minimal fluff.
+
+**Standing rule:** when changes land, refresh every doc that references them (this file, README, repo map, cross-references) **without asking** — proactively, as part of the same work.

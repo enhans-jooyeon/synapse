@@ -16,7 +16,7 @@ module.exports = {
         selector:
           "JSXOpeningElement[name.name=/^(button|input|select|textarea|dialog|table)$/]",
         message:
-          'Use the @enhans/synapse component (Button, Input, Select, Textarea, Modal, Table), not a raw element. Missing capability → harness ticket, not a raw element (protocol §9).',
+          'Use the @enhans-jooyeon/synapse component (Button, Input, Select, Textarea, Modal, Table), not a raw element. Missing capability → harness ticket, not a raw element (protocol §9).',
       },
       {
         // No inline style objects with literal color/size values — tokens only.
@@ -31,9 +31,9 @@ module.exports = {
       {
         patterns: [
           {
-            group: ['**/components/ui/*', '!@enhans/synapse'],
+            group: ['**/components/ui/*', '!@enhans-jooyeon/synapse'],
             message:
-              'Import UI primitives from @enhans/synapse, not local re-implementations (one-way door rule, design.md §6).',
+              'Import UI primitives from @enhans-jooyeon/synapse, not local re-implementations (one-way door rule, design.md §6).',
           },
         ],
       },
