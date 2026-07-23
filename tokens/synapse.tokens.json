@@ -12,7 +12,7 @@
         "50":  { "$value": "#FAFAFB" },
         "100": { "$value": "#F4F4F6" },
         "150": { "$value": "#ECECEF" },
-        "175": { "$value": "#E9E9ED", "$description": "Hairline chrome step (v4.0 sleek restyle) — border.default's light value." },
+        "175": { "$value": "#E9E9ED", "$description": "Hairline chrome step ( sleek restyle) — border.default's light value." },
         "200": { "$value": "#E3E3E8" },
         "300": { "$value": "#D1D1D8" },
         "400": { "$value": "#A9A9B2" },
@@ -24,7 +24,7 @@
         "950": { "$value": "#141419" }
       },
       "slate": {
-        "$description": "Quiet-emphasis family (v6.11) — NOT a second neutral. Enters UI only through emphasis.*, ai.* surfaces (v6.18), and slate-valued selected states; never default surfaces/borders/text. AI and emphasis share the family by design: agency is signaled by ai.fg blue marks + the squared avatar, never by tint alone.",
+        "$description": "Quiet-emphasis family — NOT a second neutral. Enters UI only through emphasis.*, ai.* surfaces, and slate-valued selected states; never default surfaces/borders/text. AI and emphasis share the family by design: agency is signaled by ai.fg blue marks + the squared avatar, never by tint alone.",
         "50":  { "$value": "#F7F9FB" },
         "100": { "$value": "#EFF3F7" },
         "200": { "$value": "#DCE3EB" },
@@ -63,7 +63,7 @@
         "950": { "$value": "#111A3C" }
       },
       "point": {
-        "$description": "Point/accent color (v6.51; retargeted to the Claude Design System value v6.61) — the point blue #0621C4, the system's one vivid accent. Black remains the brand/action color; point is used ONLY for brand identity objects and AI emphasis (conversational-AI CTAs + active AI running states). Distinct hue from the functional blue ramp (links/focus/status.info), which stays the calmer indigo.",
+        "$description": "Point/accent color (retargeted to the Claude Design System value) — the point blue #0621C4, the system's one vivid accent. Black remains the brand/action color; point is used ONLY for brand identity objects and AI emphasis (conversational-AI CTAs + active AI running states). Distinct hue from the functional blue ramp (links/focus/status.info), which stays the calmer indigo.",
         "50":  { "$value": "#EBEDFA" },
         "500": { "$value": "#0621C4" },
         "600": { "$value": "#051AA0" }
@@ -196,7 +196,7 @@
       "sm":   { "$value": "8px" },
       "md":   { "$value": "10px" },
       "lg":   { "$value": "16px" },
-      "xl":   { "$value": "24px", "$description": "Section shells ONLY (v6.9): the outermost rounded well a page region sits in — SplitPanel container, content wells, hero/empty wells. Never on cards, overlays, or anything nested inside a shell. Shells pad >= space-24 so the concentric-corner rule never binds their children." },
+      "xl":   { "$value": "24px", "$description": "Section shells ONLY: the outermost rounded well a page region sits in — SplitPanel container, content wells, hero/empty wells. Never on cards, overlays, or anything nested inside a shell. Shells pad >= space-24 so the concentric-corner rule never binds their children." },
       "full": { "$value": "9999px" }
     },
     "shadow": {
@@ -209,7 +209,7 @@
     },
     "z": {
       "$type": "number",
-      "$description": "Stacking scale (v5.1). Every floating/pinned element takes exactly one of these; arbitrary z-index values are forbidden. Order is law: sticky < dropdown < drawer < modal < toast < tooltip.",
+      "$description": "Stacking scale. Every floating/pinned element takes exactly one of these; arbitrary z-index values are forbidden. Order is law: sticky < dropdown < drawer < modal < toast < tooltip.",
       "sticky":   { "$value": 100 },
       "dropdown": { "$value": 200 },
       "drawer":   { "$value": 300 },
@@ -241,18 +241,18 @@
       "display-xl":  { "$value": { "family": "display", "size": "{primitive.font.size.44}", "lineHeight": "{primitive.font.lineHeight.44}", "weight": 700 }, "$description": "Marketing-adjacent heroes only." },
       "display":     { "$value": { "family": "display", "size": "{primitive.font.size.36}", "lineHeight": "{primitive.font.lineHeight.36}", "weight": 600 }, "$description": "Guided-archetype heroes, empty-state heroes." },
       "display-sm":  { "$value": { "family": "display", "size": "{primitive.font.size.30}", "lineHeight": "{primitive.font.lineHeight.30}", "weight": 600 }, "$description": "Compact brand moments." },
-      "heading-xl":  { "$value": { "family": "sans", "size": "{primitive.font.size.24}", "lineHeight": "{primitive.font.lineHeight.24}", "weight": 700, "letterSpacing": "-0.01em (Latin only)" }, "$description": "Page title. One per page. Bold + tight Latin tracking (v4.0)." },
+      "heading-xl":  { "$value": { "family": "sans", "size": "{primitive.font.size.24}", "lineHeight": "{primitive.font.lineHeight.24}", "weight": 700, "letterSpacing": "-0.01em (Latin only)" }, "$description": "Page title. One per page. Bold + tight Latin tracking." },
       "heading-lg":  { "$value": { "family": "sans", "size": "{primitive.font.size.18}", "lineHeight": "{primitive.font.lineHeight.18}", "weight": 600 }, "$description": "Section / card / modal titles." },
       "heading-md":  { "$value": { "family": "sans", "size": "{primitive.font.size.16}", "lineHeight": "{primitive.font.lineHeight.16}", "weight": 600 }, "$description": "Subsections, drawer titles, empty-state titles." },
-      "heading-sm":  { "$value": { "family": "sans", "size": "{primitive.font.size.14}", "lineHeight": "{primitive.font.lineHeight.14}", "weight": 600 }, "$description": "Group titles inside cards, dense panel headers. Fixed 14/22 (v6.52 — no longer density-bound)." },
+      "heading-sm":  { "$value": { "family": "sans", "size": "{primitive.font.size.14}", "lineHeight": "{primitive.font.lineHeight.14}", "weight": 600 }, "$description": "Group titles inside cards, dense panel headers. Fixed 14/22 (no longer density-bound)." },
       "body-lg":     { "$value": { "family": "sans", "size": "{primitive.font.size.16}", "lineHeight": "{primitive.font.lineHeight.16}", "weight": 400 }, "$description": "Long-form reading: agent reports, docs, onboarding prose." },
-      "body":        { "$value": { "family": "sans", "size": "{primitive.font.size.14}", "lineHeight": "{primitive.font.lineHeight.14}", "weight": 400 }, "$description": "Default text. Fixed 14/22 (v6.52 — density type re-typesetting removed)." },
+      "body":        { "$value": { "family": "sans", "size": "{primitive.font.size.14}", "lineHeight": "{primitive.font.lineHeight.14}", "weight": 400 }, "$description": "Default text. Fixed 14/22 (density type re-typesetting removed)." },
       "body-sm":     { "$value": { "family": "sans", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 400 }, "$description": "Secondary prose fixed at 13 regardless of density (menu items, toast, meta sentences)." },
-      "label":       { "$value": { "family": "sans", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 500 }, "$description": "Form labels, table headers, buttons. Fixed 13/20 (v6.52 — no longer density-bound)." },
+      "label":       { "$value": { "family": "sans", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 500 }, "$description": "Form labels, table headers, buttons. Fixed 13/20 (no longer density-bound)." },
       "label-sm":    { "$value": { "family": "sans", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 500 }, "$description": "Compact labels, nav group headers pair with micro." },
       "caption":     { "$value": { "family": "sans", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 400 }, "$description": "Helper text, footnotes, attribution rows." },
       "micro":       { "$value": { "family": "sans", "size": "{primitive.font.size.11}", "lineHeight": "{primitive.font.lineHeight.11}", "weight": 600 }, "$description": "Badges, kbd hints. Never sentences. Weight 600 by rule: the floor size carries the reinforced weight — 500 fuzzes at 11px, especially Hangul; 700 clogs counters." },
-      "micro-label": { "$value": { "family": "sans", "size": "{primitive.font.size.11}", "lineHeight": "{primitive.font.lineHeight.11}", "weight": 600, "tracking": "0.02em Latin only" }, "$description": "Eyebrow/group labels: sidebar groups, palette groups, card eyebrows, chart axis labels. +2% tracking on Latin (Hangul never tracked); NEVER all-caps — tracking does the work caps would (v6.5)." },
+      "micro-label": { "$value": { "family": "sans", "size": "{primitive.font.size.11}", "lineHeight": "{primitive.font.lineHeight.11}", "weight": 600, "tracking": "0.02em Latin only" }, "$description": "Eyebrow/group labels: sidebar groups, palette groups, card eyebrows, chart axis labels. +2% tracking on Latin (Hangul never tracked); NEVER all-caps — tracking does the work caps would." },
       "code":        { "$value": { "family": "mono", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 400 }, "$description": "Code blocks, log output." },
       "code-sm":     { "$value": { "family": "mono", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 400 }, "$description": "Inline code, IDs in table cells." },
       "stat-lg":     { "$value": { "family": "sans", "size": "{primitive.font.size.30}", "lineHeight": "{primitive.font.lineHeight.30}", "weight": 600, "numeric": "tabular-nums" }, "$description": "Hero KPI values." },
@@ -269,12 +269,12 @@
         "sunken":    { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.950}" } } } },
         "hover":     { "$value": "{primitive.color.alpha.black-4}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.alpha.black-4}", "dark": "{primitive.color.alpha.white-6}" } } } },
         "active":    { "$value": "{primitive.color.alpha.black-6}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.alpha.black-6}", "dark": "{primitive.color.alpha.white-10}" } } } },
-        "selected":  { "$value": "{primitive.color.slate.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.100}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Lightened v3.8.3 so badge tints keep differentiation on highlighted rows. Sits close to bg.hover — selected states lean on their secondary cues (checkbox, fg.primary + weight in nav, check in menus)." },
+        "selected":  { "$value": "{primitive.color.slate.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.100}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Lightened so badge tints keep differentiation on highlighted rows. Sits close to bg.hover — selected states lean on their secondary cues (checkbox, fg.primary + weight in nav, check in menus)." },
         "selected-hover": { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.700}" } } }, "$description": "Hover on an already-selected row/item." },
         "disabled":  { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.900}" } } }, "$description": "Fill of disabled controls. Pairs with fg.disabled and border.disabled semantics — never opacity." },
         "scrim":     { "$value": "{primitive.color.alpha.black-40}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.alpha.black-40}", "dark": "{primitive.color.alpha.black-60}" } } } },
         "inverse":   { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.white}" } } } },
-        "inverse-soft": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Softened key fill (v6.2.5) — count overlays and key-color marks that pure black/white would overpower. Pairs with fg.inverse." }
+        "inverse-soft": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Softened key fill — count overlays and key-color marks that pure black/white would overpower. Pairs with fg.inverse." }
       },
       "fg": {
         "primary":   { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.gray.100}" } } } },
@@ -293,7 +293,7 @@
         "overlay": { "$value": "transparent", "$extensions": { "synapse": { "modes": { "light": "transparent", "dark": "{primitive.color.gray.700}" } } }, "$description": "Border for floating layers (menus, toasts, tooltips, popovers): none in light mode — soft shadow carries the edge — visible in dark mode where shadows die." },
         "strong":  { "$value": "{primitive.color.gray.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.300}", "dark": "{primitive.color.gray.600}" } } } },
         "focus":   { "$value": "{primitive.color.blue.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.500}", "dark": "{primitive.color.blue.300}" } } }, "$description": "Keyboard-focus ring on non-entry controls (buttons, checkboxes, rows, links)." },
-        "focus-input": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Focus perimeter on ENTRY surfaces (Input, Textarea, Select/Combobox/DatePicker triggers) — neutral, not blue (v6.10 maintainer ruling): text fields show focus on every click-to-type, so blue overexposed the accent during ordinary form-filling. Softened key tone (gray.800, matching the bg.inverse-soft precedent), never pure black." },
+        "focus-input": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Focus perimeter on ENTRY surfaces (Input, Textarea, Select/Combobox/DatePicker triggers) — neutral, not blue ( maintainer ruling): text fields show focus on every click-to-type, so blue overexposed the accent during ordinary form-filling. Softened key tone (gray.800, matching the bg.inverse-soft precedent), never pure black." },
         "selected": { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.gray.100}" } } }, "$description": "Key-color outline for selected cards/tiles (selection ≠ focus: focus is blue, selection is the key color)." },
         "error": { "$value": "{primitive.color.red.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.500}", "dark": "{primitive.color.red.300}" } } }, "$description": "Invalid-field borders. Brighter than status.danger text for 3:1 non-text contrast on inputs." }
       },
@@ -301,11 +301,11 @@
         "$description": "Key-color actions. Primary action is black-on-light / white-on-dark by brand definition.",
         "primary-bg":        { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.white}" } } } },
         "primary-bg-hover":  { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } } },
-        "primary-bg-active": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Aliases hover by maintainer decision (v3.7.3) — pressed and hover share one fill. Kept as a separate token so they can diverge later without an API change." },
+        "primary-bg-active": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Aliases hover by maintainer decision — pressed and hover share one fill. Kept as a separate token so they can diverge later without an API change." },
         "primary-fg":        { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.black}" } } } },
-        "secondary-bg":       { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.800}" } } }, "$description": "Tonal secondary button fill (v5.0 — replaced the outlined secondary). Ghost stays transparent." },
+        "secondary-bg":       { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.800}" } } }, "$description": "Tonal secondary button fill (replaced the outlined secondary). Ghost stays transparent." },
         "secondary-bg-hover": { "$value": "{primitive.color.gray.150}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.150}", "dark": "{primitive.color.gray.700}" } } } },
-        "brand-bg":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } }, "$description": "The POINT / brand color (v6.51; button variant renamed accent→brand v6.58): #0621C4. Jurisdiction = brand-identity objects + conversational-AI CTAs (Ask agent / Composer send), max 1 per screen. Operational agent actions (Run/Retry/Resume) stay primary/black — invoking the agent conversationally is the sanctioned blue moment, executing a configured run is not." },
+        "brand-bg":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } }, "$description": "The POINT / brand color (button variant renamed accent→brand): #0621C4. Jurisdiction = brand-identity objects + conversational-AI CTAs (Ask agent / Composer send), max 1 per screen. Operational agent actions (Run/Retry/Resume) stay primary/black — invoking the agent conversationally is the sanctioned blue moment, executing a configured run is not." },
         "brand-bg-hover":   { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.600}" } } } },
         "brand-bg-active":  { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.600}" } } }, "$description": "Aliases hover." },
         "brand-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } },
@@ -320,7 +320,7 @@
         "warning-bg":      { "$value": "{primitive.color.amber.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.amber.100}", "dark": "{primitive.color.amber.900}" } } } },
         "danger":          { "$value": "{primitive.color.red.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.600}", "dark": "{primitive.color.red.300}" } } } },
         "danger-bg":       { "$value": "{primitive.color.red.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.100}", "dark": "{primitive.color.red.900}" } } } },
-        "danger-bg-solid": { "$value": "{primitive.color.red.400}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.400}", "dark": "{primitive.color.red.400}" } } }, "$description": "Light-leaning resting fill (v3.7.1), ~3.4:1 with white under §8 policy — labels on it are semibold. Hover darkens to red.500 (AA)." },
+        "danger-bg-solid": { "$value": "{primitive.color.red.400}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.400}", "dark": "{primitive.color.red.400}" } } }, "$description": "Light-leaning resting fill, ~3.4:1 with white under §8 policy — labels on it are semibold. Hover darkens to red.500 (AA)." },
         "danger-bg-solid-hover": { "$value": "{primitive.color.red.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.500}", "dark": "{primitive.color.red.500}" } } }, "$description": "Hover/pressed fill — darkens from the resting red.400 and passes AA with white." },
         "info-bg-solid":    { "$value": "{primitive.color.blue.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.500}", "dark": "{primitive.color.blue.500}" } } } },
         "success-bg-solid": { "$value": "{primitive.color.green.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.green.500}", "dark": "{primitive.color.green.500}" } } }, "$description": "Mid fill + fg.on-solid white at ~3.5:1 — documented policy deviation from AA for short solid labels (foundations §8)." },
@@ -335,35 +335,35 @@
         "fill": { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.400}" } } }, "$description": "Default (user-initiated work). AI runs use action.brand-bg; failed uses status.danger-bg-solid." }
       },
       "brand": {
-        "$description": "Brand-identity objects (v6.51). The point color #0621C4 marks the brand: the topbar workspace monogram tile, the docs-hub/preview brand mark, and the sanctioned Artific brand-hero moment. Logo lockups & marketing surfaces also use point. NOT for general chrome — the frame stays monochrome; the point is the single deliberate brand pop.",
+        "$description": "Brand-identity objects. The point color #0621C4 marks the brand: the topbar workspace monogram tile, the docs-hub/preview brand mark, and the sanctioned Artific brand-hero moment. Logo lockups & marketing surfaces also use point. NOT for general chrome — the frame stays monochrome; the point is the single deliberate brand pop.",
         "point":    { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } } },
         "point-fg": { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } }
       },
       "ai": {
-        "$description": "Surfaces and marks that identify agent/AI presence. v6.19: FULL slate theme — surfaces, borders, fg and solid fills all draw from slate. The squared avatar is the primary agency marker; ai.* slate treatments support it. Blue no longer appears on AI (accent deprecated). Distinct from emphasis.* in semantics even where values match. See ai-patterns.md §1.",
+        "$description": "Surfaces and marks that identify agent/AI presence.: FULL slate theme — surfaces, borders, fg and solid fills all draw from slate. The squared avatar is the primary agency marker; ai.* slate treatments support it. Blue no longer appears on AI (accent deprecated). Distinct from emphasis.* in semantics even where values match. See ai-patterns.md §1.",
         "surface":       { "$value": "{primitive.color.slate.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.100}", "dark": "{primitive.color.slate.900}" } } } },
         "surface-hover": { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Hover state for interactive AI fills (suggestion chips)." },
-        "border":        { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Hairline weight; slate since v6.18. AI surfaces are layered (tinted zone on a neutral card), never outlined in saturated color." },
-        "fg":            { "$value": "{primitive.color.slate.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.600}", "dark": "{primitive.color.slate.300}" } } }, "$description": "v6.19: slate — the full-slate AI theme. The squared avatar is THE agency marker; ai.fg marks support it." },
-        "solid":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } }, "$description": "Solid AI fills for ACTIVE running states (live-activity beacon Badge, in-progress ai ProgressBar) — the point color #0621C4 (v6.51). Blue signals AI at work; idle/complete/surface stay slate (ai.surface/border/fg unchanged). Pairs with fg.on-solid under the §8 solid-label ≥3:1 policy." }
+        "border":        { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Hairline weight; slate. AI surfaces are layered (tinted zone on a neutral card), never outlined in saturated color." },
+        "fg":            { "$value": "{primitive.color.slate.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.600}", "dark": "{primitive.color.slate.300}" } } }, "$description": ": slate — the full-slate AI theme. The squared avatar is THE agency marker; ai.fg marks support it." },
+        "solid":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } }, "$description": "Solid AI fills for ACTIVE running states (live-activity beacon Badge, in-progress ai ProgressBar) — the point color #0621C4. Blue signals AI at work; idle/complete/surface stay slate (ai.surface/border/fg unchanged). Pairs with fg.on-solid under the §8 solid-label ≥3:1 policy." }
       },
       "glass": {
-        "$description": "The glass material (v6.22, jurisdiction corrected v6.31): UNSCRIMMED floating layers over live content only — CommandPalette (scrimless) and the follow-up panel. Scrimmed blocking layers (Modal, Drawer) are opaque: blur over a scrim samples darkness and reads muddy. Opacity floor 0.82; reduced-transparency falls back opaque; backdrop-filter legal ONLY as blur(glass.blur) (SY015).",
+        "$description": "The glass material (jurisdiction corrected): UNSCRIMMED floating layers over live content only — CommandPalette (scrimless) and the follow-up panel. Scrimmed blocking layers (Modal, Drawer) are opaque: blur over a scrim samples darkness and reads muddy. Opacity floor 0.82; reduced-transparency falls back opaque; backdrop-filter legal ONLY as blur(glass.blur) (SY015).",
         "surface": { "$value": "rgba(255, 255, 255, 0.85)", "$extensions": { "synapse": { "modes": { "light": "rgba(255, 255, 255, 0.85)", "dark": "rgba(30, 30, 36, 0.82)" } } } },
         "blur":    { "$value": "20px", "$type": "dimension" }
       },
       "emphasis": {
-        "$description": "Quiet emphasis without vibrant color (v6.11). Closed job list (hero stat card removed v6.40): table emphasis column/cell fill, timeline/calendar now-markers. Selected states (bg.selected) also draw from slate. Anti-collision rule: AI surfaces always carry a squared avatar or ai.fg text — a bare cool tint alone NEVER signals AI, and emphasis.* is never used on AI surfaces.",
+        "$description": "Quiet emphasis without vibrant color. Closed job list (hero stat card removed): table emphasis column/cell fill, timeline/calendar now-markers. Selected states (bg.selected) also draw from slate. Anti-collision rule: AI surfaces always carry a squared avatar or ai.fg text — a bare cool tint alone NEVER signals AI, and emphasis.* is never used on AI surfaces.",
         "surface": { "$value": "{primitive.color.slate.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.100}", "dark": "{primitive.color.slate.900}" } } } },
         "border":  { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.800}" } } } },
         "fg":      { "$value": "{primitive.color.slate.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.600}", "dark": "{primitive.color.slate.300}" } } } },
-        "fg-soft": { "$value": "{primitive.color.slate.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.500}", "dark": "{primitive.color.slate.400}" } } }, "$description": "Soft emphasis marks where a FILL carries the visual mass (the favorite star, v6.35). One step above the 3:1 non-text floor vs surfaces — gate-checked; nothing lighter is legal for stateful marks. Never for text." }
+        "fg-soft": { "$value": "{primitive.color.slate.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.500}", "dark": "{primitive.color.slate.400}" } } }, "$description": "Soft emphasis marks where a FILL carries the visual mass (the favorite star). One step above the 3:1 non-text floor vs surfaces — gate-checked; nothing lighter is legal for stateful marks. Never for text." }
       }
     }
   },
 
   "density": {
-    "$description": "Control & layout dimensions (v6.53 — density modes removed; single scale). Tables use the compact table-row/table-cell-x by default. content-max is the reading-column cap; data regions go fluid as a layout choice.",
+    "$description": "Control & layout dimensions (density modes removed; single scale). Tables use the compact table-row/table-cell-x by default. content-max is the reading-column cap; data regions go fluid as a layout choice.",
     "control": {
       "$type": "dimension",
       "height-sm": { "$value": "32px" },
@@ -378,7 +378,7 @@
       "section-gap":    { "$value": "40px" },
       "card-padding":   { "$value": "28px" },
       "stack-gap":      { "$value": "16px" },
-      "table-row":      { "$value": "36px", "$description": "Compact by default (v6.53) — tables run tight regardless of context." },
+      "table-row":      { "$value": "36px", "$description": "Compact by default — tables run tight regardless of context." },
       "table-cell-x":   { "$value": "12px" },
       "content-max":    { "$value": "760px", "$description": "Reading-column cap; workbench/data regions go fluid per patterns.md §1 (a layout choice, not a density mode)." }
     }

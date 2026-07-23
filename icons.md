@@ -4,7 +4,7 @@
 
 ## Navigation & chrome
 
-**Third-party product logos (v6.17):** brand logos (Slack, Zendesk, Google Calendar, …) are permitted ONLY in connector/integration contexts — connector lists, integration settings rows, source attribution rows. 16px, original brand colors, never recolored, never monochromed, never in navigation chrome, never as a substitute for registry icons. Everywhere else, the closed registry below is the only icon source.
+**Third-party product logos:** brand logos (Slack, Zendesk, Google Calendar, …) are permitted ONLY in connector/integration contexts — connector lists, integration settings rows, source attribution rows. 16px, original brand colors, never recolored, never monochromed, never in navigation chrome, never as a substitute for registry icons. Everywhere else, the closed registry below is the only icon source.
 
 | Concept | Icon | Notes |
 |---|---|---|
@@ -51,7 +51,7 @@
 | retry | `rotate-cw` | distinct from refresh |
 | filter | `list-filter` | |
 | sort | `arrow-up` / `arrow-down` | active column only |
-| delta / trend | `trend-up` / `trend-down` | stat-card delta rows only (v6.4) — icon shows direction of change; color carries direction of goodness |
+| delta / trend | `trend-up` / `trend-down` | stat-card delta rows only — icon shows direction of change; color carries direction of goodness |
 | more (overflow) | `ellipsis` | approved icon-only |
 | send | `arrow-up` in filled circle context | Composer only |
 | stop (generation/run) | `square` | |
@@ -62,14 +62,14 @@
 | show / hide value | `eye` / `eye-off` | secrets reveal |
 | link / attach reference | `link` | |
 | attachment | `paperclip` | Composer |
-| reply / quote | `corner-up-left` | Reply pill + ComposerQuote only (v6.12) |
-| follow-up | `arrow-right` | follow-up panel rows only (v6.12) |
-| refine prompt | `pen-line` | Composer input area, contextual overlay only (v6.25; moved v6.44) |
-| voice input | `mic` | Composer footer, send-adjacent trailing (v6.26; moved v6.43) |
-| tools / capabilities | `plug` | Composer footer + tool rows (v6.41) |
-| prompt template | `bookmark` | Composer footer + template library rows (v6.29) |
-| favorite | `star` | template library favorite toggles (v6.34.1, was pin); **active state renders FILLED — the registry's one fill-on-active exception (v6.34.3)**; future list favoriting by governance |
-| pause | `pause` | recording bar only (v6.26) |
+| reply / quote | `corner-up-left` | Reply pill + ComposerQuote only |
+| follow-up | `arrow-right` | follow-up panel rows only |
+| refine prompt | `pen-line` | Composer input area, contextual overlay only (moved) |
+| voice input | `mic` | Composer footer, send-adjacent trailing (moved) |
+| tools / capabilities | `plug` | Composer footer + tool rows |
+| prompt template | `bookmark` | Composer footer + template library rows |
+| favorite | `star` | template library favorite toggles (was pin); **active state renders FILLED — the registry's one fill-on-active exception**; future list favoriting by governance |
+| pause | `pause` | recording bar only |
 | approve / confirm | `check` | |
 | send (Composer) | `arrow-up` | Composer's sanctioned icon-only send |
 | regenerate | `refresh-ccw` | distinct from refresh/retry |

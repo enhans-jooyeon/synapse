@@ -59,24 +59,24 @@ Agent conversation surface.
 
 ---
 
-### F. Home (v6.39)
+### F. Home
 
 The workspace's start surface: today's state plus the conversational entry.
 
 - Content max-width 760 centered in a full-region scroller (scrollbar at the region edge); the **Composer is pinned at the bottom** — the Console's composer anatomy without a thread. Sending opens a Console conversation.
-- Structure top-to-bottom: **greeting block** (the screen's one sanctioned Display moment — `display-sm`, may use the display family; date + today-summary `caption` beneath) → **metric strip** (R4, ≤3 cards, uniform — no emphasized card since v6.40; urgency lives in the approval queue below, not in card tint) → **approval queue** (pending ProposalCards — the human-in-the-loop backlog surfaces here before anywhere else; "모두 보기" Link when >2) → **agent shelf** (interactive Cards: squared Avatar, name, status dot + schedule caption; click opens the agent).
+- Structure top-to-bottom: **greeting block** (the screen's one sanctioned Display moment — `display-sm`, may use the display family; date + today-summary `caption` beneath) → **metric strip** (R4, ≤3 cards, uniform — no emphasized card; urgency lives in the approval queue below, not in card tint) → **approval queue** (pending ProposalCards — the human-in-the-loop backlog surfaces here before anywhere else; "모두 보기" Link when >2) → **agent shelf** (interactive Cards: squared Avatar, name, status dot + schedule caption; click opens the agent).
 - Suggestion chips are NOT sanctioned here (Console/empty states only); the composer placeholder carries the invitation.
-- **One viewport, no page scroll (v6.39.1):** Home always fits the window — ≤3 uniform metric cards (`stat-sm` numerals, 16 card padding — Home compacts the R4 metrics), ≤2 queued proposals (then "모두 보기"), one shelf row, 16px section gaps. If content would overflow, cut content — never scroll, and never push the Composer out of view.
+- **One viewport, no page scroll:** Home always fits the window — ≤3 uniform metric cards (`stat-sm` numerals, 16 card padding — Home compacts the R4 metrics), ≤2 queued proposals (then "모두 보기"), one shelf row, 16px section gaps. If content would overflow, cut content — never scroll, and never push the Composer out of view.
 - Empty flavors: first-run Home hands off to the GUIDED archetype; a Home with nothing pending still shows the greeting + composer — never an EmptyState card for "no work".
 
 ## 2. Layout grid
 
-- App frame: Sidebar (240/64) + main area. Main area holds one archetype. **Scroll containers span the region (v6.17.5):** when content is a centered reading column inside a wider region (Console thread, focus documents), the scroll container is the full-width region and the column is centered inside it — the scrollbar sits at the region's edge, never beside the column. A mid-canvas scrollbar reads as a broken layout.
+- App frame: Sidebar (240/64) + main area. Main area holds one archetype. **Scroll containers span the region:** when content is a centered reading column inside a wider region (Console thread, focus documents), the scroll container is the full-width region and the column is centered inside it — the scrollbar sits at the region's edge, never beside the column. A mid-canvas scrollbar reads as a broken layout.
 
 - Content grids use CSS grid with `--sy-space-24` gutters. Column counts: metric cards 2–6; card grids 2–4; never 12-column decorative grids.
 - Breakpoints: <768 single column + collapsed sidebar; 768–1280 standard; >1440 workbenches keep fluid, reading archetypes stay at max-width (whitespace is intentional — do not fill it).
 
-### 2.1 Narrow-window contract (v6.1 — web-only; browser windows get narrow, devices don't exist)
+### 2.1 Narrow-window contract (web-only; browser windows get narrow, devices don't exist)
 
 - **Sidebar** collapses to the 64px icon rail below 1024; below 768 the rail hides behind the `menu` icon in the topbar area. Labels move to Tooltips on the rail.
 - **Workbench tables** scroll horizontally with the first column pinned — they NEVER collapse into card lists unless a per-view card mapping has been explicitly spec'd (an unspec'd collapse invents a new layout).
@@ -96,13 +96,13 @@ The workspace's start surface: today's state plus the conversational entry.
 ## 4. Data display choices
 
 ```
-Records with comparable fields        → Table
-Visual/preview-led records           → Card grid (2–4 col)
-Single figure + trend                → Stat card (label 13 medium fg.secondary,
+Records with comparable fields → Table
+Visual/preview-led records → Card grid (2–4 col)
+Single figure + trend → Stat card (label 13 medium fg.secondary,
                                         value 24 semibold tabular-nums, delta Badge)
-Trends over time                     → line chart · Composition → stacked bar
-Distribution                         → bar/histogram · NEVER pie beyond 3 slices
-Live status of many systems          → Table with Badge column, not a tile wall
+Trends over time → line chart · Composition → stacked bar
+Distribution → bar/histogram · NEVER pie beyond 3 slices
+Live status of many systems → Table with Badge column, not a tile wall
 ```
 
 All charts render via the Chart component (`components.md`) — closed type set, axis/legend/tooltip anatomy, and loading/empty/error states are specified there. Period switchers on charts use SegmentedControl.
@@ -111,27 +111,27 @@ All charts render via the Chart component (`components.md`) — closed type set,
 
 ```
 Outcome of a user/agent action, no decision needed → Toast
-Validation problem on a field                      → inline field error
-Condition affecting a whole page/section           → Banner
-Blocking decision or confirmation                  → Modal
-Progress, shape known                              → Skeleton
-Progress, inside a control                         → Spinner in Button
+Validation problem on a field → inline field error
+Condition affecting a whole page/section → Banner
+Blocking decision or confirmation → Modal
+Progress, shape known → Skeleton
+Progress, inside a control → Spinner in Button
 ```
 
-### 5.1 Loading orchestration (v6.1)
+### 5.1 Loading orchestration
 
 - Page-level load order is fixed: chrome (sidebar/topbar) renders immediately → header block skeletons → content region skeletons. Chrome never skeletons.
 - **One primary skeleton region at a time** — the region the user came for; secondary panels show nothing until the primary resolves, then skeleton if still pending.
 - Skeletons compose only the three presets (line/block/circle); table skeletons render the expected row count, capped at 10; chart skeletons are the type's silhouette.
 - Under 300ms nothing renders (existing rule); NEVER mix a Spinner and a Skeleton in one region; a region that fails mid-load swaps its skeleton for the error EmptyState, never leaves a pulsing corpse.
 
-### 5.2 Optimistic vs. pessimistic mutations (v6.1)
+### 5.2 Optimistic vs. pessimistic mutations
 
 - **Optimistic** (render the result immediately, reconcile in background): local, reversible, single-user metadata — rename, toggle a Switch, add/remove a Chip or tag, mark-read, reorder. On failure: revert visibly + danger Toast naming what failed ("Rename didn't save — check your connection." / "이름 변경이 저장되지 않았습니다 — 연결을 확인하세요.").
 - **Pessimistic** (spinner/disabled until confirmed): anything an agent executes, anything destructive, anything affecting other users or permissions, anything with named consequences. ProposalCard approvals are ALWAYS pessimistic — an approval that silently failed is the worst state in the product.
 - Never optimistic-render agent output or run state; agents report, they are not predicted.
 
-## 6. Permission-aware rendering (v5.1)
+## 6. Permission-aware rendering
 
 One rule decides visible-disabled vs. hidden:
 
@@ -148,7 +148,7 @@ One rule decides visible-disabled vs. hidden:
 - Never build sentences from concatenated fragments around a variable — word order differs; use full templated strings per locale.
 - CJK-specific: no letter-spacing adjustments on Hangul; no synthetic bold (Pretendard has true weights).
 
-## 8. Session & system states (v6.1)
+## 8. Session & system states
 
 - **Session expiry:** a Modal 60s before expiry ("Your session ends in {n}s — continue working?" / "{n}초 후 세션이 만료됩니다 — 계속하시겠어요?") with a single continue action; on expiry, re-auth in place and ALL drafts (Composer, forms) survive the round-trip. Silent logout mid-edit is forbidden.
 - **Maintenance:** announced via `warning` subtle Banner app-wide ("Scheduled maintenance {window} — saves may be delayed." / content.md template). The `solid` strip stays reserved for outage-grade events.

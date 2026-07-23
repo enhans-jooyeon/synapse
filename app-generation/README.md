@@ -12,7 +12,7 @@ The chart/component catalog the **App Generation** feature (the Lovable-style ap
 
 ## Reconciled to Synapse v1.0.0
 
-This catalog arrived on an **older token system** — the azure `#0a84ff` brand, an off-scale radius set (2/6/12), and a parallel token vocabulary (`Blue/500`, `text-text-primary`). That azure is exactly the value Synapse **replaced** with the point color `#0621C4` in v6.61. It has been reconciled to v1.0.0: brand → `#0621C4`, neutrals/borders/text → the `--sy-*` values, radius → the on-scale set, font → Pretendard. See `tokens-map.md` for the full mapping.
+This catalog arrived on an **older token system** — the azure `#0a84ff` brand, an off-scale radius set (2/6/12), and a parallel token vocabulary (`Blue/500`, `text-text-primary`). That azure is exactly the value Synapse **replaced** with the point color `#0621C4`. It has been reconciled to v1.0.0: brand → `#0621C4`, neutrals/borders/text → the `--sy-*` values, radius → the on-scale set, font → Pretendard. See `tokens-map.md` for the full mapping.
 
 **Why it lives here and isn't gated:** ECharts option objects must hardcode hex in JavaScript — they can't reference `--sy-*` CSS variables — so this catalog is a **value-aligned reference asset**, not a token-linted artifact. `tools/validate.py` intentionally does not scan it (it lints the design-system's own root artifacts). Consistency is maintained by the reconciliation above, not by the gate.
 

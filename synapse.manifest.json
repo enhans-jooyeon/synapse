@@ -63,9 +63,9 @@
   "components or variants outside this manifest",
   "icons outside icons.md registry",
   "italics, ALL-CAPS, fixed-width text containers, line-height below paired floor",
-  ">1 primary button or Banner per region; the deprecated accent variant anywhere (v6.19)",
+  ">1 primary button or Banner per region; the deprecated accent variant anywhere",
   "carousels; infinite scroll in tables; nested modals; custom scrollbars; per-client theming; arbitrary z-index",
-  "gradients; glow; blur outside the glass material (scrimmed overlays only, v6.22); rotation outside MediaGroup's generated-media fan",
+  "gradients; glow; blur outside the glass material (scrimmed overlays only); rotation outside MediaGroup's generated-media fan",
   "particle attached to a variable in Korean; concatenated sentence fragments",
   "auto-approval of agent proposals; silent agent side effects; fake citations",
   "optimistic rendering of agent output; marquee/auto-playing motion; white-label/per-client theming"
@@ -78,7 +78,7 @@
     "secondary (tonal)",
     "ghost",
     "danger",
-    "accent (POINT color #0621C4, revived v6.51 — conversational-AI CTA only: Ask agent / Composer send)"
+    "accent (POINT color #0621C4, revived — conversational-AI CTA only: Ask agent / Composer send)"
    ],
    "sizes": [
     "sm",
@@ -87,11 +87,11 @@
    ],
    "key_rules": [
     "max 1 primary per region",
-    "conversational-AI entry (Ask agent / Composer send) = accent = the point color #0621C4 (v6.51; max 1/screen); operational agent actions (Run/Retry/Resume) stay primary/black — executing a configured run never earns the point color; slate stays the AI surface, point blue is a distinct accent on top (never blue-on-slate)",
+    "conversational-AI entry (Ask agent / Composer send) = accent = the point color #0621C4 (max 1/screen); operational agent actions (Run/Retry/Resume) stay primary/black — executing a configured run never earns the point color; slate stays the AI surface, point blue is a distinct accent on top (never blue-on-slate)",
     "text-only labels by default; icon+text only for accent AI actions and toolbar/filter contexts (approved icons)",
     "pill radius only in Guided heroes / empty-state first-use",
     "icon-only buttons are always square (width = size height)",
-    "optical trim: icon+text buttons drop 2px padding on the icon side (v6.17.2)",
+    "optical trim: icon+text buttons drop 2px padding on the icon side",
     "loading keeps width; disabled is a fill, never opacity",
     "danger labels semibold; danger hover darkens to AA"
    ]
@@ -107,7 +107,7 @@
   "Input (text)": {
    "purpose": "Single-line text entry (text/email/password/number/search).",
    "key_rules": [
-    "filled anatomy: bg.sunken, borderless; focus = 1px NEUTRAL border.focus-input + fill opens to bg.page (v6.10; no offset ring on fields; non-entry controls keep the blue 2px offset ring)",
+    "filled anatomy: bg.sunken, borderless; focus = 1px NEUTRAL border.focus-input + fill opens to bg.page (no offset ring on fields; non-entry controls keep the blue 2px offset ring)",
     "label above, always; placeholder is example content only",
     "errors name the fix (border.error)",
     "mixed bulk values show 'Mixed'/'여러 값'",
@@ -143,7 +143,7 @@
    ],
    "key_rules": [
     "status vocabulary = content.md §3.3 closed set",
-    "undeclared color = neutral; a badge never renders unfilled (v6.24)",
+    "undeclared color = neutral; a badge never renders unfilled",
     "solid has named jobs only: urgent marks (1 solid color/view), ops-table opt-in, neutral=release markers (must expire), ai=live-activity beacon on ai.solid slate (disappears on completion)",
     "dot uses status.*-bg-solid fills",
     "with-icon option: 12px registry status icon for triple redundancy (subtle/solid only)",
@@ -157,7 +157,7 @@
     "input (removable)",
     "filter (toggleable)",
     "category (click-to-filter, system-assigned viz color)",
-    "suggestion (outlined bg.raised + hairline, hover bg.hover/border.strong — v6.38 style swap w/ source pills; Console/empty states only, max 3)"
+    "suggestion (outlined bg.raised + hairline, hover bg.hover/border.strong — style swap w/ source pills; Console/empty states only, max 3)"
    ],
    "key_rules": [
     "never carries commands (that is Button)",
@@ -172,7 +172,7 @@
     "outlined (separable/interactive objects)",
     "elevated (max 1/page; sole static shadow)",
     "ai (agent content)",
-    "stat (KPI anatomy; uniform — the v6.11 emphasized opt-in removed v6.40)"
+    "stat (KPI anatomy; uniform — the emphasized opt-in removed)"
    ],
    "key_rules": [
     "interactive implies outlined/elevated + exactly one action + optional hover-lift",
@@ -184,9 +184,9 @@
    "purpose": "Workhorse for data-heavy records with aligned columns.",
    "key_rules": [
     "18 closed cell renderers fix alignment/format per column; empty cell = em dash",
-    "header row: label-size medium fg.tertiary, transparent fill (v6.5), hairline rule only; sort glyph space reserved",
-    "selection column: 40px, zero padding, centered both axes — control cell, not text cell (v6.24.1)",
-    "emphasis column opt-in (v6.11): emphasis.surface fill marks current period/totals, max 1/table",
+    "header row: label-size medium fg.tertiary, transparent fill, hairline rule only; sort glyph space reserved",
+    "selection column: 40px, zero padding, centered both axes — control cell, not text cell",
+    "emphasis column opt-in: emphasis.surface fill marks current period/totals, max 1/table",
     "status columns default dot+text; solid opt-in for ops walls",
     "frameless by default (bare header); scrolling/pinned-column tables framed",
     "column menu closed set; bulk selection bar; inline edit for text/number/select cells; 1-level grouping; virtualize >200 rows",
@@ -212,7 +212,7 @@
    "purpose": "Exclusive 2–5-way switch, immediate effect (not Tabs, not Radio).",
    "key_rules": [
     "content-based widths; disabled whole-control only",
-    "concentric geometry (v6.8): radius-sm container, 4px padding, radius-xs segments — inner = outer − inset; assembled control = 36"
+    "concentric geometry: radius-sm container, 4px padding, radius-xs segments — inner = outer − inset; assembled control = 36"
    ]
   },
   "Accordion": {
@@ -227,14 +227,14 @@
    "key_rules": [
     "constraints visible before selection; violations named per file",
     "no combined progress bar",
-    "dropzone: dashed border.strong + radius lg + medallion; drag-over = border.focus-input + emphasis.surface (v6.14); dashed = drop targets only"
+    "dropzone: dashed border.strong + radius lg + medallion; drag-over = border.focus-input + emphasis.surface; dashed = drop targets only"
    ]
   },
   "SplitPanel": {
    "purpose": "Resizable workbench panes with a draggable divider.",
    "key_rules": [
     "≤3 panes; min widths 280/200; ratio persists; not in fixed-layout archetypes (Settings/Guided)",
-    "container = section shell: radius xl + hairline, flush panes (v6.9)"
+    "container = section shell: radius xl + hairline, flush panes"
    ]
   },
   "Chart": {
@@ -257,7 +257,7 @@
    "key_rules": [
     "240px expanded/64 rail",
     "container padding 12; items 32px, 4px gaps; group labels 16px top pad (micro-label, sentence case)",
-    "collection rows may carry an 8px viz-tint category dot (v6.17) — the one color in the sidebar; never on system destinations",
+    "collection rows may carry an 8px viz-tint category dot — the one color in the sidebar; never on system destinations",
     "labels never truncate when expanded — shorten the label",
     "max 2 nesting levels"
    ]
@@ -269,7 +269,7 @@
    "purpose": "Blocking decision or focused short task.",
    "key_rules": [
     "widths 400(confirm)/480/640 max",
-    "opaque bg.raised (v6.31 — glass retired from scrimmed layers)",
+    "opaque bg.raised (glass retired from scrimmed layers)",
     "footer: Cancel + one primary (danger for destructive, consequences named by count+noun)",
     "no modal-on-modal; z.modal"
    ]
@@ -279,7 +279,7 @@
    "key_rules": [
     "full-screen data drawers for review surfaces",
     "wide 800 variant for data review (DiffView)",
-    "opaque bg.raised always (v6.31 — glass retired from scrimmed layers)",
+    "opaque bg.raised always (glass retired from scrimmed layers)",
     "z.drawer"
    ]
   },
@@ -287,7 +287,7 @@
    "purpose": "Anchored floating panel; menus of actions/options.",
    "key_rules": [
     "border.overlay (none in light, visible in dark) + shadow.overlay; z.dropdown",
-    "6px container padding (concentric: 10-6=4 item radius, v6.8); items 32px with 4px gaps; destructive last; dividers full-bleed — binds EVERY horizontal rule in any floating panel, incl. search/hint/footer rows (v6.21.2)",
+    "6px container padding (concentric: 10-6=4 item radius); items 32px with 4px gaps; destructive last; dividers full-bleed — binds EVERY horizontal rule in any floating panel, incl. search/hint/footer rows",
     "search row optional >8 items",
     "one submenu level max"
    ]
@@ -303,7 +303,7 @@
    "key_rules": [
     "same-scheme surface (raised-2 + border.overlay + shadow)",
     "errors 8s + manual dismiss; never for validation or decisions",
-    "contents first-line aligned; dismiss × = compact 20px box (not a form control — v6.27.2)",
+    "contents first-line aligned; dismiss × = compact 20px box (not a form control )",
     "undo convention: reversible-lite ops get Undo toast (8s) instead of Popconfirm — never both"
    ]
   },
@@ -311,7 +311,7 @@
    "purpose": "Persistent inline notice for a page/section.",
    "variants": [
     "colors: neutral,info,success,warning,danger",
-    "emphasis: subtle (borderless status tint, no border/rail — v6.7.1), solid (app-critical strip; max 1 in app; semibold text)"
+    "emphasis: subtle (borderless status tint, no border/rail ), solid (app-critical strip; max 1 in app; semibold text)"
    ],
    "key_rules": [
     "max 1 per region"
@@ -344,7 +344,7 @@
    "key_rules": [
     "always an action when possible",
     "no illustrations in v1",
-    "icon medallion: sunken circle + two concentric hairline rings (v6.4); error flavor tints it danger-bg",
+    "icon medallion: sunken circle + two concentric hairline rings; error flavor tints it danger-bg",
     "explanations balance-wrapped",
     "compact variant (one line, no icon) required inside small overlays"
    ]
@@ -356,7 +356,7 @@
    "purpose": "⌘K universal entry: navigation, actions, ask-agent.",
    "key_rules": [
     "never dead-ends — final row is 'Ask agent: {query}'",
-    "glass material, SCRIMLESS (v6.31 — frost is the focus device; reduced-transparency → opaque)",
+    "glass material, SCRIMLESS (frost is the focus device; reduced-transparency → opaque)",
     "grouped results, kbd hints, match highlighting",
     "z.dropdown"
    ]
@@ -378,17 +378,17 @@
    "key_rules": [
     "never disabled during generation (empty-send is the one sanctioned disable)",
     "send↔stop morph in place",
-    "ComposerQuote bar (v6.12): ai.surface radius-xs, max 1/send; follow-up panel above composer, max 4 rows, never auto-sends",
-    "slash commands (v6.15): / scopes palette to agent actions; ghost completion accepted with →, never Tab; closed glossary only",
-    "follow-up panel = glass material (v6.23, the one anchored glass exception)",
-    "templates: / = expert quick-insert; bookmark opens the Template Library Modal (glass 640: search + grouped rich cards w/ description + cloze preview + 새 템플릿 만들기 footer — v6.30); slot chips = emphasis.surface, → moves slots, unfilled slot blocks send (§23)",
-    "authoring coach: max one non-blocking quality hint; pen-line opens the CLOSED refinement-preset menu (다듬기/자세히/간결/범위/형식 — v6.27), rewrite replaces draft w/ Undo, disabled on empty",
-    "voice = dictation only (v6.26 §26): tray morphs to recording bar (cancel / pulsing danger dot + timer / pause / primary check confirm); transcript inserts at caret, NEVER auto-sends; no audio in thread",
-    "agent-picker menu: search + grouped rows + one submenu + mandatory request-footer escape (no model rows — reversed v6.42)",
-    "model selector (v6.42, trailing v6.44): menu grouped by provider under micro-label headers, real product names in mono, 자동 row = agent default (v6.45); per-conversation, defaults from agent, lockable; never changes permissions/approval",
-    "tools popover (plug, v6.41): per-conversation capability switches; disabled tool → agent asks; enabling never bypasses ProposalCard",
-    "composer footer (v6.44): leading = + menu (첨부/템플릿/도구) + agent picker; trailing = model + mic (send-adjacent, never in + menu) + send; kbd hint removed; refine-prompt = contextual pen at input top-right, rendered only with a non-empty draft; 1 visible leading icon default, 5 hard cap",
-    "input-pattern laws (v6.47): starters = zero-state only, insert never send, dismissible; chip label IS the query; selection pill = 답장/설명/재생성 closed set, thread append-only; attachment captions advisory-only; batch = per-item queue, one failure never aborts, ProposalCard still gates; ghost text → accepts never Tab, suppressed during Hangul composition",
+    "ComposerQuote bar: ai.surface radius-xs, max 1/send; follow-up panel above composer, max 4 rows, never auto-sends",
+    "slash commands: / scopes palette to agent actions; ghost completion accepted with →, never Tab; closed glossary only",
+    "follow-up panel = glass material (the one anchored glass exception)",
+    "templates: / = expert quick-insert; bookmark opens the Template Library Modal (glass 640: search + grouped rich cards w/ description + cloze preview + 새 템플릿 만들기 footer ); slot chips = emphasis.surface, → moves slots, unfilled slot blocks send (§23)",
+    "authoring coach: max one non-blocking quality hint; pen-line opens the CLOSED refinement-preset menu (다듬기/자세히/간결/범위/형식 ), rewrite replaces draft w/ Undo, disabled on empty",
+    "voice = dictation only ( §26): tray morphs to recording bar (cancel / pulsing danger dot + timer / pause / primary check confirm); transcript inserts at caret, NEVER auto-sends; no audio in thread",
+    "agent-picker menu: search + grouped rows + one submenu + mandatory request-footer escape (no model rows — reversed)",
+    "model selector (trailing): menu grouped by provider under micro-label headers, real product names in mono, 자동 row = agent default; per-conversation, defaults from agent, lockable; never changes permissions/approval",
+    "tools popover (plug): per-conversation capability switches; disabled tool → agent asks; enabling never bypasses ProposalCard",
+    "composer footer: leading = + menu (첨부/템플릿/도구) + agent picker; trailing = model + mic (send-adjacent, never in + menu) + send; kbd hint removed; refine-prompt = contextual pen at input top-right, rendered only with a non-empty draft; 1 visible leading icon default, 5 hard cap",
+    "input-pattern laws: starters = zero-state only, insert never send, dismissible; chip label IS the query; selection pill = 답장/설명/재생성 closed set, thread append-only; attachment captions advisory-only; batch = per-item queue, one failure never aborts, ProposalCard still gates; ghost text → accepts never Tab, suppressed during Hangul composition",
     "Enter sends, Shift+Enter breaks, Enter during IME composition NEVER sends",
     "attachments as input Chips; agent/scope picker ghost",
     "drafts persist; no formatting toolbar; one per screen"
@@ -399,10 +399,10 @@
    "key_rules": [
     "agent messages only; fixed order",
     "hover-reveal default, persistent where hover is unreliable",
-    "regenerate on latest message only — creates variant N+1, never destroys; answer header carries the ‹n/N› pager (v6.25 §22)",
+    "regenerate on latest message only — creates variant N+1, never destroys; answer header carries the ‹n/N› pager ( §22)",
     "thumbs selected = stroke + bg.selected circle, never filled icons",
     "no destructive actions",
-    "media variant: vertical rail beside a MediaGroup ONLY when media is the sole message content (v6.17.7) — text+media replies use the message toolbar alone, never both"
+    "media variant: vertical rail beside a MediaGroup ONLY when media is the sole message content — text+media replies use the message toolbar alone, never both"
    ]
   },
   "AgentStep": {
@@ -412,13 +412,13 @@
     "collapses to '5 steps · 12s' summary on completion",
     "tool ids in mono; payloads collapsed; max 1 nesting level",
     "role=log aria-live=polite",
-    "named working line above steps while generating (pulse, no shimmer); long replies open with title + duration badge + collapse (v6.13)"
+    "named working line above steps while generating (pulse, no shimmer); long replies open with title + duration badge + collapse"
    ]
   },
   "ProposalCard": {
    "purpose": "Human-in-the-loop approval of a consequential agent action.",
    "key_rules": [
-    "tray anatomy (v6.20): borderless ai.surface fill, radius lg, no shadow; header row + ai.border hairline (single-tone; v6.21 two-tone reversed); payload surfaces open to bg.page; squared avatar FIRST in header (the agency marker); forbidden formula = tint + outline",
+    "tray anatomy: borderless ai.surface fill, radius lg, no shadow; header row + ai.border hairline (single-tone; two-tone reversed); payload surfaces open to bg.page; squared avatar FIRST in header (the agency marker); forbidden formula = tint + outline",
     "Approve=primary (danger if destructive; approving is a human decision, not an AI CTA), Reject=secondary (light mode: bg.page fill on the tray — tonal gray dissolves on slate; dark keeps standard fill)",
     "no auto-approve, no countdowns",
     "resolved collapses to attribution row, never deleted",
@@ -445,8 +445,8 @@
    "key_rules": [
     "never fake citations — unsourced claims get the 'Model knowledge' badge",
     "≤3 per sentence",
-    "sources row: 출처 eyebrow ABOVE pill source cards — leading 18px page-filled numeral circle (mirrors the inline marker) + 12px type icon + name (icon restored v6.38.3); card↔marker hover linkage; ≥24px hit areas",
-    "marker = 18px circle, neutral bg.sunken + fg.secondary, bare numeral 11 semibold tabular (v6.38.1) — brackets/mono retired"
+    "sources row: 출처 eyebrow ABOVE pill source cards — leading 18px page-filled numeral circle (mirrors the inline marker) + 12px type icon + name (icon restored); card↔marker hover linkage; ≥24px hit areas",
+    "marker = 18px circle, neutral bg.sunken + fg.secondary, bare numeral 11 semibold tabular — brackets/mono retired"
    ]
   },
   "ContextCard": {

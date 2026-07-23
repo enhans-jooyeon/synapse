@@ -28,7 +28,7 @@ Anything a machine can check — token use, component provenance, contrast, requ
 |---|---|
 | Contract & governance | [`design.md`](design.md) — read first; authority order, hard rules, workflow |
 | Tokens (source of truth) | `tokens/synapse.tokens.json` → generated `tokens/synapse.css` |
-| Specs (bilingual, EN authoritative) | `foundations.md` · `components.md` (52) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` (+ `*.ko.md`) |
+| Specs (English — Korean rendered on demand in the hub) | `foundations.md` · `components.md` (52) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` |
 | Machine index for agents | `synapse.manifest.json` (built by `tools/build_manifest.py`; agents load this first) |
 | DS-repo gate | `tools/validate.py` — `tokens` / `ui` / `page` modes (enforces this repo's own artifacts) |
 | Component browser + sample pages | `preview.html` |
@@ -37,7 +37,7 @@ Anything a machine can check — token use, component provenance, contrast, requ
 | **Distribution & rollout** | [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) — how this reaches the team + current status |
 | Product-repo gate bundle | `tooling/product-gates/` — drop-in ESLint/Tailwind/coverage gates for the product CI |
 | App Generation catalog | `app-generation/` — the App Builder's ECharts chart/component catalog, reconciled to v1.0.0 tokens (`app-generation/tokens-map.md`) |
-| Governance proposals / audits | `proposals/` (dated; not gated) |
+| Governance proposals / audits | `proposals/` (dated; not gated) — resolved pre-1.0 ones in `proposals/archive/` |
 
 ## Quick checks (DS-repo)
 

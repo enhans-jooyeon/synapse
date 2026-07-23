@@ -8,7 +8,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   helper?: string;
   /** Error text MUST name the fix, not just "invalid" (content.md §5). */
   error?: string;
-  /** Affix slots (v6.0): one leading registry icon, one trailing unit/icon. */
+  /** Affix slots: one leading registry icon, one trailing unit/icon. */
   leading?: React.ReactNode;
   trailing?: React.ReactNode;
 }

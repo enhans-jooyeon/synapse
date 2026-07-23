@@ -34,8 +34,9 @@ for (const rel of allow) {
   copied++;
 }
 
-// 3. generate the slim CHANGELOG (released entries only: from first "## " release
-//    header down to the "Internal pre-release history" divider; drop Unreleased).
+// 3. generate the slim CHANGELOG (released entries only: drop the Unreleased
+//    section). The source changelog is already release-only since v1.0.0; the
+//    legacy "Internal pre-release history" cut is kept as a harmless fallback.
 const fullLog = readFileSync(join(ROOT, 'CHANGELOG.md'), 'utf8').split('\n');
 const cut = fullLog.findIndex(l => /^##\s+Internal pre-release history/i.test(l));
 const head = cut === -1 ? fullLog : fullLog.slice(0, cut);

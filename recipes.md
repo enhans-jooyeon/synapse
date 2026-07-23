@@ -11,9 +11,9 @@ Each recipe: structure top-to-bottom / left-to-right, with typography styles and
 The top block of every Object and Workbench page.
 
 ```
-[Breadcrumb]                                    ← only if depth > 2
+[Breadcrumb] ← only if depth > 2
 space-4
-[heading-xl page title]  [Badge status, size lg] [actions: ≤1 primary/accent + ≤1 secondary + overflow menu]
+[heading-xl page title] [Badge status, size lg] [actions: ≤1 primary/accent + ≤1 secondary + overflow menu]
 space-4
 [caption fg.tertiary meta line: owner · updated timestamp · id]
 space-24
@@ -26,9 +26,9 @@ Title truncation forbidden; long titles wrap. Actions right-aligned, vertically 
 Above any content section or data region.
 
 ```
-[heading-lg]  [count Badge]                     [≤1 secondary or ghost action]
+[heading-lg] [count Badge] [≤1 secondary or ghost action]
 space-4
-[body-sm fg.secondary one-line description]     ← optional
+[body-sm fg.secondary one-line description] ← optional
 space-16
 ```
 
@@ -42,7 +42,7 @@ Inside Card: `heading-md` (or `heading-lg` for page-dominant cards) + optional t
 
 2–6 `stat` Cards in an equal-column grid, gutter `space-24`.
 
-Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking, v6.4) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row** (v6.4): 12px `trend-up`/`trend-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비").
+Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row**: 12px `trend-up`/`trend-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비").
 
 ## R5 · Action pair & footer conventions
 
@@ -67,9 +67,9 @@ Dense workbench control strip: height 40px, items gap `space-8`, groups separate
 ## R8 · Form section
 
 ```
-[heading-md]  +  optional [body-sm fg.secondary description]
+[heading-md] + optional [body-sm fg.secondary description]
 space-16
-[fields, stack-gap]                              ← single column, patterns.md §3
+[fields, stack-gap] ← single column, patterns.md §3
 space-24
 ```
 
@@ -77,7 +77,7 @@ Every 3–6 fields get a new section. Sections separated by full-bleed `border.s
 
 ## R9 · Stepper
 
-Sequential flow indicator for Guided archetypes (composed, not a component). **Numeral discipline (v6.24):** step numbers are `600 11px/1` tabular — line-height 1 is mandatory inside the 20px circle (inherited line-heights sit the digit low); rings are **1.5px** (2px outweighs an 11px numeral; 1.5 matches AgentStep's pending-dot ring):
+Sequential flow indicator for Guided archetypes (composed, not a component). **Numeral discipline:** step numbers are `600 11px/1` tabular — line-height 1 is mandatory inside the 20px circle (inherited line-heights sit the digit low); rings are **1.5px** (2px outweighs an 11px numeral; 1.5 matches AgentStep's pending-dot ring):
 
 ```
 [step dot/number 20px] — [label label-role] — [connector 1px border.default line] — …
@@ -87,7 +87,7 @@ States: done (key-color fill + check), current (key-color ring + `fg.primary` la
 
 ## R10 · Topbar
 
-App-frame top strip (when a product surface needs one in addition to Sidebar): height 48px, `bg.surface`, full-bleed bottom `border.subtle`. Left: context (workspace switcher — ghost Button: **20px squared monogram tile** (`bg.inverse` fill, `fg.inverse` letter, radius `xs` — the frame's one deliberate dark object, v6.7) + workspace name + chevron). Center: nothing (search lives in ⌘K). Right: solid Banner slot (system-critical only) never here — it pins *above* the topbar; then notification bell (icon-button + count Badge), help, Avatar 32 menu.
+App-frame top strip (when a product surface needs one in addition to Sidebar): height 48px, `bg.surface`, full-bleed bottom `border.subtle`. Left: context (workspace switcher — ghost Button: **20px squared monogram tile** (`bg.inverse` fill, `fg.inverse` letter, radius `xs` — the frame's one deliberate dark object) + workspace name + chevron). Center: nothing (search lives in ⌘K). Right: solid Banner slot (system-critical only) never here — it pins *above* the topbar; then notification bell (icon-button + count Badge), help, Avatar 32 menu.
 
 ## R11 · Key-value panel
 
@@ -95,7 +95,7 @@ Object summary block: Card (`flat` default, `outlined` when it must read as a se
 
 ## R12 · Empty page (first-run)
 
-Full content-area EmptyState, Guided styling: `display` style title permitted, `body-lg` explanation (≤2 sentences), one primary action (pill silhouette sanctioned here — Button spec v5.0) + optional ghost "Learn more" link, optional Stepper (vertical) for multi-step setup below. No other content on the page — resist filling the whitespace.
+Full content-area EmptyState, Guided styling: `display` style title permitted, `body-lg` explanation (≤2 sentences), one primary action (pill silhouette sanctioned here — Button spec) + optional ghost "Learn more" link, optional Stepper (vertical) for multi-step setup below. No other content on the page — resist filling the whitespace.
 
 ## R13 · Error page (403 / 404 / 500)
 
@@ -116,6 +116,6 @@ Agent-generated reports leave the app; the export is a Synapse surface with no i
 - Page-break rules: never inside a table row, a stat card, or a heading-plus-first-paragraph pair; tables repeat their header row per page.
 - No interactive components render in exports: buttons, inputs, and toolbars are omitted, not disabled.
 
-## R15 · Batch-run results (v6.47)
+## R15 · Batch-run results
 
 Queue (ai-patterns §29) completion lands here: Table, one row per input item — mono source name · status (dot+text) · count/metric columns (tabular) · per-row 열기 link; failed rows keep 다시 시도 inline. Header carries the aggregate line and 결과 내보내기 (`secondary`). Empty/failed-all uses the standard error EmptyState. Jurisdiction: Workbench archetype.

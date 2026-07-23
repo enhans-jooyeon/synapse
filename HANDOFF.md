@@ -17,7 +17,7 @@ The system's character: neutral, black-key, borders-first, engineered restraint 
 - `components.md` — every component's anatomy/variants/states/rules.
 - `ai-patterns.md` — agent-surface interaction rules (§1–35).
 - `content.md`, `patterns.md` — voice/terminology, and archetypes.
-- `*.ko.md` — Korean translations of the 8 spec files (EN-authoritative; each carries a `<!-- sy-source: HASH -->` marker).
+- Specs are **English-only** (the single maintained source). Korean is rendered **on demand** in the docs hub (client-side Google Translate) — no committed `.ko.md`, no per-edit sync. The generated *product UI* stays bilingual KO/EN (governed by `content.md` + `foundations.md` §2.3 — unaffected by this).
 - `tokens/synapse.tokens.json` — **source of truth** for tokens (carries `$version`). `tokens/synapse.css` — generated CSS custom properties (`--sy-*`).
 - `preview.html` — the component browser / storybook (left sidenav + Overview gallery + per-component detail pages with When/When-not/Anti/Where guidance). Deployed to Vercel via the docs hub.
 - `storybook/` — React component implementations (SEED: Button, Badge, Input, Card only — 4 of 52). `storybook/PUBLISHING.md` — how to make `@enhans-jooyeon/synapse` publishable (blocked on component parity).
@@ -28,7 +28,7 @@ The system's character: neutral, black-key, borders-first, engineered restraint 
 - `scripts/dist.allowlist` + `scripts/build-dist.mjs` — the curated team-package builder (allowlist → `dist/`; internal docs excluded by construction). `.github/workflows/publish-harness.yml` mirrors `dist/` to the separate `synapse-harness` repo on each release tag. Two-repo workflow doc: `docs/DISTRIBUTION.md`.
 - `tools/validate.py` — the DS-repo gate (SY001–SY018). `tools/build_manifest.py` — regenerates `synapse.manifest.json`.
 - `app-generation/` — the App Generation (App Builder) feature's ECharts chart/component catalog + design task list, **reconciled from the old azure `#0a84ff` token system to v1.0.0** (`app-generation/tokens-map.md`). Un-gated by design (ECharts JS must hardcode hex — can't be `--sy-*`-linted); consistency held by the value reconciliation. Open item: the chart blue ramp was computed from `#0621C4` (Synapse has no blue ramp) and wants a designer's eye, or a governance token-ramp addition.
-- `proposals/` — governance/audit docs (not gated, no KO required).
+- `proposals/` — active governance/audit docs (not gated, no KO required); resolved/superseded pre-1.0 ones are in `proposals/archive/`.
 
 ## The working discipline (IMPORTANT — follow exactly)
 
@@ -39,10 +39,10 @@ Every change is spec law and is versioned in lockstep. For any change:
 3. **Run `python3 tools/build_manifest.py`** after any version bump (or SY017 fails — stale manifest).
 4. **Gate must be clean:** `python3 tools/validate.py all` → `0 error(s), 0 warning(s)`.
 5. **Verify preview JS:** extract the last `<script>` from `preview.html` and `node --check` it (localhost/Chrome are not reachable from the sandbox, so this is how preview.html is verified).
-6. **Always refresh translations:** if an EN spec file changes, patch its `.ko.md` and re-inject the `sy-source` hash (`translation_hash()` in validate.py — version-agnostic sha256, first 16 hex). Browser chrome (`preview.html`) is **EN-only**; the 8 spec docs are bilingual.
+6. **Docs are English-only.** No `.ko.md` to maintain — Korean is on-demand in the hub (client-side Google Translate). SY011/SY016 still apply to Hangul *example strings* inside the EN specs; only the KO-doc staleness check (SY018) and its `sy-source` hashes were removed.
 7. **June pushes from her Mac.** The sandbox can commit-attempt but CANNOT push (no creds) and cannot delete `.git/index.lock` (permission denied). Push flow on Mac: `rm -f .git/index.lock && git add -A && git commit -m "…" && git push`.
 
-Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (scale = {0,2,4,6,8,12,16,20,24,28,32,40,48,64,80,96}; NOT 10), SY009 raw box-shadow (exempt: a zero-blur `0 0 0` ring — inset or outset — using a token; focus rings may wrap a token in `color-mix`), SY011 Hangul outside `lang=ko`, SY016 Hangul in Artific display element, SY017 manifest stale, SY018 `.ko.md` stale (warning).
+Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (scale = {0,2,4,6,8,12,16,20,24,28,32,40,48,64,80,96}; NOT 10), SY009 raw box-shadow (exempt: a zero-blur `0 0 0` ring — inset or outset — using a token; focus rings may wrap a token in `color-mix`), SY011 Hangul outside `lang=ko`, SY016 Hangul in Artific display element, SY017 manifest stale.
 
 ## Current state
 
@@ -53,8 +53,10 @@ Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (
 Focus shifted from the design system to the **harness around it**, prompted by a disappointing team test round (testers gave generic instructions, skipped the PRD, got generic UI). Work done, all **uncommitted, gate green (0/0)**:
 
 - **Added the design-development process layer** in `docs/process/` (EN, ungated — see repo map): `design-cycle.md`, `screen-intake-skill.md`, `harness-refinement-protocol.md`, `harness-refinement-register.md`. The cycle is `Triage → (Frame if net-new) → Intake (unskippable) → Generate (any tool) → Review (gate then judgment) → Refine (defects become harness edits)`.
-- **Retargeted the npm package scope** harness-wide: `@enhans/synapse` → `@enhans-jooyeon/synapse` across 14 files (incl. `storybook/package.json` name, the product-gate `eslint`/`tailwind` configs that bind a consuming repo, PUBLISHING/DISTRIBUTION, PRD template, review protocol, README, app-generation docs, this file). Left `proposals/2026-07-15-branding-system-comparison.md` intact — its `@enhans/synapse` is a true historical reference to the OLD (viralpick/CommerceOS) system.
+- **Retargeted the npm package scope** harness-wide: `@enhans/synapse` → `@enhans-jooyeon/synapse` across 14 files (incl. `storybook/package.json` name, the product-gate `eslint`/`tailwind` configs that bind a consuming repo, PUBLISHING/DISTRIBUTION, PRD template, review protocol, README, app-generation docs, this file). Left `proposals/archive/2026-07-15-branding-system-comparison.md` intact — its `@enhans/synapse` is a true historical reference to the OLD (viralpick/CommerceOS) system.
 - **Direction agreed:** the process layer ships as a **Synapse plugin** (guided + gate) for the internal team's agent tools — repo stays source of truth, no standalone app. Frame is deliberately *optional* (triaged) to avoid research theater.
+- **v1 cleanup pass:** trimmed `CHANGELOG.md` to Unreleased + 1.0.0 (6.x history now only in git); deleted the superseded `app-generation/project_synapse_tokens.md`; archived 8 resolved proposals to `proposals/archive/`; and **stripped all `v2`–`v6` provenance tags** from the specs (EN+KO), tokens, manifest, `build_manifest.py`, preview, and storybook — rationale kept, version stamps gone. `v1.x` protected. NOTE: this file and `proposals/` intentionally still carry version references (they're history/handoff, not the contract). Two `v1.2`/`v1.3` tags in ai-patterns/components specs were left pending June's call.
+- **Docs went English-only.** Deleted the 8 `*.ko.md`; removed SY018 + `translation_hash` + `check_translations` from `validate.py`; switched the docs hub (`index.html`) to translate EN → KO **on demand client-side** (Google Translate cookie+element, no maintainer step, nothing committed); pruned the `.ko.md` allowlist from `.vercelignore`. Product UI stays bilingual (content.md unaffected). NOTE: the hub's translate widget needs a **browser check** (couldn't render in-sandbox); harmless dead code (`koFile`, `stripMeta`, ko NAV labels) left in index.html.
 
 ## Key maintainer rulings / earlier decisions
 

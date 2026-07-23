@@ -14,7 +14,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   shape?: "pill" | "rounded";
   /** `lg` only beside heading-xl+ titles (R1) and heroes — never in tables. */
   size?: "md" | "lg";
-  /** with-icon (v6.0): the matching 12px registry status icon — triple redundancy. */
+  /** with-icon: the matching 12px registry status icon — triple redundancy. */
   icon?: React.ReactNode;
 }
 

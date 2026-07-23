@@ -57,28 +57,28 @@ One concept, one term, both languages. Synonyms listed as forbidden are wrong ev
 | Save changes | 변경사항 저장 | |
 | Cancel (abort an edit) | 취소 | |
 | Stop (halt generation/run) | 중지 | Never 정지, 멈춤. Distinct from 취소. |
-| Reply (quote a passage) | 답장 | Reply pill / ComposerQuote (v6.12). |
-| Regenerate selection | 재생성 | Selection pill second action (v6.25). |
-| Save as template | 템플릿으로 저장 | Message ⋯ overflow (v6.25). |
-| New template | 새 템플릿 만들기 | Template library footer escape (v6.29). |
-| Add favorite | 즐겨찾기 추가 | Favorite toggles (v6.34.1). |
-| Remove favorite | 즐겨찾기 해제 | Favorite toggles (v6.34.1). |
-| New thread | 새 대화 | Console sidebar + ⌘K (v6.25). |
-| Temporary chat | 임시 대화 | Agent-picker switch; Console shows 임시 badge (v6.25). |
-| Refine prompt | 프롬프트 다듬기 | Composer footer pen-line; also the refinement menu's general action (v6.25/27). |
-| Add detail | 더 자세히 | Refinement preset (v6.27, closed set). |
-| Make concise | 더 간결하게 | Refinement preset (v6.27, closed set). |
-| Specify scope | 기간·범위 구체화 | Refinement preset (v6.27, closed set). |
-| Specify format | 형식 지정 | Refinement preset (v6.27, closed set). |
-| Voice input | 음성 입력 | Mic button aria-label; recording bar (v6.26). |
-| Add | 추가 | Composer + menu aria-label (v6.44). |
-| Tools | 도구 | Composer tools popover (v6.41). |
-| Explain (selection) | 설명 | Selection pill action (§18, v6.47). |
-| Refine all | 전체 다듬기 | General preset row, §24 menu (v6.47.3). |
-| Prompt starters | 시작 제안 | Zero-state chips (§27, v6.47). |
-| Batch processing | 일괄 처리 | Queue runs (§29, v6.47). |
-| Model | 모델 | Composer model selector; 자동 = agent default (v6.42). |
-| Recording | 녹음 중 | Recording-state announcement (v6.26). |
+| Reply (quote a passage) | 답장 | Reply pill / ComposerQuote. |
+| Regenerate selection | 재생성 | Selection pill second action. |
+| Save as template | 템플릿으로 저장 | Message ⋯ overflow. |
+| New template | 새 템플릿 만들기 | Template library footer escape. |
+| Add favorite | 즐겨찾기 추가 | Favorite toggles. |
+| Remove favorite | 즐겨찾기 해제 | Favorite toggles. |
+| New thread | 새 대화 | Console sidebar + ⌘K. |
+| Temporary chat | 임시 대화 | Agent-picker switch; Console shows 임시 badge. |
+| Refine prompt | 프롬프트 다듬기 | Composer footer pen-line; also the refinement menu's general action. |
+| Add detail | 더 자세히 | Refinement preset (closed set). |
+| Make concise | 더 간결하게 | Refinement preset (closed set). |
+| Specify scope | 기간·범위 구체화 | Refinement preset (closed set). |
+| Specify format | 형식 지정 | Refinement preset (closed set). |
+| Voice input | 음성 입력 | Mic button aria-label; recording bar. |
+| Add | 추가 | Composer + menu aria-label. |
+| Tools | 도구 | Composer tools popover. |
+| Explain (selection) | 설명 | Selection pill action (§18). |
+| Refine all | 전체 다듬기 | General preset row, §24 menu. |
+| Prompt starters | 시작 제안 | Zero-state chips (§27). |
+| Batch processing | 일괄 처리 | Queue runs (§29). |
+| Model | 모델 | Composer model selector; 자동 = agent default. |
+| Recording | 녹음 중 | Recording-state announcement. |
 | Delete (permanent) | 삭제 | Only for irreversible destruction. |
 | Remove (from a collection) | 제거 | Item survives elsewhere. NEVER interchangeable with Delete/삭제. |
 | Edit | 편집 | 수정 only inside sentences describing a change, never on buttons. |
@@ -138,7 +138,7 @@ Structure, always: **[what happened] · [why, if truly known] · [what to do]**.
 
 Destructive confirmations additionally name count + noun + irreversibility: "Deletes 14 runs permanently. This can't be undone." / "실행 기록 14건이 영구 삭제됩니다. 되돌릴 수 없습니다."
 
-**System-state templates (v6.1):**
+**System-state templates:**
 
 | State | EN | KO |
 |---|---|---|
@@ -171,14 +171,14 @@ Relative timestamps always reveal the absolute value on hover (`patterns.md` §6
 - Labels, titles, buttons, menu items, Badge text: no terminal period, both locales. Full sentences (helper text, errors, empty-state descriptions): terminal period, both locales.
 - Ellipsis for in-progress verbs: … (single character), both locales ("Saving…" / "저장 중…").
 - Middle dot (·) as the metadata separator ("5 steps · 12s" / "5단계 · 12초"); never slashes or pipes in metadata rows.
-- EN em dash usage sparingly; KO uses comma or restructures — never mixes 물결(~) into ranges in UI (use –: "1–24").
+- EN em dash usage sparingly; KO uses comma or restructures — never mixes 물결(~) into ranges in UI (use: "1–24").
 - Korean text never takes letter-spacing, italic, or ALL-CAPS treatment (foundations §2.3); romanized brand names inside Korean sentences keep their casing (Slack, AgentOS).
 - Keyboard keys render via `.sy-kbd`, referenced by symbol (⌘K), not spelled out.
 
 ## 8. Agent speech
 
 - Agents describe actions in first person, results in plain declaratives, and always in the user's UI locale regardless of source-data language ("I searched 328 tickets" / "문의 328건을 검색했습니다" — source content itself is never auto-translated).
-- **Artific brand titles are the one string type that does NOT localize (v6.48).** A short display heading set in Artific (Guided/empty-state/HOME hero) is a brand moment: the KO locale keeps the English words verbatim, in Artific — never translated, never rendered in Pretendard-Korean (Artific has no Hangul; see foundations §2.1). If a heading must be Korean, it is not a brand moment — drop Artific and use Pretendard bold at the display size. This exception is scoped strictly to Artific brand titles; all other UI copy localizes normally.
+- **Artific brand titles are the one string type that does NOT localize.** A short display heading set in Artific (Guided/empty-state/HOME hero) is a brand moment: the KO locale keeps the English words verbatim, in Artific — never translated, never rendered in Pretendard-Korean (Artific has no Hangul; see foundations §2.1). If a heading must be Korean, it is not a brand moment — drop Artific and use Pretendard bold at the display size. This exception is scoped strictly to Artific brand titles; all other UI copy localizes normally.
 - Uncertainty hedges come from the approved templates (`ai-patterns.md` §7); confidence badges carry the classification.
 - Agents never claim intent or emotion ("I think you'll love this" — forbidden), never flatter, and never apologize more than once per failure ("죄송합니다" at most once, then facts).
 

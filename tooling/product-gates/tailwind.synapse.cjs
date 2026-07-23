@@ -30,7 +30,7 @@ module.exports = {
     // colors, fontSize, fontFamily, boxShadow: build the same way from tokens.
   },
   // Disable arbitrary values — the enforcement that makes SY001/SY002 unbypassable.
-  // (Tailwind v3.4+: `experimental` / plugin; if unavailable, pair with check-raw-values.mjs.)
+  // (Tailwind+: `experimental` / plugin; if unavailable, pair with check-raw-values.mjs.)
   corePlugins: {
     // keep defaults; the arbitrary-value ban is enforced by the lint scan below
     // and by NOT whitelisting bracket syntax in your editor/formatter.

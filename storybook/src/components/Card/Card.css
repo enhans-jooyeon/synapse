@@ -1,4 +1,4 @@
-/* Card — components.md · Card (v5.0: flat default). */
+/* Card — components.md · Card (flat default). */
 .sy-card { border-radius: var(--sy-radius-md); padding: var(--sy-card-padding); }
 .sy-card--flat { background: var(--sy-bg-surface); }
 .sy-card--outlined { background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); }

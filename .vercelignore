@@ -17,12 +17,4 @@
 !content.md
 !icons.md
 !CHANGELOG.md
-# Korean translations (v6.50) — loaded per-doc by the hub when 한국어 is selected; EN falls back automatically.
-!design.ko.md
-!foundations.ko.md
-!components.ko.md
-!ai-patterns.ko.md
-!patterns.ko.md
-!recipes.ko.md
-!content.ko.md
-!icons.ko.md
+# (Korean docs removed — the hub translates the English pages on demand client-side; nothing to ship.)

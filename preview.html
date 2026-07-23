@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Synapse v6.0.0 — component browser</title>
+<title>Synapse — component browser</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.0.0/index.min.css">
 <link rel="stylesheet" href="tokens/synapse.css">
@@ -11,7 +11,7 @@
   * { margin: 0; box-sizing: border-box; }
   html, body { height: 100%; }
   body { background: var(--sy-bg-page); overflow: hidden; }
-  /* quiet scrollbars (v6.46): thin, trackless, borderless — thumb only */
+  /* quiet scrollbars: thin, trackless, borderless — thumb only */
   * { scrollbar-width: thin; scrollbar-color: var(--sy-border-strong) transparent; }
   ::-webkit-scrollbar { width: 8px; height: 8px; background: transparent; }
   ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; border: none; }
@@ -63,7 +63,7 @@
   .story > h3.sub:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
   .topbar .t .crumb-sep { color: var(--sy-fg-tertiary); margin: 0 var(--sy-space-6); font-weight: var(--sy-weight-regular); }
 
-  /* browser chrome (v6.51.1): search · collapsible nav · overview gallery */
+  /* browser chrome: search · collapsible nav · overview gallery */
   .nav-search { display: flex; align-items: center; gap: var(--sy-space-6); margin: var(--sy-space-4) var(--sy-space-4) var(--sy-space-8); padding: 0 var(--sy-space-8); height: 32px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-sm); flex: none; }
   .nav-search svg { width: 14px; height: 14px; color: var(--sy-fg-tertiary); flex: none; }
   .nav-search input { border: none; outline: none; background: none; flex: 1; min-width: 0; font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-fg-primary); }
@@ -103,7 +103,7 @@
   .gcard .nm { font: var(--sy-weight-semibold) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); color: var(--sy-fg-primary); }
   .gcard .blurb { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); color: var(--sy-fg-secondary); margin-top: var(--sy-space-2); }
 
-  /* story detail page (v6.54 — aiuxplayground-style structure) */
+  /* story detail page (aiuxplayground-style structure) */
   .doc-header { margin-bottom: var(--sy-space-24); }
   .doc-header .eyebrow { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-6); }
   .doc-header h1 { font: var(--sy-weight-bold) var(--sy-text-30)/var(--sy-text-30-lh) var(--sy-font-sans); margin: 0; }
@@ -126,7 +126,7 @@
   .guide-list { margin: 0 0 var(--sy-space-8); padding-left: var(--sy-space-20); max-width: 680px; }
   .guide-list li { font: var(--sy-weight-regular) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); color: var(--sy-fg-secondary); margin-bottom: var(--sy-space-4); }
 
-  /* two-column detail layout (v6.55.1): docs left · dedicated sticky Examples column right */
+  /* two-column detail layout: docs left · dedicated sticky Examples column right */
   .canvas-inner.detail { max-width: 1440px; }
   .doc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.1fr); gap: var(--sy-space-40); align-items: start; }
   .doc-main { min-width: 0; }
@@ -162,7 +162,7 @@
     font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans);
     color: var(--sy-fg-primary); background: transparent;
     transition: background var(--sy-duration-instant) var(--sy-ease-standard), border-color var(--sy-duration-instant) var(--sy-ease-standard); }
-  /* per-variant focus ring (v6.58.1): a box-shadow ring hugs border-radius (no corner gap that outline leaves);
+  /* per-variant focus ring: a box-shadow ring hugs border-radius (no corner gap that outline leaves);
      lightened to a ~50% tint of the button's own color via color-mix. transparent outline preserved for forced-colors mode. */
   .btn:focus-visible { outline: 2px solid transparent; outline-offset: 0; box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-border-focus) 50%, transparent); }
   .btn-primary:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-action-primary-bg) 45%, transparent); }
@@ -170,7 +170,7 @@
   .btn-ghost:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-fg-primary) 40%, transparent); }
   .btn-danger:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-status-danger-bg-solid) 55%, transparent); }
   .btn-brand:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--sy-action-brand-bg) 55%, transparent); }
-  /* optical trim (v6.17.2): the icon side of icon+text buttons reads heavier — trim 2px on that side */
+  /* optical trim: the icon side of icon+text buttons reads heavier — trim 2px on that side */
   .btn:not(.btn-icon):has(> .icon:first-child) { padding-left: calc(var(--sy-control-padding-x) - var(--sy-space-2)); }
   .btn:not(.btn-icon):has(> .icon:last-child) { padding-right: calc(var(--sy-control-padding-x) - var(--sy-space-2)); }
   .btn-sm { height: var(--sy-control-height-sm); }
@@ -179,7 +179,7 @@
   .btn-primary:hover { background: var(--sy-action-primary-bg-hover); }
   .btn-secondary { background: var(--sy-action-secondary-bg); }
   .btn-secondary:hover { background: var(--sy-action-secondary-bg-hover); }
-  /* tray rule applied to controls (v6.21.3): tonal secondary dissolves on tinted trays in light mode — open to page */
+  /* tray rule applied to controls: tonal secondary dissolves on tinted trays in light mode — open to page */
   .proposal .btn-secondary { background: var(--sy-bg-page); }
   .proposal .btn-secondary:hover { background: var(--sy-action-secondary-bg-hover); }
   [data-theme="dark"] .proposal .btn-secondary { background: var(--sy-action-secondary-bg); }
@@ -307,7 +307,7 @@
     border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-overlay);
     padding: var(--sy-space-12) var(--sy-space-16); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); }
   .toast > .icon { margin-top: var(--sy-space-2); }
-  .toast .btn-icon { height: 20px; width: 20px; flex: none; } /* compact inline dismiss — first-line aligned (v6.27.2) */
+  .toast .btn-icon { height: 20px; width: 20px; flex: none; } /* compact inline dismiss — first-line aligned */
   .toast .act { line-height: var(--sy-text-13-lh); margin-left: auto; color: var(--sy-fg-link); font-weight: var(--sy-weight-medium); cursor: pointer; white-space: nowrap; }
   .tooltip { display: inline-block; background: var(--sy-bg-raised-2); color: var(--sy-fg-primary);
     border: 1px solid var(--sy-border-overlay); font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh);
@@ -413,8 +413,8 @@
     animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); z-index: var(--sy-z-dropdown); }
   .quote-hl { background: var(--sy-ai-surface); box-shadow: inset 0 0 0 1px var(--sy-ai-border); border-radius: var(--sy-radius-xs); padding: 0 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
   .composer-tray { background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12); }
-  .plus-dot { position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--sy-fg-primary); } /* active-tools deviation dot (v6.47) */
-  /* compact picker padding (v6.44.1): labeled ghost controls in the tray (agent/model pickers) — avatar/chevron carry the mass, 12px sides read detached */
+  .plus-dot { position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--sy-fg-primary); } /* active-tools deviation dot */
+  /* compact picker padding: labeled ghost controls in the tray (agent/model pickers) — avatar/chevron carry the mass, 12px sides read detached */
   .composer-tray .btn-ghost.btn-sm:not(.btn-icon) { padding: 0 var(--sy-space-8); }
   .composer-tray .tag { background: var(--sy-bg-page); }
   .att-img { position: relative; width: 48px; height: 48px; border-radius: var(--sy-radius-xs); border: 1px solid var(--sy-border-default);
@@ -440,7 +440,7 @@
     transition: opacity var(--sy-duration-instant) var(--sy-ease-standard), background var(--sy-duration-instant) var(--sy-ease-standard); }
   .tpl-row:hover .row-pin { opacity: 1; }
   .row-pin[aria-pressed="true"] { opacity: 1; color: var(--sy-emphasis-fg-soft); }
-  .row-pin[aria-pressed="true"] svg { fill: currentColor; } /* fill-on-active: sanctioned for the favorite star ONLY (v6.34.3) */
+  .row-pin[aria-pressed="true"] svg { fill: currentColor; } /* fill-on-active: sanctioned for the favorite star ONLY */
   .row-pin:hover { background: var(--sy-bg-hover); }
   .row-pin svg { width: 12px; height: 12px; }
   .composer-quote { display: flex; align-items: center; gap: var(--sy-space-8); color: var(--sy-fg-secondary);
@@ -547,7 +547,7 @@
     background: var(--sy-bg-sunken); border-radius: var(--sy-radius-full); position: relative;
     font: var(--sy-weight-semibold) 11px/1 var(--sy-font-sans); font-variant-numeric: tabular-nums;
     color: var(--sy-fg-secondary); cursor: pointer; vertical-align: text-bottom; }
-  .src::before { content: ""; position: absolute; inset: -4px; } /* 24px+ hit target (v6.36) — visual stays 18 */
+  .src::before { content: ""; position: absolute; inset: -4px; } /* 24px+ hit target — visual stays 18 */
   .src:hover, .src.hl { background: var(--sy-action-secondary-bg-hover); color: var(--sy-fg-primary); }
   .src-card { display: inline-flex; align-items: center; gap: var(--sy-space-6); border-radius: var(--sy-radius-full);
     background: var(--sy-bg-sunken); border: none; padding: var(--sy-space-2) var(--sy-space-8) var(--sy-space-2) var(--sy-space-2);
@@ -649,12 +649,12 @@
       <div class="gallery" id="overview"></div>
 
       <div class="story" data-group="Foundations" data-title="Typography" data-doc="foundations.md §2.2" id="s-typography">
-        <p class="desc">Nineteen closed typography styles — the only way to set type. Each row shows family · size/line-height · weight. One scale throughout (v6.53 — density modes removed).</p>
+        <p class="desc">Nineteen closed typography styles — the only way to set type. Each row shows family · size/line-height · weight. One scale throughout (density modes removed).</p>
         <div id="specrows"></div>
       </div>
 
       <div class="story" data-group="Foundations" data-title="Type families" data-doc="foundations.md §2.1" id="s-type-families">
-        <p class="desc">Pretendard for all UI · Artific for brand moments, English-only — KO locale keeps the English copy verbatim (v6.48; Artific has no Hangul) · JetBrains Mono for machine-significant text.</p>
+        <p class="desc">Pretendard for all UI · Artific for brand moments, English-only — KO locale keeps the English copy verbatim (Artific has no Hangul) · JetBrains Mono for machine-significant text.</p>
         <div class="col">
           <div><div class="sy-type-display">Work moves itself</div><div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);" lang="ko">Artific은 영문 전용입니다 — KO 로케일에서도 브랜드 타이틀은 영문 원문을 그대로 유지합니다 (§2.1)</div></div>
           <p style="max-width: 640px;">Body text with <em>weight emphasis, never italics</em>. <span lang="ko">강조는 굵기로 표현합니다.</span></p>
@@ -696,13 +696,13 @@
       </div>
 
       <div class="story" data-group="Components" data-title="Button" data-doc="components.md · Button" id="s-button">
-        <p class="desc">Five variants. Max one primary per region; accent = the point color (#0621C4, v6.51) for conversational-AI CTAs only (Ask agent / Composer send), max 1/screen; loading keeps width; disabled is a fill, never opacity.</p>
+        <p class="desc">Five variants. Max one primary per region; accent = the point color (#0621C4) for conversational-AI CTAs only (Ask agent / Composer send), max 1/screen; loading keeps width; disabled is a fill, never opacity.</p>
         <div class="row">
           <button class="btn btn-primary" type="button">Save changes</button>
           <button class="btn btn-secondary" type="button" lang="ko">변경사항 저장</button>
           <button class="btn btn-ghost" type="button">Cancel</button>
           <button class="btn btn-danger" type="button" lang="ko">영구 삭제</button>
-          <button class="btn btn-brand" type="button" title="brand = the point color (v6.51): brand identity + conversational-AI CTA, max 1/screen"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Ask agent</button>
+          <button class="btn btn-brand" type="button" title="brand = the point color: brand identity + conversational-AI CTA, max 1/screen"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Ask agent</button>
           <button class="btn" disabled type="button">Disabled</button>
           <button class="btn btn-primary" type="button"><span class="spinner" style="border-top-color: var(--sy-action-primary-fg);"></span>Saving…</button>
         </div>
@@ -1011,7 +1011,7 @@
       </div>
 
       <div class="story" data-group="Components" data-title="Card" data-doc="components.md · Card" id="s-card">
-        <p class="desc">Variants (v5.0): flat is the default — surface step + spacing, no box. Outlined for separable/interactive objects (interactivity needs an edge); selected · ai · stat; elevated reserved for page key moments.</p>
+        <p class="desc">Variants: flat is the default — surface step + spacing, no box. Outlined for separable/interactive objects (interactivity needs an edge); selected · ai · stat; elevated reserved for page key moments.</p>
         <div class="grid2">
           <div class="card" style="background: var(--sy-bg-surface); border: none;">
             <div class="sy-type-heading-md" style="margin-bottom: var(--sy-space-8);" lang="ko">flat — 기본 카드</div>
@@ -1053,7 +1053,7 @@
       </div>
 
       <div class="story" data-group="Components" data-title="Toast" data-doc="components.md · Toast" id="s-toast">
-        <p class="desc">Transient outcome notification — bottom-right, max 3, auto-dismiss — carrying the Undo convention for reversible-lite mutations. Same-scheme surface (v2.0): raised-2 + border + overlay shadow in both modes.</p>
+        <p class="desc">Transient outcome notification — bottom-right, max 3, auto-dismiss — carrying the Undo convention for reversible-lite mutations. Same-scheme surface: raised-2 + border + overlay shadow in both modes.</p>
         <div class="col" style="gap: var(--sy-space-8); align-items: flex-start;">
           <div class="toast"><svg class="icon" viewBox="0 0 24 24" style="color: var(--sy-status-success);"><path d="m5 13 4 4L19 7"/></svg>Agent deployed to production<span class="act">View</span></div>
           <div class="toast" lang="ko"><svg class="icon" viewBox="0 0 24 24" style="color: var(--sy-status-danger);"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>실행에 실패했습니다<span class="act">다시 시도</span></div>
@@ -1090,7 +1090,7 @@
       </div>
 
       <div class="story" data-group="Components" data-title="Table" data-doc="components.md · Table" id="s-table">
-        <p class="desc">Cell renderers fix alignment and formatting per column. Status columns default to dot + text (v5.0, quietest rendering — no fill to melt into highlights); solid badges are the opt-in for ops/monitoring walls. Focus tables are frameless since v4.0 (bare header, hairline rule); dense/scrolling tables keep the frame. Toggle the canvas density — rows and type resize regionally. Empty cells are always "—".</p>
+        <p class="desc">Cell renderers fix alignment and formatting per column. Status columns default to dot + text (quietest rendering — no fill to melt into highlights); solid badges are the opt-in for ops/monitoring walls. Focus tables are frameless (bare header, hairline rule); dense/scrolling tables keep the frame. Toggle the canvas density — rows and type resize regionally. Empty cells are always "—".</p>
         <div>
           <table class="bare">
             <thead><tr><th>Agent run</th><th>Run ID</th><th>Owner</th><th>Status</th><th class="num">Duration</th><th class="num">Cost</th></tr></thead>
@@ -1181,7 +1181,7 @@
         </div>
         <h3 class="sub">Compact — inline @-mention in Composer</h3>
         <div class="row"><span class="ctx" style="padding: var(--sy-space-2) var(--sy-space-8); gap: var(--sy-space-6);"><span class="c-i" style="width:16px;height:16px;"><svg class="icon" style="width:11px;height:11px;" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></span><span class="c-t"><span class="t" style="font-size: var(--sy-text-12);" lang="ko">주간_고객문의.csv</span></span></span></div>
-        <h3 class="sub">Connector state (v6.60) — freshness · cached · reconnect</h3>
+        <h3 class="sub">Connector state — freshness · cached · reconnect</h3>
         <div class="row" style="gap: var(--sy-space-24); align-items: flex-start; padding-top: var(--sy-space-8);">
           <span class="ctx"><span class="c-i"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></span><span class="c-t"><div class="t" lang="ko">Q3_재무요약.gdoc</div><div class="m" style="display:inline-flex; align-items:center; gap: var(--sy-space-6);"><span lang="ko">Google Drive · 2분 전 동기화</span><span class="badge" style="flex:none;" lang="ko">캐시됨</span></div></span></span>
           <span class="ctx"><span class="c-i" style="color: var(--sy-status-danger);"><svg class="icon" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><span class="c-t"><div class="t" lang="ko">#ops 채널</div><div class="m" style="color: var(--sy-status-danger);" lang="ko">Slack · 연결 끊김</div></span><button class="btn btn-ghost btn-sm" type="button" style="flex:none;" lang="ko">다시 연결</button></span>
@@ -1519,7 +1519,7 @@ team: finance</pre>
 
 
       <div class="story" data-group="AI patterns" data-title="Follow-up panel" data-doc="ai-patterns.md §19" id="s-followups">
-        <p class="desc">Keyboard-first escalation of suggestion chips: anchored above the Composer, glass material (v6.23 — the one anchored glass exception: it floats over the thread like a mini-palette, static while open), ↑↓/↵/esc keycaps, max 4 rows, selecting inserts — never auto-sends. Chips and panel never show simultaneously. <strong>Refine vs pivot (v6.60):</strong> rows are grouped by intent — refine (zoom in) above pivot (zoom out), split by a divider with <code>micro-label</code> headers; the grouping is how the panel signals <em>why</em> a row is offered, without a per-row rationale (the label is still the query).</p>
+        <p class="desc">Keyboard-first escalation of suggestion chips: anchored above the Composer, glass material (the one anchored glass exception: it floats over the thread like a mini-palette, static while open), ↑↓/↵/esc keycaps, max 4 rows, selecting inserts — never auto-sends. Chips and panel never show simultaneously. <strong>Refine vs pivot:</strong> rows are grouped by intent — refine (zoom in) above pivot (zoom out), split by a divider with <code>micro-label</code> headers; the grouping is how the panel signals <em>why</em> a row is offered, without a per-row rationale (the label is still the query).</p>
         <div style="max-width: 640px; position: relative; padding-top: var(--sy-space-48);">
           <p lang="ko" style="color: var(--sy-fg-secondary);">지난주 문의는 총 328건으로 전주 대비 12% 증가했습니다. 상위 주제는 결제 오류(47건)와 로그인 문제(31건)입니다. 초안을 만들었습니다 — 검토 후 공유할 수 있습니다. 로그인 문제 증가는 지난주 SSO 설정 변경과 관련이 있을 수 있습니다.</p>
           <div class="followups" style="position: absolute; left: 0; right: 0; top: 0; margin-bottom: 0;">
@@ -1536,7 +1536,7 @@ team: finance</pre>
       </div>
 
       <div class="story" data-group="AI patterns" data-title="MediaGroup" data-doc="components.md · MediaGroup" id="s-mediagroup">
-        <p class="desc">Agent-generated media as a casual fan — the system's ONE sanctioned playful moment (v6.16): ±2.5° rotation lives here and nowhere else. Hover straightens; reduced-motion renders flat; referenced objects stay in flat ContextCard stacks.</p>
+        <p class="desc">Agent-generated media as a casual fan — the system's ONE sanctioned playful moment: ±2.5° rotation lives here and nowhere else. Hover straightens; reduced-motion renders flat; referenced objects stay in flat ContextCard stacks.</p>
         <div class="row" style="align-items: center;">
           <span class="media-rail">
             <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Copy"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
@@ -1585,7 +1585,7 @@ team: finance</pre>
             <button class="btn btn-brand" type="button" style="width:32px; height:32px; padding:0; border-radius: var(--sy-radius-full);" aria-label="Send"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button>
           </div>
         </div>
-        <h3 class="sub">Agent picker — search, groups, submenu escape, request footer (v6.15 · model moved to its own selector, v6.42)</h3>
+        <h3 class="sub">Agent picker — search, groups, submenu escape, request footer ( · model moved to its own selector)</h3>
         <div class="menu" style="width: 280px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-4) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-8); margin: 0 calc(-1 * var(--sy-space-6)) var(--sy-space-4); border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary);">
             <svg class="icon" style="width:14px;height:14px" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -1598,7 +1598,7 @@ team: finance</pre>
           <div style="border-top: 1px solid var(--sy-border-subtle); margin: var(--sy-space-4) calc(-1 * var(--sy-space-6)) 0; padding: var(--sy-space-4) var(--sy-space-6) 0;"><div class="menu-item" lang="ko"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>에이전트 요청</div></div>
         </div>
         <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4); max-width: 640px;" lang="ko">기간을 지정하면 더 정확한 결과를 얻습니다 · §24 quality hint (한 개, 전송을 막지 않음)</div>
-        <h3 class="sub">Model selector — trailing footer control (v6.42–45): real product names in mono, grouped by provider, 자동 = agent default</h3>
+        <h3 class="sub">Model selector — trailing footer control: real product names in mono, grouped by provider, 자동 = agent default</h3>
         <div class="menu" style="width: 240px;" lang="ko">
           <div class="sy-type-micro-label" style="padding: var(--sy-space-6) var(--sy-space-8) var(--sy-space-2);">Anthropic</div>
           <div class="menu-item selected"><span style="font-family: var(--sy-font-mono); font-size: 12px;">Claude Sonnet 5</span><svg class="icon" style="width:14px;height:14px; margin-left:auto;" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></div>
@@ -1612,7 +1612,7 @@ team: finance</pre>
           <div class="menu-sep"></div>
           <div class="menu-item">자동<span style="margin-left:auto; font-size: 11px; color: var(--sy-fg-tertiary);">에이전트 기본값</span></div>
         </div>
-        <h3 class="sub">Assisted editing — refinement presets (v6.27 §24): closed set, rewrite replaces draft with Undo</h3>
+        <h3 class="sub">Assisted editing — refinement presets ( §24): closed set, rewrite replaces draft with Undo</h3>
         <div class="menu" style="width: 220px;" lang="ko">
           <div class="sy-type-micro-label" style="padding: var(--sy-space-6) var(--sy-space-8) var(--sy-space-4);">프롬프트 다듬기</div>
           <div class="menu-item">전체 다듬기</div>
@@ -1622,11 +1622,11 @@ team: finance</pre>
           <div class="menu-item">기간·범위 구체화</div>
           <div class="menu-item">형식 지정</div>
         </div>
-        <h3 class="sub">Predictive ghost text (v6.47 §30) — fg.placeholder continuation, → accepts, never Tab, suppressed during Hangul composition</h3>
+        <h3 class="sub">Predictive ghost text ( §30) — fg.placeholder continuation, → accepts, never Tab, suppressed during Hangul composition</h3>
         <div class="composer-tray" style="max-width: 640px;">
           <div style="font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); min-height: 24px;" lang="ko">지난주 결제 오류<span style="color: var(--sy-fg-placeholder);"> 문의를 유형별로 정리해 줘</span> <span class="sy-kbd">→</span></div>
         </div>
-        <h3 class="sub">Voice dictation — recording state (v6.26 §26): tray morphs in place, esc cancels, ↵ confirms</h3>
+        <h3 class="sub">Voice dictation — recording state ( §26): tray morphs in place, esc cancels, ↵ confirms</h3>
         <div class="composer-tray" style="max-width: 640px;">
           <div class="row" style="gap: var(--sy-space-12); min-height: 32px;">
             <button class="btn btn-ghost btn-sm" type="button" lang="ko">취소</button>
@@ -1639,12 +1639,12 @@ team: finance</pre>
           </div>
           <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);" lang="ko">받아쓴 내용은 보내기 전에 확인할 수 있습니다 — 자동 전송되지 않습니다</div>
         </div>
-        <h3 class="sub">Template with placeholder slots (v6.25 §23) — → moves between slots; unfilled slots block send</h3>
+        <h3 class="sub">Template with placeholder slots ( §23) — → moves between slots; unfilled slots block send</h3>
         <div class="composer-tray" style="max-width: 640px;">
           <div style="font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); min-height: 24px;" lang="ko"><span style="background: var(--sy-emphasis-surface); color: var(--sy-emphasis-fg); border-radius: var(--sy-radius-xs); padding: 0 var(--sy-space-4); font-weight: var(--sy-weight-medium);">[영업팀]</span> 관련 문의를 <span style="background: var(--sy-emphasis-surface); color: var(--sy-fg-tertiary); border-radius: var(--sy-radius-xs); padding: 0 var(--sy-space-4); box-shadow: inset 0 0 0 1px var(--sy-emphasis-border); font-weight: var(--sy-weight-medium);">[기간]</span> 기준으로 요약해 줘</div>
           <div class="sy-type-caption" style="color: var(--sy-fg-tertiary); margin-top: var(--sy-space-4);" lang="ko">[기간] 값을 입력하면 보낼 수 있습니다</div>
         </div>
-        <h3 class="sub">Slash command — ghost completion (v6.15)</h3>
+        <h3 class="sub">Slash command — ghost completion</h3>
         <div class="composer-tray" style="max-width: 640px;">
           <div style="font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); min-height: 24px;"><span style="color: var(--sy-fg-primary);">/보고</span><span style="color: var(--sy-fg-placeholder);">서 만들기</span><span class="sy-kbd" style="margin-left: var(--sy-space-8);">→</span><span class="sy-type-micro" style="color: var(--sy-fg-tertiary); margin-left: var(--sy-space-4);" lang="ko">자동 완성</span></div>
         </div>
@@ -1660,7 +1660,7 @@ team: finance</pre>
       </div>
 
       <div class="story" data-group="AI patterns" data-title="ResponseToolbar" data-doc="components.md · ResponseToolbar" id="s-response-toolbar">
-        <p class="desc">Copy · regenerate · thumbs · overflow on agent messages only. Fixed order; thumbs selection = bg.selected square + primary-ink stroke (v6.47.1 — was a blue circle; selection language is fill + ink, and the send button is the only circle); never a filled icon; regenerate only on the latest message.</p>
+        <p class="desc">Copy · regenerate · thumbs · overflow on agent messages only. Fixed order; thumbs selection = bg.selected square + primary-ink stroke (was a blue circle; selection language is fill + ink, and the send button is the only circle); never a filled icon; regenerate only on the latest message.</p>
         <div class="card" style="max-width: 560px;">
           <div class="msg-a">
             <span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
@@ -1850,7 +1850,7 @@ team: finance</pre>
 
 
       <div class="story" data-group="Sample pages" data-title="Home" data-doc="patterns.md §1F · R4 · Composer" id="s-sample-home">
-        <p class="desc">The workspace's start surface (§1F, v6.39): Artific greeting moment, hero metric strip with the actionable number emphasized, the human-in-the-loop approval queue first, agent shelf — and the Composer pinned at the bottom (sending opens a Console). <strong>Interactive:</strong> topbar as in Workbench.</p>
+        <p class="desc">The workspace's start surface (§1F): Artific greeting moment, hero metric strip with the actionable number emphasized, the human-in-the-loop approval queue first, agent shelf — and the Composer pinned at the bottom (sending opens a Console). <strong>Interactive:</strong> topbar as in Workbench.</p>
         <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
             <button class="btn btn-ghost btn-sm" type="button"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
@@ -2216,7 +2216,7 @@ team: finance</pre>
       </div>
 
       <div class="story" data-group="Sample pages" data-title="Object detail" data-doc="patterns.md §1B · R1/R11" id="s-sample-object">
-        <p class="desc">Focus object page: R1 header (Run is `primary` — operational, v6.2.1), tabs, key-value flat card, trend chart, embedded dense runs table, agent proposal, activity. No accent — the ask-entry lives in chrome (⌘K).</p>
+        <p class="desc">Focus object page: R1 header (Run is `primary` — operational), tabs, key-value flat card, trend chart, embedded dense runs table, agent proposal, activity. No accent — the ask-entry lives in chrome (⌘K).</p>
         <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); padding: var(--sy-page-padding); min-width: 960px; max-width: 1440px;">
           <div style="max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--sy-space-24);">
             <div>
@@ -2293,7 +2293,7 @@ team: finance</pre>
       </div>
 
       <div class="story" data-group="Sample pages" data-title="First run (guided)" data-doc="patterns.md §1D · R12" id="s-sample-guided">
-        <p class="desc">Guided archetype, two moments: the hero (EN so the Artific display face actually renders — Hangul falls back to Pretendard by design, v6.7) and step 2's ChoiceCard decision. Whitespace is intentional.</p>
+        <p class="desc">Guided archetype, two moments: the hero (EN so the Artific display face actually renders — Hangul falls back to Pretendard by design) and step 2's ChoiceCard decision. Whitespace is intentional.</p>
         <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); background: var(--sy-bg-page); padding: var(--sy-space-64) var(--sy-space-32); min-width: 960px; max-width: 1440px;">
           <div style="max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: var(--sy-space-16); text-align: center;">
             <div class="sy-type-display">Create your first agent</div>
@@ -2556,7 +2556,7 @@ team: finance</pre>
   function secLabel(t){var d=document.createElement('div');d.className='sec-label';d.textContent=t;return d;}
   function guideP(t){var el=document.createElement('p');el.className='guide-p';el.textContent=t;return el;}
   function guideList(arr){var ul=document.createElement('ul');ul.className='guide-list';arr.forEach(function(x){var li=document.createElement('li');li.textContent=x;ul.appendChild(li);});return ul;}
-  // Restructure each story into a documentation detail page (v6.54):
+  // Restructure each story into a documentation detail page:
   // header (eyebrow · title · spec ref) → definition (.desc) → Examples (demo) → Related.
   function relatedBlock(s, g, cat) {
     var sibs = (g === 'Components' && cat) ? CAT[cat].slice() : groups[g].map(function (x) { return x.id; });
@@ -2828,7 +2828,7 @@ team: finance</pre>
     'Actions': ['action-primary-bg','action-primary-bg-hover','action-primary-bg-active','action-primary-fg','action-brand-bg','action-brand-bg-hover','action-brand-bg-active','action-brand-fg','action-danger-fg'],
     'Status': ['status-info','status-info-bg','status-info-bg-solid','status-info-inverse','status-success','status-success-bg','status-success-bg-solid','status-success-inverse','status-warning','status-warning-bg','status-warning-bg-solid','status-warning-inverse','status-danger','status-danger-bg','status-danger-bg-solid','status-danger-bg-solid-hover','status-danger-inverse'],
     'AI': ['ai-surface','ai-border','ai-fg','ai-solid'],
-    'Emphasis — quiet, non-vibrant (v6.11)': ['emphasis-surface','emphasis-border','emphasis-fg']
+    'Emphasis — quiet, non-vibrant': ['emphasis-surface','emphasis-border','emphasis-fg']
   };
   var tg = document.getElementById('tokengroups');
   Object.keys(tokenGroups).forEach(function (g) {
@@ -3009,7 +3009,7 @@ team: finance</pre>
       '<div class="n-item unread" data-type="mention"><span class="n-dot"></span><span class="avatar av-20" style="background: color-mix(in srgb, var(--sy-viz-5) 20%, transparent); color: var(--sy-viz-5); flex:none;">MK</span><span class="n-body"><span class="sy-type-body-sm"><span style="font-weight:500;">민경</span>님이 회원님을 언급했습니다</span><span class="n-meta"><span class="sy-type-caption n-time">1시간 전</span>' + nActs + '</span></span></div>' +
       '<div class="grp sy-type-micro-label" style="padding: var(--sy-space-4) var(--sy-space-8);">이전</div>' +
       '<div class="n-item read" data-type="comment"><span class="n-dot"></span><span class="avatar av-20" style="background: color-mix(in srgb, var(--sy-viz-3) 20%, transparent); color: var(--sy-viz-3); flex:none;">JH</span><span class="n-body"><span class="sy-type-body-sm"><span style="font-weight:500;">지훈</span>님이 댓글을 남겼습니다</span><span class="n-meta"><span class="sy-type-caption n-time">어제</span>' + nActs + '</span></span></div>' +
-      '<div class="n-item read" data-type="system"><span class="n-dot"></span><span class="n-type"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span><span class="n-body"><span class="sy-type-body-sm">새 버전 v6.59가 배포되었습니다</span><span class="n-meta"><span class="sy-type-caption n-time">2일 전</span>' + nActs + '</span></span></div>' +
+      '<div class="n-item read" data-type="system"><span class="n-dot"></span><span class="n-type"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span><span class="n-body"><span class="sy-type-body-sm">새 버전가 배포되었습니다</span><span class="n-meta"><span class="sy-type-caption n-time">2일 전</span>' + nActs + '</span></span></div>' +
       '</div>' +
       '<div class="n-f"><button class="btn btn-ghost btn-sm" type="button">모두 보기<svg class="icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>';
 

@@ -1,4 +1,4 @@
-/* Input — components.md · Input (v5.0 filled anatomy). */
+/* Input — components.md · Input ( filled anatomy). */
 .sy-field { display: flex; flex-direction: column; gap: var(--sy-space-4); width: 300px; max-width: 100%; }
 .sy-field__label { font: var(--sy-weight-medium) var(--sy-label-size) / var(--sy-label-lh) var(--sy-font-sans); }
 .sy-field__ctrl { position: relative; display: flex; align-items: center; }

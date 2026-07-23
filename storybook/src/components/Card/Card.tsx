@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import "./Card.css";
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** `flat` is the default (v5.0): grouping by surface step, not boxes. */
+  /** `flat` is the default: grouping by surface step, not boxes. */
   variant?: "flat" | "outlined" | "elevated" | "ai";
   /** Selection ring — key color; focus stays blue. */
   selected?: boolean;
