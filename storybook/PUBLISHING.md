@@ -1,6 +1,6 @@
 # Publishing `@enhans-jooyeon/synapse`
 
-This workspace is **not publishable yet** and is kept `private: true` on purpose: it implements **4 of 52 components** (Button · Badge · Input · Card). Shipping it now would give consumers a near-empty design system. This is the checklist to make it a real package when the library reaches parity.
+This workspace is **not publishable yet** and is kept `private: true` on purpose: it implements **4 of 57 components** (Button · Badge · Input · Card). Shipping it now would give consumers a near-empty design system. This is the checklist to make it a real package when the library reaches parity.
 
 ## Blocker
 

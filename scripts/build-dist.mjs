@@ -58,8 +58,8 @@ The machine-enforceable contract for generating AgentOS UI. This is the **curate
 
 1. Load **\`synapse.manifest.json\`** first (the compact index), then **\`design.md\`** (the contract + hard rules).
 2. Generate from the closed component set only — pull specs from \`components.md\`, \`ai-patterns.md\`, \`foundations.md\`, \`tokens/\`.
-3. Use **\`docs/process/템플릿-PRD.md\`** as your generation prompt (fill it in, paste it, keep it as the review baseline).
-4. Follow **\`docs/process/디자인-리뷰-프로토콜.md\`** for the generate → gate → review workflow.
+3. Use **\`docs/process/prd-template.md\`** as your generation prompt (fill it in, paste it, keep it as the review baseline).
+4. Follow **\`docs/process/design-review-protocol.md\`** for the generate → gate → review workflow.
 
 ## Enforce it
 

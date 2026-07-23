@@ -703,3 +703,71 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Behavior:** clicking an item navigates to the object and marks it read. A present inline action only *opens* its surface for consequential acts — approving an agent proposal happens on the ProposalCard, never from a notification. The Unread and Mentions filters and the read/dismiss controls never surface a number — the bell's count overlay is the only count.
 **Empty state:** the compact flavor ("You're all caught up" / "모두 확인했습니다"), shown when a filter yields nothing or the list is cleared.
 **Forbidden:** marketing content; more than one content inline action per item (the read/dismiss hover controls are exempt — they are chrome, not content actions); unread counts anywhere except the bell's count overlay (99+ rule); type expressed by color/tint alone.
+
+## GraphCanvas · FlowNode · Edge
+
+**Purpose:** the node-graph editor behind the `workbench` builders — Workflow Builder, Pipeline Builder, and the Ontology Link / Lineage graph. A pannable, zoomable canvas of node cards connected by typed edges, with a node palette and canvas controls. One family, grouped because the parts only exist together.
+
+**Canvas:** a full-bleed workbench surface on `bg.sunken` with a subtle dot grid (dots `border.subtle`) — the one sanctioned background texture, never a decorative pattern. Pan (space-drag) + zoom (wheel/controls). Every graph has one fixed **Start** anchor and one or more **End** nodes.
+
+**FlowNode:** an `outlined` card — `bg.surface`, 1px `border.default`, radius `md`; `border.selected` when selected, blue `border.focus` ring on keyboard focus. Header row: 16px type icon + node-type label (`label`) + a leading status dot using the AgentStep state vocabulary. Body: a compact config summary (`caption`, `fg.secondary`). **Ports:** input on the left edge, output on the right — 8px squared handles (`border.strong`; eligible/hover = `border.focus`). Fixed width tier (240); height to content.
+
+**Edge:** a 1px `border.strong` connector from an output port to an input port; one connector style system-wide. The Condition branch variant carries a small `label-sm` tag (`bg.surface`) for If / Else. A running edge may pulse (transform/opacity only; static under reduced-motion). State is a token + a glyph, never a hue alone.
+
+**NodePalette:** a docked left panel (`bg.surface`, right `border.subtle`) or an "Add node" Popover; node types grouped under `micro-label` headers (mirroring the Pipeline Extract/Transform/Load grouping); drag-to-canvas or click-to-insert. Closed set — only node types in the manifest.
+
+**CanvasControls:** a floating cluster bottom-left (`bg.raised` + `border.overlay` + `shadow.overlay`): zoom in/out, fit-view, and an optional minimap (`bg.surface`, viewport rect in `border.strong`). Icon-only, square, `aria-label` required.
+
+**Modes:** **Build** (edit — add/configure/connect; edit-permission gated) and **Run** (read-only + per-node run status + a `RunLog`).
+
+**States:** empty (a lone Start node + "add first node" affordance), default, node selected, node running/failed, connecting (a live edge follows the cursor; invalid targets dim), read-only (Run mode or insufficient permission).
+
+**Forbidden:** decorative node fill-colors (status is dot + glyph, never hue alone); free-form node shapes (one silhouette); mixing straight and curved edge styles; gradients/glow on nodes or edges; more than one grouping nesting level; any node type absent from the manifest.
+
+## RunLog
+
+**Purpose:** the execution record of a run — Workflow Run mode, Pipeline runs, and the CUA run review. A hierarchical, append-capable log: run → step → line.
+
+**Anatomy:** a bordered panel or Drawer content (`bg.surface`, radius `md`). Header: run title + status `Badge` + duration (tabular). Body: an expandable list of **steps** (each row = status dot + step name + `caption` duration), each expanding to its **log lines** in a mono `CodeBlock`-style block on `bg.sunken`.
+
+**States:** queued · running (live-append with a named working line, `aria-live=polite`; the running step pulses, no shimmer) · success (collapses to "N steps · 12s") · failed (auto-expands, surfaces the error line + optional Retry ghost action) · cancelled (`border.strong`).
+
+**Behavior:** reuses AgentStep's closed state vocabulary; machine text in mono; timestamps absolute on hover; virtualize long logs; **pin-to-bottom is a toggle**, never forced. Display only.
+
+**Forbidden:** color-only status; editing log content; auto-scroll that fights manual scroll.
+
+## PivotTable
+
+**Purpose:** cross-tabulated aggregation (dimensions × measures) of ontology/dataset rows for the Application/dashboard surface. Extends `Table` but is a distinct component — it has row- and column-header dimensions and aggregated cells, not flat records.
+
+**Anatomy:** a framed Table-family grid with a sticky **row-dimension gutter** (leftmost, `bg.surface`, nested dimensions indent with expand/collapse) and grouped, sticky **column-dimension headers** (hairline rules only, per Table). Cells are aggregated measures using Table's numeric renderers (right-aligned, tabular; empty = em dash). Subtotal/total bands take the `emphasis.surface` fill (the Table emphasis rule — totals only). A field bar (rows / columns / measures pickers) sits above as a filter-bar recipe.
+
+**States:** default · loading (skeleton mirroring the grid) · empty (no data for the pivot) · expanded/collapsed dimension levels · error.
+
+**Behavior:** inherits Table's cell renderers, alignment, and header treatment; pivots are always framed (they scroll); drill via expand, not a modal; virtualize >200 rows.
+
+**Forbidden:** zebra striping; default heatmap cell-coloring (a governed decision, not a default); emphasis beyond the total/subtotal band; two aggregations muddled in one cell.
+
+## AssistantPanel
+
+**Purpose:** the persistent docked/floating global agent — a compact chat available across the app that maximizes into the full Console. A composite (like `CommandPalette` and `NotificationCenter`), assembled from existing parts, never a re-implemented chat.
+
+**Anatomy:** a floating launcher — a `brand` circular icon-button bottom-right (the sanctioned circular exception it shares with the Composer send) — opening a docked panel: `bg.raised`, radius `lg`, 1px `border.default`, `shadow.overlay`, `z.dropdown` tier. Panel = header (squared agent `Avatar` 24 + name + maximize + close ghost icon-buttons) · a scrolling message stream (agent turns on `ai.surface`, human turns plain; `AgentStep` / `ProposalCard` / `SourceChip` as usual) · one docked `Composer` at the bottom. Maximize navigates to the Console and carries state over.
+
+**States:** collapsed (launcher only) · open (panel) · maximized (full Console) · running (AgentStep working line) · empty (starters per ai-patterns §27).
+
+**Behavior:** exactly one per app; non-modal (no scrim); hidden on the full Console page (it *is* the Console there); never overlaps a primary action region — it offsets.
+
+**Forbidden:** a second persistent chat surface; auto-opening or nagging; a scrim/blocking behavior; re-implementing the Composer.
+
+## AppLauncher
+
+**Purpose:** a browsable overlay grid of system apps + user-published apps — the entry to the Application surface. Distinct from `CommandPalette` (which is ⌘K search); this is a tile grid.
+
+**Anatomy:** a centered overlay in the glass material, **scrimless** (the frost is the focus device; reduced-transparency → opaque `bg.raised`), radius `lg`, `shadow.modal`, `z.modal`. Content: an optional search row, then **system apps** and **your apps** as grids of `outlined` `Card` tiles (icon medallion + name `label` + one `caption`), each under a `micro-label` header. Whole tile is the target → opens the app; hover-lift.
+
+**States:** default · search-filtered (empty groups hide; compact no-results line) · loading (skeleton tiles) · empty ("no apps yet" + create action).
+
+**Behavior:** tiles reuse the `Card` component (outlined, one action, hover-lift); keyboard traversal + ↵ opens; fixed responsive column steps.
+
+**Forbidden:** decorative tile colors (icon medallions stay neutral / viz-tint per the icon rule); a modal stacked on top; arbitrary grid reflow.

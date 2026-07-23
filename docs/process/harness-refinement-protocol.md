@@ -1,4 +1,4 @@
-<!-- Agent-facing process doctrine. EN-only, ungated, no KO required (docs/process/ is outside the validate.py scope). Companion to 디자인-리뷰-프로토콜.md: that doc governs the TEAM's human review; this doc governs the MAINTAINER's harness-refinement loop (June + Claude). Not a spec file — safe to edit freely. -->
+<!-- Agent-facing process doctrine. EN-only, ungated, no KO required (docs/process/ is outside the validate.py scope). Companion to design-review-protocol.md: that doc governs the TEAM's human review; this doc governs the MAINTAINER's harness-refinement loop (June + Claude). Not a spec file — safe to edit freely. -->
 
 # Synapse — harness refinement protocol
 
@@ -76,7 +76,7 @@ Every confirmed defect maps to exactly one:
 - **RC3 — Gate gap.** A checkable rule exists in prose but `validate.py` doesn't enforce it (or enforces it too narrowly); a bad output passed the gate.
 - **RC4 — Un-lintable quality.** Inherently a judgment call (most of Tier B/C craft). Cannot be mechanized; needs prose guidance + a human-review checkpoint.
 - **RC5 — Prompt / intent failure.** Not a harness fault — the prompt was vague or wrong. Possible sub-finding: the harness should scaffold intent better (screen-intent schema / PRD template).
-- **RC6 — Coverage gap.** The needed component or pattern doesn't exist yet (the storybook lib is 4 of 52). Feeds the component build-out backlog, not a spec edit.
+- **RC6 — Coverage gap.** The needed component or pattern doesn't exist yet (the storybook lib is 4 of 57). Feeds the component build-out backlog, not a spec edit.
 
 ## 6. Fix routing
 

@@ -3,7 +3,7 @@
  * Merge into the product repo's ESLint config. Pairs with tailwind.synapse.cjs
  * (which handles the arbitrary-value / token enforcement) and jsx-a11y.
  *
- * Mirrors design.md §3 hard rules and 디자인-리뷰-프로토콜.md §6 for React/JSX.
+ * Mirrors design.md §3 hard rules and design-review-protocol.md §6 for React/JSX.
  */
 module.exports = {
   plugins: ['jsx-a11y'],

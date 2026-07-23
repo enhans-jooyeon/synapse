@@ -11,7 +11,7 @@ Web-only · bilingual **KO/EN** (EN authoritative) · current version **1.0.0**.
 | You are… | Start with |
 |---|---|
 | **New to Synapse** (anyone) | This file, then [`design.md`](design.md) — the contract and hard rules |
-| **Author** (PM/engineer generating UI) | [`docs/process/design-cycle.md`](docs/process/design-cycle.md) — the step-by-step cycle — then run [`screen-intake-skill.md`](docs/process/screen-intake-skill.md) (it fills the [PRD template](docs/process/템플릿-PRD.md) for you). Don't skip intake — generic instructions produce generic UI |
+| **Author** (PM/engineer generating UI) | [`docs/process/design-cycle.md`](docs/process/design-cycle.md) — the step-by-step cycle — then run [`screen-intake-skill.md`](docs/process/screen-intake-skill.md) (it fills the [PRD template](docs/process/prd-template.md) for you). Don't skip intake — generic instructions produce generic UI |
 | **Reviewer** (designer) | The protocol §9 rubric (three outcomes) + the [PR/review template](.github/PULL_REQUEST_TEMPLATE/ui_review.md) |
 | **Consuming the system in product code** | [`storybook/`](storybook/) (React components) + `tokens/` — see [status](docs/DISTRIBUTION.md) |
 | **Browsing the system** | Open [`preview.html`](preview.html) in a browser (also deployed as the docs hub) |
@@ -20,7 +20,7 @@ Web-only · bilingual **KO/EN** (EN authoritative) · current version **1.0.0**.
 
 > **The harness owns compliance; humans review only judgment.**
 
-Anything a machine can check — token use, component provenance, contrast, required-state coverage, prop validity — is a **gate**, green before a designer ever looks. If a designer is hand-checking spacing or hardcoded hex, the harness has a hole; the fix is closing the hole, not adding a review step. Full doctrine: [`docs/process/디자인-리뷰-프로토콜.md`](docs/process/디자인-리뷰-프로토콜.md).
+Anything a machine can check — token use, component provenance, contrast, required-state coverage, prop validity — is a **gate**, green before a designer ever looks. If a designer is hand-checking spacing or hardcoded hex, the harness has a hole; the fix is closing the hole, not adding a review step. Full doctrine: [`docs/process/design-review-protocol.md`](docs/process/design-review-protocol.md).
 
 ## Repo map
 
@@ -28,7 +28,7 @@ Anything a machine can check — token use, component provenance, contrast, requ
 |---|---|
 | Contract & governance | [`design.md`](design.md) — read first; authority order, hard rules, workflow |
 | Tokens (source of truth) | `tokens/synapse.tokens.json` → generated `tokens/synapse.css` |
-| Specs (English — Korean rendered on demand in the hub) | `foundations.md` · `components.md` (52) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` |
+| Specs (English — Korean rendered on demand in the hub) | `foundations.md` · `components.md` (57) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` |
 | Machine index for agents | `synapse.manifest.json` (built by `tools/build_manifest.py`; agents load this first) |
 | DS-repo gate | `tools/validate.py` — `tokens` / `ui` / `page` modes (enforces this repo's own artifacts) |
 | Component browser + sample pages | `preview.html` |
@@ -49,7 +49,7 @@ python3 tools/build_manifest.py                              # after any compone
 
 ## Status (read before adopting)
 
-The **doctrine is mature** (52 components, AI patterns, tokens, gate, bilingual specs at 1.0.0). The **consumption layer is not finished**: the React library in `storybook/` is a 4-of-52 seed and is not yet published as an installable `@enhans-jooyeon/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
+The **doctrine is mature** (57 components, AI patterns, tokens, gate, bilingual specs at 1.0.0). The **consumption layer is not finished**: the React library in `storybook/` is a 4-of-57 seed and is not yet published as an installable `@enhans-jooyeon/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
 
 ## Governance
 

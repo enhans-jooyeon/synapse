@@ -20,8 +20,8 @@ tokens/synapse.css
 synapse.manifest.json
 
 # --- Generation prompt + team workflow ---
-docs/process/템플릿-PRD.md
-docs/process/디자인-리뷰-프로토콜.md
+docs/process/prd-template.md
+docs/process/design-review-protocol.md
 tooling/product-gates/
 
 # --- App Generation feature: chart/component catalog (reconciled to v1.0.0) ---

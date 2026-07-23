@@ -4,7 +4,14 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
-_Nothing yet._
+- **Five component types added (52 → 57)**, extracted from the AOS digital twin (`proposals/2026-07-23-twin-component-candidates.md`) and specified to the Synapse contract — spec-only, not yet implemented in `storybook/`:
+  - **GraphCanvas · FlowNode · Edge** — the node-graph editor for the Workflow / Pipeline / Ontology-Link builders (the biggest prior `workbench` coverage gap).
+  - **RunLog** — hierarchical execution log (run → step → line).
+  - **PivotTable** — cross-tab aggregation for dashboards.
+  - **AssistantPanel** — the docked/floating global agent (composite).
+  - **AppLauncher** — the app tile-grid overlay.
+  - Manifest rebuilt; `build_manifest.py` `C` set extended in lockstep.
+  - Added `preview.html` component-browser stories (token-only demos + When/Avoid/Anti/Where guidance) for all five, so they show in the browser.
 
 ## 1.0.1 — 2026-07-23 — v1 cleanup release
 
