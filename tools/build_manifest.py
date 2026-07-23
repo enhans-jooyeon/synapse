@@ -156,7 +156,7 @@ def build():
         "locales": ["en", "ko"],
         "typography_styles": list(tokens["semantic"]["type"].keys() - {"$description"}) if isinstance(tokens["semantic"]["type"], dict) else [],
         "z_scale": {k: v["$value"] for k, v in tokens["primitive"]["z"].items() if not k.startswith("$")},
-        "recipes": {"R1": "page header", "R2": "section header", "R3": "card header", "R4": "stat grid", "R5": "action pairs/footers", "R6": "filter bar", "R7": "toolbar", "R8": "form section", "R9": "stepper", "R10": "topbar", "R11": "key-value panel", "R12": "empty page"},
+        "recipes": {"R1": "page header", "R2": "section header", "R3": "card header", "R4": "stat grid", "R5": "action pairs/footers", "R6": "filter bar", "R7": "toolbar", "R8": "form section", "R9": "stepper", "R10": "topbar", "R11": "key-value panel", "R12": "empty page", "R13": "error page", "R14": "exported report", "R15": "batch-run results", "R16": "builder workbench shell"},
         "never": ["raw color/spacing/radius/type values (semantic tokens + typography styles only)",
                   "components or variants outside this manifest", "icons outside icons.md registry",
                   "italics, ALL-CAPS, fixed-width text containers, line-height below paired floor",

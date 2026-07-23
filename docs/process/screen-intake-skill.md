@@ -15,7 +15,7 @@ Just a one-line intent from the user, e.g. *"a screen where an operator reviews 
 ## Grounding sources (read first)
 
 - `product-context.md` — the AgentOS product model (entities, roles, JTBD, IA, tone). **The user's intent must map onto a real product surface here.** If this file doesn't exist yet, say so and ask the user for the product facts inline; do not guess.
-- `synapse.manifest.json` — the closed sets this intake must resolve to: 6 archetypes (`workbench`, `object`, `settings`, `guided`, `console`, `home`), 12 recipes (`R1`–`R12`), 57 components, and the `never` list.
+- `synapse.manifest.json` — the closed sets this intake must resolve to: 6 archetypes (`workbench`, `object`, `settings`, `guided`, `console`, `home`), 16 recipes (`R1`–`R16`), 57 components, and the `never` list.
 - `prd-template.md` — the PRD this skill fills. `tools/screen-intent.schema.json` — the JSON this skill emits.
 
 ## Gap analysis first — ask only what's missing
@@ -39,7 +39,7 @@ Ask only the fields the gap analysis flagged **Partial** or **Missing**, in this
 3. **Real data (no placeholders).** Actual field names, realistic quantities, and real KO **and** EN strings — short and long. Refuse "Lorem ipsum" / "Item 1". → PRD *Data / content examples*.
 4. **States (walk every one).** Confirm behavior for `default`, `empty`, `loading`, `error`, `overflow / long content`, `long Korean string`, and each `permission variant`. → PRD *Required states*, schema `states` + SY108.
 5. **Permissions.** The viewer role, any plan-gated capabilities hidden, any org-obtainable capabilities shown-but-disabled with a reason. → schema `permissions` + SY109.
-6. **Requirement → composition matching.** Map the need to `archetype → regions → components (manifest keys) + recipes (R1–R12)`. Prefer a recipe before composing from scratch. Every component named must be an exact manifest key. → schema `regions`.
+6. **Requirement → composition matching.** Map the need to `archetype → regions → components (manifest keys) + recipes (R1–R16)`. Prefer a recipe before composing from scratch. Every component named must be an exact manifest key. → schema `regions`.
 7. **Anti-patterns.** Pull the `never`-list items and the archetype's anti-patterns relevant to this screen and state them as explicit "do NOT" lines (negative instructions measurably improve output). → PRD *Constraints & anti-patterns*.
 8. **Acceptance criteria + open questions** for the reviewer. → PRD *Acceptance criteria*, *Open questions*.
 

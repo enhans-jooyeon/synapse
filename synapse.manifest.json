@@ -56,7 +56,11 @@
   "R9": "stepper",
   "R10": "topbar",
   "R11": "key-value panel",
-  "R12": "empty page"
+  "R12": "empty page",
+  "R13": "error page",
+  "R14": "exported report",
+  "R15": "batch-run results",
+  "R16": "builder workbench shell"
  },
  "never": [
   "raw color/spacing/radius/type values (semantic tokens + typography styles only)",

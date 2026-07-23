@@ -15,7 +15,7 @@
         "properties": {
           "id": { "type": "string" },
           "components": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-          "recipes": { "type": "array", "items": { "pattern": "^R([1-9]|1[0-2])$" } }
+          "recipes": { "type": "array", "items": { "pattern": "^R([1-9]|1[0-6])$" } }
         }
       }
     },

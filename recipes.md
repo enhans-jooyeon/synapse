@@ -119,3 +119,15 @@ Agent-generated reports leave the app; the export is a Synapse surface with no i
 ## R15 · Batch-run results
 
 Queue (ai-patterns §29) completion lands here: Table, one row per input item — mono source name · status (dot+text) · count/metric columns (tabular) · per-row 열기 link; failed rows keep 다시 시도 inline. Header carries the aggregate line and 결과 내보내기 (`secondary`). Empty/failed-all uses the standard error EmptyState. Jurisdiction: Workbench archetype.
+
+## R16 · Builder workbench shell
+
+The `workbench` layout every builder shares — Workflow Builder, Pipeline Builder, and the dev-stage Replay/CUA builder. A three-region shell with a Build/Run lifecycle; the reusable generalization of those builder screens (compose this, don't re-invent per builder).
+
+- **Header row (R1):** title + a **Build / Run** `SegmentedControl` + trailing actions — `primary` "Deploy" (or "Save"), `ghost` version-history; a deployed/draft `Badge`.
+- **Body = `SplitPanel`** (workbench, ratio persists, panes scroll independently):
+  - **Left pane (~320):** the intent surface — a docked `Composer` agent chat (Replay/CUA), or a `NodePalette` (Workflow/Pipeline). Collapsible.
+  - **Center pane:** the `GraphCanvas` (Build mode: nodes/ports/edges editable) — or a preview canvas for screen-building.
+  - **Right pane (~320):** the inspector — a `DescriptionList` or form for the selected node/step; collapsible.
+- **Run mode:** the canvas goes read-only with per-node status overlays, and a **`RunLog`** opens (bottom strip or the inspector pane). HITL steps surface a `ProposalCard`; failures show a RunLog error row + Retry.
+- **Typography/spacing:** header per R1; `SplitPanel` min widths 280/200 (KO labels need the floor). Jurisdiction: Workbench archetype only — never Settings/Guided (fixed-layout).

@@ -12,6 +12,7 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
   - **AppLauncher** — the app tile-grid overlay.
   - Manifest rebuilt; `build_manifest.py` `C` set extended in lockstep.
   - Added `preview.html` component-browser stories (token-only demos + When/Avoid/Anti/Where guidance) for all five, so they show in the browser.
+- **New recipe R16 · Builder workbench shell** — the reusable `workbench` layout the Workflow, Pipeline, and dev-stage Replay/CUA builders share (generalizes the twin's replay-shell screens, which are too app-specific to be components). Also **reconciled the recipe cap**: the screen-intent schema and manifest recipe set were stuck at R1–R12 while `recipes.md` already defined R13–R15 — extended both to **R1–R16** (and the intake skill) so all recipes are actually declarable.
 
 ## 1.0.1 — 2026-07-23 — v1 cleanup release
 
