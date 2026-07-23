@@ -13,6 +13,7 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
   - Manifest rebuilt; `build_manifest.py` `C` set extended in lockstep.
   - Added `preview.html` component-browser stories (token-only demos + When/Avoid/Anti/Where guidance) for all five, so they show in the browser.
 - **New recipe R16 · Builder workbench shell** — the reusable `workbench` layout the Workflow, Pipeline, and dev-stage Replay/CUA builders share (generalizes the twin's replay-shell screens, which are too app-specific to be components). Also **reconciled the recipe cap**: the screen-intent schema and manifest recipe set were stuck at R1–R12 while `recipes.md` already defined R13–R15 — extended both to **R1–R16** (and the intake skill) so all recipes are actually declarable. Also filled the **preview.html Recipes group**: it demoed only 4 recipes (R1/R4/R6/R9); added token-only stories for the other 12 (R2/R3/R5/R7/R8/R10–R16) so all 16 show in the browser.
+- **New harness CLI — `tools/synapse.py`** (the "tools" harness element): `lookup <name>` verifies a component/token/recipe/archetype is real and prints its rules — or the closest matches if not (prevents off-manifest components (RC6) and off-token values (RC3) *at generation time*, not just at the gate); `validate <intent.json>` and `gate` wrap `validate.py`; `list` prints a closed set. Wired into `screen-intake-skill.md` and `design-cycle.md` so the generating agent calls it. Stdlib-only; wrap-able as an MCP server later.
 
 ## 1.0.1 — 2026-07-23 — v1 cleanup release
 

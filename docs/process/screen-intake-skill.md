@@ -16,6 +16,7 @@ Just a one-line intent from the user, e.g. *"a screen where an operator reviews 
 
 - `product-context.md` — the AgentOS product model (entities, roles, JTBD, IA, tone). **The user's intent must map onto a real product surface here.** If this file doesn't exist yet, say so and ask the user for the product facts inline; do not guess.
 - `synapse.manifest.json` — the closed sets this intake must resolve to: 6 archetypes (`workbench`, `object`, `settings`, `guided`, `console`, `home`), 16 recipes (`R1`–`R16`), 57 components, and the `never` list.
+- **Tools (`tools/synapse.py`)** — call these instead of reading the manifest by hand: `synapse lookup <name>` (is a component / token / recipe / archetype real? prints its rules, or the closest matches if not), `synapse validate <intent.json>` (validate the screen-intent), `synapse gate` (full contract check).
 - `prd-template.md` — the PRD this skill fills. `tools/screen-intent.schema.json` — the JSON this skill emits.
 
 ## Gap analysis first — ask only what's missing
@@ -39,7 +40,7 @@ Ask only the fields the gap analysis flagged **Partial** or **Missing**, in this
 3. **Real data (no placeholders).** Actual field names, realistic quantities, and real KO **and** EN strings — short and long. Refuse "Lorem ipsum" / "Item 1". → PRD *Data / content examples*.
 4. **States (walk every one).** Confirm behavior for `default`, `empty`, `loading`, `error`, `overflow / long content`, `long Korean string`, and each `permission variant`. → PRD *Required states*, schema `states` + SY108.
 5. **Permissions.** The viewer role, any plan-gated capabilities hidden, any org-obtainable capabilities shown-but-disabled with a reason. → schema `permissions` + SY109.
-6. **Requirement → composition matching.** Map the need to `archetype → regions → components (manifest keys) + recipes (R1–R16)`. Prefer a recipe before composing from scratch. Every component named must be an exact manifest key. → schema `regions`.
+6. **Requirement → composition matching.** Map the need to `archetype → regions → components (manifest keys) + recipes (R1–R16)`. Prefer a recipe before composing from scratch. Every component named must be an exact manifest key — **verify each with `synapse lookup <name>`**; if it returns NOT FOUND, use the suggested closest match or log an RC6. → schema `regions`.
 7. **Anti-patterns.** Pull the `never`-list items and the archetype's anti-patterns relevant to this screen and state them as explicit "do NOT" lines (negative instructions measurably improve output). → PRD *Constraints & anti-patterns*.
 8. **Acceptance criteria + open questions** for the reviewer. → PRD *Acceptance criteria*, *Open questions*.
 
@@ -62,7 +63,7 @@ If step 6 needs a component that exists in the **manifest/spec** but not yet as 
 ## Outputs (the generation-ready package)
 
 1. **Filled PRD** using `prd-template.md`, with the *Generation instructions* block placed first (it becomes the prompt).
-2. **screen-intent JSON** conforming to the schema, then **validated**: `python3 tools/validate.py page <file>` must pass. Errors mean fix the *declaration*, not the rendering.
+2. **screen-intent JSON** conforming to the schema, then **validated**: `python3 tools/synapse.py validate <file>` must pass (wraps `validate.py page`). Errors mean fix the *declaration*, not the rendering.
 3. **The assembled generation prompt** — PRD generation-block + the validated intent + the explicit anti-pattern "do NOT" lines.
 
 ## Handoff

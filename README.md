@@ -31,6 +31,7 @@ Anything a machine can check — token use, component provenance, contrast, requ
 | Specs (English — Korean rendered on demand in the hub) | `foundations.md` · `components.md` (57) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` |
 | Machine index for agents | `synapse.manifest.json` (built by `tools/build_manifest.py`; agents load this first) |
 | DS-repo gate | `tools/validate.py` — `tokens` / `ui` / `page` modes (enforces this repo's own artifacts) |
+| Harness CLI (generation-time tools) | `tools/synapse.py` — `lookup` (is a component/token/recipe/archetype real? + closest-match) · `validate` (screen-intent) · `gate` · `list` |
 | Component browser + sample pages | `preview.html` |
 | React + Storybook workspace | `storybook/` (seed: Button · Badge · Input · Card) |
 | **Process doctrine** | `docs/process/` — design-development cycle (`design-cycle.md`), guided intake (`screen-intake-skill.md`), refinement loop (`harness-refinement-protocol.md` + `harness-refinement-register.md`), review protocol + PRD template, `.github/PULL_REQUEST_TEMPLATE/ui_review.md` |
@@ -45,6 +46,11 @@ Anything a machine can check — token use, component provenance, contrast, requ
 python3 tools/validate.py all                                # full gate → 0 error(s), 0 warning(s)
 python3 tools/validate.py page examples/screen-intent.example.json
 python3 tools/build_manifest.py                              # after any components.md change
+
+# harness CLI (what a generating agent calls)
+python3 tools/synapse.py lookup FlowNode                     # is it real? show its rules (or closest matches)
+python3 tools/synapse.py validate examples/screen-intent.example.json
+python3 tools/synapse.py gate
 ```
 
 ## Status (read before adopting)

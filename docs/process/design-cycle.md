@@ -43,7 +43,7 @@ Triage exists to prevent **research theater**. Do not run Frame on a simple sett
 
 **Runs on.** `screen-intake-skill.md`.
 
-**Gate to advance.** All intake refusal gates clear (real data, known viewer role, decided states, on-manifest need, product grounding) **and** the screen-intent JSON passes `python3 tools/validate.py page <file>`. Off-manifest needs that are spec'd but not yet implemented are logged as RC6 in the refinement register.
+**Gate to advance.** All intake refusal gates clear (real data, known viewer role, decided states, on-manifest need — verified with `synapse lookup`, product grounding) **and** the screen-intent JSON passes `synapse validate <file>`. Off-manifest needs that are spec'd but not yet implemented are logged as RC6 in the refinement register.
 
 **Hands to Generate.** A filled PRD (`prd-template.md`), a validated screen-intent JSON, and the assembled generation prompt (generation-block + intent + explicit anti-pattern "do NOT" lines).
 
@@ -61,7 +61,7 @@ Triage exists to prevent **research theater**. Do not run Frame on a simple sett
 
 **Purpose.** Separate machine-checkable compliance from human judgment.
 
-**Runs on.** The CI gate first (`validate.py all` / `tooling/product-gates`), then the human review in `design-review-protocol.md`.
+**Runs on.** The CI gate first (`synapse gate`, i.e. `validate.py all` / `tooling/product-gates`), then the human review in `design-review-protocol.md`.
 
 **Gate to advance.** **The gate must be green before a human looks.** A human hand-checking tokens, spacing, or component provenance means the harness has a hole — fix the hole, don't add a review step. Human review is judgment-only and yields one of three outcomes (approve / revise-in-scope / reject).
 
