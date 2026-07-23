@@ -31,7 +31,7 @@ Triage exists to prevent **research theater**. Do not run Frame on a simple sett
 
 **Who.** Author (PM–engineer pair), with real product knowledge — not invented personas.
 
-**Runs on.** The design plugin's `user-research` + `research-synthesis`, tailored to AgentOS via `product-context.md`. These structure and elicit; they must not fabricate users or findings.
+**Runs on.** The design plugin's `user-research` + `research-synthesis`, tailored to AgentOS via `product-context.md`. These structure and elicit; they must not fabricate users or findings. **Bounded reference research** (see Tools below) may inform *structure and interaction* here — never visual style.
 
 **Gate to advance.** A problem statement grounded in a real product surface (`product-context.md`) and a named real user role. If these can't be produced from real knowledge, the screen isn't ready — get the facts, don't guess.
 
@@ -74,6 +74,13 @@ Triage exists to prevent **research theater**. Do not run Frame on a simple sett
 **Runs on.** `harness-refinement-protocol.md`, logged in `harness-refinement-register.md`.
 
 **Gate to advance (loop closure).** Each confirmed defect is root-caused (RC1–RC6) and routed to a harness fix; proposed edits are held until June approves and pushes. Applied edits feed back into the contract, raising the floor for every future run of the cycle.
+
+## Tools the harness uses
+
+**Strictly code-based** — no Figma, Canva, or design-inspiration boards in the loop. They pull toward a look the contract rejects and add a design surface to keep in sync; the whole system is code + gate.
+
+- **Internal — `tools/synapse.py`** (the harness CLI): `lookup` (is a component/token/recipe/archetype real? + closest-match), `validate` (screen-intent), `gate` (full contract), `list`. The on-manifest and validation checks in Intake and Review run through it — called, not remembered.
+- **External — bounded reference research (Frame + maintainer refinement only).** **Tool-agnostic** — this is a *capability* (web search + a way to view a live UI reference), not a specific product: fulfilled by whatever the generation tool offers (its own web search/browsing, or a browser MCP like Playwright), and at the floor by a **human pasting the reference URL or screenshot** — so it needs no particular tool. Used to study how a *class of screen* is structured and behaves (e.g., how a workflow builder arranges canvas/palette/inspector; how a pivot exposes drill-downs). **Guardrail:** web UI skews toward consumer-app polish (shadows, color, decoration) — the opposite of Synapse's engineered restraint. A reference is a source of *pattern and interaction* ideas only, re-expressed in Synapse's character and filtered through the refinement rubric's **Tier B** before it may influence output. It informs **Frame** (net-new/ambiguous surfaces) and the maintainer's refinement (studying prior art before proposing a `design.md` reference pattern) — **never Generate directly, and never Intake's data** (that stays real, drawn from the product/ontology).
 
 ## How this reaches the team
 
