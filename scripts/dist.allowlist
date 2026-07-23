@@ -4,23 +4,15 @@
 # source repo (proposals, HANDOFF, DISTRIBUTION, preview.html, storybook internals, …).
 # build-dist.mjs also GENERATES: README.md (consumer) + CHANGELOG.md (released versions only).
 
-# --- The contract + specs (bilingual; EN authoritative) ---
+# --- The contract + specs (English; Korean is on-demand in the hub, not shipped) ---
 design.md
-design.ko.md
 foundations.md
-foundations.ko.md
 components.md
-components.ko.md
 recipes.md
-recipes.ko.md
 patterns.md
-patterns.ko.md
 ai-patterns.md
-ai-patterns.ko.md
 content.md
-content.ko.md
 icons.md
-icons.ko.md
 
 # --- Tokens + machine index (load-first for agents) ---
 tokens/synapse.tokens.json
