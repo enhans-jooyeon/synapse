@@ -1422,8 +1422,8 @@ team: finance</pre>
       <div class="story" data-group="Components" data-title="GraphCanvas · FlowNode · Edge" data-doc="components.md · GraphCanvas / FlowNode / Edge" id="s-graphcanvas">
         <p class="desc">The node-graph editor behind the workbench builders (Workflow, Pipeline, Ontology Link/Lineage): a pannable, zoomable canvas of outlined node cards joined by typed edges, with a grouped node palette and a floating controls cluster. Status is a dot + glyph, never hue alone; one connector style system-wide.</p>
         <h3 class="sub">Build mode — palette · canvas · nodes · ports · edge · controls</h3>
-        <div style="display:flex; max-width: 720px; height: 280px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
-          <div style="width: 150px; flex:none; background: var(--sy-bg-surface); border-right: 1px solid var(--sy-border-subtle); padding: var(--sy-space-8);">
+        <div style="display:flex; max-width: 540px; height: 260px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
+          <div style="width: 140px; flex:none; background: var(--sy-bg-surface); border-right: 1px solid var(--sy-border-subtle); padding: var(--sy-space-8);">
             <div class="sy-type-micro" style="color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-4);">Extract</div>
             <div class="sy-type-body-sm" style="height:28px; display:flex; align-items:center; padding: 0 var(--sy-space-6); border-radius: var(--sy-radius-xs);">Data (DB)</div>
             <div class="sy-type-body-sm" style="height:28px; display:flex; align-items:center; padding: 0 var(--sy-space-6);">Data (HTTP)</div>
@@ -1431,13 +1431,13 @@ team: finance</pre>
             <div class="sy-type-body-sm" style="height:28px; display:flex; align-items:center; padding: 0 var(--sy-space-6);">LLM Operator</div>
           </div>
           <div style="flex:1; position:relative; background: var(--sy-bg-sunken);">
-            <svg style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;"><path d="M 208 74 C 250 74 250 152 292 152" fill="none" stroke="var(--sy-border-strong)" stroke-width="1.5"/></svg>
-            <div style="position:absolute; left: 36px; top: 48px; width: 168px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);">
+            <svg style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;"><path d="M 176 70 C 208 82 190 148 200 154" fill="none" stroke="var(--sy-border-strong)" stroke-width="1.5"/></svg>
+            <div style="position:absolute; left: 16px; top: 40px; width: 160px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);">
               <div style="display:flex; align-items:center; gap: var(--sy-space-6); padding: var(--sy-space-6) var(--sy-space-8); border-bottom: 1px solid var(--sy-border-subtle);"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/></svg><span class="sy-type-label">Agent</span><span style="margin-left:auto; width:8px;height:8px;border-radius:50%; background: var(--sy-status-success);"></span></div>
               <div class="sy-type-caption" style="padding: var(--sy-space-6) var(--sy-space-8); color: var(--sy-fg-secondary);">Classify reviews</div>
               <span style="position:absolute; right:-5px; top:50%; width:8px;height:8px; transform:translateY(-50%); background: var(--sy-bg-surface); border: 1px solid var(--sy-border-strong);"></span>
             </div>
-            <div style="position:absolute; left: 292px; top: 126px; width: 168px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-selected); border-radius: var(--sy-radius-md);">
+            <div style="position:absolute; left: 200px; top: 124px; width: 160px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-selected); border-radius: var(--sy-radius-md);">
               <div style="display:flex; align-items:center; gap: var(--sy-space-6); padding: var(--sy-space-6) var(--sy-space-8); border-bottom: 1px solid var(--sy-border-subtle);"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span class="sy-type-label">HITL</span><span style="margin-left:auto; color: var(--sy-fg-tertiary);" class="sy-type-micro">running</span></div>
               <div class="sy-type-caption" style="padding: var(--sy-space-6) var(--sy-space-8); color: var(--sy-fg-secondary);">Await approval</div>
               <span style="position:absolute; left:-5px; top:50%; width:8px;height:8px; transform:translateY(-50%); background: var(--sy-bg-surface); border: 1px solid var(--sy-border-strong);"></span>
@@ -2434,9 +2434,10 @@ team: finance</pre>
   var CAT = {
     'Actions': ['s-button', 's-buttongroup'],
     'Forms & selection': ['s-input', 's-select', 's-combobox', 's-datepicker', 's-choices', 's-choicecard', 's-segmented', 's-slider', 's-fileupload', 's-chip'],
-    'Data display': ['s-badge', 's-avatar', 's-card', 's-table', 's-desclist', 's-chart', 's-timeline', 's-notifications', 's-tree', 's-code', 's-calendar-sheet', 's-contextcard'],
+    'Data display': ['s-badge', 's-avatar', 's-card', 's-table', 's-pivottable', 's-desclist', 's-chart', 's-timeline', 's-notifications', 's-tree', 's-code', 's-calendar-sheet', 's-contextcard'],
+    'Builders': ['s-graphcanvas', 's-runlog'],
     'Navigation': ['s-nav', 's-accordion', 's-splitpanel'],
-    'Overlays': ['s-modal', 's-hovercard', 's-popconfirm', 's-contextmenu'],
+    'Overlays': ['s-modal', 's-hovercard', 's-popconfirm', 's-contextmenu', 's-assistantpanel', 's-applauncher'],
     'Feedback': ['s-banner', 's-toast', 's-tooltip', 's-loading', 's-empty']
   };
   var catOf = {}; Object.keys(CAT).forEach(function (c) { CAT[c].forEach(function (id) { catOf[id] = c; }); });
