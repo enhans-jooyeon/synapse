@@ -1,6 +1,6 @@
 # Synapse — design system for AgentOS
 
-**Version 1.0.0 · Enhans · This file is the entry point. Read it before generating any UI.**
+**Version 1.0.1 · Enhans · This file is the entry point. Read it before generating any UI.**
 
 Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. It is built to be operated primarily by AI agents on behalf of non-designers, which means it is written as a *contract*, not an inspiration board: closed sets, enumerated options, explicit decision rules. An agent following this file mechanically should produce UI indistinguishable from designer-made AgentOS screens.
 
