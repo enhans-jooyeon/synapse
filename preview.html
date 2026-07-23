@@ -1909,12 +1909,36 @@ team: finance</pre>
         </div>
       </div>
 
+      <div class="story" data-group="Recipes" data-title="Section header (R2)" data-doc="recipes.md R2" id="s-r-section">
+        <p class="desc">Above any content section: title + count Badge + ≤1 secondary/ghost action, and an optional one-line description. Never more than one sentence.</p>
+        <div style="max-width: 560px;">
+          <div style="display:flex; align-items:center; gap: var(--sy-space-8);"><span class="sy-type-heading-lg" lang="ko">최근 실행</span><span class="badge badge-neutral">24</span><button class="btn btn-ghost btn-sm" type="button" style="margin-left:auto;" lang="ko">모두 보기</button></div>
+          <p class="sy-type-body-sm" style="color: var(--sy-fg-secondary); margin-top: var(--sy-space-4);" lang="ko">지난 7일간 실행된 Workflow입니다.</p>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Card header (R3)" data-doc="recipes.md R3" id="s-r-cardhead">
+        <p class="desc">Inside a Card: heading-md + optional trailing ghost action or SegmentedControl; a full-bleed <code>border.subtle</code> rule below at card padding.</p>
+        <div class="card" style="max-width: 480px; padding: 0;">
+          <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-16); border-bottom: 1px solid var(--sy-border-subtle);"><span class="sy-type-heading-md" lang="ko">연동</span><button class="btn btn-ghost btn-icon btn-sm" type="button" style="margin-left:auto;" aria-label="More"><svg class="icon" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button></div>
+          <div class="sy-type-body-sm" style="padding: var(--sy-space-16); color: var(--sy-fg-secondary);" lang="ko">카드 본문 콘텐츠는 헤더 아래에 놓입니다.</div>
+        </div>
+      </div>
+
       <div class="story" data-group="Recipes" data-title="Stat grid (R4)" data-doc="recipes.md R4" id="s-r-stats">
         <p class="desc">Equal columns; delta colored by direction of goodness, not direction of change.</p>
         <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--sy-space-16);">
           <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">주간 실행</div><div style="display:flex; align-items:flex-end; justify-content:space-between; gap: var(--sy-space-8);"><div class="sy-type-stat">1,204</div><svg width="64" height="24" viewBox="0 0 64 24" fill="none" aria-hidden="true" style="flex:none; margin-bottom: var(--sy-space-4);"><polyline points="1,18 11,14 21,16 31,10 41,13 51,6 63,9" stroke="var(--sy-viz-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="delta" style="color: var(--sy-status-success);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>12%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
           <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">평균 소요</div><div class="sy-type-stat">4m 02s</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="delta" style="color: var(--sy-status-success);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 17l-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></svg>8%</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
           <div class="card"><div class="sy-type-label" style="color: var(--sy-fg-secondary);" lang="ko">실패율</div><div class="sy-type-stat">2.1%</div><div class="row" style="gap: var(--sy-space-6); margin-top: var(--sy-space-4);"><span class="delta" style="color: var(--sy-status-danger);"><svg class="icon" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>0.4%p</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">전주 대비</span></div></div>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Action pair & footer (R5)" data-doc="recipes.md R5" id="s-r-actions">
+        <p class="desc">Footer pair: secondary "Cancel" + primary confirm (always rightmost, gap <code>space-8</code>); destructive swaps the primary for a <code>danger</code> button that names consequences. Never two adjacent primaries.</p>
+        <div class="col" style="gap: var(--sy-space-16); max-width: 480px;">
+          <div style="display:flex; justify-content:flex-end; gap: var(--sy-space-8); border-top: 1px solid var(--sy-border-subtle); padding-top: var(--sy-space-12);"><button class="btn btn-secondary" type="button" lang="ko">취소</button><button class="btn btn-primary" type="button" lang="ko">저장</button></div>
+          <div style="display:flex; justify-content:flex-end; gap: var(--sy-space-8); border-top: 1px solid var(--sy-border-subtle); padding-top: var(--sy-space-12);"><button class="btn btn-secondary" type="button" lang="ko">취소</button><button class="btn btn-danger" type="button" lang="ko">실행 14개 삭제</button></div>
         </div>
       </div>
 
@@ -1926,6 +1950,30 @@ team: finance</pre>
           <div class="field" style="width: 160px;"><div class="ctrl"><input value="지난 7일" lang="ko" readonly style="cursor:pointer;"><svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary);"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg></div></div>
           <button class="btn btn-ghost" type="button" lang="ko">해제</button>
           <span style="margin-left:auto;"><div class="seg"><button type="button" class="on" style="height:28px;" lang="ko">목록</button><button type="button" style="height:28px;" lang="ko">그리드</button></div></span>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Toolbar (R7)" data-doc="recipes.md R7" id="s-r-toolbar">
+        <p class="desc">Dense workbench control strip (height 40): icon-buttons in groups separated by full-height hairline dividers; text buttons ghost/secondary; max 3 groups, overflow into ⋯.</p>
+        <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:40px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); padding: 0 var(--sy-space-8); max-width: 520px;">
+          <button class="btn btn-ghost btn-icon btn-sm" aria-label="Add" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="btn btn-ghost btn-icon btn-sm" aria-label="Delete" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+          <span style="width:1px; height:20px; background: var(--sy-border-subtle); margin: 0 var(--sy-space-12);"></span>
+          <button class="btn btn-ghost btn-sm" type="button" lang="ko">정렬</button>
+          <button class="btn btn-ghost btn-sm" type="button" lang="ko">그룹</button>
+          <button class="btn btn-ghost btn-icon btn-sm" style="margin-left:auto;" aria-label="More" type="button"><svg class="icon" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Form section (R8)" data-doc="recipes.md R8" id="s-r-form">
+        <p class="desc">heading-md + optional description → single-column stacked fields → section divider. Every 3–6 fields start a new section.</p>
+        <div style="max-width: 460px;">
+          <div class="sy-type-heading-md" lang="ko" style="margin-bottom: var(--sy-space-4);">기본 정보</div>
+          <p class="sy-type-body-sm" style="color: var(--sy-fg-secondary); margin-bottom: var(--sy-space-16);" lang="ko">에이전트의 이름과 설명입니다.</p>
+          <div class="col" style="gap: var(--sy-space-16);">
+            <div class="field"><div class="sy-type-label" style="margin-bottom: var(--sy-space-4);" lang="ko">이름</div><div class="ctrl"><input value="주간 보고서 에이전트" lang="ko"></div></div>
+            <div class="field"><div class="sy-type-label" style="margin-bottom: var(--sy-space-4);" lang="ko">설명</div><div class="ctrl"><input placeholder="설명을 입력하세요" lang="ko"></div></div>
+          </div>
         </div>
       </div>
 
@@ -1942,6 +1990,83 @@ team: finance</pre>
 
 
 
+
+      <div class="story" data-group="Recipes" data-title="Topbar (R10)" data-doc="recipes.md R10" id="s-r-topbar">
+        <p class="desc">App-frame top strip (height 48, in addition to Sidebar): workspace switcher — a 20px squared monogram tile (the frame's one deliberate dark object) + name + chevron; right side: notification bell, help, Avatar.</p>
+        <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-md); padding: 0 var(--sy-space-12); max-width: 560px;">
+          <button class="btn btn-ghost btn-sm" type="button" style="gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius: var(--sy-radius-xs); background: var(--sy-bg-inverse); color: var(--sy-fg-inverse); display:inline-flex; align-items:center; justify-content:center; font-weight: var(--sy-weight-semibold); font-size:11px;">E</span><span lang="ko">인핸스</span><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+          <span style="margin-left:auto; display:flex; align-items:center; gap: var(--sy-space-8);">
+            <button class="btn btn-ghost btn-icon btn-sm" aria-label="Notifications" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+            <button class="btn btn-ghost btn-icon btn-sm" aria-label="Help" type="button"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></button>
+            <span class="avatar av-32 sy-type-label-sm" style="width:32px;height:32px;border-radius:50%; background: var(--sy-bg-sunken); color: var(--sy-fg-secondary); display:inline-flex; align-items:center; justify-content:center;">JC</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Key-value panel (R11)" data-doc="recipes.md R11" id="s-r-keyvalue">
+        <p class="desc">Object summary: Card + DescriptionList (side-by-side), grouped under heading-sm titles every ≤10 rows. Standard order: identity → state → timestamps → configuration.</p>
+        <div class="card" style="max-width: 460px;">
+          <dl style="display:grid; grid-template-columns: 110px 1fr; gap: var(--sy-space-8) var(--sy-space-16); margin:0;">
+            <dt class="sy-type-body-sm" style="color: var(--sy-fg-secondary);" lang="ko">이름</dt><dd class="sy-type-body-sm" style="margin:0;" lang="ko">주간 보고서 에이전트</dd>
+            <dt class="sy-type-body-sm" style="color: var(--sy-fg-secondary);">ID</dt><dd class="sy-type-body-sm" style="margin:0; font-family: var(--sy-font-mono);">agt_9d21</dd>
+            <dt class="sy-type-body-sm" style="color: var(--sy-fg-secondary);" lang="ko">상태</dt><dd style="margin:0;"><span class="badge badge-info" lang="ko">진행 중</span></dd>
+            <dt class="sy-type-body-sm" style="color: var(--sy-fg-secondary);" lang="ko">소유자</dt><dd class="sy-type-body-sm" style="margin:0;">June</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Empty page — first run (R12)" data-doc="recipes.md R12" id="s-r-emptypage">
+        <p class="desc">Full content-area EmptyState, Guided styling: display-scale title, ≤2-sentence explanation, one primary action (pill silhouette sanctioned here) + optional ghost. Resist filling the whitespace.</p>
+        <div style="border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-lg); padding: var(--sy-space-48) var(--sy-space-24); text-align:center; max-width: 560px;">
+          <span style="width:48px;height:48px;border-radius:50%; background: var(--sy-bg-sunken); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-16);"><svg class="icon" style="color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h8a2 2 0 0 1 2 2v8"/></svg></span>
+          <div class="sy-type-heading-lg" lang="ko" style="margin-bottom: var(--sy-space-8);">첫 Workflow를 만들어 보세요</div>
+          <p class="sy-type-body-lg" style="color: var(--sy-fg-secondary); margin: 0 auto var(--sy-space-16); max-width: 380px;" lang="ko">에이전트가 반복 업무를 자동으로 실행하도록 Workflow를 구성합니다.</p>
+          <div style="display:flex; gap: var(--sy-space-8); justify-content:center;"><button class="btn btn-primary" type="button" style="border-radius: var(--sy-radius-full);" lang="ko">Workflow 만들기</button><button class="btn btn-ghost" type="button" lang="ko">자세히 보기</button></div>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Error page — 403/404/500 (R13)" data-doc="recipes.md R13" id="s-r-errorpage">
+        <p class="desc">Full content-area EmptyState, error flavor. 403 never reveals what the page contains; 404 offers "Go back"; 500 shows Retry + an incident reference. Chrome stays rendered — errors are content-region events.</p>
+        <div style="border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-lg); padding: var(--sy-space-48) var(--sy-space-24); text-align:center; max-width: 560px;">
+          <span style="width:48px;height:48px;border-radius:50%; background: var(--sy-status-danger-bg); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-16);"><svg class="icon" style="color: var(--sy-status-danger);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></span>
+          <div class="sy-type-heading-md" lang="ko" style="margin-bottom: var(--sy-space-8);">이 페이지에 접근할 권한이 없습니다</div>
+          <p class="sy-type-body-sm" style="color: var(--sy-fg-secondary); margin: 0 auto var(--sy-space-16); max-width: 360px;" lang="ko">담당자에게 권한을 요청하거나 홈으로 이동하세요.</p>
+          <button class="btn btn-secondary" type="button" lang="ko">홈으로</button>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Exported report (R14)" data-doc="recipes.md R14" id="s-r-report">
+        <p class="desc">Agent-generated report leaving the app: an A4 print surface with no interactivity — header (workspace + title), static content, footnote citations, and page numbers. The display family is not used in exports.</p>
+        <div style="max-width: 420px; border: 1px solid var(--sy-border-default); background: var(--sy-bg-page); box-shadow: var(--sy-shadow-raised); padding: var(--sy-space-24);">
+          <div style="display:flex; justify-content:space-between; border-bottom: 1px solid var(--sy-border-subtle); padding-bottom: var(--sy-space-8); margin-bottom: var(--sy-space-16);"><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">인핸스</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary);" lang="ko">주간 문의 보고서</span></div>
+          <div class="sy-type-heading-lg" lang="ko" style="margin-bottom: var(--sy-space-12);">주간 문의 분석</div>
+          <p class="sy-type-body-sm" style="color: var(--sy-fg-primary); margin-bottom: var(--sy-space-16);" lang="ko">지난주 문의는 총 328건으로 전주 대비 12% 증가했습니다.<sup class="sy-type-caption">1</sup> 상위 주제는 결제 오류와 로그인 문제였습니다.</p>
+          <div style="border-top: 1px solid var(--sy-border-subtle); padding-top: var(--sy-space-8); display:flex; justify-content:space-between;"><span class="sy-type-caption" style="color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums;">2026-07-09</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums;">1 / 3</span></div>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Batch-run results (R15)" data-doc="recipes.md R15" id="s-r-batch">
+        <p class="desc">Queue completion (ai-patterns §29): Table, one row per input — mono source · status (dot+text) · per-row action; failed rows keep 다시 시도. Header carries the aggregate line + 결과 내보내기. Partial success reports as partial.</p>
+        <div style="max-width: 560px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow:hidden;">
+          <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-8) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle);"><span class="sy-type-label" lang="ko">328건 중 312건 처리</span><button class="btn btn-secondary btn-sm" type="button" style="margin-left:auto;" lang="ko">결과 내보내기</button></div>
+          <table style="width:100%; border-collapse: collapse; font-variant-numeric: tabular-nums;"><tbody>
+            <tr style="border-bottom: 1px solid var(--sy-border-subtle);"><td class="sy-type-body-sm" style="padding: var(--sy-space-6) var(--sy-space-12); font-family: var(--sy-font-mono);">reviews_01.csv</td><td class="sy-type-body-sm" style="padding: var(--sy-space-6) var(--sy-space-12);"><span style="width:8px;height:8px;border-radius:50%; background: var(--sy-status-success); display:inline-block; margin-right: var(--sy-space-6);"></span><span lang="ko">완료</span></td><td class="sy-type-body-sm" style="text-align:right; padding: var(--sy-space-6) var(--sy-space-12);"><a href="#" lang="ko">열기</a></td></tr>
+            <tr><td class="sy-type-body-sm" style="padding: var(--sy-space-6) var(--sy-space-12); font-family: var(--sy-font-mono);">reviews_02.csv</td><td class="sy-type-body-sm" style="padding: var(--sy-space-6) var(--sy-space-12);"><span style="width:8px;height:8px;border-radius:50%; background: var(--sy-status-danger); display:inline-block; margin-right: var(--sy-space-6);"></span><span style="color: var(--sy-status-danger);" lang="ko">실패</span></td><td class="sy-type-body-sm" style="text-align:right; padding: var(--sy-space-6) var(--sy-space-12);"><a href="#" lang="ko">다시 시도</a></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <div class="story" data-group="Recipes" data-title="Builder workbench shell (R16)" data-doc="recipes.md R16" id="s-r-builder">
+        <p class="desc">The workbench layout every builder shares (Workflow, Pipeline, dev-stage Replay/CUA): a header with a Build/Run toggle over a SplitPanel of an intent pane · GraphCanvas · inspector. Run mode overlays per-node status and opens a RunLog.</p>
+        <div style="max-width: 600px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
+          <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-8) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle);"><span class="sy-type-label" lang="ko">가격 트래커 Workflow</span><span class="seg" style="margin-left: var(--sy-space-8);"><button type="button" class="on" style="height:28px;">Build</button><button type="button" style="height:28px;">Run</button></span><button class="btn btn-primary btn-sm" type="button" style="margin-left:auto;" lang="ko">배포</button></div>
+          <div style="display:flex; height: 190px;">
+            <div style="width: 140px; flex:none; border-right: 1px solid var(--sy-border-subtle); background: var(--sy-bg-surface); padding: var(--sy-space-8);"><div class="sy-type-micro" style="color: var(--sy-fg-tertiary);" lang="ko">노드</div><div class="sy-type-body-sm" style="height:28px; display:flex; align-items:center;">Agent</div><div class="sy-type-body-sm" style="height:28px; display:flex; align-items:center;">Condition</div></div>
+            <div style="flex:1; background: var(--sy-bg-sunken); position:relative;"><div style="position:absolute; left: var(--sy-space-16); top: var(--sy-space-16); width: 130px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); padding: var(--sy-space-6) var(--sy-space-8);"><span class="sy-type-label">Agent</span></div></div>
+            <div style="width: 150px; flex:none; border-left: 1px solid var(--sy-border-subtle); background: var(--sy-bg-surface); padding: var(--sy-space-8);"><div class="sy-type-micro" style="color: var(--sy-fg-tertiary);" lang="ko">인스펙터</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary); margin-top: var(--sy-space-6);" lang="ko">노드를 선택하세요</div></div>
+          </div>
+        </div>
+      </div>
 
       <div class="story" data-group="Sample pages" data-title="Home" data-doc="patterns.md §1F · R4 · Composer" id="s-sample-home">
         <p class="desc">The workspace's start surface (§1F): Artific greeting moment, hero metric strip with the actionable number emphasized, the human-in-the-loop approval queue first, agent shelf — and the Composer pinned at the bottom (sending opens a Console). <strong>Interactive:</strong> topbar as in Workbench.</p>
