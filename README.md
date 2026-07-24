@@ -31,10 +31,11 @@ Anything a machine can check — token use, component provenance, contrast, requ
 | Specs (English — Korean rendered on demand in the hub) | `foundations.md` · `components.md` (57) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` |
 | Machine index for agents | `synapse.manifest.json` (built by `tools/build_manifest.py`; agents load this first) |
 | DS-repo gate | `tools/validate.py` — `tokens` / `ui` / `page` modes (enforces this repo's own artifacts) |
-| Harness CLI (generation-time tools) | `tools/synapse.py` — `lookup` (is a component/token/recipe/archetype real? + closest-match) · `validate` (screen-intent) · `gate` · `list` |
+| Harness CLI (generation-time tools) | `tools/synapse.py` — `lookup` (is a component/token/recipe/archetype real? + closest-match) · `validate` (screen-intent) · `gate` · `list` · `digest` (mine the correction ledgers) |
+| Memory (maintainer-facing) | `docs/process/correction-ledger.md` + `feedback/` — per-screen fix records captured in PRs; `synapse digest` surfaces recurring LLM failures + DS-gap candidates |
 | Component browser + sample pages | `preview.html` |
 | React + Storybook workspace | `storybook/` (seed: Button · Badge · Input · Card) |
-| **Process doctrine** | `docs/process/` — design-development cycle (`design-cycle.md`), guided intake (`screen-intake-skill.md`), refinement loop (`harness-refinement-protocol.md` + `harness-refinement-register.md`), review protocol + PRD template, `.github/PULL_REQUEST_TEMPLATE/ui_review.md` |
+| **Process doctrine** | `docs/process/` — design-development cycle (`design-cycle.md`), guided intake (`screen-intake-skill.md`), refinement loop (`harness-refinement-protocol.md` + `harness-refinement-register.md`), correction ledger (`correction-ledger.md`), review protocol + PRD template, `.github/PULL_REQUEST_TEMPLATE/ui_review.md` |
 | **Distribution & rollout** | [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) — how this reaches the team + current status |
 | Product-repo gate bundle | `tooling/product-gates/` — drop-in ESLint/Tailwind/coverage gates for the product CI |
 | App Generation catalog | `app-generation/` — the App Builder's ECharts chart/component catalog, reconciled to v1.0.0 tokens (`app-generation/tokens-map.md`) |
@@ -51,6 +52,7 @@ python3 tools/build_manifest.py                              # after any compone
 python3 tools/synapse.py lookup FlowNode                     # is it real? show its rules (or closest matches)
 python3 tools/synapse.py validate examples/screen-intent.example.json
 python3 tools/synapse.py gate
+python3 tools/synapse.py digest                              # what LLMs keep getting wrong (reads feedback/)
 ```
 
 ## Status (read before adopting)

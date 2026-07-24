@@ -4,6 +4,8 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Memory element — the correction ledger** (`docs/process/correction-ledger.md` + `feedback/` + `synapse digest`): the harness's memory, pointed at the **maintainers**, not the generator (a generator-facing memory would be a shadow contract — durable lessons belong promoted into `design.md`/the gate). Each reviewed screen gets a `synapse-corrections` block captured **in the PR** (embedded in `.github/PULL_REQUEST_TEMPLATE/ui_review.md`): one `category | attribution | severity | source | note` line per fix needed to reach shippable, with closed field sets so entries aggregate. `synapse digest` rolls the collected blocks up into a pattern report — separating the harness-actionable signal (`llm-generation`/`contract-gap`/`gate-gap`) from taste and requirement churn, and flagging categories that recur (≥2) as **DS-gap candidates** to take to the refinement register. Auto-detectable fixes (token/state/provenance) come from the diff+gate; only the un-lintable ones are hand-tagged. Wired into `design-cycle.md` (Review captures, Refine consumes). GitHub-PR auto-harvest lands once the connector is authorized; interim, blocks are dropped into `feedback/`.
+
 - **Five component types added (52 → 57)**, extracted from the AOS digital twin (`proposals/2026-07-23-twin-component-candidates.md`) and specified to the Synapse contract — spec-only, not yet implemented in `storybook/`:
   - **GraphCanvas · FlowNode · Edge** — the node-graph editor for the Workflow / Pipeline / Ontology-Link builders (the biggest prior `workbench` coverage gap).
   - **RunLog** — hierarchical execution log (run → step → line).

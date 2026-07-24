@@ -42,3 +42,24 @@
 
 ### Deviations needing explicit sign-off
 -
+
+### Correction ledger (fill as you fix — this is the harness's memory)
+
+> One `- category | attribution | severity | source | note` line per fix needed to get from the generated output to what ships. `auto` lines are pre-filled from the diff/gate; add the `manual` (judgment) ones as you review. Nothing to fix? Write `- none`. Schema + category/attribution lists: [`docs/process/correction-ledger.md`](../../docs/process/correction-ledger.md). Harvested by `synapse digest`, so **keep the fields closed** — no free text in the first four columns.
+
+```synapse-corrections
+screen:
+archetype:
+harness_version:
+- category | attribution | severity | source | note
+```
+
+<!--
+category:    token | component-provenance | state-coverage | permission-context | voice-content |
+             primary-action | hierarchy | layout-alignment | density | character-drift |
+             interaction | copy | other
+attribution: llm-generation | contract-gap | gate-gap | prompt-gap | reviewer-preference | requirement-change
+severity:    blocker | major | minor
+source:      auto | manual
+-->
+

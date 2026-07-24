@@ -65,13 +65,15 @@ Triage exists to prevent **research theater**. Do not run Frame on a simple sett
 
 **Gate to advance.** **The gate must be green before a human looks.** A human hand-checking tokens, spacing, or component provenance means the harness has a hole — fix the hole, don't add a review step. Human review is judgment-only and yields one of three outcomes (approve / revise-in-scope / reject).
 
+**Captures the correction ledger.** As the reviewer fixes, they fill the `synapse-corrections` block in the PR (`correction-ledger.md`) — one line per fix, tagged by cause. This is the harness's **memory**: the raw evidence of what generation got wrong, harvested later by `synapse digest`.
+
 **Hands to Refine.** Any dissatisfaction, defect, or judgment miss — especially outputs that passed the gate but still fall short.
 
 ## Phase 5 — Refine
 
 **Purpose.** Convert dissatisfaction into a *harness* improvement, not a one-off screen fix. Closes the loop back to the contract every earlier phase depends on.
 
-**Runs on.** `harness-refinement-protocol.md`, logged in `harness-refinement-register.md`.
+**Runs on.** `harness-refinement-protocol.md`, logged in `harness-refinement-register.md`. Driven by evidence, not by the most-recent screen: `synapse digest` rolls up the correction ledgers (`correction-ledger.md`) to show what LLM generation *keeps* getting wrong and which DS elements recur as gaps.
 
 **Gate to advance (loop closure).** Each confirmed defect is root-caused (RC1–RC6) and routed to a harness fix; proposed edits are held until June approves and pushes. Applied edits feed back into the contract, raising the floor for every future run of the cycle.
 
@@ -79,7 +81,7 @@ Triage exists to prevent **research theater**. Do not run Frame on a simple sett
 
 **Strictly code-based** — no Figma, Canva, or design-inspiration boards in the loop. They pull toward a look the contract rejects and add a design surface to keep in sync; the whole system is code + gate.
 
-- **Internal — `tools/synapse.py`** (the harness CLI): `lookup` (is a component/token/recipe/archetype real? + closest-match), `validate` (screen-intent), `gate` (full contract), `list`. The on-manifest and validation checks in Intake and Review run through it — called, not remembered.
+- **Internal — `tools/synapse.py`** (the harness CLI): `lookup` (is a component/token/recipe/archetype real? + closest-match), `validate` (screen-intent), `gate` (full contract), `list`, and `digest` (roll up the correction ledgers — the memory element). The on-manifest and validation checks in Intake and Review run through it — called, not remembered.
 - **External — bounded reference research (Frame + maintainer refinement only).** **Tool-agnostic** — this is a *capability* (web search + a way to view a live UI reference), not a specific product: fulfilled by whatever the generation tool offers (its own web search/browsing, or a browser MCP like Playwright), and at the floor by a **human pasting the reference URL or screenshot** — so it needs no particular tool. Used to study how a *class of screen* is structured and behaves (e.g., how a workflow builder arranges canvas/palette/inspector; how a pivot exposes drill-downs). **Guardrail:** web UI skews toward consumer-app polish (shadows, color, decoration) — the opposite of Synapse's engineered restraint. A reference is a source of *pattern and interaction* ideas only, re-expressed in Synapse's character and filtered through the refinement rubric's **Tier B** before it may influence output. It informs **Frame** (net-new/ambiguous surfaces) and the maintainer's refinement (studying prior art before proposing a `design.md` reference pattern) — **never Generate directly, and never Intake's data** (that stays real, drawn from the product/ontology).
 
 ## How this reaches the team
