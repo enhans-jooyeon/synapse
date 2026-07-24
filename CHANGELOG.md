@@ -2,7 +2,9 @@
 
 Versioning is **release-based** (design.md §6): ongoing work lands under **Unreleased**; the version bumps only when a release is cut for the team.
 
-## Unreleased
+## 1.0.2 — 2026-07-24 — harness anatomy: tools, memory + twin components
+
+Fills out the missing harness-anatomy elements (tools, memory) and adds the components the AgentOS digital twin surfaced. No breaking changes; existing tokens/rules unchanged.
 
 - **Memory element — the correction ledger** (`docs/process/correction-ledger.md` + `feedback/` + `synapse digest`): the harness's memory, pointed at the **maintainers**, not the generator (a generator-facing memory would be a shadow contract — durable lessons belong promoted into `design.md`/the gate). Each reviewed screen gets a `synapse-corrections` block captured **in the PR** (embedded in `.github/PULL_REQUEST_TEMPLATE/ui_review.md`): one `category | attribution | severity | source | note` line per fix needed to reach shippable, with closed field sets so entries aggregate. `synapse digest` rolls the collected blocks up into a pattern report — separating the harness-actionable signal (`llm-generation`/`contract-gap`/`gate-gap`) from taste and requirement churn, and flagging categories that recur (≥2) as **DS-gap candidates** to take to the refinement register. Auto-detectable fixes (token/state/provenance) come from the diff+gate; only the un-lintable ones are hand-tagged. Wired into `design-cycle.md` (Review captures, Refine consumes). GitHub-PR auto-harvest lands once the connector is authorized; interim, blocks are dropped into `feedback/`.
 
