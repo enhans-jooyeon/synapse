@@ -2,6 +2,10 @@
 
 Versioning is **release-based** (design.md §6): ongoing work lands under **Unreleased**; the version bumps only when a release is cut for the team.
 
+## Unreleased
+
+- **Glass-material `never`-list wording fixed.** The `design.md` §8 appendix (and its manifest source in `build_manifest.py`) called glass *"scrimmed overlays only"* — stale, and the opposite of the corrected jurisdiction in `foundations.md` §5 (*"unscrimmed floating layers only"* — blur over a scrim reads muddy; caught on the Template Library). Corrected both to match §5 and rebuilt the manifest. Doc-consistency fix only — no token, rule, or behavior change; the components (CommandPalette, AppLauncher, Composer follow-up panel) were already correct.
+
 ## 1.0.2 — 2026-07-24 — harness anatomy: tools, memory + twin components
 
 Fills out the missing harness-anatomy elements (tools, memory) and adds the components the AgentOS digital twin surfaced. No breaking changes; existing tokens/rules unchanged.
