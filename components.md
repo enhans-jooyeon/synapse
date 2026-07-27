@@ -452,7 +452,7 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 
 **Purpose:** universal keyboard-first entry point for navigation, actions, and asking the agent. Opened with ⌘K / Ctrl+K from anywhere; also via the topbar search affordance.
 
-**Anatomy:** centered overlay, 560px wide, offset 15vh from top, **glass material, scrimless** (foundations §5: the frost is the focus device — glass over a scrim goes muddy; esc/click-away dismiss as before; reduced-transparency → opaque `bg.raised`), radius `lg`, `shadow.modal`. Search input (borderless, 16px, full-width, leading search icon) · result list (max 8 visible, then scroll) · footer strip (11px `fg.tertiary` keyboard hints using `.sy-kbd`).
+**Anatomy:** centered overlay, 560px wide, offset 15vh from top, **glass material, scrimless** (foundations §5: dark glass in light theme / light glass in dark — the frost is the focus device; text `fg.inverse`; esc/click-away dismiss as before; reduced-transparency → opaque `bg.inverse`/`bg.raised`), radius `lg`, `glass.border` hairline + `shadow.glass`. Search input (borderless, 16px, full-width, leading search icon) · result list (max 8 visible, then scroll) · footer strip (11px `fg.tertiary` keyboard hints using `.sy-kbd`).
 **Results:** grouped under 11px medium `fg.tertiary` group labels (Recent / Navigation / Actions / Agents). Rows: height 40px, 16px leading icon, 13px label, trailing `.sy-kbd` shortcut or `fg.tertiary` context; selected row `bg.selected`. Actions that invoke AI carry the squared agent glyph.
 **States:** empty query → recent items; no results → single EmptyState-style row plus the mandatory final fallback row **"Ask agent: '{query}'"** (`ai.fg` text + squared glyph) — the palette never dead-ends; loading → 3 skeleton rows.
 **Behavior:** full keyboard (arrows, Enter, Esc, ⌘K toggles); type-ahead filters instantly (<50ms local, async results appended under their group); executing closes the palette; focus returns to the invoking context on close.
@@ -764,7 +764,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **Purpose:** a browsable overlay grid of system apps + user-published apps — the entry to the Application surface. Distinct from `CommandPalette` (which is ⌘K search); this is a tile grid.
 
-**Anatomy:** a centered overlay in the glass material, **scrimless** (the frost is the focus device; reduced-transparency → opaque `bg.raised`), radius `lg`, `shadow.modal`, `z.modal`. Content: an optional search row, then **system apps** and **your apps** as grids of `outlined` `Card` tiles (icon medallion + name `label` + one `caption`), each under a `micro-label` header. Whole tile is the target → opens the app; hover-lift.
+**Anatomy:** a centered overlay in the glass material, **scrimless** (foundations §5: dark glass in light theme / light glass in dark; text `fg.inverse`; reduced-transparency → opaque `bg.inverse`/`bg.raised`), radius `lg`, `glass.border` + `shadow.glass`, `z.modal`. Content: an optional search row, then **system apps** and **your apps** as grids of `outlined` `Card` tiles (icon medallion + name `label` + one `caption`), each under a `micro-label` header. Whole tile is the target → opens the app; hover-lift.
 
 **States:** default · search-filtered (empty groups hide; compact no-results line) · loading (skeleton tiles) · empty ("no apps yet" + create action).
 
