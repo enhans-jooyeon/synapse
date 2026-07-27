@@ -69,7 +69,7 @@
   "italics, ALL-CAPS, fixed-width text containers, line-height below paired floor",
   ">1 primary button or Banner per region; the deprecated accent variant anywhere",
   "carousels; infinite scroll in tables; nested modals; custom scrollbars; per-client theming; arbitrary z-index",
-  "gradients; glow; blur outside the glass material (unscrimmed floating layers only); rotation outside MediaGroup's generated-media fan",
+  "gradients; glow; blur / backdrop-filter (overlays are opaque, no glassmorphism); rotation outside MediaGroup's generated-media fan",
   "particle attached to a variable in Korean; concatenated sentence fragments",
   "auto-approval of agent proposals; silent agent side effects; fake citations",
   "optimistic rendering of agent output; marquee/auto-playing motion; white-label/per-client theming"

@@ -18,7 +18,7 @@ Rules (E = error, W = warning):
   SY005 E font-style italic/oblique — foundations §2.3.2
   SY006 E text-transform: uppercase — foundations §2.3.7
   SY007 W letter-spacing declared (verify it never applies to Hangul) — foundations §2.3
-  SY015 E backdrop-filter outside the glass material — foundations §5 (only var(--sy-glass-filter) or blur(var(--sy-glass-blur)))
+  SY015 E backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §5)
   SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
   SY017 E synapse.manifest.json stale vs a fresh build — run tools/build_manifest.py (mirrors the CI gate locally)
   SY008 E reference to undefined --sy-* variable — tokens
@@ -169,8 +169,8 @@ def lint_css_text(text, path, line_of, defined):
             report("E", "SY005", path, ln, "italic/oblique is forbidden (Hangul has no italics)")
         if prop == "text-transform" and "uppercase" in val:
             report("E", "SY006", path, ln, "text-transform: uppercase is forbidden")
-        if prop.endswith("backdrop-filter") and val.strip() not in ("var(--sy-glass-filter)", "blur(var(--sy-glass-blur))", "none"):
-            report("E", "SY015", path, ln, f"backdrop-filter only as var(--sy-glass-filter) or blur(var(--sy-glass-blur)) — got '{val[:40]}'")
+        if prop.endswith("backdrop-filter") and val.strip() != "none":
+            report("E", "SY015", path, ln, f"backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §5) — got '{val[:40]}'")
         if prop == "letter-spacing":
             report("W", "SY007", path, ln, "letter-spacing declared — must never apply to Hangul")
         if prop == "box-shadow" and "var(--sy-shadow" not in val and val != "none":

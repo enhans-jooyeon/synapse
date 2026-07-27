@@ -360,12 +360,7 @@
   .spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--sy-border-default);
     border-top-color: var(--sy-fg-tertiary); animation: spin 0.8s linear infinite; flex: none; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  /* audit #9: border.overlay is transparent in light — glass needs a containing hairline */
-  .palette { color: var(--sy-fg-inverse); }
-  /* glass row hover/selected inherit the existing bg.selected token */
-  @media (prefers-reduced-transparency: reduce) {
-    .palette { background: var(--sy-bg-inverse); backdrop-filter: none; color: var(--sy-fg-inverse); }
-  }
+  /* palette + launcher are opaque light overlays (bg.raised) + scrim — no glass */
   @media (prefers-reduced-motion: reduce) {
     .skel, .spinner, .cursor { animation-duration: 4s; }
     .menu, .palette, .toast { animation: none; }
@@ -565,20 +560,19 @@
   @keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(430%); } }
   .plabel { display: flex; justify-content: space-between; font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); margin-bottom: var(--sy-space-4); }
   .plabel .n { color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums; }
-  .palette { width: 560px; max-width: 100%; background: var(--sy-glass-surface); backdrop-filter: var(--sy-glass-filter); -webkit-backdrop-filter: var(--sy-glass-filter); border: 1px solid var(--sy-glass-border); border-radius: var(--sy-radius-lg);
-    box-shadow: var(--sy-shadow-glass); overflow: hidden; }
+  .palette { width: 560px; max-width: 100%; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg);
+    box-shadow: var(--sy-shadow-modal); overflow: hidden; }
   .palette .p-in { display: flex; align-items: center; gap: var(--sy-space-8); padding: var(--sy-space-12) var(--sy-space-16);
     border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary); }
-  .palette .p-in input { border: none; outline: none; background: none; flex: 1; color: var(--sy-fg-inverse);
+  .palette .p-in input { border: none; outline: none; background: none; flex: 1; color: var(--sy-fg-primary);
     font: var(--sy-weight-regular) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); }
-  .palette .grp { color: var(--sy-fg-inverse); opacity: .55; padding: var(--sy-space-8) var(--sy-space-16) var(--sy-space-4); }
+  .palette .grp { color: var(--sy-fg-tertiary); padding: var(--sy-space-8) var(--sy-space-16) var(--sy-space-4); }
   .palette .res { display: flex; align-items: center; gap: var(--sy-space-8); height: 40px; padding: 0 var(--sy-space-16);
     font-size: var(--sy-text-13); cursor: pointer; }
-  .palette .res:hover, .palette .res.sel { background: var(--sy-glass-selected); }
+  .palette .res:hover, .palette .res.sel { background: var(--sy-bg-selected); }
   .palette .res .kbd-r { margin-left: auto; display: flex; gap: 2px; }
-  .palette .sy-kbd { background: var(--sy-glass-selected); border-color: var(--sy-glass-border); color: var(--sy-fg-inverse); }
   .palette .p-ft { display: flex; align-items: center; gap: var(--sy-space-12); padding: var(--sy-space-8) var(--sy-space-16);
-    border-top: 1px solid var(--sy-border-subtle); font-size: 11px; color: var(--sy-fg-inverse); opacity: .5; }
+    border-top: 1px solid var(--sy-border-subtle); font-size: 11px; color: var(--sy-fg-tertiary); }
 
   .combo-trigger { display: flex; flex-wrap: wrap; gap: var(--sy-space-4); align-items: center; min-height: var(--sy-control-height-md);
     padding: var(--sy-space-4) var(--sy-space-8); border: 1px solid transparent; border-radius: var(--sy-radius-sm);
@@ -3283,7 +3277,7 @@ team: finance</pre>
       if (bellBtn) bellBtn.addEventListener('click', function () { showPop(frame, bellBtn, notifHtml); });
       var searchBtn = frame.querySelector('button[aria-label="Search (⌘K)"]');
       if (searchBtn) searchBtn.addEventListener('click', function () {
-        var o = showOverlay(frame, paletteHtml, true, true); var inp = o.querySelector('input'); if (inp) inp.focus();
+        var o = showOverlay(frame, paletteHtml, true, false); var inp = o.querySelector('input'); if (inp) inp.focus();
       });
       var av = frame.querySelector('.av-32');
       if (av) { av.style.cursor = 'pointer'; av.addEventListener('click', function () { showPop(frame, av, profileHtml); }); }
