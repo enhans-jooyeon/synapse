@@ -362,8 +362,6 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   /* audit #9: border.overlay is transparent in light — glass needs a containing hairline */
   .palette { color: var(--sy-fg-inverse); }
-  .palette .p-in input { color: var(--sy-fg-inverse); }
-  .palette .grp, .palette .p-ft, .palette .res .kbd-r { color: inherit; opacity: .6; }
   /* glass row hover/selected inherit the existing bg.selected token */
   @media (prefers-reduced-transparency: reduce) {
     .palette { background: var(--sy-bg-inverse); backdrop-filter: none; color: var(--sy-fg-inverse); }
@@ -571,15 +569,15 @@
     box-shadow: var(--sy-shadow-glass); overflow: hidden; }
   .palette .p-in { display: flex; align-items: center; gap: var(--sy-space-8); padding: var(--sy-space-12) var(--sy-space-16);
     border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary); }
-  .palette .p-in input { border: none; outline: none; background: none; flex: 1; color: var(--sy-fg-primary);
+  .palette .p-in input { border: none; outline: none; background: none; flex: 1; color: var(--sy-fg-inverse);
     font: var(--sy-weight-regular) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); }
-  .palette .grp { color: var(--sy-fg-tertiary); padding: var(--sy-space-8) var(--sy-space-16) var(--sy-space-4); }
+  .palette .grp { color: var(--sy-fg-inverse); opacity: .55; padding: var(--sy-space-8) var(--sy-space-16) var(--sy-space-4); }
   .palette .res { display: flex; align-items: center; gap: var(--sy-space-8); height: 40px; padding: 0 var(--sy-space-16);
     font-size: var(--sy-text-13); cursor: pointer; }
   .palette .res:hover, .palette .res.sel { background: var(--sy-glass-selected); }
   .palette .res .kbd-r { margin-left: auto; display: flex; gap: 2px; }
   .palette .p-ft { display: flex; align-items: center; gap: var(--sy-space-12); padding: var(--sy-space-8) var(--sy-space-16);
-    border-top: 1px solid var(--sy-border-subtle); font-size: 11px; color: var(--sy-fg-tertiary); }
+    border-top: 1px solid var(--sy-border-subtle); font-size: 11px; color: var(--sy-fg-inverse); opacity: .5; }
 
   .combo-trigger { display: flex; flex-wrap: wrap; gap: var(--sy-space-4); align-items: center; min-height: var(--sy-control-height-md);
     padding: var(--sy-space-4) var(--sy-space-8); border: 1px solid transparent; border-radius: var(--sy-radius-sm);
