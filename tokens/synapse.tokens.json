@@ -354,7 +354,8 @@
         "blur":    { "$value": "26px", "$type": "dimension" },
         "filter":  { "$value": "blur(26px) saturate(1.5) brightness(1.12)", "$extensions": { "synapse": { "modes": { "light": "blur(26px) saturate(1.5) brightness(1.12)", "dark": "blur(26px) saturate(1.4) brightness(1.05)" } } } },
         "border":  { "$value": "rgba(255, 255, 255, 0.14)", "$extensions": { "synapse": { "modes": { "light": "rgba(255, 255, 255, 0.14)", "dark": "rgba(9, 9, 11, 0.08)" } } } },
-        "accent":  { "$value": "#8AA0FF", "$extensions": { "synapse": { "modes": { "light": "#8AA0FF", "dark": "#0621C4" } } } }
+        "accent":  { "$value": "#8AA0FF", "$extensions": { "synapse": { "modes": { "light": "#8AA0FF", "dark": "#0621C4" } } } },
+        "selected": { "$value": "rgba(255, 255, 255, 0.10)", "$extensions": { "synapse": { "modes": { "light": "rgba(255, 255, 255, 0.10)", "dark": "rgba(9, 9, 11, 0.06)" } } } }
       },
       "emphasis": {
         "$description": "Quiet emphasis without vibrant color. Closed job list (hero stat card removed): table emphasis column/cell fill, timeline/calendar now-markers. Selected states (bg.selected) also draw from slate. Anti-collision rule: AI surfaces always carry a squared avatar or ai.fg text — a bare cool tint alone NEVER signals AI, and emphasis.* is never used on AI surfaces.",
