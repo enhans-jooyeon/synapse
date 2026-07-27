@@ -209,7 +209,7 @@ Motion confirms causality; it never decorates. Durations: `instant` 100ms (hover
 
 ## 7. Iconography
 
-- Single icon family, stroke-based, 1.5px stroke at 20px grid (Lucide). The usable set is the **closed concept→icon registry in `icons.md`** — unlisted concepts get no icon; unlisted Lucide names are violations.
+- Single icon family, stroke-based, 1.5px stroke at 20px grid (Tabler Icons, outline set — down-weighted from Tabler's 2px default to 1.5). The usable set is the **closed concept→icon registry in `icons.md`** — unlisted concepts get no icon; unlisted Tabler names are violations.
 - Sizes: 16px (inline, compact controls), 20px (default controls, navigation), 24px (empty states, feature moments). No other sizes.
 - Icons inherit text color of their context. Icon-only buttons MUST have an accessible label and are only allowed for actions from the approved icon-action list (`components.md` §Button).
 - NEVER use emoji as UI iconography.

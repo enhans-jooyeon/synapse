@@ -42,7 +42,7 @@ Inside Card: `heading-md` (or `heading-lg` for page-dominant cards) + optional t
 
 2–6 `stat` Cards in an equal-column grid, gutter `space-24`.
 
-Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row**: 12px `trend-up`/`trend-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비").
+Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row**: 12px `trending-up`/`trending-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비").
 
 ## R5 · Action pair & footer conventions
 

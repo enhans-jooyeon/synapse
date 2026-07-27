@@ -65,7 +65,7 @@ One concept, one term, both languages. Synonyms listed as forbidden are wrong ev
 | Remove favorite | 즐겨찾기 해제 | Favorite toggles. |
 | New thread | 새 대화 | Console sidebar + ⌘K. |
 | Temporary chat | 임시 대화 | Agent-picker switch; Console shows 임시 badge. |
-| Refine prompt | 프롬프트 다듬기 | Composer footer pen-line; also the refinement menu's general action. |
+| Refine prompt | 프롬프트 다듬기 | Composer footer `edit` icon; also the refinement menu's general action. |
 | Add detail | 더 자세히 | Refinement preset (closed set). |
 | Make concise | 더 간결하게 | Refinement preset (closed set). |
 | Specify scope | 기간·범위 구체화 | Refinement preset (closed set). |

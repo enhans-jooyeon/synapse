@@ -386,7 +386,7 @@
     "slash commands: / scopes palette to agent actions; ghost completion accepted with →, never Tab; closed glossary only",
     "follow-up panel = solid bg.raised (small/dense over thread text — NOT glass)",
     "templates: / = expert quick-insert; bookmark opens the Template Library Modal (glass 640: search + grouped rich cards w/ description + cloze preview + 새 템플릿 만들기 footer ); slot chips = emphasis.surface, → moves slots, unfilled slot blocks send (§23)",
-    "authoring coach: max one non-blocking quality hint; pen-line opens the CLOSED refinement-preset menu (다듬기/자세히/간결/범위/형식 ), rewrite replaces draft w/ Undo, disabled on empty",
+    "authoring coach: max one non-blocking quality hint; the `edit` icon opens the CLOSED refinement-preset menu (다듬기/자세히/간결/범위/형식 ), rewrite replaces draft w/ Undo, disabled on empty",
     "voice = dictation only ( §26): tray morphs to recording bar (cancel / pulsing danger dot + timer / pause / primary check confirm); transcript inserts at caret, NEVER auto-sends; no audio in thread",
     "agent-picker menu: search + grouped rows + one submenu + mandatory request-footer escape (no model rows — reversed)",
     "model selector (trailing): menu grouped by provider under micro-label headers, real product names in mono, 자동 row = agent default; per-conversation, defaults from agent, lockable; never changes permissions/approval",
