@@ -54,7 +54,7 @@ Onboarding, wizards, empty first-run, irreversible decisions. The only archetype
 Agent conversation surface.
 
 - Two-column: conversation (fluid, max-width 760 message column) + optional context Drawer.
-- Messages: human messages right-anchored `bg.sunken` bubbles (radius `lg`); agent messages full-width plain text on `bg.page` — agents speak as the product, humans speak in bubbles.
+- Messages: human messages right-anchored `bg.sunken` bubbles (radius `xl`); agent messages full-width plain text on `bg.page` — agents speak as the product, humans speak in bubbles.
 - Agent identity uses the squared Avatar. Streaming, working steps, approvals, provenance, and failure conventions are governed by `ai-patterns.md` — the Console archetype is where most of those patterns live, but they apply to every AI surface in any archetype.
 
 ---

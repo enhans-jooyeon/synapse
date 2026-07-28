@@ -5,14 +5,14 @@
 .sy-field__input {
   width: 100%; height: var(--sy-control-height-md);
   padding: 0 var(--sy-control-padding-x);
-  border: 1px solid transparent; border-radius: var(--sy-radius-sm);
+  border: 1px solid transparent; border-radius: var(--sy-radius-md);
   background: var(--sy-bg-sunken); color: var(--sy-fg-primary);
   font: var(--sy-weight-regular) var(--sy-body-size) / var(--sy-body-lh) var(--sy-font-sans);
   transition: background var(--sy-duration-instant) var(--sy-ease-standard);
 }
 .sy-field__input::placeholder { color: var(--sy-fg-placeholder); }
 .sy-field__input:hover { background: var(--sy-bg-selected-hover); }
-.sy-field__input:focus-visible { outline: 2px solid var(--sy-border-focus); outline-offset: 2px; background: var(--sy-bg-page); }
+.sy-field__input:focus-visible { outline: none; border-color: var(--sy-border-focus-input); background: var(--sy-bg-page); }
 .sy-field__input:disabled { background: var(--sy-bg-disabled); color: var(--sy-fg-disabled); }
 .sy-field__input:read-only { background: var(--sy-bg-surface); }
 .sy-field--error .sy-field__input { border-color: var(--sy-border-error); }

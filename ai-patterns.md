@@ -14,7 +14,7 @@ Every agent surface must make agency **visible** (users always know when AI is a
 
 **The two AI markers.** AI presence is signaled by exactly two devices, used consistently and used nowhere else:
 
-1. The **squared avatar** (radius `sm` vs. round human avatars) on any actor row, message, or attribution chip.
+1. The **squared avatar** (radius `md` vs. round human avatars) on any actor row, message, or attribution chip.
 2. The **`ai.*` token family** (`--sy-ai-surface`, `--sy-ai-border`, `--sy-ai-fg`) on surfaces that contain agent output or agent proposals, and the **`brand` (point-color) fill** on the screen's single conversational-AI entry point only (Ask agent / Composer send; one per screen). Operational agent actions (Run/Retry/Resume) use the normal hierarchy — "executes an agent" never earns blue.
 
 NEVER mark AI presence any other way — no sparkle gradients, no purple, no robot iconography beyond the standard agent glyph. NEVER use `ai.*` tokens on non-AI surfaces, and never substitute `status.info-*` for `ai.*` or vice versa, even though the families are related.
@@ -59,7 +59,7 @@ All agent activity between "request" and "answer" renders as **AgentStep** rows 
 
 The agent never performs a consequential action silently. It proposes; the human disposes.
 
-**Anatomy** (see `components.md`, tray): borderless `ai.surface` object, radius `lg`, no shadow — Composer-tray language; payload surfaces (diff, previews) open to `bg.page`. Header row: squared agent avatar first (the agency marker) + agent name + "proposes" / "제안" (13 medium, `ai.fg`), `ai.border` hairline below (single-tone tray; the two-tone band was reversed). Body: one-sentence summary of the action and its scope, then the payload — a diff, a message preview, a list of affected records. Footer: **Approve** (`primary` Button — approving is a human decision about agent work, not an AI CTA) + **Reject** (`secondary`) + optional **Edit** (`ghost`).
+**Anatomy** (see `components.md`, tray): borderless `ai.surface` object, radius `md`, no shadow — Composer-tray language; payload surfaces (diff, previews) open to `bg.page`. Header row: squared agent avatar first (the agency marker) + agent name + "proposes" / "제안" (13 medium, `ai.fg`), `ai.border` hairline below (single-tone tray; the two-tone band was reversed). Body: one-sentence summary of the action and its scope, then the payload — a diff, a message preview, a list of affected records. Footer: **Approve** (`primary` Button — approving is a human decision about agent work, not an AI CTA) + **Reject** (`secondary`) + optional **Edit** (`ghost`).
 
 **Rules:**
 - NEVER auto-approve by timeout. No countdown timers on approval. Absence of response = no action.
@@ -120,7 +120,7 @@ Agent output is markdown; without fixed rendering rules every message improvises
 - **Links** = `fg.link` with the external mark for off-app targets; bare URLs auto-link and middle-truncate.
 - **Tables** render as bare (frameless) dense tables — hairline header rule, `label` headers; wider than the message column → horizontal scroll, never reflow.
 - **Blockquote:** 2px `border.strong` left rule + `fg.secondary`; one level, deeper flattened.
-- **Images:** only user/workspace attachments render inline (max-width 100%, radius `md`, `caption` caption); remote URLs render as links, never fetched — provenance and safety. **Human messages:** attachments stack above the bubble text in fixed order — document ContextCards first, then images (bubble-aligned, radius `md` + hairline, max-height 240; two side by side, 3+ as a 2-wide grid, never a MediaGroup fan — that is generated media only), then the text.
+- **Images:** only user/workspace attachments render inline (max-width 100%, radius `lg`, `caption` caption); remote URLs render as links, never fetched — provenance and safety. **Human messages:** attachments stack above the bubble text in fixed order — document ContextCards first, then images (bubble-aligned, radius `lg` + hairline, max-height 240; two side by side, 3+ as a 2-wide grid, never a MediaGroup fan — that is generated media only), then the text.
 - **Task lists** → read-only Checkboxes; **hr** → full-bleed `border.subtle`; emphasis follows system rules (bold = 600; italics normalize to 600 per foundations §2.3.2).
 - **Streaming safety:** block elements (tables, fences) render when their block closes — partial tables never flash unstyled; text streams per §2.
 
@@ -167,13 +167,17 @@ Selected text inside an agent message is a first-class conversational object.
 
 **Reply pill:** selecting text in an agent message raises a single floating pill ("Reply" / "답장", reply icon) — `bg.raised-2`, `border.overlay`, `shadow.overlay`, pill radius, `z.dropdown`, standard entrance. One pill, no toolbar of options; it disappears on deselect or esc.
 **Quote highlight:** the selected passage takes `ai.surface` fill + inset `ai.border` hairline while quoted.
-**ComposerQuote:** choosing Reply inserts a quote bar into the Composer above the textarea — `ai.surface` fill, `ai.fg` text, reply icon, single-line ellipsis, × remove. Radius `xs` (concentric: composer radius 16 − 12 padding = 4). Max one quote per send; quoting replaces any existing quote. The sent message renders the quote above the user text.
+**ComposerQuote:** choosing Reply inserts a quote bar into the Composer above the textarea — `ai.surface` fill, `ai.fg` text, reply icon, single-line ellipsis, × remove. Radius `sm` (concentric: composer radius 12 − 4 padding = 8). Max one quote per send; quoting replaces any existing quote. The sent message renders the quote above the user text.
 
 **Selection actions (closed set):** the floating pill carries 답장 · 설명 · 재생성 — and nothing else without governance (actions come from the action glossary). 설명 composes a quoted follow-up ("이 부분을 설명해 줘" + ComposerQuote of the selection); the explanation arrives as a NORMAL agent turn in the thread. Selection actions NEVER mutate the original message in place — thread history is append-only (provenance law). Rewrite-type actions apply only to the user's OWN draft (§24), never to agent output.
 
 ## 19. Follow-up panel
 
+<<<<<<< HEAD
 Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it: a **solid `bg.raised` panel** (NOT glass — it's small, dense, and sits over thread text where glass reads muddy; foundations §5) with a `border.default` hairline, `shadow.overlay`, radius `md`, 6px padding, 32px rows at radius `xs`; rows lead with the 12px follow-up arrow, full-bleed keyboard header row in keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). **Placement:** the panel is absolutely anchored **8px above the Composer's top edge** (a floating layer detaches from its anchor — flush contact reads as part of the input; anchored menus use 4px, the panel's larger mass earns 8) and OVERLAYS the last thread messages — it never pushes content down (layout shift on open is forbidden). Max 4 rows; selecting inserts the text into the Composer (never auto-sends). Chips and panel never show simultaneously.
+=======
+Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it: **glass material** (the one anchored exception to the scrim-gating in foundations §5: the panel floats over thread content like a mini-palette, is static while open, and dismisses on esc/typing; reduced-transparency falls back opaque) with `border.overlay`, `shadow.overlay`, radius `lg`, 6px padding, 32px rows at radius `xs`; rows lead with the 12px follow-up arrow, full-bleed keyboard header row in keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). **Placement:** the panel is absolutely anchored **8px above the Composer's top edge** (a floating layer detaches from its anchor — flush contact reads as part of the input; anchored menus use 4px, the panel's larger mass earns 8) and OVERLAYS the last thread messages — it never pushes content down (layout shift on open is forbidden, and the glass material is meaningless without content behind it). Max 4 rows; selecting inserts the text into the Composer (never auto-sends). Chips and panel never show simultaneously.
+>>>>>>> 0a2de76 (Radius: finer 6-step scale; focus + optical corrections; app-gen nav/focus fix; add proposals)
 
 **Chip honesty (adopted law):** a suggestion chip's visible label IS the query it sends — never a longer or different hidden prompt. If the real query needs more words than the chip can show, the chip inserts into the Composer for editing instead of sending.
 

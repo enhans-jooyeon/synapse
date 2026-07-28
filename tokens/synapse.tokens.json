@@ -194,9 +194,10 @@
       "$type": "dimension",
       "xs":   { "$value": "4px" },
       "sm":   { "$value": "8px" },
-      "md":   { "$value": "10px" },
+      "md":   { "$value": "12px" },
       "lg":   { "$value": "16px" },
-      "xl":   { "$value": "24px", "$description": "Section shells ONLY: the outermost rounded well a page region sits in — SplitPanel container, content wells, hero/empty wells. Never on cards, overlays, or anything nested inside a shell. Shells pad >= space-24 so the concentric-corner rule never binds their children." },
+      "xl":   { "$value": "20px", "$description": "Section shells ONLY: the outermost rounded well a page region sits in — SplitPanel container, content wells, hero/empty wells. Never on cards, overlays, or anything nested inside a shell. Shells pad >= space-24 so the concentric-corner rule never binds their children." },
+      "2xl":  { "$value": "24px" },
       "full": { "$value": "9999px" }
     },
     "shadow": {
@@ -375,7 +376,7 @@
       "height-md": { "$value": "36px" },
       "height-lg": { "$value": "40px" },
       "padding-x": { "$value": "12px" },
-      "gap":       { "$value": "8px" }
+      "gap":       { "$value": "12px" }
     },
     "layout": {
       "$type": "dimension",

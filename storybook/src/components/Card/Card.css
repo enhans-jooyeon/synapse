@@ -1,5 +1,5 @@
 /* Card — components.md · Card (flat default). */
-.sy-card { border-radius: var(--sy-radius-md); padding: var(--sy-card-padding); }
+.sy-card { border-radius: var(--sy-radius-lg); padding: var(--sy-card-padding); }
 .sy-card--flat { background: var(--sy-bg-surface); }
 .sy-card--outlined { background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); }
 .sy-card--elevated { background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); box-shadow: var(--sy-shadow-raised); }
@@ -12,4 +12,4 @@
               background var(--sy-duration-fast) var(--sy-ease-standard); }
 .sy-card--interactive:hover { border-color: var(--sy-border-strong); background: var(--sy-bg-hover);
   transform: translateY(-1px); box-shadow: var(--sy-shadow-raised); }
-.sy-card--interactive:focus-visible { outline: 2px solid var(--sy-border-focus); outline-offset: 2px; }
+.sy-card--interactive:focus-visible { outline: 2px solid transparent; outline-offset: 0; box-shadow: 0 0 0 2px var(--sy-border-focus); }

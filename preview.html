@@ -28,13 +28,13 @@
     border-bottom: 1px solid var(--sy-border-subtle); display: flex; flex-direction: column; gap: var(--sy-space-8); }
   .side .brand { display: flex; align-items: center; gap: var(--sy-space-8); padding: 0 var(--sy-space-4);
     font: var(--sy-weight-semibold) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); }
-  .side-mark { width: 22px; height: 22px; flex: none; border-radius: var(--sy-radius-sm); background: var(--sy-brand-point); color: var(--sy-brand-point-fg);
+  .side-mark { width: 22px; height: 22px; flex: none; border-radius: var(--sy-radius-md); background: var(--sy-brand-point); color: var(--sy-brand-point-fg);
     display: flex; align-items: center; justify-content: center; font: var(--sy-weight-bold) var(--sy-text-13)/1 var(--sy-font-sans); }
   .side .brand .v { margin-left: auto; font: var(--sy-weight-regular) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-mono); color: var(--sy-fg-tertiary); }
   .nav-group { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans);
     color: var(--sy-fg-tertiary); padding: var(--sy-space-12) var(--sy-space-8) var(--sy-space-4); }
-  .nav-item { display: flex; align-items: center; gap: var(--sy-space-8); height: 32px; padding: 0 var(--sy-space-8);
-    border-radius: var(--sy-radius-sm); font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
+  .nav-item { display: flex; align-items: center; gap: var(--sy-space-8); height: 32px; padding: 0 var(--sy-space-8) 0 var(--sy-space-6);
+    border-radius: var(--sy-radius-md); font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
     color: var(--sy-fg-secondary); cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
   .nav-item .icon { width: 16px; height: 16px; flex: none; color: var(--sy-fg-tertiary); }
   .nav-item:hover { background: var(--sy-bg-hover); }
@@ -64,7 +64,7 @@
   .topbar .t .crumb-sep { color: var(--sy-fg-tertiary); margin: 0 var(--sy-space-6); font-weight: var(--sy-weight-regular); }
 
   /* browser chrome: search · collapsible nav · overview gallery */
-  .nav-search { display: flex; align-items: center; gap: var(--sy-space-6); margin: var(--sy-space-4) var(--sy-space-4) var(--sy-space-8); padding: 0 var(--sy-space-8); height: 32px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-sm); flex: none; }
+  .nav-search { display: flex; align-items: center; gap: var(--sy-space-6); margin: var(--sy-space-4) var(--sy-space-4) var(--sy-space-8); padding: 0 var(--sy-space-8); height: 32px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); flex: none; }
   .nav-search svg { width: 14px; height: 14px; color: var(--sy-fg-tertiary); flex: none; }
   .nav-search input { border: none; outline: none; background: none; flex: 1; min-width: 0; font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-fg-primary); }
   .nav-grp-head { display: flex; align-items: center; gap: var(--sy-space-6); width: 100%; border: none; background: none; cursor: pointer; text-align: left;
@@ -83,7 +83,7 @@
   .gal-head { display: flex; align-items: center; gap: var(--sy-space-8); margin: var(--sy-space-32) 0 var(--sy-space-12); }
   .gal-head:first-child { margin-top: 0; }
   .gallery h2 { font: var(--sy-weight-semibold) var(--sy-text-20)/var(--sy-text-20-lh) var(--sy-font-sans); margin: 0; }
-  .gal-ico { width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; background: var(--sy-bg-sunken); border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-sm); }
+  .gal-ico { width: 28px; height: 28px; flex: none; display: flex; align-items: center; justify-content: center; background: var(--sy-bg-sunken); border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-md); }
   .gal-ico svg { width: 16px; height: 16px; color: var(--sy-fg-secondary); }
   .gallery .cat-label { display: flex; align-items: center; gap: var(--sy-space-6); font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); margin: var(--sy-space-20) 0 var(--sy-space-8); }
   .gallery .cat-label svg { width: 14px; height: 14px; color: var(--sy-fg-tertiary); flex: none; }
@@ -92,7 +92,7 @@
   @media (max-width: 1000px) { .gallery-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 720px)  { .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 520px)  { .gallery-grid { grid-template-columns: 1fr; } }
-  .gcard { display: flex; flex-direction: column; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); background: var(--sy-bg-raised); cursor: pointer; text-align: left; padding: 0; overflow: hidden;
+  .gcard { display: flex; flex-direction: column; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); background: var(--sy-bg-raised); cursor: pointer; text-align: left; padding: 0; overflow: hidden;
     transition: border-color var(--sy-duration-fast) var(--sy-ease-standard), box-shadow var(--sy-duration-fast) var(--sy-ease-standard); }
   .gcard:hover { border-color: var(--sy-border-strong); box-shadow: var(--sy-shadow-overlay); }
   .gcard .thumb { height: 116px; display: flex; align-items: center; justify-content: center; background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle); }
@@ -119,7 +119,7 @@
   .related { margin-top: var(--sy-space-40); padding-top: var(--sy-space-16); border-top: 1px solid var(--sy-border-subtle); }
   .related .rel-label { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-8); }
   .related .rel-links { display: flex; flex-wrap: wrap; gap: var(--sy-space-8); }
-  .rel-chip { display: inline-flex; align-items: center; padding: var(--sy-space-4) var(--sy-space-12); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-full); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); color: var(--sy-fg-secondary); cursor: pointer; text-decoration: none;
+  .rel-chip { display: inline-flex; align-items: center; padding: var(--sy-space-4) var(--sy-space-8); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-full); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); color: var(--sy-fg-secondary); cursor: pointer; text-decoration: none;
     transition: border-color var(--sy-duration-fast) var(--sy-ease-standard), color var(--sy-duration-fast) var(--sy-ease-standard); }
   .rel-chip:hover { border-color: var(--sy-border-strong); color: var(--sy-fg-primary); }
   .guide-p { font: var(--sy-weight-regular) var(--sy-text-14)/var(--sy-text-14-lh) var(--sy-font-sans); color: var(--sy-fg-secondary); max-width: 680px; margin: 0 0 var(--sy-space-12); }
@@ -132,9 +132,9 @@
   .doc-main { min-width: 0; }
   /* preview body uses the real AgentOS page background (bg.page) so components render truthfully */
   .doc-aside { min-width: 0; position: sticky; top: var(--sy-space-8); align-self: start;
-    background: var(--sy-bg-page); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); padding: var(--sy-space-20); }
+    background: var(--sy-bg-page); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); padding: var(--sy-space-20); }
   /* "Examples" becomes the panel header bar (subtly tinted), full-bleed to the panel edges */
-  .doc-aside > .sec-label:first-child { margin: calc(-1 * var(--sy-space-20)) calc(-1 * var(--sy-space-20)) var(--sy-space-20); padding: var(--sy-space-12) var(--sy-space-20); border-top: none; border-bottom: 1px solid var(--sy-border-subtle); background: var(--sy-bg-surface); border-radius: var(--sy-radius-lg) var(--sy-radius-lg) 0 0; }
+  .doc-aside > .sec-label:first-child { margin: calc(-1 * var(--sy-space-20)) calc(-1 * var(--sy-space-20)) var(--sy-space-20); padding: var(--sy-space-12) var(--sy-space-20); border-top: none; border-bottom: 1px solid var(--sy-border-subtle); background: var(--sy-bg-surface); border-radius: var(--sy-radius-xl) var(--sy-radius-xl) 0 0; }
   .doc-aside > h3.sub:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
   @media (max-width: 1100px) { .doc-grid { grid-template-columns: minmax(0, 1fr); } .doc-aside { position: static; } }
   .note { font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-12); max-width: 680px; }
@@ -143,8 +143,8 @@
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sy-space-16); }
   @media (max-width: 1100px) { .grid2 { grid-template-columns: 1fr; } }
 
-  .seg { display: inline-flex; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-sm); padding: var(--sy-space-4); }
-  .seg button { height: 24px; padding: 0 var(--sy-space-8); border: 1px solid transparent; border-radius: var(--sy-radius-xs);
+  .seg { display: inline-flex; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-4); }
+  .seg button { height: 24px; padding: 0 var(--sy-space-8); border: 1px solid transparent; border-radius: var(--sy-radius-sm);
     background: none; cursor: pointer; font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans);
     color: var(--sy-fg-secondary); }
   .seg button.on { background: var(--sy-bg-page); border-color: var(--sy-border-default); color: var(--sy-fg-primary); }
@@ -152,13 +152,13 @@
   .theme-toggle svg { width: 14px; height: 14px; }
 
   .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: var(--sy-space-8); }
-  .swatch { border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); overflow: hidden; }
+  .swatch { border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow: hidden; }
   .swatch .chip { height: 40px; }
   .swatch .lbl { padding: var(--sy-space-4) var(--sy-space-8); font-size: 11px; line-height: var(--sy-text-11-lh); color: var(--sy-fg-secondary); font-family: var(--sy-font-mono); }
 
   .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--sy-space-6);
     height: var(--sy-control-height-md); padding: 0 var(--sy-control-padding-x);
-    border-radius: var(--sy-radius-sm); border: 1px solid transparent; cursor: pointer;
+    border-radius: var(--sy-radius-md); border: 1px solid transparent; cursor: pointer;
     font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans);
     color: var(--sy-fg-primary); background: transparent;
     transition: background var(--sy-duration-instant) var(--sy-ease-standard), border-color var(--sy-duration-instant) var(--sy-ease-standard); }
@@ -201,7 +201,7 @@
   .field label { font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans); }
   .field .ctrl { position: relative; display: flex; align-items: center; }
   .field input, .field textarea { width: 100%; padding: 0 var(--sy-control-padding-x);
-    border: 1px solid transparent; border-radius: var(--sy-radius-sm);
+    border: 1px solid transparent; border-radius: var(--sy-radius-md);
     background: var(--sy-bg-sunken); color: var(--sy-fg-primary);
     font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); }
   .field input { height: var(--sy-control-height-md); }
@@ -219,10 +219,10 @@
   .counter { align-self: flex-end; font-size: var(--sy-text-12); color: var(--sy-fg-tertiary); }
 
   .menu { width: 260px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-overlay);
-    border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-6);
+    border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-4);
     display: flex; flex-direction: column; gap: var(--sy-space-4); }
-  .menu-item { display: flex; align-items: center; gap: var(--sy-space-8); height: 32px; padding: 0 var(--sy-space-8);
-    border-radius: var(--sy-radius-xs); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); cursor: pointer; }
+  .menu-item { display: flex; align-items: center; gap: var(--sy-space-8); height: 32px; padding: 0 var(--sy-space-8) 0 var(--sy-space-6);
+    border-radius: var(--sy-radius-sm); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); cursor: pointer; }
   .menu-item:hover { background: var(--sy-bg-hover); }
   .menu-item.selected { background: var(--sy-bg-selected); }
   .menu-item.danger { color: var(--sy-status-danger); }
@@ -258,7 +258,7 @@
   .badge-danger { background: var(--sy-status-danger-bg); color: var(--sy-status-danger); }
 
   .tag { display: inline-flex; align-items: center; gap: var(--sy-space-4); height: 24px; padding: 0 var(--sy-space-8);
-    background: var(--sy-bg-sunken); border: 1px solid transparent; border-radius: var(--sy-radius-sm);
+    background: var(--sy-bg-sunken); border: 1px solid transparent; border-radius: var(--sy-radius-md);
     font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); cursor: default; }
   .tag.selected { background: var(--sy-bg-selected); border-color: var(--sy-border-strong); }
   .tag .x { display: inline-flex; cursor: pointer; color: var(--sy-fg-tertiary); }
@@ -266,14 +266,14 @@
 
   .avatar { display: inline-flex; align-items: center; justify-content: center; border-radius: var(--sy-radius-full);
     font-weight: var(--sy-weight-semibold); color: var(--sy-fg-primary); flex: none; }
-  .avatar.agent { border-radius: var(--sy-radius-sm); }
+  .avatar.agent { border-radius: var(--sy-radius-md); }
   .av-20 { width: 20px; height: 20px; font-size: 11px; }
   .av-24 { width: 24px; height: 24px; font-size: 11px; }
   .av-32 { width: 32px; height: 32px; font-size: 13px; }
   .av-40 { width: 40px; height: 40px; font-size: 16px; }
 
   .card { background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default);
-    border-radius: var(--sy-radius-md); padding: var(--sy-card-padding); }
+    border-radius: var(--sy-radius-lg); padding: var(--sy-card-padding); }
   .card.tight { padding: 0; overflow: hidden; }
   .card .card-h { display: flex; align-items: center; justify-content: space-between;
     padding: var(--sy-space-16) var(--sy-card-padding); border-bottom: 1px solid var(--sy-border-subtle); }
@@ -289,7 +289,7 @@
   .card.interactive:hover { border-color: var(--sy-border-strong); background: var(--sy-bg-hover); transform: translateY(-1px); box-shadow: var(--sy-shadow-raised); }
 
   .banner { display: flex; gap: var(--sy-space-8); align-items: flex-start;
-    border-radius: var(--sy-radius-md); padding: var(--sy-space-12) var(--sy-space-16);
+    border-radius: var(--sy-radius-lg); padding: var(--sy-space-12) var(--sy-space-16);
     font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); }
   .banner-info { background: var(--sy-status-info-bg); color: var(--sy-status-info); }
   .banner-success { background: var(--sy-status-success-bg); color: var(--sy-status-success); }
@@ -304,7 +304,7 @@
 
   .toast { display: flex; gap: var(--sy-space-8); align-items: flex-start; width: 340px;
     background: var(--sy-bg-raised-2); color: var(--sy-fg-primary); border: 1px solid var(--sy-border-overlay);
-    border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-overlay);
+    border-radius: var(--sy-radius-lg); box-shadow: var(--sy-shadow-overlay);
     padding: var(--sy-space-12) var(--sy-space-16); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); }
   .toast > .icon { margin-top: var(--sy-space-2); }
   .toast .btn-icon { height: 20px; width: 20px; flex: none; } /* compact inline dismiss — first-line aligned */
@@ -314,7 +314,7 @@
     border-radius: var(--sy-radius-xs); padding: var(--sy-space-4) var(--sy-space-8); box-shadow: var(--sy-shadow-overlay); }
 
   table { width: 100%; border-collapse: collapse; }
-  .tframe { border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow: hidden; }
+  .tframe { border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; }
   table.bare thead th { background: none; color: var(--sy-fg-tertiary); border-bottom: 1px solid var(--sy-border-default); }
   thead th { text-align: left; height: 36px; padding: 0 var(--sy-table-cell-x);
     background: none; color: var(--sy-fg-tertiary);
@@ -345,9 +345,9 @@
   .pg.cur { background: var(--sy-bg-selected); color: var(--sy-fg-primary); }
   .pager .sum { margin-left: var(--sy-space-12); color: var(--sy-fg-tertiary); }
 
-  .viewport { min-height: 320px; background: var(--sy-bg-scrim); border-radius: var(--sy-radius-md);
+  .viewport { min-height: 320px; background: var(--sy-bg-scrim); border-radius: var(--sy-radius-lg);
     display: flex; align-items: center; justify-content: center; padding: var(--sy-space-24); position: relative; overflow: hidden; }
-  .modal { width: 420px; max-width: 100%; background: var(--sy-bg-raised); border-radius: var(--sy-radius-lg);
+  .modal { width: 420px; max-width: 100%; background: var(--sy-bg-raised); border-radius: var(--sy-radius-xl);
     box-shadow: var(--sy-shadow-modal); padding: var(--sy-space-24); }
   .modal h3 { font: var(--sy-weight-semibold) var(--sy-text-18)/var(--sy-text-18-lh) var(--sy-font-sans); }
   .modal .m-b { color: var(--sy-fg-secondary); margin: var(--sy-space-12) 0 var(--sy-space-24); }
@@ -381,7 +381,7 @@
 
   .type-row { display: flex; gap: var(--sy-space-16); align-items: baseline; padding: var(--sy-space-8) 0; border-bottom: 1px solid var(--sy-border-subtle); }
   .type-row .m { width: 120px; flex: none; font-family: var(--sy-font-mono); font-size: 11px; color: var(--sy-fg-tertiary); }
-  .shadow-demo { width: 150px; height: 72px; background: var(--sy-bg-raised); border-radius: var(--sy-radius-md);
+  .shadow-demo { width: 150px; height: 72px; background: var(--sy-bg-raised); border-radius: var(--sy-radius-lg);
     display: flex; align-items: flex-end; padding: var(--sy-space-8); font-family: var(--sy-font-mono); font-size: 11px; color: var(--sy-fg-tertiary); }
   .space-demo > div { background: var(--sy-status-info-bg); border: 1px solid var(--sy-status-info); }
   .space-lbl { font-family: var(--sy-font-mono); font-size: 11px; color: var(--sy-fg-tertiary); text-align: center; margin-top: 4px; }
@@ -394,7 +394,7 @@
   .step .dur { color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums; margin-left: auto; }
   .dot-pending { width: 10px; height: 10px; border: 1.5px solid var(--sy-border-strong); border-radius: 50%; }
   .dot-skipped { width: 10px; height: 1.5px; background: var(--sy-border-strong); }
-  .proposal { background: var(--sy-ai-surface); border-radius: var(--sy-radius-lg); overflow: hidden; max-width: 560px; }
+  .proposal { background: var(--sy-ai-surface); border-radius: var(--sy-radius-xl); overflow: hidden; max-width: 560px; }
   .proposal .p-h { display: flex; gap: var(--sy-space-8); align-items: center; padding: var(--sy-space-12);
     border-bottom: 1px solid var(--sy-ai-border);
     font: var(--sy-weight-medium) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); color: var(--sy-ai-fg); }
@@ -407,8 +407,8 @@
     border-radius: var(--sy-radius-full); box-shadow: var(--sy-shadow-overlay); cursor: pointer; white-space: nowrap;
     font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); color: var(--sy-fg-primary);
     animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); z-index: var(--sy-z-dropdown); }
-  .quote-hl { background: var(--sy-ai-surface); box-shadow: inset 0 0 0 1px var(--sy-ai-border); border-radius: var(--sy-radius-xs); padding: 0 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-  .composer-tray { background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12); }
+  .quote-hl { background: var(--sy-ai-surface); box-shadow: inset 0 0 0 1px var(--sy-ai-border); border-radius: var(--sy-radius-sm); padding: 0 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .composer-tray { background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-4); }
   .plus-dot { position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--sy-fg-primary); } /* active-tools deviation dot */
   /* compact picker padding: labeled ghost controls in the tray (agent/model pickers) — avatar/chevron carry the mass, 12px sides read detached */
   .composer-tray .btn-ghost.btn-sm:not(.btn-icon) { padding: 0 var(--sy-space-8); }
@@ -419,11 +419,11 @@
   .att-img .x { position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 50%;
     background: var(--sy-bg-inverse-soft); color: var(--sy-fg-inverse); display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .att-img .x svg { width: 10px; height: 10px; }
-  .msg-img { display: block; margin-left: auto; margin-bottom: var(--sy-space-4); width: 160px; border-radius: var(--sy-radius-md);
+  .msg-img { display: block; margin-left: auto; margin-bottom: var(--sy-space-4); width: 160px; border-radius: var(--sy-radius-lg);
     border: 1px solid var(--sy-border-default); overflow: hidden; }
   .msg-img svg { display: block; width: 100%; }
   .tpl-row { display: flex; align-items: center; gap: var(--sy-space-8); height: 32px; padding: 0 var(--sy-space-8);
-    border-radius: var(--sy-radius-xs); cursor: pointer;
+    border-radius: var(--sy-radius-sm); cursor: pointer;
     transition: background var(--sy-duration-instant) var(--sy-ease-standard); }
   .tpl-row:hover { background: var(--sy-bg-hover); }
   .tpl-row.sel { background: var(--sy-bg-selected); }
@@ -443,14 +443,18 @@
     border-left: 2px solid var(--sy-border-strong); padding: var(--sy-space-2) var(--sy-space-4) var(--sy-space-2) var(--sy-space-8); margin-bottom: var(--sy-space-8);
     font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); }
   .composer-quote .q-t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+<<<<<<< HEAD
   .followups { background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);
+=======
+  .followups { background: var(--sy-glass-surface); backdrop-filter: blur(var(--sy-glass-blur)); border: 1px solid var(--sy-border-overlay); border-radius: var(--sy-radius-lg);
+>>>>>>> 0a2de76 (Radius: finer 6-step scale; focus + optical corrections; app-gen nav/focus fix; add proposals)
     box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-6); margin-bottom: var(--sy-space-8);
     animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
   .followups .fu-hint { display: flex; align-items: center; gap: var(--sy-space-12); padding: var(--sy-space-4) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-8);
     margin: 0 calc(-1 * var(--sy-space-6)) var(--sy-space-4);
     border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary); font-size: 11px; line-height: var(--sy-text-11-lh); }
   .followups .fu-row { display: flex; align-items: center; gap: var(--sy-space-8); height: 32px; padding: 0 var(--sy-space-8);
-    border-radius: var(--sy-radius-xs); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); cursor: pointer; }
+    border-radius: var(--sy-radius-sm); font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); cursor: pointer; }
   .followups .fu-row:hover, .followups .fu-row.sel { background: var(--sy-bg-selected); }
   .followups .fu-row .icon { width: 12px; height: 12px; color: var(--sy-fg-tertiary); flex: none; }
   .working { color: var(--sy-fg-secondary); animation: pulse 1.6s var(--sy-ease-standard) infinite; }
@@ -464,7 +468,7 @@
   @keyframes rec-lv { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
   .ans-h { display: flex; align-items: center; gap: var(--sy-space-8); margin-top: var(--sy-space-8); }
   .ctx { display: inline-flex; align-items: center; gap: var(--sy-space-8); max-width: 240px; padding: var(--sy-space-8) var(--sy-space-12);
-    background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); cursor: pointer; }
+    background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); cursor: pointer; }
   .ctx:hover { border-color: var(--sy-border-strong); }
   .ctx .c-i { width: 24px; height: 24px; flex: none; border-radius: var(--sy-radius-xs); background: var(--sy-bg-sunken);
     display: flex; align-items: center; justify-content: center; color: var(--sy-fg-secondary); }
@@ -475,10 +479,10 @@
   .ctx-stack { position: relative; display: inline-flex; }
   .ctx-stack .ctx { position: relative; outline: 2px solid var(--sy-bg-page); }
   .ctx-stack .under { position: absolute; inset: -4px 4px auto 4px; height: 100%; background: var(--sy-bg-raised);
-    border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); }
+    border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); }
   .media-fan { display: flex; padding: var(--sy-space-16) var(--sy-space-8); }
   .media-fan .m-card { width: 180px; height: 120px; background: var(--sy-bg-page); border: 1px solid var(--sy-border-default);
-    border-radius: var(--sy-radius-md); display: flex; flex-direction: column; align-items: stretch; overflow: hidden;
+    border-radius: var(--sy-radius-lg); display: flex; flex-direction: column; align-items: stretch; overflow: hidden;
     color: var(--sy-fg-secondary); outline: 2px solid var(--sy-bg-page);
     transition: transform var(--sy-duration-fast) var(--sy-ease-standard), box-shadow var(--sy-duration-fast) var(--sy-ease-standard); }
   .m-card .asset { display: block; width: 100%; height: 90px; flex: none; }
@@ -504,7 +508,7 @@
     overflow: auto; animation: sy-enter-right var(--sy-duration-base) var(--sy-ease-standard); }
   .pop-anchor { position: absolute; z-index: var(--sy-z-dropdown); }
   .toast-slot { position: absolute; right: var(--sy-space-16); bottom: var(--sy-space-16); z-index: var(--sy-z-toast); display: flex; flex-direction: column; gap: var(--sy-space-8); }
-  .notif { width: 360px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-overlay); border-radius: var(--sy-radius-md);
+  .notif { width: 360px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-overlay); border-radius: var(--sy-radius-lg);
     box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-6); animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
   .notif .n-h { display: flex; align-items: center; padding: var(--sy-space-4) calc(var(--sy-space-8) + var(--sy-space-6)) var(--sy-space-8); margin: 0 calc(-1 * var(--sy-space-6)) var(--sy-space-4); border-bottom: 1px solid var(--sy-border-subtle); }
   .notif .n-filter { padding: var(--sy-space-4) var(--sy-space-4) var(--sy-space-8); }
@@ -560,7 +564,11 @@
   @keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(430%); } }
   .plabel { display: flex; justify-content: space-between; font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); margin-bottom: var(--sy-space-4); }
   .plabel .n { color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums; }
+<<<<<<< HEAD
   .palette { width: 560px; max-width: 100%; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg);
+=======
+  .palette { width: 560px; max-width: 100%; background: var(--sy-glass-surface); backdrop-filter: blur(var(--sy-glass-blur)); border-radius: var(--sy-radius-xl);
+>>>>>>> 0a2de76 (Radius: finer 6-step scale; focus + optical corrections; app-gen nav/focus fix; add proposals)
     box-shadow: var(--sy-shadow-modal); overflow: hidden; }
   .palette .p-in { display: flex; align-items: center; gap: var(--sy-space-8); padding: var(--sy-space-12) var(--sy-space-16);
     border-bottom: 1px solid var(--sy-border-subtle); color: var(--sy-fg-tertiary); }
@@ -575,7 +583,7 @@
     border-top: 1px solid var(--sy-border-subtle); font-size: 11px; color: var(--sy-fg-tertiary); }
 
   .combo-trigger { display: flex; flex-wrap: wrap; gap: var(--sy-space-4); align-items: center; min-height: var(--sy-control-height-md);
-    padding: var(--sy-space-4) var(--sy-space-8); border: 1px solid transparent; border-radius: var(--sy-radius-sm);
+    padding: var(--sy-space-4) var(--sy-space-8); border: 1px solid transparent; border-radius: var(--sy-radius-md);
     background: var(--sy-bg-sunken); width: 300px; }
   .cal { width: 252px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-overlay);
     border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-overlay); padding: var(--sy-space-12); }
@@ -586,13 +594,13 @@
   .cal tbody tr:hover { background: none; }
   .cal tbody td { border-bottom: none; }
   .cal .wd { font: var(--sy-weight-medium) 11px/var(--sy-text-11-lh) var(--sy-font-sans); color: var(--sy-fg-tertiary); text-align: center; padding-bottom: 4px; }
-  .cal .d { width: 32px; height: 32px; text-align: center; font-size: var(--sy-text-13); border-radius: var(--sy-radius-sm); cursor: pointer; }
+  .cal .d { width: 32px; height: 32px; text-align: center; font-size: var(--sy-text-13); border-radius: var(--sy-radius-md); cursor: pointer; }
   .cal .d:hover { background: var(--sy-bg-hover); }
   .cal .d.out { color: var(--sy-fg-disabled); }
   .cal .d.today { background: var(--sy-emphasis-surface); box-shadow: inset 0 0 0 1px var(--sy-emphasis-border); color: var(--sy-emphasis-fg); font-weight: var(--sy-weight-semibold); }
   .cal .d.in { background: var(--sy-bg-selected); border-radius: 0; }
   .cal .d.ep { background: var(--sy-action-primary-bg); color: var(--sy-action-primary-fg); }
-  .acc { border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); max-width: 560px; }
+  .acc { border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); max-width: 560px; }
   .acc-item + .acc-item { border-top: 1px solid var(--sy-border-subtle); }
   .acc-h { display: flex; align-items: center; gap: var(--sy-space-8); height: 40px; padding: 0 var(--sy-space-16);
     background: none; border: none; width: 100%; cursor: pointer; text-align: left;
@@ -605,7 +613,7 @@
   .card.cc-sel { border-color: var(--sy-border-selected); outline: 4px solid var(--sy-border-subtle); outline-offset: 0; }
   .cc-check { color: var(--sy-action-primary-bg); }
   .card:not(.cc-sel) .cc-check { display: none; }
-  .dropzone { border: 1px dashed var(--sy-border-strong); border-radius: var(--sy-radius-lg); padding: var(--sy-space-32) var(--sy-space-24);
+  .dropzone { border: 1px dashed var(--sy-border-strong); border-radius: var(--sy-radius-xl); padding: var(--sy-space-32) var(--sy-space-24);
     display: flex; flex-direction: column; align-items: center; gap: var(--sy-space-8); max-width: 480px; }
   .dropzone .dz-i { width: 48px; height: 48px; border-radius: 50%; background: var(--sy-bg-sunken); position: relative;
     display: flex; align-items: center; justify-content: center; color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-4); }
@@ -614,12 +622,12 @@
   .frow { display: flex; align-items: center; gap: var(--sy-space-8); height: 40px; max-width: 480px;
     font-size: var(--sy-text-13); position: relative; border-bottom: 1px solid var(--sy-border-subtle); }
   .frow .sz { color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums; margin-left: auto; }
-  .split { display: flex; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow: hidden; height: 180px; }
+  .split { display: flex; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-2xl); overflow: hidden; height: 180px; }
   .split .pane { padding: var(--sy-space-16); font-size: var(--sy-text-13); color: var(--sy-fg-secondary); }
   .split .div { width: 1px; background: var(--sy-border-default); cursor: col-resize; }
   .split .div:hover { background: var(--sy-border-strong); }
   .region-tag { display: inline-block; font-family: var(--sy-font-mono); font-size: 11px; color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-12); }
-  .msg-h { max-width: 75%; margin-left: auto; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg);
+  .msg-h { max-width: 75%; margin-left: auto; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-xl);
     padding: var(--sy-space-8) var(--sy-space-12); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
   .msg-a { display: flex; gap: var(--sy-space-8); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
 
@@ -678,10 +686,10 @@
         <h3 class="sub">Radius</h3>
         <div class="row">
           <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xs);">xs 4</div>
-          <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm);">sm 8 — controls</div>
-          <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);">md 10 — cards</div>
-          <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg);">lg 16 — modals</div>
-          <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl);">xl 24 — section shells</div>
+          <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);">sm 8 — controls</div>
+          <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg);">md 10 — cards</div>
+          <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl);">lg 16 — modals</div>
+          <div class="shadow-demo" style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-2xl);">xl 24 — section shells</div>
         </div>
         <h3 class="sub">Shadows</h3>
         <div class="row">
@@ -719,13 +727,13 @@
         <p class="desc">Attached peers and split buttons. Split menus contain only true variants of the main action.</p>
         <div class="row" style="gap: var(--sy-space-24);">
           <span role="group" style="display:inline-flex;">
-            <button class="btn btn-secondary" type="button" style="border-radius: var(--sy-radius-sm) 0 0 var(--sy-radius-sm);" aria-label="Zoom out"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+            <button class="btn btn-secondary" type="button" style="border-radius: var(--sy-radius-md) 0 0 var(--sy-radius-md);" aria-label="Zoom out"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
             <button class="btn btn-secondary" type="button" style="border-radius: 0; border-left: 1px solid var(--sy-border-default);">100%</button>
-            <button class="btn btn-secondary" type="button" style="border-radius: 0 var(--sy-radius-sm) var(--sy-radius-sm) 0; border-left: 1px solid var(--sy-border-default);" aria-label="Zoom in"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+            <button class="btn btn-secondary" type="button" style="border-radius: 0 var(--sy-radius-md) var(--sy-radius-md) 0; border-left: 1px solid var(--sy-border-default);" aria-label="Zoom in"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
           </span>
           <span role="group" style="display:inline-flex;">
-            <button class="btn btn-primary" type="button" style="border-radius: var(--sy-radius-sm) 0 0 var(--sy-radius-sm);" lang="ko">실행</button>
-            <button class="btn btn-primary" type="button" style="border-radius: 0 var(--sy-radius-sm) var(--sy-radius-sm) 0; width:28px; padding:0; border-left: 1px solid var(--sy-action-primary-bg-hover);" aria-haspopup="menu" aria-label="More run options"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+            <button class="btn btn-primary" type="button" style="border-radius: var(--sy-radius-md) 0 0 var(--sy-radius-md);" lang="ko">실행</button>
+            <button class="btn btn-primary" type="button" style="border-radius: 0 var(--sy-radius-md) var(--sy-radius-md) 0; width:28px; padding:0; border-left: 1px solid var(--sy-action-primary-bg-hover);" aria-haspopup="menu" aria-label="More run options"><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
           </span>
         </div>
       </div>
@@ -858,7 +866,7 @@
             </tbody></table>
             <div style="display:flex; align-items:center; gap: var(--sy-space-8); border-top: 1px solid var(--sy-border-subtle); margin: var(--sy-space-8) -12px 0; padding: var(--sy-space-8) var(--sy-space-12) 0;">
               <svg class="icon" viewBox="0 0 24 24" style="color: var(--sy-fg-tertiary);"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-              <input value="14:02" style="width: 64px; height: var(--sy-control-height-sm); padding: 0 var(--sy-space-8); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); background: var(--sy-bg-page); color: var(--sy-fg-primary); font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-mono); font-variant-numeric: tabular-nums;">
+              <input value="14:02" style="width: 64px; height: var(--sy-control-height-sm); padding: 0 var(--sy-space-8); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); background: var(--sy-bg-page); color: var(--sy-fg-primary); font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-mono); font-variant-numeric: tabular-nums;">
               <span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">KST</span>
             </div>
           </div>
@@ -925,9 +933,9 @@
         <h3 class="sub">Shapes — pill (default) · rounded (dense tables; one shape per view)</h3>
         <div class="row">
           <span class="badge badge-success">Completed</span>
-          <span class="badge badge-success" style="border-radius: var(--sy-radius-sm);">Completed</span>
-          <span class="badge badge-info" style="border-radius: var(--sy-radius-sm);" lang="ko">진행 중</span>
-          <span class="badge" style="border-radius: var(--sy-radius-sm); background: color-mix(in srgb, var(--sy-viz-2) 20%, transparent); color: var(--sy-viz-2);" lang="ko">주간 보고</span>
+          <span class="badge badge-success" style="border-radius: var(--sy-radius-md);">Completed</span>
+          <span class="badge badge-info" style="border-radius: var(--sy-radius-md);" lang="ko">진행 중</span>
+          <span class="badge" style="border-radius: var(--sy-radius-md); background: color-mix(in srgb, var(--sy-viz-2) 20%, transparent); color: var(--sy-viz-2);" lang="ko">주간 보고</span>
         </div>
         <h3 class="sub">Solid · outline · dot · count · ai</h3>
         <div class="row">
@@ -1232,9 +1240,9 @@
         <p class="desc">Modal = blocking decision, destructive confirms name consequences. Drawer = detail in context, right side only.</p>
         <h3 class="sub">Widths (half scale) — modal 400 confirm · 480 default · 640 form max / drawer 480 · 640</h3>
         <div class="row" style="align-items: flex-end;">
-          <span style="text-align:center;"><span style="display:block; width:200px; height:60px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm);"></span><div class="space-lbl">modal 400</div></span>
-          <span style="text-align:center;"><span style="display:block; width:240px; height:60px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm);"></span><div class="space-lbl">modal 480 · drawer 480</div></span>
-          <span style="text-align:center;"><span style="display:block; width:320px; height:60px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm);"></span><div class="space-lbl">max 640</div></span>
+          <span style="text-align:center;"><span style="display:block; width:200px; height:60px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);"></span><div class="space-lbl">modal 400</div></span>
+          <span style="text-align:center;"><span style="display:block; width:240px; height:60px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);"></span><div class="space-lbl">modal 480 · drawer 480</div></span>
+          <span style="text-align:center;"><span style="display:block; width:320px; height:60px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);"></span><div class="space-lbl">max 640</div></span>
         </div>
         <div class="grid2">
           <div class="viewport">
@@ -1326,14 +1334,14 @@
       <div class="story" data-group="Components" data-title="CodeBlock · DiffView" data-doc="components.md · CodeBlock / DiffView" id="s-code">
         <p class="desc">The two monospace display surfaces: CodeBlock shows code, logs, and config in one muted theme; DiffView compares changes with +/− gutter markers so color is never the only signal. Both are display, not editors.</p>
         <h3 class="sub">CodeBlock</h3>
-        <div style="max-width: 560px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); overflow:hidden;">
+        <div style="max-width: 560px; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); overflow:hidden;">
           <div style="display:flex; align-items:center; padding: var(--sy-space-4) var(--sy-space-8);"><span class="sy-type-micro" style="font-family: var(--sy-font-mono); color: var(--sy-fg-tertiary);">yaml</span><button class="btn btn-ghost btn-icon btn-sm" type="button" style="margin-left:auto;" aria-label="Copy"><svg class="icon" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div>
           <pre style="margin:0; padding: 0 var(--sy-space-12) var(--sy-space-12); font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-mono); color: var(--sy-fg-primary);">schedule: "0 6 * * 1"
 route: "payment.*"
 team: finance</pre>
         </div>
         <h3 class="sub">DiffView — unified, collapse row, counts</h3>
-        <div style="max-width: 560px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow:hidden;">
+        <div style="max-width: 560px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
           <div style="display:flex; gap: var(--sy-space-8); padding: var(--sy-space-4) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle);"><span class="sy-type-label-sm" style="font-family: var(--sy-font-mono);">agent-config.yaml</span><span class="sy-type-caption" style="margin-left:auto; color: var(--sy-status-success); font-variant-numeric: tabular-nums;">+2</span><span class="sy-type-caption" style="color: var(--sy-status-danger); font-variant-numeric: tabular-nums;">−1</span></div>
           <div style="font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-mono);">
             <div style="padding: 1px var(--sy-space-12); color: var(--sy-fg-tertiary); background: var(--sy-bg-surface);">⋯ 12 unchanged lines</div>
@@ -1403,7 +1411,7 @@ team: finance</pre>
       <div class="story" data-group="Components" data-title="CalendarView" data-doc="components.md (P3)" id="s-calendar-sheet">
         <p class="desc">Schedules, not bookings: max 3 events per cell then +N; event colors are system-assigned viz tints.</p>
         <h3 class="sub">CalendarView (month, excerpt)</h3>
-        <div style="display:grid; grid-template-columns: repeat(3, 1fr); max-width: 560px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow:hidden;">
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); max-width: 560px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
           <div style="min-height:96px; padding: var(--sy-space-6); border-right: 1px solid var(--sy-border-subtle);"><span class="sy-type-label-sm" style="color: var(--sy-fg-tertiary);">8</span></div>
           <div style="min-height:96px; padding: var(--sy-space-6); border-right: 1px solid var(--sy-border-subtle);">
             <span class="sy-type-label-sm" style="display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; box-shadow: inset 0 0 0 1px var(--sy-border-strong);">9</span>
@@ -1418,7 +1426,7 @@ team: finance</pre>
       <div class="story" data-group="Components" data-title="GraphCanvas · FlowNode · Edge" data-doc="components.md · GraphCanvas / FlowNode / Edge" id="s-graphcanvas">
         <p class="desc">The node-graph editor behind the workbench builders (Workflow, Pipeline, Ontology Link/Lineage): a pannable, zoomable canvas of outlined node cards joined by typed edges, with a grouped node palette and a floating controls cluster. Status is a dot + glyph, never hue alone; one connector style system-wide.</p>
         <h3 class="sub">Build mode — palette · canvas · nodes · ports · edge · controls</h3>
-        <div style="display:flex; max-width: 540px; height: 260px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
+        <div style="display:flex; max-width: 540px; height: 260px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow:hidden;">
           <div style="width: 140px; flex:none; background: var(--sy-bg-surface); border-right: 1px solid var(--sy-border-subtle); padding: var(--sy-space-8);">
             <div class="sy-type-micro" style="color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-4);">Extract</div>
             <div class="sy-type-body-sm" style="height:28px; display:flex; align-items:center; padding: 0 var(--sy-space-6); border-radius: var(--sy-radius-xs);">Data (DB)</div>
@@ -1428,17 +1436,17 @@ team: finance</pre>
           </div>
           <div style="flex:1; position:relative; background: var(--sy-bg-sunken);">
             <svg style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;"><path d="M 176 70 C 208 82 190 148 200 154" fill="none" stroke="var(--sy-border-strong)" stroke-width="1.5"/></svg>
-            <div style="position:absolute; left: 16px; top: 40px; width: 160px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md);">
+            <div style="position:absolute; left: 16px; top: 40px; width: 160px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg);">
               <div style="display:flex; align-items:center; gap: var(--sy-space-6); padding: var(--sy-space-6) var(--sy-space-8); border-bottom: 1px solid var(--sy-border-subtle);"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/></svg><span class="sy-type-label">Agent</span><span style="margin-left:auto; width:8px;height:8px;border-radius:50%; background: var(--sy-status-success);"></span></div>
               <div class="sy-type-caption" style="padding: var(--sy-space-6) var(--sy-space-8); color: var(--sy-fg-secondary);">Classify reviews</div>
               <span style="position:absolute; right:-5px; top:50%; width:8px;height:8px; transform:translateY(-50%); background: var(--sy-bg-surface); border: 1px solid var(--sy-border-strong);"></span>
             </div>
-            <div style="position:absolute; left: 200px; top: 124px; width: 160px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-selected); border-radius: var(--sy-radius-md);">
+            <div style="position:absolute; left: 200px; top: 124px; width: 160px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-selected); border-radius: var(--sy-radius-lg);">
               <div style="display:flex; align-items:center; gap: var(--sy-space-6); padding: var(--sy-space-6) var(--sy-space-8); border-bottom: 1px solid var(--sy-border-subtle);"><svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span class="sy-type-label">HITL</span><span style="margin-left:auto; color: var(--sy-fg-tertiary);" class="sy-type-micro">running</span></div>
               <div class="sy-type-caption" style="padding: var(--sy-space-6) var(--sy-space-8); color: var(--sy-fg-secondary);">Await approval</div>
               <span style="position:absolute; left:-5px; top:50%; width:8px;height:8px; transform:translateY(-50%); background: var(--sy-bg-surface); border: 1px solid var(--sy-border-strong);"></span>
             </div>
-            <div style="position:absolute; left: var(--sy-space-8); bottom: var(--sy-space-8); display:flex; gap: var(--sy-space-2); background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); padding: var(--sy-space-2);">
+            <div style="position:absolute; left: var(--sy-space-8); bottom: var(--sy-space-8); display:flex; gap: var(--sy-space-2); background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); padding: var(--sy-space-2);">
               <button class="btn btn-ghost btn-icon btn-sm" aria-label="Zoom in" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
               <button class="btn btn-ghost btn-icon btn-sm" aria-label="Zoom out" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
               <button class="btn btn-ghost btn-icon btn-sm" aria-label="Fit view" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg></button>
@@ -1450,7 +1458,7 @@ team: finance</pre>
       <div class="story" data-group="Components" data-title="RunLog" data-doc="components.md · RunLog" id="s-runlog">
         <p class="desc">Hierarchical execution log — run → step → line — for Workflow Run mode, Pipeline runs, and the CUA run review. Reuses the AgentStep state vocabulary; failed steps auto-expand and surface the error with a Retry. Status is a dot + glyph, never hue alone; display only.</p>
         <h3 class="sub">A run with a failed step expanded</h3>
-        <div style="max-width: 560px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow:hidden;">
+        <div style="max-width: 560px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-8) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle);"><span class="sy-type-label">Run #1284</span><span class="badge badge-danger" style="margin-left:auto;">Failed</span><span class="sy-type-caption" style="color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums;">8.4s</span></div>
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-6) var(--sy-space-12);"><span style="width:8px;height:8px;border-radius:50%; background: var(--sy-status-success);"></span><span class="sy-type-body-sm">Fetch reviews</span><span class="sy-type-caption" style="margin-left:auto; color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums;">1.2s</span></div>
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-6) var(--sy-space-12);"><span style="width:8px;height:8px;border-radius:50%; background: var(--sy-status-success);"></span><span class="sy-type-body-sm">Classify sentiment</span><span class="sy-type-caption" style="margin-left:auto; color: var(--sy-fg-tertiary); font-variant-numeric: tabular-nums;">4.0s</span></div>
@@ -1462,7 +1470,7 @@ team: finance</pre>
       <div class="story" data-group="Components" data-title="PivotTable" data-doc="components.md · PivotTable" id="s-pivottable">
         <p class="desc">Cross-tab aggregation (dimensions × measures) for the Application/dashboard surface: a sticky row-dimension gutter (nested, expand/collapse), grouped column-dimension headers, aggregated numeric cells, and an <code>emphasis.surface</code> total band. Extends Table's renderers; always framed. No zebra, no default heatmap coloring.</p>
         <h3 class="sub">Revenue by category × month</h3>
-        <div style="max-width: 520px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow:hidden;">
+        <div style="max-width: 520px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
           <table style="width:100%; border-collapse: collapse; font-variant-numeric: tabular-nums;">
             <thead><tr style="border-bottom: 1px solid var(--sy-border-subtle);">
               <th class="sy-type-label-sm" style="text-align:left; padding: var(--sy-space-6) var(--sy-space-12); color: var(--sy-fg-tertiary); font-weight: var(--sy-weight-medium);">Category</th>
@@ -1483,13 +1491,13 @@ team: finance</pre>
         <p class="desc">The persistent docked/floating global agent — a compact chat that maximizes into the Console. A composite (like CommandPalette / NotificationCenter): a brand circular launcher opens a docked panel that reuses Composer, AgentStep, and the message stream — never a re-implemented chat. One per app, non-modal.</p>
         <h3 class="sub">Docked panel + floating launcher</h3>
         <div class="row" style="gap: var(--sy-space-16); align-items:flex-end;">
-          <div style="width: 320px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); box-shadow: var(--sy-shadow-overlay); overflow:hidden;">
-            <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-8) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle);"><span style="width:24px;height:24px;border-radius: var(--sy-radius-sm); background: var(--sy-ai-solid); display:inline-flex; align-items:center; justify-content:center; flex:none;"><svg class="icon" style="width:14px;height:14px; color: var(--sy-fg-on-solid);" viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg></span><span class="sy-type-label">Agent</span><button class="btn btn-ghost btn-icon btn-sm" style="margin-left:auto;" aria-label="Maximize" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button><button class="btn btn-ghost btn-icon btn-sm" aria-label="Close" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+          <div style="width: 320px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); box-shadow: var(--sy-shadow-overlay); overflow:hidden;">
+            <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-8) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle);"><span style="width:24px;height:24px;border-radius: var(--sy-radius-md); background: var(--sy-ai-solid); display:inline-flex; align-items:center; justify-content:center; flex:none;"><svg class="icon" style="width:14px;height:14px; color: var(--sy-fg-on-solid);" viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg></span><span class="sy-type-label">Agent</span><button class="btn btn-ghost btn-icon btn-sm" style="margin-left:auto;" aria-label="Maximize" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button><button class="btn btn-ghost btn-icon btn-sm" aria-label="Close" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
             <div style="padding: var(--sy-space-12); display:flex; flex-direction:column; gap: var(--sy-space-8);">
-              <div class="sy-type-body-sm" style="align-self:flex-end; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-6) var(--sy-space-8); max-width: 82%;">Summarize today's failed runs</div>
-              <div class="sy-type-body-sm" style="background: var(--sy-ai-surface); border-radius: var(--sy-radius-md); padding: var(--sy-space-6) var(--sy-space-8);">3 runs failed — 2 on validation, 1 on a connector timeout.</div>
+              <div class="sy-type-body-sm" style="align-self:flex-end; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); padding: var(--sy-space-6) var(--sy-space-8); max-width: 82%;">Summarize today's failed runs</div>
+              <div class="sy-type-body-sm" style="background: var(--sy-ai-surface); border-radius: var(--sy-radius-lg); padding: var(--sy-space-6) var(--sy-space-8);">3 runs failed — 2 on validation, 1 on a connector timeout.</div>
             </div>
-            <div style="display:flex; align-items:center; gap: var(--sy-space-6); margin: 0 var(--sy-space-12) var(--sy-space-12); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); padding: var(--sy-space-6) var(--sy-space-8);"><span class="sy-type-body-sm" style="color: var(--sy-fg-placeholder); flex:1;">Ask the agent…</span><span style="width:24px;height:24px;border-radius:50%; background: var(--sy-action-brand-bg); display:inline-flex; align-items:center; justify-content:center; flex:none;"><svg class="icon" style="width:14px;height:14px; color: var(--sy-fg-on-solid);" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div>
+            <div style="display:flex; align-items:center; gap: var(--sy-space-6); margin: 0 var(--sy-space-12) var(--sy-space-12); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-xl); padding: var(--sy-space-6) var(--sy-space-8);"><span class="sy-type-body-sm" style="color: var(--sy-fg-placeholder); flex:1;">Ask the agent…</span><span style="width:24px;height:24px;border-radius:50%; background: var(--sy-action-brand-bg); display:inline-flex; align-items:center; justify-content:center; flex:none;"><svg class="icon" style="width:14px;height:14px; color: var(--sy-fg-on-solid);" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span></div>
           </div>
           <span style="width:48px;height:48px;border-radius:50%; background: var(--sy-action-brand-bg); box-shadow: var(--sy-shadow-raised); display:inline-flex; align-items:center; justify-content:center; flex:none;"><svg class="icon" style="width:20px;height:20px; color: var(--sy-fg-on-solid);" viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></svg></span>
         </div>
@@ -1498,13 +1506,13 @@ team: finance</pre>
       <div class="story" data-group="Components" data-title="AppLauncher" data-doc="components.md · AppLauncher" id="s-applauncher">
         <p class="desc">A browsable overlay grid of system + user apps — the entry to the Application surface. Glass, scrimless (like CommandPalette). Tiles reuse the Card component (outlined, one action, hover-lift). Distinct from CommandPalette's ⌘K search.</p>
         <h3 class="sub">System + your apps</h3>
-        <div style="max-width: 520px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); box-shadow: var(--sy-shadow-modal); padding: var(--sy-space-16);">
-          <div style="display:flex; align-items:center; gap: var(--sy-space-6); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-sm); padding: var(--sy-space-6) var(--sy-space-8); margin-bottom: var(--sy-space-12);"><svg class="icon" style="color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><span class="sy-type-body-sm" style="color: var(--sy-fg-placeholder);">Search apps…</span></div>
+        <div style="max-width: 520px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); box-shadow: var(--sy-shadow-modal); padding: var(--sy-space-16);">
+          <div style="display:flex; align-items:center; gap: var(--sy-space-6); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-6) var(--sy-space-8); margin-bottom: var(--sy-space-12);"><svg class="icon" style="color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><span class="sy-type-body-sm" style="color: var(--sy-fg-placeholder);">Search apps…</span></div>
           <div class="sy-type-micro" style="color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-8);">System apps</div>
           <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: var(--sy-space-8);">
-            <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); padding: var(--sy-space-12); text-align:center;"><span style="width:32px;height:32px;border-radius: var(--sy-radius-sm); background: var(--sy-bg-sunken); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-6);"><svg class="icon" style="color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg></span><div class="sy-type-label">Price tracker</div><div class="sy-type-caption" style="color: var(--sy-fg-tertiary);">Marketplace prices</div></div>
-            <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); padding: var(--sy-space-12); text-align:center;"><span style="width:32px;height:32px;border-radius: var(--sy-radius-sm); background: var(--sy-bg-sunken); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-6);"><svg class="icon" style="color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div class="sy-type-label">Review analysis</div><div class="sy-type-caption" style="color: var(--sy-fg-tertiary);">Sentiment & needs</div></div>
-            <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); padding: var(--sy-space-12); text-align:center;"><span style="width:32px;height:32px;border-radius: var(--sy-radius-sm); background: var(--sy-bg-sunken); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-6);"><svg class="icon" style="color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h8a2 2 0 0 1 2 2v8"/></svg></span><div class="sy-type-label">Workflow</div><div class="sy-type-caption" style="color: var(--sy-fg-tertiary);">Agentic Work</div></div>
+            <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12); text-align:center;"><span style="width:32px;height:32px;border-radius: var(--sy-radius-md); background: var(--sy-bg-sunken); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-6);"><svg class="icon" style="color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg></span><div class="sy-type-label">Price tracker</div><div class="sy-type-caption" style="color: var(--sy-fg-tertiary);">Marketplace prices</div></div>
+            <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12); text-align:center;"><span style="width:32px;height:32px;border-radius: var(--sy-radius-md); background: var(--sy-bg-sunken); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-6);"><svg class="icon" style="color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div class="sy-type-label">Review analysis</div><div class="sy-type-caption" style="color: var(--sy-fg-tertiary);">Sentiment & needs</div></div>
+            <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12); text-align:center;"><span style="width:32px;height:32px;border-radius: var(--sy-radius-md); background: var(--sy-bg-sunken); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-6);"><svg class="icon" style="color: var(--sy-fg-secondary);" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h8a2 2 0 0 1 2 2v8"/></svg></span><div class="sy-type-label">Workflow</div><div class="sy-type-caption" style="color: var(--sy-fg-tertiary);">Agentic Work</div></div>
           </div>
         </div>
       </div>
@@ -1775,14 +1783,14 @@ team: finance</pre>
           <div class="step"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">추론 과정</span><span class="dur">6.2s</span></div>
           <div>
             <div class="step"><svg class="icon" style="width:12px;height:12px; color: var(--sy-fg-tertiary); transform: rotate(90deg);" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span style="color: var(--sy-fg-tertiary);" lang="ko">추론 과정</span><span class="dur">6.2s</span></div>
-            <div class="sy-type-body-sm" style="background: var(--sy-bg-surface); border-radius: var(--sy-radius-md); padding: var(--sy-space-12); color: var(--sy-fg-secondary); margin-left: var(--sy-space-20);" lang="ko">문의 데이터를 주제별로 묶은 뒤 전주와 같은 기준으로 비교해야 한다. 결제 오류가 눈에 띄게 늘었으므로 원인 분석을 우선한다…</div>
+            <div class="sy-type-body-sm" style="background: var(--sy-bg-surface); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12); color: var(--sy-fg-secondary); margin-left: var(--sy-space-20);" lang="ko">문의 데이터를 주제별로 묶은 뒤 전주와 같은 기준으로 비교해야 한다. 결제 오류가 눈에 띄게 늘었으므로 원인 분석을 우선한다…</div>
           </div>
         </div>
       </div>
 
       <div class="story" data-group="AI patterns" data-title="Guardrail notice" data-doc="ai-patterns.md §15" id="s-guardrail">
         <p class="desc">A policy outcome, not an error — a neutral shield Banner on bg.sunken that names the path forward. NEVER status.danger red: red would teach users that policy is breakage.</p>
-        <div style="max-width: 560px; display: flex; gap: var(--sy-space-8); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-12) var(--sy-space-16);">
+        <div style="max-width: 560px; display: flex; gap: var(--sy-space-8); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12) var(--sy-space-16);">
           <svg class="icon" style="color: var(--sy-fg-tertiary); flex:none;" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.7 9a.6.6 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 .6-.9l7-2.9a1 1 0 0 1 .8 0l7 2.9A1 1 0 0 1 20 6z"/></svg>
           <span class="sy-type-body-sm" style="color: var(--sy-fg-secondary);" lang="ko">워크스페이스 데이터 정책에 따라 처리할 수 없는 요청입니다. 정책은 관리자가 설정에서 확인할 수 있습니다.</span>
         </div>
@@ -1817,14 +1825,14 @@ team: finance</pre>
               <span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
               <div style="flex:1;">
                 <p lang="ko">주간 문의 보고서 초안을 작성했습니다. 오른쪽 패널에서 확인하고 편집할 수 있습니다.</p>
-                <div style="display:inline-flex; align-items:center; gap: var(--sy-space-8); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); padding: var(--sy-space-6) var(--sy-space-8); margin-top: var(--sy-space-8);">
+                <div style="display:inline-flex; align-items:center; gap: var(--sy-space-8); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); padding: var(--sy-space-6) var(--sy-space-8); margin-top: var(--sy-space-8);">
                   <svg class="icon" style="width:16px;height:16px; color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
                   <span class="sy-type-label" lang="ko">주간 문의 보고서</span>
                 </div>
               </div>
             </div>
           </div>
-          <div style="flex: 1.4; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); background: var(--sy-bg-raised); overflow: hidden;">
+          <div style="flex: 1.4; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); background: var(--sy-bg-raised); overflow: hidden;">
             <div class="row" style="gap: var(--sy-space-8); padding: var(--sy-space-12) var(--sy-space-16); border-bottom: 1px solid var(--sy-border-subtle);">
               <span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
               <span class="sy-type-label" lang="ko">주간 문의 보고서</span>
@@ -1852,7 +1860,7 @@ team: finance</pre>
           <div class="card" style="flex: 1;">
             <p lang="ko">지난 분기 결제 오류의 주요 원인은 결제 게이트웨이 타임아웃이었습니다 <span style="display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius: var(--sy-radius-full); background: var(--sy-bg-sunken); color: var(--sy-fg-secondary); font-variant-numeric: tabular-nums; vertical-align: middle;"><span class="sy-type-caption">1</span></span>.</p>
           </div>
-          <div style="flex: 1.2; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); background: var(--sy-bg-raised); overflow: hidden;">
+          <div style="flex: 1.2; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); background: var(--sy-bg-raised); overflow: hidden;">
             <div class="row" style="gap: var(--sy-space-8); padding: var(--sy-space-12) var(--sy-space-16); border-bottom: 1px solid var(--sy-border-subtle);">
               <span class="sy-type-micro-label" lang="ko">출처</span>
               <span style="margin-left:auto;"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></span>
@@ -1872,7 +1880,7 @@ team: finance</pre>
       <div class="story" data-group="AI patterns" data-title="Conversation summary" data-doc="ai-patterns.md §34" id="s-summary">
         <p class="desc">An agent-generated recap of a long thread — decisions, action items, open questions — on ai.surface with the squared avatar and attribution. Refreshable on demand, never replaces the transcript (append-only), and each point links back to the turns it summarizes.</p>
         <h3 class="sub">Summary block</h3>
-        <div style="max-width: 560px; background: var(--sy-ai-surface); border-radius: var(--sy-radius-lg); padding: var(--sy-space-16);">
+        <div style="max-width: 560px; background: var(--sy-ai-surface); border-radius: var(--sy-radius-xl); padding: var(--sy-space-16);">
           <div class="row" style="gap: var(--sy-space-8); align-items:center; margin-bottom: var(--sy-space-12);">
             <span class="avatar agent av-20" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1);"><svg class="icon" style="width:11px;height:11px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
             <span class="sy-type-label" style="color: var(--sy-ai-fg);" lang="ko">대화 요약</span>
@@ -1951,7 +1959,7 @@ team: finance</pre>
 
       <div class="story" data-group="Recipes" data-title="Toolbar (R7)" data-doc="recipes.md R7" id="s-r-toolbar">
         <p class="desc">Dense workbench control strip (height 40): icon-buttons in groups separated by full-height hairline dividers; text buttons ghost/secondary; max 3 groups, overflow into ⋯.</p>
-        <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:40px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); padding: 0 var(--sy-space-8); max-width: 520px;">
+        <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:40px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); padding: 0 var(--sy-space-8); max-width: 520px;">
           <button class="btn btn-ghost btn-icon btn-sm" aria-label="Add" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
           <button class="btn btn-ghost btn-icon btn-sm" aria-label="Delete" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
           <span style="width:1px; height:20px; background: var(--sy-border-subtle); margin: 0 var(--sy-space-12);"></span>
@@ -1989,7 +1997,7 @@ team: finance</pre>
 
       <div class="story" data-group="Recipes" data-title="Topbar (R10)" data-doc="recipes.md R10" id="s-r-topbar">
         <p class="desc">App-frame top strip (height 48, in addition to Sidebar): workspace switcher — a 20px squared monogram tile (the frame's one deliberate dark object) + name + chevron; right side: notification bell, help, Avatar.</p>
-        <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-md); padding: 0 var(--sy-space-12); max-width: 560px;">
+        <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-lg); padding: 0 var(--sy-space-12); max-width: 560px;">
           <button class="btn btn-ghost btn-sm" type="button" style="gap: var(--sy-space-8);"><span style="width:20px;height:20px;border-radius: var(--sy-radius-xs); background: var(--sy-bg-inverse); color: var(--sy-fg-inverse); display:inline-flex; align-items:center; justify-content:center; font-weight: var(--sy-weight-semibold); font-size:11px;">E</span><span lang="ko">인핸스</span><svg class="icon" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
           <span style="margin-left:auto; display:flex; align-items:center; gap: var(--sy-space-8);">
             <button class="btn btn-ghost btn-icon btn-sm" aria-label="Notifications" type="button"><svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
@@ -2013,7 +2021,7 @@ team: finance</pre>
 
       <div class="story" data-group="Recipes" data-title="Empty page — first run (R12)" data-doc="recipes.md R12" id="s-r-emptypage">
         <p class="desc">Full content-area EmptyState, Guided styling: display-scale title, ≤2-sentence explanation, one primary action (pill silhouette sanctioned here) + optional ghost. Resist filling the whitespace.</p>
-        <div style="border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-lg); padding: var(--sy-space-48) var(--sy-space-24); text-align:center; max-width: 560px;">
+        <div style="border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-xl); padding: var(--sy-space-48) var(--sy-space-24); text-align:center; max-width: 560px;">
           <span style="width:48px;height:48px;border-radius:50%; background: var(--sy-bg-sunken); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-16);"><svg class="icon" style="color: var(--sy-fg-tertiary);" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="18" r="2"/><path d="M8 6h8a2 2 0 0 1 2 2v8"/></svg></span>
           <div class="sy-type-heading-lg" lang="ko" style="margin-bottom: var(--sy-space-8);">첫 Workflow를 만들어 보세요</div>
           <p class="sy-type-body-lg" style="color: var(--sy-fg-secondary); margin: 0 auto var(--sy-space-16); max-width: 380px;" lang="ko">에이전트가 반복 업무를 자동으로 실행하도록 Workflow를 구성합니다.</p>
@@ -2023,7 +2031,7 @@ team: finance</pre>
 
       <div class="story" data-group="Recipes" data-title="Error page — 403/404/500 (R13)" data-doc="recipes.md R13" id="s-r-errorpage">
         <p class="desc">Full content-area EmptyState, error flavor. 403 never reveals what the page contains; 404 offers "Go back"; 500 shows Retry + an incident reference. Chrome stays rendered — errors are content-region events.</p>
-        <div style="border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-lg); padding: var(--sy-space-48) var(--sy-space-24); text-align:center; max-width: 560px;">
+        <div style="border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-xl); padding: var(--sy-space-48) var(--sy-space-24); text-align:center; max-width: 560px;">
           <span style="width:48px;height:48px;border-radius:50%; background: var(--sy-status-danger-bg); display:inline-flex; align-items:center; justify-content:center; margin-bottom: var(--sy-space-16);"><svg class="icon" style="color: var(--sy-status-danger);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></span>
           <div class="sy-type-heading-md" lang="ko" style="margin-bottom: var(--sy-space-8);">이 페이지에 접근할 권한이 없습니다</div>
           <p class="sy-type-body-sm" style="color: var(--sy-fg-secondary); margin: 0 auto var(--sy-space-16); max-width: 360px;" lang="ko">담당자에게 권한을 요청하거나 홈으로 이동하세요.</p>
@@ -2043,7 +2051,7 @@ team: finance</pre>
 
       <div class="story" data-group="Recipes" data-title="Batch-run results (R15)" data-doc="recipes.md R15" id="s-r-batch">
         <p class="desc">Queue completion (ai-patterns §29): Table, one row per input — mono source · status (dot+text) · per-row action; failed rows keep 다시 시도. Header carries the aggregate line + 결과 내보내기. Partial success reports as partial.</p>
-        <div style="max-width: 560px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); overflow:hidden;">
+        <div style="max-width: 560px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-8) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle);"><span class="sy-type-label" lang="ko">328건 중 312건 처리</span><button class="btn btn-secondary btn-sm" type="button" style="margin-left:auto;" lang="ko">결과 내보내기</button></div>
           <table style="width:100%; border-collapse: collapse; font-variant-numeric: tabular-nums;"><tbody>
             <tr style="border-bottom: 1px solid var(--sy-border-subtle);"><td class="sy-type-body-sm" style="padding: var(--sy-space-6) var(--sy-space-12); font-family: var(--sy-font-mono);">reviews_01.csv</td><td class="sy-type-body-sm" style="padding: var(--sy-space-6) var(--sy-space-12);"><span style="width:8px;height:8px;border-radius:50%; background: var(--sy-status-success); display:inline-block; margin-right: var(--sy-space-6);"></span><span lang="ko">완료</span></td><td class="sy-type-body-sm" style="text-align:right; padding: var(--sy-space-6) var(--sy-space-12);"><a href="#" lang="ko">열기</a></td></tr>
@@ -2054,11 +2062,11 @@ team: finance</pre>
 
       <div class="story" data-group="Recipes" data-title="Builder workbench shell (R16)" data-doc="recipes.md R16" id="s-r-builder">
         <p class="desc">The workbench layout every builder shares (Workflow, Pipeline, dev-stage Replay/CUA): a header with a Build/Run toggle over a SplitPanel of an intent pane · GraphCanvas · inspector. Run mode overlays per-node status and opens a RunLog.</p>
-        <div style="max-width: 600px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow:hidden;">
+        <div style="max-width: 600px; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow:hidden;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); padding: var(--sy-space-8) var(--sy-space-12); border-bottom: 1px solid var(--sy-border-subtle);"><span class="sy-type-label" lang="ko">가격 트래커 Workflow</span><span class="seg" style="margin-left: var(--sy-space-8);"><button type="button" class="on" style="height:28px;">Build</button><button type="button" style="height:28px;">Run</button></span><button class="btn btn-primary btn-sm" type="button" style="margin-left:auto;" lang="ko">배포</button></div>
           <div style="display:flex; height: 190px;">
             <div style="width: 140px; flex:none; border-right: 1px solid var(--sy-border-subtle); background: var(--sy-bg-surface); padding: var(--sy-space-8);"><div class="sy-type-micro" style="color: var(--sy-fg-tertiary);" lang="ko">노드</div><div class="sy-type-body-sm" style="height:28px; display:flex; align-items:center;">Agent</div><div class="sy-type-body-sm" style="height:28px; display:flex; align-items:center;">Condition</div></div>
-            <div style="flex:1; background: var(--sy-bg-sunken); position:relative;"><div style="position:absolute; left: var(--sy-space-16); top: var(--sy-space-16); width: 130px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); padding: var(--sy-space-6) var(--sy-space-8);"><span class="sy-type-label">Agent</span></div></div>
+            <div style="flex:1; background: var(--sy-bg-sunken); position:relative;"><div style="position:absolute; left: var(--sy-space-16); top: var(--sy-space-16); width: 130px; background: var(--sy-bg-surface); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); padding: var(--sy-space-6) var(--sy-space-8);"><span class="sy-type-label">Agent</span></div></div>
             <div style="width: 150px; flex:none; border-left: 1px solid var(--sy-border-subtle); background: var(--sy-bg-surface); padding: var(--sy-space-8);"><div class="sy-type-micro" style="color: var(--sy-fg-tertiary);" lang="ko">인스펙터</div><div class="sy-type-caption" style="color: var(--sy-fg-secondary); margin-top: var(--sy-space-6);" lang="ko">노드를 선택하세요</div></div>
           </div>
         </div>
@@ -2066,7 +2074,7 @@ team: finance</pre>
 
       <div class="story" data-group="Sample pages" data-title="Home" data-doc="patterns.md §1F · R4 · Composer" id="s-sample-home">
         <p class="desc">The workspace's start surface (§1F): Artific greeting moment, hero metric strip with the actionable number emphasized, the human-in-the-loop approval queue first, agent shelf — and the Composer pinned at the bottom (sending opens a Console). <strong>Interactive:</strong> topbar as in Workbench.</p>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
             <button class="btn btn-ghost btn-sm" type="button"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
             <span style="margin-left:auto;"></span>
@@ -2143,7 +2151,7 @@ team: finance</pre>
 
       <div class="story" data-group="Sample pages" data-title="Workbench" data-doc="patterns.md §1A · R1/R4/R6/R10" id="s-sample-workbench">
         <p class="desc">Full dense workbench: topbar (R10), sidebar, filter bar, stat grid, framed table with dot statuses and totals, SplitPanel detail pane, pagination. One accent on the whole screen — the conversational entry. <strong>Interactive:</strong> bell → NotificationCenter · avatar &amp; workspace → menus · 🔍 → CommandPalette · table row → detail Drawer.</p>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
             <button class="btn btn-ghost btn-sm" type="button"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
             <span style="margin-left:auto;"></span>
@@ -2232,7 +2240,7 @@ team: finance</pre>
 
       <div class="story" data-group="Sample pages" data-title="Console" data-doc="patterns.md §1E · ai-patterns" id="s-sample-console">
         <p class="desc">The product's heart — now a full ai-patterns walkthrough: context cards, named working line (§20), steps with pre-approved tool call and failure→retry (§3/§4/§10), answer anatomy (§20), provenance + Model-knowledge + uncertainty register (§6/§7/§9), ProposalCard + resolved attribution (§5), MediaGroup + rail (§21), quote-reply (§18), follow-ups (§19), guardrail (§15), handoff (§16), long-running progress (§11), live streaming + Stop (§2/§8). Mono §-tags mark each pattern; thread scrolls. <strong>Interactive:</strong> follow-up rows &amp; chips insert into the Composer · send ↔ stop morph · quote × removes · agent picker opens · pen-line → refinement presets rewrite the draft (Undo in the toast) · bookmark → Template Library modal (rich cards: description + cloze preview) inserts a draft · topbar as in Workbench.</p>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
             <button class="btn btn-ghost btn-sm" type="button"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
             <span style="margin-left:auto;"></span>
@@ -2312,7 +2320,7 @@ team: finance</pre>
                 <div class="msg-a">
                   <span class="avatar agent av-24" style="background: color-mix(in srgb, var(--sy-viz-1) 20%, transparent); color: var(--sy-viz-1); flex:none;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>
                   <div style="flex:1; min-width:0;">
-                    <div style="display:flex; gap: var(--sy-space-8); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-12) var(--sy-space-16); max-width: 560px;">
+                    <div style="display:flex; gap: var(--sy-space-8); background: var(--sy-bg-sunken); border-radius: var(--sy-radius-lg); padding: var(--sy-space-12) var(--sy-space-16); max-width: 560px;">
                       <svg class="icon" style="color: var(--sy-fg-tertiary); flex:none;" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.7 9a.6.6 0 0 1-.6 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 .6-.9l7-2.9a1 1 0 0 1 .8 0l7 2.9A1 1 0 0 1 20 6z"/></svg>
                       <span class="sy-type-body-sm" style="color: var(--sy-fg-secondary);" lang="ko">개인 연락처는 워크스페이스 데이터 정책에 따라 보고서에 포함할 수 없습니다. 정책은 관리자가 설정에서 확인할 수 있습니다.</span>
                       <span class="ptag" style="flex:none; align-self:flex-start;">§15</span>
@@ -2364,7 +2372,7 @@ team: finance</pre>
 
       <div class="story" data-group="Sample pages" data-title="Settings" data-doc="patterns.md §1C" id="s-sample-settings">
         <p class="desc">Settings archetype: 760px column, tabs, form card with save pair, switch rows, usage meter, danger zone. Zero accent — nothing here prompts an AI. <strong>Interactive:</strong> 워크스페이스 삭제 → destructive Modal → Toast · topbar as in Workbench.</p>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-8); height:48px; padding: 0 var(--sy-space-16); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
             <button class="btn btn-ghost btn-sm" type="button"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
             <span style="margin-left:auto;"></span>
@@ -2432,7 +2440,7 @@ team: finance</pre>
 
       <div class="story" data-group="Sample pages" data-title="Object detail" data-doc="patterns.md §1B · R1/R11" id="s-sample-object">
         <p class="desc">Focus object page: R1 header (Run is `primary` — operational), tabs, key-value flat card, trend chart, embedded dense runs table, agent proposal, activity. No accent — the ask-entry lives in chrome (⌘K).</p>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); overflow: hidden; background: var(--sy-bg-page); padding: var(--sy-page-padding); min-width: 960px; max-width: 1440px;">
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow: hidden; background: var(--sy-bg-page); padding: var(--sy-page-padding); min-width: 960px; max-width: 1440px;">
           <div style="max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--sy-space-24);">
             <div>
               <div class="crumbs" style="margin-bottom: var(--sy-space-4);"><a href="#">Agents</a><span>/</span><span class="cur" lang="ko">주간 보고서</span></div>
@@ -2509,7 +2517,7 @@ team: finance</pre>
 
       <div class="story" data-group="Sample pages" data-title="First run (guided)" data-doc="patterns.md §1D · R12" id="s-sample-guided">
         <p class="desc">Guided archetype, two moments: the hero (EN so the Artific display face actually renders — Hangul falls back to Pretendard by design) and step 2's ChoiceCard decision. Whitespace is intentional.</p>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); background: var(--sy-bg-page); padding: var(--sy-space-64) var(--sy-space-32); min-width: 960px; max-width: 1440px;">
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); background: var(--sy-bg-page); padding: var(--sy-space-64) var(--sy-space-32); min-width: 960px; max-width: 1440px;">
           <div style="max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: var(--sy-space-16); text-align: center;">
             <div class="sy-type-display">Create your first agent</div>
             <p class="sy-type-body-lg sy-balance" style="color: var(--sy-fg-secondary); max-width: 440px;">Hand off a recurring task — results come back organized and ready to review.</p>
@@ -2520,7 +2528,7 @@ team: finance</pre>
           </div>
         </div>
         <h3 class="sub" lang="ko">2단계 — 에이전트 유형 선택 (ChoiceCard)</h3>
-        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); background: var(--sy-bg-page); padding: var(--sy-space-48) var(--sy-space-32); min-width: 960px; max-width: 1440px;">
+        <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); background: var(--sy-bg-page); padding: var(--sy-space-48) var(--sy-space-32); min-width: 960px; max-width: 1440px;">
           <div style="max-width: 640px; margin: 0 auto; display:flex; flex-direction:column; gap: var(--sy-space-24);">
             <div style="text-align:center;">
               <div class="sy-type-caption" style="color: var(--sy-fg-tertiary);">2 / 3</div>
@@ -3133,7 +3141,7 @@ team: finance</pre>
 
   document.getElementById('badgeShapeMatrix').appendChild(matrixTable(['md','lg'], ['pill','rounded'], function (shape, size) {
     var cls = 'badge badge-success' + (size === 'lg' ? ' badge-lg' : '');
-    var style = shape === 'rounded' ? ' style="border-radius: var(--sy-radius-sm);"' : '';
+    var style = shape === 'rounded' ? ' style="border-radius: var(--sy-radius-md);"' : '';
     return '<span class="' + cls + '"' + style + ' lang="ko">완료</span> <span class="' + cls + '"' + style + '>Completed</span>';
   }));
 

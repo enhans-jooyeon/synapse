@@ -62,9 +62,10 @@
   /* radius */
   --sy-radius-xs: 4px;
   --sy-radius-sm: 8px;
-  --sy-radius-md: 10px;
+  --sy-radius-md: 12px;
   --sy-radius-lg: 16px;
-  --sy-radius-xl: 24px;
+  --sy-radius-xl: 20px;
+  --sy-radius-2xl: 24px;
   --sy-radius-full: 9999px;
 
   /* elevation — borders-first system; shadows only for floating layers */
@@ -287,7 +288,7 @@
   --sy-control-height-md: 36px;
   --sy-control-height-lg: 40px;
   --sy-control-padding-x: 12px;
-  --sy-control-gap: 8px;
+  --sy-control-gap: 12px;
 
   --sy-body-size: 14px;
   --sy-body-lh: 22px;

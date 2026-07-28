@@ -11,6 +11,7 @@
   :root {
     /* Synapse semantic tokens */
     --bg:#FAFAFB;--bg2:#ffffff;--bg3:#F4F4F6;--border:#E9E9ED;--border2:#D1D1D8;
+    --focus-line:#33333A; /* border.focus-input — neutral dark hairline on entry/edit surfaces */
     --text:#09090B;--text2:#62626B;--text3:#83838D;
     --blue:#0621C4;--blue2:#384dd0;--blue-light:#eeeffb;--blue-bg:#eeeffb;
     --blue-900:#002e5c;--blue-800:#041476;--blue-700:#051a99;--blue-600:#051AA0;
@@ -126,7 +127,7 @@
   .pbtn.active{background:#ffffff;border-color:#D1D1D8;color:var(--text);}
   .tsearch{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:8px;height:auto;min-width:260px;width:auto;color:var(--text);font-size:14px;line-height:1.3;letter-spacing:0.01em;font-weight:400;outline:none;transition:.15s;font-family:inherit;}
   .tsearch::placeholder{color:var(--text2);}
-  .tsearch:focus{background:var(--bg2);border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,132,255,.12);}
+  .tsearch:focus{background:var(--bg2);border-color:var(--focus-line);box-shadow:0 0 0 3px color-mix(in srgb, var(--focus-line) 12%, transparent);}
   .tbtn{padding:6px 12px;border-radius:8px;font-size:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;font-weight:500;transition:.15s;font-family:inherit;}
   .tbtn:hover{border-color:var(--border2);color:var(--text);background:var(--bg3);}
   .cond-hi{background:var(--green-bg);}
@@ -168,7 +169,7 @@
   .fg{display:flex;flex-direction:column;gap:3px;}.fl{font-size:11px;color:var(--text2);font-weight:600;}
   .fsel,.fdate,.ftext{background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:8px;height:auto;min-width:260px;width:auto;color:var(--text);font-size:14px;line-height:1.3;letter-spacing:0.01em;font-weight:400;outline:none;transition:.15s;font-family:inherit;}
   .fsel::placeholder,.fdate::placeholder,.ftext::placeholder{color:var(--text2);}
-  .fsel:focus,.ftext:focus{background:var(--bg2);border-color:var(--blue);}
+  .fsel:focus,.ftext:focus{background:var(--bg2);border-color:var(--focus-line);box-shadow:0 0 0 3px color-mix(in srgb, var(--focus-line) 12%, transparent);}
   select.fsel{appearance:none;-webkit-appearance:none;padding-right:32px;min-width:0;align-self:flex-start;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23808081' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;}
   .frange{width:216px;-webkit-appearance:none;appearance:none;height:8px;border-radius:9999px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--blue) var(--r,0%),#E9E9ED var(--r,0%));}
   .frange::-webkit-slider-thumb{-webkit-appearance:none;width:8px;height:16px;border-radius:4px;background:#fff;border:1px solid #d4d4d5;box-shadow:0 1px 3px rgba(0,0,0,.12);cursor:pointer;transition:border-color .15s,box-shadow .15s;}
@@ -216,7 +217,7 @@
   .ff select{appearance:none;-webkit-appearance:none;padding-right:32px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23808081' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;}
   .ff input::placeholder,.ff textarea::placeholder{color:var(--text2);}
   .ff textarea{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:6px 10px;color:var(--text);font-size:13px;outline:none;font-family:inherit;transition:.15s;}
-  .ff input:focus,.ff select:focus,.ff textarea:focus{background:var(--bg2);border-color:var(--blue);}
+  .ff input:focus,.ff select:focus,.ff textarea:focus{background:var(--bg2);border-color:var(--focus-line);box-shadow:0 0 0 3px color-mix(in srgb, var(--focus-line) 12%, transparent);}
   .ff textarea{resize:vertical;min-height:40px;}
   .ff .err{font-size:11px;color:var(--red);margin-top:3px;display:none;}
   .ff.invalid input,.ff.invalid select{border-color:var(--red);background:var(--red-bg);}.ff.invalid .err{display:block;}
@@ -280,7 +281,7 @@
   /* Editable cell */
   .editable-cell{cursor:pointer;position:relative;}
   .editable-cell:hover{background:var(--blue-light);outline:2px solid var(--blue);outline-offset:-2px;border-radius:4px;}
-  .editable-cell input{width:80px;border:1.5px solid var(--blue);border-radius:4px;padding:2px 6px;font-size:13px;outline:none;background:white;}
+  .editable-cell input{width:80px;border:1.5px solid var(--focus-line);border-radius:4px;padding:2px 6px;font-size:13px;outline:none;background:white;box-shadow:0 0 0 3px color-mix(in srgb, var(--focus-line) 12%, transparent);}
   .detail-row{cursor:pointer;transition:background .1s;}
   .detail-row:hover td{background:var(--blue-light);}
   .detail-row.selected td{background:var(--blue-light);border-left:2px solid var(--blue);}
@@ -423,6 +424,13 @@
     <button class="snav-item active" data-target="cat-1">Visualization</button>
     <button class="snav-item" data-target="cat-2">Table</button>
     <button class="snav-item" data-target="cat-3">Filter</button>
+    <button class="snav-item" data-target="cat-4">Data entry</button>
+    <button class="snav-item" data-target="cat-5">Files</button>
+    <button class="snav-item" data-target="cat-6">Export</button>
+    <button class="snav-item" data-target="cat-7">Layout</button>
+    <button class="snav-item" data-target="cat-8">Interaction</button>
+    <button class="snav-item" data-target="cat-9">Maps</button>
+    <button class="snav-item" data-target="cat-10">Comparison</button>
   </nav>
 </aside>
 

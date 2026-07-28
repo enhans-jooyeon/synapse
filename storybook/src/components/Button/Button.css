@@ -4,7 +4,7 @@
   gap: var(--sy-space-6);
   height: var(--sy-control-height-md);
   padding: 0 var(--sy-control-padding-x);
-  border: none; border-radius: var(--sy-radius-sm); cursor: pointer;
+  border: none; border-radius: var(--sy-radius-md); cursor: pointer;
   font: var(--sy-weight-medium) var(--sy-label-size) / var(--sy-label-lh) var(--sy-font-sans);
   color: var(--sy-fg-primary); background: transparent;
   transition: background var(--sy-duration-instant) var(--sy-ease-standard),

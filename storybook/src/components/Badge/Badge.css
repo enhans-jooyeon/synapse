@@ -7,7 +7,7 @@
 }
 .sy-badge--lg { height: 24px; padding: 0 var(--sy-space-12);
   font: var(--sy-weight-medium) var(--sy-text-12) / var(--sy-text-12-lh) var(--sy-font-sans); }
-.sy-badge--rounded { border-radius: var(--sy-radius-sm); }
+.sy-badge--rounded { border-radius: var(--sy-radius-md); }
 .sy-badge--neutral { background: var(--sy-bg-sunken); color: var(--sy-fg-secondary); }
 .sy-badge--info { background: var(--sy-status-info-bg); color: var(--sy-status-info); }
 .sy-badge--success { background: var(--sy-status-success-bg); color: var(--sy-status-success); }
