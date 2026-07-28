@@ -116,12 +116,7 @@ One size per view, as with shape.
 
 **Optical centering:** badge labels are single-line and flex-centered within the fixed height; line-height collapses to 1 (the container provides the box — the line-height floor rule targets wrapping text, not sealed single-line containers) plus a 1px top-padding nudge to compensate for descender space the font reserves but short labels rarely use. Without this, labels read as shifted toward the top of the pill. **Scale-bound:** the nudge applies ONLY to the tight 20px/11px geometry of the `md` badge. At 24px/12px proportions (`lg` badge, Chip) the container has enough optical room that plain flex centering is correct and the nudge overcorrects downward — verified empirically, both surfaces.
 
-**Shape variants** (a view-level style choice, NEVER per instance — one shape per view):
-
-| Shape | Radius | Use |
-|---|---|---|
-| `pill` (default) | `full` | The default everywhere. |
-| `rounded` | `sm` | Available at any size/context as the view's chosen shape. It is the *default expectation* in dense tables and code-adjacent contexts, where tiling pills read as noise. |
+**Shape: pill only.** A Badge is ALWAYS `radius.full` — the pill silhouette is what marks it as static/informational. The former `rounded` (`sm`) shape is retired: the rounded rectangle now belongs exclusively to **Chip** (the interactive counterpart), so shape alone separates them — **pill = informs, cornered = act on it.** One less per-view decision, and interactivity is scannable at a glance.
 
 **Color variants:** `neutral`, `info`, `success`, `warning`, `danger`, `ai` (uses `ai.*` tokens — agent-related states only), `category` (static taxonomy label: deterministic `viz-n` at 20% fill + matching text, same hashing as Avatar; system-assigned, never user-picked). `category` supports the `subtle` emphasis only — taxonomy is never urgent, outlined, or reduced to a dot.
 **Emphasis variants** (orthogonal to color; pick by surrounding density and importance):
@@ -151,7 +146,7 @@ One size per view, as with shape.
 
 ## Chip
 
-**Purpose:** compact **interactive** element — select, refine, remove, or accept a suggestion. The static counterpart is Badge; the split is absolute: if it can be clicked, it's a Chip; if it only informs, it's a Badge. Height 24px, radius `md` (rounded — deliberately distinct from pill badges so interactivity is scannable by shape), text 12, plain flex centering (the Badge optical nudge does NOT apply here — at 24px/12px the container has enough room that the nudge overcorrects downward).
+**Purpose:** compact **interactive** element — select, refine, remove, or accept a suggestion. The static counterpart is Badge; the split is absolute: if it can be clicked, it's a Chip; if it only informs, it's a Badge. Height 24px, radius `sm` (rounded rectangle — a defined corner, deliberately distinct from the pill Badge so interactivity is scannable by shape: cornered = actionable, pill = static), text 12, plain flex centering (the Badge optical nudge does NOT apply here — at 24px/12px the container has enough room that the nudge overcorrects downward).
 
 **Variants (closed):**
 

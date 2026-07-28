@@ -185,6 +185,10 @@
   --sy-ai-solid: #0621C4;
 
   --sy-meter-fill: #83838D;
+
+  /* category-chip label text — darkened viz hues, AA-verified on the viz 20% tint (never use raw --sy-viz-* as text) */
+  --sy-viz-1-text: #4761AF; --sy-viz-2-text: #34735C; --sy-viz-3-text: #85611E; --sy-viz-4-text: #9A4A4A;
+  --sy-viz-5-text: #6E59A1; --sy-viz-6-text: #366F85; --sy-viz-7-text: #88547C; --sy-viz-8-text: #5F656F;
 }
 
 [data-theme="dark"] {
@@ -271,6 +275,10 @@
   --sy-ai-solid: #0621C4;
 
   --sy-meter-fill: #A9A9B2;
+
+  /* category-chip label text — lightened viz hues, AA-verified on the viz 20% tint over dark surfaces */
+  --sy-viz-1-text: #7F99E7; --sy-viz-2-text: #5AB392; --sy-viz-3-text: #CC993B; --sy-viz-4-text: #D18787;
+  --sy-viz-5-text: #A692D6; --sy-viz-6-text: #5DAAC9; --sy-viz-7-text: #C28CB5; --sy-viz-8-text: #979EA7;
 
   --sy-shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4);
   --sy-shadow-overlay: 0 8px 24px rgba(0, 0, 0, 0.5);

@@ -336,6 +336,17 @@
         "$description": "Progress/meter fills. Non-text elements — 3:1 floor against the sunken track.",
         "fill": { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.400}" } } }, "$description": "Default (user-initiated work). AI runs use action.brand-bg; failed uses status.danger-bg-solid." }
       },
+      "viz-text": {
+        "$description": "Category-chip label text — darkened (light mode) / lightened (dark mode) viz hues, AA-verified on the viz 20% tint. Chip labels ONLY; raw viz-* is chart-swatch-only and fails AA as text.",
+        "1": { "$value": "#4761AF", "$extensions": { "synapse": { "modes": { "light": "#4761AF", "dark": "#7F99E7" } } } },
+        "2": { "$value": "#34735C", "$extensions": { "synapse": { "modes": { "light": "#34735C", "dark": "#5AB392" } } } },
+        "3": { "$value": "#85611E", "$extensions": { "synapse": { "modes": { "light": "#85611E", "dark": "#CC993B" } } } },
+        "4": { "$value": "#9A4A4A", "$extensions": { "synapse": { "modes": { "light": "#9A4A4A", "dark": "#D18787" } } } },
+        "5": { "$value": "#6E59A1", "$extensions": { "synapse": { "modes": { "light": "#6E59A1", "dark": "#A692D6" } } } },
+        "6": { "$value": "#366F85", "$extensions": { "synapse": { "modes": { "light": "#366F85", "dark": "#5DAAC9" } } } },
+        "7": { "$value": "#88547C", "$extensions": { "synapse": { "modes": { "light": "#88547C", "dark": "#C28CB5" } } } },
+        "8": { "$value": "#5F656F", "$extensions": { "synapse": { "modes": { "light": "#5F656F", "dark": "#979EA7" } } } }
+      },
       "brand": {
         "$description": "Brand-identity objects. The point color #0621C4 marks the brand: the topbar workspace monogram tile, the docs-hub/preview brand mark, and the sanctioned Artific brand-hero moment. Logo lockups & marketing surfaces also use point. NOT for general chrome — the frame stays monochrome; the point is the single deliberate brand pop.",
         "point":    { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } } },

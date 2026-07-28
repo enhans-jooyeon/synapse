@@ -25,7 +25,7 @@ Synapse is a neutral, black-key system. The interface is built almost entirely f
 - One screen region SHOULD contain at most one solid-fill accent element (e.g. one primary button). Everything else uses outline, ghost, or text styles.
 - Status colors are for status only. NEVER use `--sy-status-danger` for decoration or `--sy-status-success` as a generic "green accent."
 - Solid red fills (`danger-bg-solid`) are reserved for destructive confirmation buttons.
-- Data visualization MUST use `--sy-viz-1` … `--sy-viz-8`, assigned in order without skipping. If a chart encodes status (pass/fail, healthy/degraded), use status tokens instead of viz tokens.
+- Data visualization MUST use `--sy-viz-1` … `--sy-viz-8`, assigned in order without skipping. If a chart encodes status (pass/fail, healthy/degraded), use status tokens instead of viz tokens. **Viz colors are chart-swatch-only — NEVER as text** (mid-toned, they fail AA on their own tints). A category chip's LABEL uses `--sy-viz-*-text` (darkened/lightened, AA-verified) on the viz 20% tint; the raw `--sy-viz-*` is for the tint/swatch only.
 - Text on colored status backgrounds MUST use the paired status foreground token, never `fg.primary`.
 - All text/background pairings MUST meet WCAG 2.1 AA (4.5:1 body, 3:1 large text ≥18px semibold or ≥24px). The semantic pairs in the token file are pre-verified; novel combinations are forbidden, which makes verification unnecessary.
 
