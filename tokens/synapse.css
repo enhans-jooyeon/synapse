@@ -112,11 +112,12 @@
   --sy-bg-selected-hover: #DCE3EB;
   --sy-bg-disabled: #F4F4F6;
   --sy-bg-scrim: rgba(9, 9, 11, 0.40);
-  --sy-glass-surface: rgba(12, 13, 18, 0.56);
+  --sy-glass-surface: #F6F8FB;
   --sy-glass-blur: 26px;
   --sy-glass-filter: blur(26px) saturate(1.5) brightness(1.12);
-  --sy-glass-border: rgba(255, 255, 255, 0.14);
-  --sy-glass-accent: #8AA0FF;
+  --sy-glass-border: #E4E9F0;
+  --sy-glass-rim: #FFFFFF;
+  --sy-glass-accent: #33333B;
   --sy-glass-selected: rgba(255, 255, 255, 0.10);
   --sy-shadow-glass: 0 2px 6px rgba(9, 9, 11, 0.28), 0 30px 60px rgba(9, 9, 11, 0.44), inset 0 1px 0 rgba(255, 255, 255, 0.42), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
   --sy-bg-inverse: #09090B;
@@ -145,10 +146,10 @@
   --sy-action-primary-fg: #FFFFFF;
   --sy-action-secondary-bg: #F4F4F6;
   --sy-action-secondary-bg-hover: #ECECEF;
-  --sy-action-brand-bg: #0621C4;
-  --sy-action-brand-bg-hover: #051AA0;
-  --sy-action-brand-bg-active: #051AA0;
-  --sy-brand-point: #0621C4;
+  --sy-action-brand-bg: #1A1A1F;
+  --sy-action-brand-bg-hover: #33333B;
+  --sy-action-brand-bg-active: #0E0E12;
+  --sy-brand-point: #1A1A1F;
   --sy-brand-point-fg: #FFFFFF;
   --sy-action-brand-fg: #FFFFFF;
 
@@ -182,13 +183,16 @@
   --sy-emphasis-fg: #4F5D6F;
   --sy-emphasis-fg-soft: #6B7A8D;
   --sy-ai-fg: #4F5D6F;
-  --sy-ai-solid: #0621C4;
+  --sy-ai-solid: #1A1A1F;
 
   --sy-meter-fill: #83838D;
 
   /* category-chip label text — darkened viz hues, AA-verified on the viz 20% tint (never use raw --sy-viz-* as text) */
   --sy-viz-1-text: #4761AF; --sy-viz-2-text: #34735C; --sy-viz-3-text: #85611E; --sy-viz-4-text: #9A4A4A;
   --sy-viz-5-text: #6E59A1; --sy-viz-6-text: #366F85; --sy-viz-7-text: #88547C; --sy-viz-8-text: #5F656F;
+  /* category tint fills — SOLID (opaque) viz tints; replaces color-mix(...,transparent) alpha fills */
+  --sy-viz-1-bg: #DEE5F9; --sy-viz-2-bg: #DCEFE8; --sy-viz-3-bg: #F4E9D5; --sy-viz-4-bg: #F3DFDF;
+  --sy-viz-5-bg: #E8E2F4; --sy-viz-6-bg: #DCEDF3; --sy-viz-7-bg: #F0E2ED; --sy-viz-8-bg: #E4E6E8;
 }
 
 [data-theme="dark"] {
@@ -203,10 +207,11 @@
   --sy-bg-selected-hover: #3C4756;
   --sy-bg-disabled: #1E1E24;
   --sy-bg-scrim: rgba(9, 9, 11, 0.60);
-  --sy-glass-surface: rgba(255, 255, 255, 0.55);
+  --sy-glass-surface: #262B33;
   --sy-glass-filter: blur(26px) saturate(1.4) brightness(1.05);
-  --sy-glass-border: rgba(9, 9, 11, 0.08);
-  --sy-glass-accent: #0621C4;
+  --sy-glass-border: #363C46;
+  --sy-glass-rim: #3C424C;
+  --sy-glass-accent: #E4E4E7;
   --sy-glass-selected: rgba(9, 9, 11, 0.06);
   --sy-shadow-glass: 0 2px 6px rgba(0, 0, 0, 0.16), 0 26px 54px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.5);
   --sy-bg-inverse: #FFFFFF;
@@ -235,12 +240,12 @@
   --sy-action-primary-fg: #09090B;
   --sy-action-secondary-bg: #33333A;
   --sy-action-secondary-bg-hover: #4A4A52;
-  --sy-action-brand-bg: #0621C4;
-  --sy-action-brand-bg-hover: #051AA0;
-  --sy-action-brand-bg-active: #051AA0;
-  --sy-brand-point: #0621C4;
-  --sy-brand-point-fg: #FFFFFF;
-  --sy-action-brand-fg: #FFFFFF;
+  --sy-action-brand-bg: #F2F2F4;
+  --sy-action-brand-bg-hover: #E4E4E7;
+  --sy-action-brand-bg-active: #E4E4E7;
+  --sy-brand-point: #F2F2F4;
+  --sy-brand-point-fg: #1A1A1F;
+  --sy-action-brand-fg: #1A1A1F;
 
   --sy-status-info: #9DB3EE;
   --sy-status-info-bg: #1B2C60;
@@ -264,21 +269,24 @@
   --sy-status-warning-inverse: #8C5A00;
   --sy-status-danger-inverse: #B23230;
 
-  --sy-ai-surface: #1A212B;
-  --sy-ai-surface-hover: #2A333F;
+  --sy-ai-surface: #2A333F;
+  --sy-ai-surface-hover: #3C4756;
   --sy-ai-border: #2A333F;
   --sy-emphasis-surface: #1A212B;
   --sy-emphasis-border: #2A333F;
   --sy-emphasis-fg: #C2CCD9;
   --sy-emphasis-fg-soft: #93A1B3;
   --sy-ai-fg: #C2CCD9;
-  --sy-ai-solid: #0621C4;
+  --sy-ai-solid: #F2F2F4;
 
   --sy-meter-fill: #A9A9B2;
 
   /* category-chip label text — lightened viz hues, AA-verified on the viz 20% tint over dark surfaces */
   --sy-viz-1-text: #7F99E7; --sy-viz-2-text: #5AB392; --sy-viz-3-text: #CC993B; --sy-viz-4-text: #D18787;
   --sy-viz-5-text: #A692D6; --sy-viz-6-text: #5DAAC9; --sy-viz-7-text: #C28CB5; --sy-viz-8-text: #979EA7;
+  /* category tint fills — SOLID viz tints on dark surfaces */
+  --sy-viz-1-bg: #2A314A; --sy-viz-2-bg: #283B39; --sy-viz-3-bg: #403526; --sy-viz-4-bg: #3F2B2F;
+  --sy-viz-5-bg: #342E45; --sy-viz-6-bg: #283944; --sy-viz-7-bg: #3C2E3D; --sy-viz-8-bg: #303239;
 
   --sy-shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4);
   --sy-shadow-overlay: 0 8px 24px rgba(0, 0, 0, 0.5);

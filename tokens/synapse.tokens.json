@@ -63,10 +63,13 @@
         "950": { "$value": "#111A3C" }
       },
       "point": {
-        "$description": "Point/accent color (retargeted to the Claude Design System value) — the point blue #0621C4, the system's one vivid accent. Black remains the brand/action color; point is used ONLY for brand identity objects and AI emphasis (conversational-AI CTAs + active AI running states). Distinct hue from the functional blue ramp (links/focus/status.info), which stays the calmer indigo.",
-        "50":  { "$value": "#EBEDFA" },
-        "500": { "$value": "#0621C4" },
-        "600": { "$value": "#051AA0" }
+        "$description": "Point/accent — GRAPHITE (retargeted from the point blue #0621C4). The system's single accent is now achromatic near-black and INVERTS by mode: near-black in light, near-white in dark, so the one point moment reads on either background. Jurisdiction unchanged (brand-identity objects + conversational-AI emphasis). Links/focus/status.info keep the functional indigo/blue ramp — the point is no longer a hue. Light steps (100/200) exist to supply the dark-mode inverted fills.",
+        "50":  { "$value": "#F4F5F6" },
+        "100": { "$value": "#F2F2F4" },
+        "200": { "$value": "#E4E4E7" },
+        "400": { "$value": "#33333B" },
+        "500": { "$value": "#1A1A1F" },
+        "600": { "$value": "#0E0E12" }
       },
       "green": {
         "50":  { "$value": "#EEF9F3" },
@@ -307,10 +310,10 @@
         "primary-fg":        { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.black}" } } } },
         "secondary-bg":       { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.800}" } } }, "$description": "Tonal secondary button fill (replaced the outlined secondary). Ghost stays transparent." },
         "secondary-bg-hover": { "$value": "{primitive.color.gray.150}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.150}", "dark": "{primitive.color.gray.700}" } } } },
-        "brand-bg":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } }, "$description": "The POINT / brand color (button variant renamed accent→brand): #0621C4. Jurisdiction = brand-identity objects + conversational-AI CTAs (Ask agent / Composer send), max 1 per screen. Operational agent actions (Run/Retry/Resume) stay primary/black — invoking the agent conversationally is the sanctioned blue moment, executing a configured run is not." },
-        "brand-bg-hover":   { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.600}" } } } },
-        "brand-bg-active":  { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.600}" } } }, "$description": "Aliases hover." },
-        "brand-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } },
+        "brand-bg":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.100}" } } }, "$description": "The POINT / brand color (button variant renamed accent→brand): graphite, inverts by mode (near-black light / near-white dark). Jurisdiction = brand-identity objects + conversational-AI CTAs (Ask agent / Composer send), max 1 per screen. Operational agent actions (Run/Retry/Resume) stay primary/black — invoking the agent conversationally is the sanctioned point moment, executing a configured run is not." },
+        "brand-bg-hover":   { "$value": "{primitive.color.point.400}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.400}", "dark": "{primitive.color.point.200}" } } } },
+        "brand-bg-active":  { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.200}" } } }, "$description": "Pressed state of the inverting point button." },
+        "brand-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.point.500}" } } } },
         "danger-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } }
       },
       "status": {
@@ -336,6 +339,17 @@
         "$description": "Progress/meter fills. Non-text elements — 3:1 floor against the sunken track.",
         "fill": { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.400}" } } }, "$description": "Default (user-initiated work). AI runs use action.brand-bg; failed uses status.danger-bg-solid." }
       },
+      "viz-bg": {
+        "$description": "Category tint fills — SOLID (opaque) viz tints, mode-aware. Replaces color-mix(...,transparent) alpha fills; alpha is reserved for bg.hover/active/scrim only. Pairs with viz-text.",
+        "1": { "$value": "#DEE5F9", "$extensions": { "synapse": { "modes": { "light": "#DEE5F9", "dark": "#2A314A" } } } },
+        "2": { "$value": "#DCEFE8", "$extensions": { "synapse": { "modes": { "light": "#DCEFE8", "dark": "#283B39" } } } },
+        "3": { "$value": "#F4E9D5", "$extensions": { "synapse": { "modes": { "light": "#F4E9D5", "dark": "#403526" } } } },
+        "4": { "$value": "#F3DFDF", "$extensions": { "synapse": { "modes": { "light": "#F3DFDF", "dark": "#3F2B2F" } } } },
+        "5": { "$value": "#E8E2F4", "$extensions": { "synapse": { "modes": { "light": "#E8E2F4", "dark": "#342E45" } } } },
+        "6": { "$value": "#DCEDF3", "$extensions": { "synapse": { "modes": { "light": "#DCEDF3", "dark": "#283944" } } } },
+        "7": { "$value": "#F0E2ED", "$extensions": { "synapse": { "modes": { "light": "#F0E2ED", "dark": "#3C2E3D" } } } },
+        "8": { "$value": "#E4E6E8", "$extensions": { "synapse": { "modes": { "light": "#E4E6E8", "dark": "#303239" } } } }
+      },
       "viz-text": {
         "$description": "Category-chip label text — darkened (light mode) / lightened (dark mode) viz hues, AA-verified on the viz 20% tint. Chip labels ONLY; raw viz-* is chart-swatch-only and fails AA as text.",
         "1": { "$value": "#4761AF", "$extensions": { "synapse": { "modes": { "light": "#4761AF", "dark": "#7F99E7" } } } },
@@ -348,25 +362,26 @@
         "8": { "$value": "#5F656F", "$extensions": { "synapse": { "modes": { "light": "#5F656F", "dark": "#979EA7" } } } }
       },
       "brand": {
-        "$description": "Brand-identity objects. The point color #0621C4 marks the brand: the topbar workspace monogram tile, the docs-hub/preview brand mark, and the sanctioned Artific brand-hero moment. Logo lockups & marketing surfaces also use point. NOT for general chrome — the frame stays monochrome; the point is the single deliberate brand pop.",
-        "point":    { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } } },
-        "point-fg": { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } }
+        "$description": "Brand-identity objects. The graphite point (inverts by mode) marks the brand: the topbar workspace monogram tile, the docs-hub/preview brand mark, and the sanctioned Artific brand-hero moment. Logo lockups & marketing surfaces also use point. NOT for general chrome — the frame stays monochrome; the point is the single deliberate brand pop.",
+        "point":    { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.100}" } } } },
+        "point-fg": { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.point.500}" } } } }
       },
       "ai": {
         "$description": "Surfaces and marks that identify agent/AI presence.: FULL slate theme — surfaces, borders, fg and solid fills all draw from slate. The squared avatar is the primary agency marker; ai.* slate treatments support it. Blue no longer appears on AI (accent deprecated). Distinct from emphasis.* in semantics even where values match. See ai-patterns.md §1.",
-        "surface":       { "$value": "{primitive.color.slate.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.100}", "dark": "{primitive.color.slate.900}" } } } },
-        "surface-hover": { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Hover state for interactive AI fills (suggestion chips)." },
+        "surface":       { "$value": "{primitive.color.slate.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.100}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Dark mode uses slate.800 (one step up from slate.900) so the AI surface separates from bg.raised without a border." },
+        "surface-hover": { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.700}" } } }, "$description": "Hover state for interactive AI fills; dark tracks the lightened ai.surface (slate.700)." },
         "border":        { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Hairline weight; slate. AI surfaces are layered (tinted zone on a neutral card), never outlined in saturated color." },
         "fg":            { "$value": "{primitive.color.slate.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.600}", "dark": "{primitive.color.slate.300}" } } }, "$description": ": slate — the full-slate AI theme. The squared avatar is THE agency marker; ai.fg marks support it." },
-        "solid":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.500}" } } }, "$description": "Solid AI fills for ACTIVE running states (live-activity beacon Badge, in-progress ai ProgressBar) — the point color #0621C4. Blue signals AI at work; idle/complete/surface stay slate (ai.surface/border/fg unchanged). Pairs with fg.on-solid under the §8 solid-label ≥3:1 policy." }
+        "solid":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.100}" } } }, "$description": "Solid AI fills for ACTIVE running states (live-activity beacon Badge, in-progress ai ProgressBar) — the graphite point, inverts by mode. The point marks AI at work; idle/complete/surface stay slate (ai.surface/border/fg unchanged). Pairs with fg.on-solid under the §8 solid-label ≥3:1 policy." }
       },
       "glass": {
-        "$description": "DEPRECATED / UNUSED — glassmorphism was explored and dropped; overlays are opaque (foundations §5). These tokens (and shadow.glass) are dormant, retained only for a possible future inverse-surface context; DO NOT apply, and backdrop-filter is forbidden (SY015). Historical spec follows. The glass material — two tints chosen by the surface behind (foundations §5). The tint always INVERTS the surface so the pane reads as glass: DARK glass over light/neutral surfaces (light theme), LIGHT glass over dark/colorful surfaces (dark theme). Text is fg.inverse (white on dark glass, ink on light glass), so legibility holds regardless of what's behind. Unscrimmed floating overlays only — CommandPalette and AppLauncher (the Composer follow-up panel is solid bg.raised, not glass). Scrimmed layers (Modal, Drawer) stay opaque. reduced-transparency falls back opaque (bg.inverse for dark glass, bg.raised for light). backdrop-filter legal ONLY as var(--sy-glass-filter) or blur(var(--sy-glass-blur)) (SY015). Edge recipe: bright top rim + inner ring on dark glass; soft neutral hairline + gentle rim on light glass (glass.border + shadow.glass).",
-        "surface": { "$value": "rgba(12, 13, 18, 0.56)", "$extensions": { "synapse": { "modes": { "light": "rgba(12, 13, 18, 0.56)", "dark": "rgba(255, 255, 255, 0.55)" } } } },
+        "$description": "FAUX-GLASS (reactivated) — the AppLauncher surface reads as frosted glass using an OPAQUE frosted tint (glass.surface) + a top rim highlight (glass.rim) + soft hairline (glass.border), NOT translucency. There is NO backdrop-filter: SY015 still forbids it, and glass.blur/glass.filter remain dormant. Chosen because a real translucent blur over an austere mostly-light app reads muddy (see below). CommandPalette and Modals/Drawers stay opaque bg.raised. Historical translucent spec follows (dormant). The glass material — two tints chosen by the surface behind (foundations §5). The tint always INVERTS the surface so the pane reads as glass: DARK glass over light/neutral surfaces (light theme), LIGHT glass over dark/colorful surfaces (dark theme). Text is fg.inverse (white on dark glass, ink on light glass), so legibility holds regardless of what's behind. Unscrimmed floating overlays only — CommandPalette and AppLauncher (the Composer follow-up panel is solid bg.raised, not glass). Scrimmed layers (Modal, Drawer) stay opaque. reduced-transparency falls back opaque (bg.inverse for dark glass, bg.raised for light). backdrop-filter legal ONLY as var(--sy-glass-filter) or blur(var(--sy-glass-blur)) (SY015). Edge recipe: bright top rim + inner ring on dark glass; soft neutral hairline + gentle rim on light glass (glass.border + shadow.glass).",
+        "surface": { "$value": "#F6F8FB", "$extensions": { "synapse": { "modes": { "light": "#F6F8FB", "dark": "#262B33" } } }, "$description": "Opaque frosted panel fill (faux-glass). Light: cool luminous near-white; dark: graphite lifted above bg.raised." },
         "blur":    { "$value": "26px", "$type": "dimension" },
         "filter":  { "$value": "blur(26px) saturate(1.5) brightness(1.12)", "$extensions": { "synapse": { "modes": { "light": "blur(26px) saturate(1.5) brightness(1.12)", "dark": "blur(26px) saturate(1.4) brightness(1.05)" } } } },
-        "border":  { "$value": "rgba(255, 255, 255, 0.14)", "$extensions": { "synapse": { "modes": { "light": "rgba(255, 255, 255, 0.14)", "dark": "rgba(9, 9, 11, 0.08)" } } } },
-        "accent":  { "$value": "#8AA0FF", "$extensions": { "synapse": { "modes": { "light": "#8AA0FF", "dark": "#0621C4" } } } },
+        "border":  { "$value": "#E4E9F0", "$extensions": { "synapse": { "modes": { "light": "#E4E9F0", "dark": "#363C46" } } } },
+        "rim":     { "$value": "#FFFFFF", "$extensions": { "synapse": { "modes": { "light": "#FFFFFF", "dark": "#3C424C" } } }, "$description": "Top inner-rim highlight (inset 0 1px 0) that gives the faux-glass its luminous edge." },
+        "accent":  { "$value": "#33333B", "$extensions": { "synapse": { "modes": { "light": "#33333B", "dark": "#E4E4E7" } } } },
         "selected": { "$value": "rgba(255, 255, 255, 0.10)", "$extensions": { "synapse": { "modes": { "light": "rgba(255, 255, 255, 0.10)", "dark": "rgba(9, 9, 11, 0.06)" } } } }
       },
       "emphasis": {

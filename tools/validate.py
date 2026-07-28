@@ -75,7 +75,7 @@ CONTRAST_PAIRS = [
     ("fg-link on bg-page", "--sy-fg-link", "--sy-bg-page", 4.5),
     ("emphasis-fg on emphasis-surface", "--sy-emphasis-fg", "--sy-emphasis-surface", 4.5),
     ("ai-fg on ai-surface", "--sy-ai-fg", "--sy-ai-surface", 4.5),
-    ("fg-on-solid on ai-solid", "--sy-fg-on-solid", "--sy-ai-solid", 3.0),
+    ("action-brand-fg on ai-solid", "--sy-action-brand-fg", "--sy-ai-solid", 3.0),
     ("emphasis-fg-soft on bg-surface (non-text mark)", "--sy-emphasis-fg-soft", "--sy-bg-surface", 3.0),
     ("fg-primary on emphasis-surface", "--sy-fg-primary", "--sy-emphasis-surface", 4.5),
     ("fg-primary on bg-selected", "--sy-fg-primary", "--sy-bg-selected", 4.5),
