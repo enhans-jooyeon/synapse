@@ -14,7 +14,7 @@ export const Playground: Story = {};
 
 export const Variants: Story = {
   render: () => (
-    <div style={{ display: "flex", gap: "var(--sy-space-12)", flexWrap: "wrap" }}>
+    <div style={{ display: "flex", gap: "var(--sy-space-3)", flexWrap: "wrap" }}>
       <Button variant="primary">Save changes</Button>
       <Button variant="secondary" lang="ko">변경사항 저장</Button>
       <Button variant="ghost">Cancel</Button>

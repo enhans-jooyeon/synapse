@@ -1,6 +1,6 @@
 # Synapse icon registry
 
-**Closed vocabulary.** Every icon in AgentOS comes from this concept→icon table (Tabler Icons — outline set — stroke down-weighted to 1.5, sizes 16/20/24 per foundations §7). A concept not listed here gets **no icon** — using an unlisted Tabler icon, inventing an SVG, or repurposing a listed icon for a different concept are contract violations; new concepts go through the proposal path (design.md §6). One concept, one icon: the same idea never renders with two different glyphs anywhere in the product.
+**Closed vocabulary.** Every icon in AgentOS comes from this concept→icon table (Tabler Icons — outline set — stroke down-weighted to 1.5, sizes 16/20/24 per foundations §8). A concept not listed here gets **no icon** — using an unlisted Tabler icon, inventing an SVG, or repurposing a listed icon for a different concept are contract violations; new concepts go through the proposal path (design.md §6). One concept, one icon: the same idea never renders with two different glyphs anywhere in the product.
 
 ## Navigation & chrome
 

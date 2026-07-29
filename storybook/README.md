@@ -27,7 +27,7 @@ npm run typecheck
 5. **Toolbar globals** (theme × density × locale) come from `.storybook/preview.tsx` —
    never hardcode `data-theme`/`data-density` inside a story.
 6. **Radix policy**: behavior-heavy components (Dialog, Popover, Tooltip, Tabs, Checkbox)
-   wrap Radix primitives — the focus-management spec (foundations §8) is what Radix ships
+   wrap Radix primitives — the focus-management spec (foundations §9) is what Radix ships
    tested. Simple components stay dependency-free. Decided per-component; reversible.
 
 ## Seed set

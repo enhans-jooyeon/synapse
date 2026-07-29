@@ -12,11 +12,11 @@ The top block of every Object and Workbench page.
 
 ```
 [Breadcrumb] ← only if depth > 2
-space-4
+space-1
 [heading-xl page title] [Badge status, size lg] [actions: ≤1 primary/accent + ≤1 secondary + overflow menu]
-space-4
+space-1
 [caption fg.tertiary meta line: owner · updated timestamp · id]
-space-24
+space-6
 ```
 
 Title truncation forbidden; long titles wrap. Actions right-aligned, vertically centered on the title line. Meta line items separated by "·".
@@ -27,9 +27,9 @@ Above any content section or data region.
 
 ```
 [heading-lg] [count Badge] [≤1 secondary or ghost action]
-space-4
+space-1
 [body-sm fg.secondary one-line description] ← optional
-space-16
+space-4
 ```
 
 Never more than one sentence of description — longer explanations go to a docs link.
@@ -40,13 +40,13 @@ Inside Card: `heading-md` (or `heading-lg` for page-dominant cards) + optional t
 
 ## R4 · Stat grid
 
-2–6 `stat` Cards in an equal-column grid, gutter `space-24`.
+2–6 `stat` Cards in an equal-column grid, gutter `space-6`.
 
 Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row**: 12px `trending-up`/`trending-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비").
 
 ## R5 · Action pair & footer conventions
 
-- Dialog/form footers: right-aligned, `[secondary "Cancel"] [primary confirm]` — confirm always rightmost, gap `space-8`. Destructive: `[secondary "Cancel"] [danger confirm]`.
+- Dialog/form footers: right-aligned, `[secondary "Cancel"] [primary confirm]` — confirm always rightmost, gap `space-2`. Destructive: `[secondary "Cancel"] [danger confirm]`.
 - Page-level forms: same pair pinned to the section bottom, never floating-sticky when only one section exists.
 - Never two adjacent primaries; a third action becomes `ghost` leftmost ("Edit") or goes into an overflow menu.
 
@@ -58,22 +58,22 @@ Above any filterable data region:
 [search Input, max 320px] [filter Combobox/Select ×≤3] [DatePicker range] ··· [ghost "Clear" — only when ≥1 filter active] [right: view SegmentedControl / column menu]
 ```
 
-Single row, gap `space-8`, wraps on narrow viewports (search full-width first). Active filters render as removable input Chips in a second row when they don't fit inline. "Clear" removes all; it never hides.
+Single row, gap `space-2`, wraps on narrow viewports (search full-width first). Active filters render as removable input Chips in a second row when they don't fit inline. "Clear" removes all; it never hides.
 
 ## R7 · Toolbar
 
-Dense workbench control strip: height 40px, items gap `space-8`, groups separated by full-height 1px `border.subtle` dividers with `space-12` on both sides. Icon-buttons from the approved list; text buttons `ghost`/`secondary` sm. Max 3 groups; overflow into a ⋯ menu.
+Dense workbench control strip: height 40px, items gap `space-2`, groups separated by full-height 1px `border.subtle` dividers with `space-3` on both sides. Icon-buttons from the approved list; text buttons `ghost`/`secondary` sm. Max 3 groups; overflow into a ⋯ menu.
 
 ## R8 · Form section
 
 ```
 [heading-md] + optional [body-sm fg.secondary description]
-space-16
+space-4
 [fields, stack-gap] ← single column, patterns.md §3
-space-24
+space-6
 ```
 
-Every 3–6 fields get a new section. Sections separated by full-bleed `border.subtle` + `space-24` in long forms.
+Every 3–6 fields get a new section. Sections separated by full-bleed `border.subtle` + `space-6` in long forms.
 
 ## R9 · Stepper
 

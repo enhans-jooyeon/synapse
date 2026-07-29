@@ -1,3 +1,5 @@
+> **APPLIED 2026-07-29.** Executed as a single-pass atomic rename (regex replace-by-captured-original, which sidesteps the crossover hazard noted below). Authoritative map is **name × 4px = value** (2px→`space-0_5`, 4px→`space-1`, 16px→`space-4`, 384px→`space-96`); the rename-map table below is the original draft and is superseded by the tokens + CHANGELOG. Moved to archive.
+
 # Spacing scale → 4px-multiplier naming (with underscore fractional steps)
 
 **Date:** 2026-07-28 · **Status:** proposal for maintainer decision (no tokens renamed yet) · **Scope:** the `--sy-space-*` scale only. **Semver: MAJOR** (breaking token rename).

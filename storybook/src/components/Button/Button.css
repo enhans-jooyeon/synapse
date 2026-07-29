@@ -1,7 +1,7 @@
 /* Button — components.md · Button. Tokens only; the gate lints this file. */
 .sy-btn {
   display: inline-flex; align-items: center; justify-content: center;
-  gap: var(--sy-space-6);
+  gap: var(--sy-space-1_5);
   height: var(--sy-control-height-md);
   padding: 0 var(--sy-control-padding-x);
   border: none; border-radius: var(--sy-radius-md); cursor: pointer;
@@ -33,7 +33,7 @@
 .sy-btn--brand { background: var(--sy-action-brand-bg); color: var(--sy-action-brand-fg); }
 .sy-btn--brand:hover, .sy-btn--brand:active { background: var(--sy-action-brand-bg-hover); }
 .sy-btn:disabled { background: var(--sy-bg-disabled); color: var(--sy-fg-disabled); cursor: not-allowed; }
-.sy-btn--pill { border-radius: var(--sy-radius-full); padding: 0 var(--sy-space-20); }
+.sy-btn--pill { border-radius: var(--sy-radius-full); padding: 0 var(--sy-space-5); }
 .sy-btn__spinner {
   width: 16px; height: 16px; border-radius: var(--sy-radius-full); flex: none;
   border: 2px solid var(--sy-border-default); border-top-color: currentColor;

@@ -44,7 +44,7 @@ Every change is spec law and is versioned in lockstep. For any change:
 6. **Docs are English-only.** No `.ko.md` to maintain — Korean is on-demand in the hub (client-side Google Translate). SY011/SY016 still apply to Hangul *example strings* inside the EN specs; only the KO-doc staleness check (SY018) and its `sy-source` hashes were removed.
 7. **June pushes from her Mac.** The sandbox can commit-attempt but CANNOT push (no creds) and cannot delete `.git/index.lock` (permission denied). Push flow on Mac: `rm -f .git/index.lock && git add -A && git commit -m "…" && git push`.
 
-Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (scale = {0,2,4,6,8,12,16,20,24,28,32,40,48,64,80,96}; NOT 10), SY009 raw box-shadow (exempt: a zero-blur `0 0 0` ring — inset or outset — using a token; focus rings may wrap a token in `color-mix`), SY011 Hangul outside `lang=ko`, SY016 Hangul in Artific display element, SY017 manifest stale.
+Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (spacing = {0,2,4,6,8,10,12,16,20,24,28,32,40,48,64,80,96,128,160,192,224,256,320,384}; radius adds 10), SY009 raw box-shadow (exempt: a zero-blur `0 0 0` ring — inset or outset — using a token; focus rings may wrap a token in `color-mix`), SY011 Hangul outside `lang=ko`, SY016 Hangul in Artific display element, SY017 manifest stale.
 
 ## Current state
 
@@ -62,9 +62,9 @@ Focus shifted from the design system to the **harness around it**, prompted by a
 
 ## Key maintainer rulings / earlier decisions
 
-- **Point color = `#0621C4`** (Claude Design System point blue), v6.61 — replaced the old brand-team-repo azure `#0A84FF`. Hover `#051AA0`, tint `#EBEDFA`. White-on-point ≈ 10:1, so it clears AA and no longer needs the ≥3:1 solid-label exemption; validator brand contrast pairs are at AA 4.5. Flows through `action.brand-*`, `brand.point`, `ai.solid`.
+- **Point color = graphite** (achromatic, mode-inverting: `#1A1A1F` light / `#F2F2F4` dark) — retargeted from the earlier point blue `#0621C4`. The accent's foreground inverts with it (`action.brand-fg`: white in light, near-black in dark). Flows through `action.brand-*`, `brand.point`, `ai.solid`. See the point-color-graphite change in CHANGELOG.
 - **`accent` → `brand`** button-variant rename (v6.58): the point-color button is the `brand` variant (brand-identity + conversational-AI CTAs; Composer send). Operational agent actions (Run/Retry/Resume) stay `primary`/black.
-- **Functional blue stays separate:** `#3155C6` indigo for links/focus/status.info. (Watch item: `#0621C4` is now closer in hue to `#3155C6` than the old azure was — eyeball focus ring next to a brand button.)
+- **Functional blue stays separate:** `#3155C6` indigo for links/focus/status.info — now the system's *only* hue, since the accent went graphite (no brand-vs-functional hue collision left to watch).
 - **Focus rings** (v6.58.1): per-variant, flush, rendered as a `box-shadow` ring (hugs radius; `outline` left a corner gap) lightened via `color-mix` to a ~50% tint of the button's color. Transparent `outline` kept for forced-colors mode. SY009 was extended to permit token-based zero-blur rings.
 - **`shadow.thumb` token** (v6.57.5) for the slider handle. **ChoiceCard selected state** = 1px `border.selected` + flush `border.subtle` outline halo.
 - **Detail pages**: Examples column widened (doc-grid 1 : 2.1, max-width 1440) so tables aren't cramped.
@@ -82,7 +82,7 @@ Focus shifted from the design system to the **harness around it**, prompted by a
 - **Team distribution (biggest open thread).** `docs/DISTRIBUTION.md` has the full plan. The doctrine is team-ready to *read*; it is NOT ready to *use under enforcement* because two things don't exist yet: (1) an installable `@enhans-jooyeon/synapse` — the `storybook/` lib is 4 of 57 components (`storybook/PUBLISHING.md`); (2) the product-repo gates are provided in `tooling/product-gates/` but not wired into a product repo. Critical path: build out components → publish package → wire product gates → land process docs in product repo → pilot one screen → broaden. `npm publish`, product-repo CI, and the git push all require June's creds/environment.
 - **Side-surface tranche** (shipped, from `proposals/2026-07-21-aiux-patterns-catalog-audit.md`): ai-patterns §32 Artifacts, §33 Source browser, §34 Conversation summary, §35 Feedback. Next-strongest catalog item still open: **Plan & Execute** (pre-flight editable plan). The catalog + framework audits (`proposals/2026-07-21-*`) list the rest.
 - **Shape-of-AI gaps** are documented in two new proposal docs: `proposals/2026-07-20-shapeof-ai-pattern-audit.md` (full pattern audit) and `proposals/2026-07-20-ai-gap-policy-decisions.md` + `proposals/2026-07-20-ai-gap-decision-register.xlsx` (policy decisions the team's DRIs must settle before UI — Memory, Incognito, Data ownership, pre-flight Action plan, pre-run Cost estimates, Branches/Variations, Voice & tone, etc.). These are **blocked on policy calls**, not design.
-- **Open question from June:** whether other tokens in the Claude Design System differ from ours (only the point blue was retargeted so far). If she provides the Claude DS palette, sync the rest in one pass.
+- **Point accent superseded:** the Claude-DS point blue was later retargeted to **graphite** (achromatic, mode-inverting) — the system accent is no longer a Claude DS hue. Icon family also moved Lucide → Tabler. (Both in CHANGELOG.)
 - Media-playground patterns (inpainting, restyle/preset styles, watermarks, etc.) were deliberately marked out-of-domain in the audit.
 
 ## How to resume in a new session

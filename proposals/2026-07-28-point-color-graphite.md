@@ -47,5 +47,6 @@ A colored accent could keep a constant-white foreground in both modes. An invert
 
 ## Follow-ups (not done)
 
-- Update `foundations.md` §1 accent/point doctrine prose to describe the graphite inversion (currently still frames the point as "the point blue").
+- ~~Update `foundations.md` §1 accent/point doctrine prose to describe the graphite inversion.~~ **Done** — aligned across `foundations.md` §1, `design.md` §2/§3, `components.md`, `ai-patterns.md`, and the manifest source.
+- **Still open:** `app-generation/` (README, CLAUDE.md, tokens-map.md, component-catalog.html) and `HANDOFF.md` still describe/hardcode `#0621C4`. The app-generation charts use blue as a *viz* ramp (not the accent), so that's a separate reconciliation decision, not a straight find-replace.
 - Decide whether the link/focus blue should eventually harmonize with graphite or stay as the lone functional hue.

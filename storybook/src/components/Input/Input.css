@@ -1,5 +1,5 @@
 /* Input — components.md · Input ( filled anatomy). */
-.sy-field { display: flex; flex-direction: column; gap: var(--sy-space-4); width: 300px; max-width: 100%; }
+.sy-field { display: flex; flex-direction: column; gap: var(--sy-space-1); width: 300px; max-width: 100%; }
 .sy-field__label { font: var(--sy-weight-medium) var(--sy-label-size) / var(--sy-label-lh) var(--sy-font-sans); }
 .sy-field__ctrl { position: relative; display: flex; align-items: center; }
 .sy-field__input {
@@ -19,7 +19,7 @@
 .sy-field__help { font: var(--sy-weight-regular) var(--sy-text-12) / var(--sy-text-12-lh) var(--sy-font-sans); color: var(--sy-fg-secondary); }
 .sy-field--error .sy-field__help { color: var(--sy-status-danger); }
 .sy-field__affix { position: absolute; display: flex; align-items: center; color: var(--sy-fg-tertiary); pointer-events: none; }
-.sy-field__affix--lead { left: var(--sy-space-8); }
-.sy-field__affix--trail { right: var(--sy-space-8); font: var(--sy-weight-regular) var(--sy-text-12) / var(--sy-text-12-lh) var(--sy-font-sans); }
-.sy-field--lead .sy-field__input { padding-left: var(--sy-space-32); }
-.sy-field--trail .sy-field__input { padding-right: var(--sy-space-40); }
+.sy-field__affix--lead { left: var(--sy-space-2); }
+.sy-field__affix--trail { right: var(--sy-space-2); font: var(--sy-weight-regular) var(--sy-text-12) / var(--sy-text-12-lh) var(--sy-font-sans); }
+.sy-field--lead .sy-field__input { padding-left: var(--sy-space-8); }
+.sy-field--trail .sy-field__input { padding-right: var(--sy-space-10); }

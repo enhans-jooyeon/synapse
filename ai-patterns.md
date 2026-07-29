@@ -15,7 +15,7 @@ Every agent surface must make agency **visible** (users always know when AI is a
 **The two AI markers.** AI presence is signaled by exactly two devices, used consistently and used nowhere else:
 
 1. The **squared avatar** (radius `md` vs. round human avatars) on any actor row, message, or attribution chip.
-2. The **`ai.*` token family** (`--sy-ai-surface`, `--sy-ai-border`, `--sy-ai-fg`) on surfaces that contain agent output or agent proposals, and the **`brand` (point-color) fill** on the screen's single conversational-AI entry point only (Ask agent / Composer send; one per screen). Operational agent actions (Run/Retry/Resume) use the normal hierarchy — "executes an agent" never earns blue.
+2. The **`ai.*` token family** (`--sy-ai-surface`, `--sy-ai-border`, `--sy-ai-fg`) on surfaces that contain agent output or agent proposals, and the **`brand` (point-color) fill** on the screen's single conversational-AI entry point only (Ask agent / Composer send; one per screen). Operational agent actions (Run/Retry/Resume) use the normal hierarchy — "executes an agent" never earns the accent.
 
 NEVER mark AI presence any other way — no sparkle gradients, no purple, no robot iconography beyond the standard agent glyph. NEVER use `ai.*` tokens on non-AI surfaces, and never substitute `status.info-*` for `ai.*` or vice versa, even though the families are related.
 
@@ -115,7 +115,7 @@ The agent never performs a consequential action silently. It proposes; the human
 Agent output is markdown; without fixed rendering rules every message improvises its own typography. The mapping is closed:
 
 - **Headings demote:** agent `#` renders as `heading-md`, `##` as `heading-sm`, deeper levels as semibold `body`. Agent text NEVER produces `heading-xl/lg` — page hierarchy belongs to the page, not the message.
-- **Body** = `body` style; lists get `space-4` item gaps, one level of nesting rendered, deeper flattened.
+- **Body** = `body` style; lists get `space-1` item gaps, one level of nesting rendered, deeper flattened.
 - **Code:** fences → the code block treatment (`bg.sunken`, `code` style, copy button, language chip, max-height 400px + expand); inline → `sy-code-inline`.
 - **Links** = `fg.link` with the external mark for off-app targets; bare URLs auto-link and middle-truncate.
 - **Tables** render as bare (frameless) dense tables — hairline header rule, `label` headers; wider than the message column → horizontal scroll, never reflow.
@@ -173,7 +173,7 @@ Selected text inside an agent message is a first-class conversational object.
 
 ## 19. Follow-up panel
 
-Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it: a **solid `bg.raised` panel** (NOT glass — it's small, dense, and sits over thread text where glass reads muddy; foundations §5) with a `border.default` hairline, `shadow.overlay`, radius `md`, 6px padding, 32px rows at radius `xs`; rows lead with the 12px follow-up arrow, full-bleed keyboard header row in keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). **Placement:** the panel is absolutely anchored **8px above the Composer's top edge** (a floating layer detaches from its anchor — flush contact reads as part of the input; anchored menus use 4px, the panel's larger mass earns 8) and OVERLAYS the last thread messages — it never pushes content down (layout shift on open is forbidden). Max 4 rows; selecting inserts the text into the Composer (never auto-sends). Chips and panel never show simultaneously.
+Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it: a **solid `bg.raised` panel** (NOT glass — it's small, dense, and sits over thread text where glass reads muddy; foundations §6) with a `border.default` hairline, `shadow.overlay`, radius `md`, 6px padding, 32px rows at radius `xs`; rows lead with the 12px follow-up arrow, full-bleed keyboard header row in keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). **Placement:** the panel is absolutely anchored **8px above the Composer's top edge** (a floating layer detaches from its anchor — flush contact reads as part of the input; anchored menus use 4px, the panel's larger mass earns 8) and OVERLAYS the last thread messages — it never pushes content down (layout shift on open is forbidden). Max 4 rows; selecting inserts the text into the Composer (never auto-sends). Chips and panel never show simultaneously.
 
 **Chip honesty (adopted law):** a suggestion chip's visible label IS the query it sends — never a longer or different hidden prompt. If the real query needs more words than the chip can show, the chip inserts into the Composer for editing instead of sending.
 
@@ -184,7 +184,7 @@ Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the C
 **Titled answer sections:** agent replies longer than ~4 paragraphs or produced by a multi-step run MAY open with an answer header: title (`heading-sm`, from the run's stated goal) + total duration Badge (`neutral` subtle, tabular numerals) + collapse chevron (ghost icon-button). Collapsed keeps title + duration; expansion state persists in the transcript. One header per reply — never per paragraph.
 **Named working line:** during multi-step generation, a status line above the steps names the current activity from the step plan ("보고서 초안 생성 중…" / "Drafting the report…"), `body-sm` `fg.secondary` with the `pulse` opacity animation (skeleton precedent — gradients/shimmer remain forbidden). Replaces a bare spinner whenever step names exist; the stop control stays adjacent per §2. The line resolves into the answer header's title on completion.
 
-**Point color for active states:** while an agent run is ACTIVELY working, its running-state indicators use the point color `#0621C4` — the live-agent beacon Badge and the in-progress `ai` ProgressBar (both via `ai.solid`, repointed to blue). Blue = AI at work; the moment it completes or idles, the indicator returns to neutral/slate. The AI *surface* (ai.surface/border/fg) stays slate throughout — blue is a solid accent mark, never a tint on the slate fill.
+**Point color for active states:** while an agent run is ACTIVELY working, its running-state indicators use the point color (graphite `ai.solid`) — the live-agent beacon Badge and the in-progress `ai` ProgressBar. Because the point is now achromatic (graphite, mode-inverting), "AI at work" reads by the beacon/progress shape and its context, not by hue; the moment it completes or idles, the indicator returns to neutral/slate. The AI *surface* (ai.surface/border/fg) stays slate throughout — the point is a solid accent mark, never a tint on the slate fill.
 
 ## 21. Generated media
 

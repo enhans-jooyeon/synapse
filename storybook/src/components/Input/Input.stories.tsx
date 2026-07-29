@@ -13,7 +13,7 @@ export const Playground: Story = {};
 
 export const States: Story = {
   render: () => (
-    <div style={{ display: "flex", gap: "var(--sy-space-16)", flexWrap: "wrap", alignItems: "flex-start" }}>
+    <div style={{ display: "flex", gap: "var(--sy-space-4)", flexWrap: "wrap", alignItems: "flex-start" }}>
       <Input label="Workspace name" placeholder="e.g. Growth team" helper="Visible to all members." />
       <Input lang="ko" label="이메일 주소" defaultValue="jooyeon@enhans"
         error="이메일 형식이 아닙니다. '@' 뒤에 도메인을 입력하세요." />

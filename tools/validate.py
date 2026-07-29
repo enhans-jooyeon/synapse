@@ -18,13 +18,13 @@ Rules (E = error, W = warning):
   SY005 E font-style italic/oblique — foundations §2.3.2
   SY006 E text-transform: uppercase — foundations §2.3.7
   SY007 W letter-spacing declared (verify it never applies to Hangul) — foundations §2.3
-  SY015 E backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §5)
+  SY015 E backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §6)
   SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
   SY017 E synapse.manifest.json stale vs a fresh build — run tools/build_manifest.py (mirrors the CI gate locally)
   SY008 E reference to undefined --sy-* variable — tokens
-  SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §5
+  SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
-  SY011 E Hangul text outside a lang="ko" scope — foundations §8
+  SY011 E Hangul text outside a lang="ko" scope — foundations §9
   SY012 E forbidden glossary term — content.md §3
   SY013 W exclamation mark in UI text — content.md §1
   SY014 W >1 primary button inside one region/section — design.md §3.7
@@ -37,9 +37,10 @@ TOKENS_JSON = os.path.join(ROOT, "tokens", "synapse.tokens.json")
 TOKENS_CSS = os.path.join(ROOT, "tokens", "synapse.css")
 
 # 1 is allowed solely as a hairline offset paired with 1px borders (e.g. tab underline overlap)
-SPACE_SCALE = {0, 1, 2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 40, 48, 64, 80, 96}
+SPACE_SCALE = {0, 1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 28, 32, 40, 48, 64, 80, 96,
+               128, 160, 192, 224, 256, 320, 384}
 FONT_SCALE = {11, 12, 13, 14, 16, 18, 20, 24, 30, 36}
-RADIUS_SCALE = {4, 8, 10, 16, 24, 9999}
+RADIUS_SCALE = {4, 8, 10, 12, 16, 20, 24, 9999}
 WEIGHTS = {"400", "500", "600", "700", "normal", "bold"}
 FORBIDDEN_TERMS = ["에러", "노티", "퍼미션", "컨펌", "익스포트", "워크플로우",
                    "부디", "제발", "을(를)", "(을)를", "Oops", "oops", "click here"]
@@ -90,7 +91,7 @@ CONTRAST_PAIRS = [
     ("status-danger on status-danger-bg", "--sy-status-danger", "--sy-status-danger-bg", 4.5),
     ("status-success-inverse on bg-inverse", "--sy-status-success-inverse", "--sy-bg-inverse", 4.5),
     ("status-warning-inverse on bg-inverse", "--sy-status-warning-inverse", "--sy-bg-inverse", 4.5),
-    # solid-label policy (foundations §8): success/warning solids accept >=3:1 by documented deviation
+    # solid-label policy (foundations §9): success/warning solids accept >=3:1 by documented deviation
     ("on-solid on success-bg-solid [policy 3:1]", "--sy-fg-on-solid", "--sy-status-success-bg-solid", 3.0),
     ("on-solid on warning-bg-solid [policy 3:1]", "--sy-fg-on-solid", "--sy-status-warning-bg-solid", 3.0),
     ("on-solid on info-bg-solid", "--sy-fg-on-solid", "--sy-status-info-bg-solid", 4.5),
@@ -170,12 +171,12 @@ def lint_css_text(text, path, line_of, defined):
         if prop == "text-transform" and "uppercase" in val:
             report("E", "SY006", path, ln, "text-transform: uppercase is forbidden")
         if prop.endswith("backdrop-filter") and val.strip() != "none":
-            report("E", "SY015", path, ln, f"backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §5) — got '{val[:40]}'")
+            report("E", "SY015", path, ln, f"backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §6) — got '{val[:40]}'")
         if prop == "letter-spacing":
             report("W", "SY007", path, ln, "letter-spacing declared — must never apply to Hangul")
         if prop == "box-shadow" and "var(--sy-shadow" not in val and val != "none":
             # sanctioned exemption: a zero-blur, zero-offset ring (inset OR outset) using a token is a
-            # border substitute / focus ring, not elevation (foundations §5). Elevation needs blur → a shadow token.
+            # border substitute / focus ring, not elevation (foundations §6). Elevation needs blur → a shadow token.
             stripped = val[6:].lstrip() if val.startswith("inset ") else val
             is_ring = stripped.startswith("0 0 0 ") and "var(--sy-" in val
             if not is_ring:

@@ -13,7 +13,7 @@ export const Playground: Story = {};
 
 export const StatusRow: Story = {
   render: () => (
-    <div style={{ display: "flex", gap: "var(--sy-space-8)" }}>
+    <div style={{ display: "flex", gap: "var(--sy-space-2)" }}>
       <Badge color="neutral">Draft</Badge>
       <Badge color="info" lang="ko">진행 중</Badge>
       <Badge color="success">Completed</Badge>
@@ -26,7 +26,7 @@ export const StatusRow: Story = {
 export const RestrictedSolids: Story = {
   name: "Solids (named jobs only)",
   render: () => (
-    <div style={{ display: "flex", gap: "var(--sy-space-8)" }}>
+    <div style={{ display: "flex", gap: "var(--sy-space-2)" }}>
       <Badge color="danger" emphasis="solid">Incident</Badge>
       <Badge color="neutral" emphasis="solid">New</Badge>
       <Badge color="ai" emphasis="solid" lang="ko">실행 중</Badge>

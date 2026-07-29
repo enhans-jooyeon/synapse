@@ -1,11 +1,11 @@
 /* Badge — components.md · Badge. Static annotation; interaction = Chip. */
 .sy-badge {
-  display: inline-flex; align-items: center; gap: var(--sy-space-4);
-  height: 20px; padding: 1px var(--sy-space-8) 0; /* md optical nudge — md only */
+  display: inline-flex; align-items: center; gap: var(--sy-space-1);
+  height: 20px; padding: 1px var(--sy-space-2) 0; /* md optical nudge — md only */
   border-radius: var(--sy-radius-full); border: 1px solid transparent;
   font: var(--sy-weight-semibold) var(--sy-text-11) / 1 var(--sy-font-sans);
 }
-.sy-badge--lg { height: 24px; padding: 0 var(--sy-space-12);
+.sy-badge--lg { height: 24px; padding: 0 var(--sy-space-3);
   font: var(--sy-weight-medium) var(--sy-text-12) / var(--sy-text-12-lh) var(--sy-font-sans); }
 .sy-badge--rounded { border-radius: var(--sy-radius-md); }
 .sy-badge--neutral { background: var(--sy-bg-sunken); color: var(--sy-fg-secondary); }

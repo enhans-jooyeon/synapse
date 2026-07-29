@@ -82,7 +82,7 @@
     "secondary (tonal)",
     "ghost",
     "danger",
-    "accent (POINT color #0621C4, revived — conversational-AI CTA only: Ask agent / Composer send)"
+    "accent (POINT color — graphite, mode-inverting — conversational-AI CTA only: Ask agent / Composer send)"
    ],
    "sizes": [
     "sm",
@@ -91,7 +91,7 @@
    ],
    "key_rules": [
     "max 1 primary per region",
-    "conversational-AI entry (Ask agent / Composer send) = accent = the point color #0621C4 (max 1/screen); operational agent actions (Run/Retry/Resume) stay primary/black — executing a configured run never earns the point color; slate stays the AI surface, point blue is a distinct accent on top (never blue-on-slate)",
+    "conversational-AI entry (Ask agent / Composer send) = accent = the graphite point color (max 1/screen); operational agent actions (Run/Retry/Resume) stay primary/black — executing a configured run never earns the point color; slate stays the AI surface, the graphite point is a distinct accent on top (never accent-on-slate)",
     "text-only labels by default; icon+text only for accent AI actions and toolbar/filter contexts (approved icons)",
     "pill radius only in Guided heroes / empty-state first-use",
     "icon-only buttons are always square (width = size height)",

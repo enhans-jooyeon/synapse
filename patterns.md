@@ -44,9 +44,9 @@ Detail view of one entity (a project, an agent run, a document).
 
 ### D. Guided
 
-Onboarding, wizards, empty first-run, irreversible decisions. The only archetype where Display type (30/40, 36/48) and `lg` buttons are permitted.
+Onboarding, wizards, empty first-run, irreversible decisions. The only archetype where Display type (30/40, 36/48) and `lg` buttons are permitted — and, alongside EmptyState and full-page status states, one of the sanctioned homes for **illustration** (foundations §8.1): first-run heroes and feature-intro cards MAY carry a curated spot illustration (one per surface).
 
-- Single centered column, max-width 560px, generous `--sy-space-64` top offset.
+- Single centered column, max-width 560px, generous `--sy-space-16` top offset.
 - Multi-step flows: step indicator (13 medium, `fg.tertiary` "2/4" or dot row — composed from primitives, this is the sanctioned "stepper"), one decision per step, primary continue + ghost back.
 
 ### E. Console
@@ -73,7 +73,7 @@ The workspace's start surface: today's state plus the conversational entry.
 
 - App frame: Sidebar (240/64) + main area. Main area holds one archetype. **Scroll containers span the region:** when content is a centered reading column inside a wider region (Console thread, focus documents), the scroll container is the full-width region and the column is centered inside it — the scrollbar sits at the region's edge, never beside the column. A mid-canvas scrollbar reads as a broken layout.
 
-- Content grids use CSS grid with `--sy-space-24` gutters. Column counts: metric cards 2–6; card grids 2–4; never 12-column decorative grids.
+- Content grids use CSS grid with `--sy-space-6` gutters. Column counts: metric cards 2–6; card grids 2–4; never 12-column decorative grids.
 - Breakpoints: <768 single column + collapsed sidebar; 768–1280 standard; >1440 workbenches keep fluid, reading archetypes stay at max-width (whitespace is intentional — do not fill it).
 
 ### 2.1 Narrow-window contract (web-only; browser windows get narrow, devices don't exist)
