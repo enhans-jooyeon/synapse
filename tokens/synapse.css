@@ -81,9 +81,11 @@
   --sy-padding-xl: var(--sy-space-8);
 
   /* elevation — borders-first system; shadows only for floating layers */
-  --sy-shadow-raised: 0 1px 2px rgba(9, 9, 11, 0.05);
-  --sy-shadow-overlay: 0 8px 24px rgba(9, 9, 11, 0.08);
-  --sy-shadow-modal: 0 24px 48px rgba(9, 9, 11, 0.12);
+  --sy-shadow-xs: 0 1px 2px rgba(9, 9, 11, 0.05);
+  --sy-shadow-sm: 0 2px 6px rgba(9, 9, 11, 0.06);
+  --sy-shadow-md: 0 4px 12px rgba(9, 9, 11, 0.07);
+  --sy-shadow-lg: 0 8px 24px rgba(9, 9, 11, 0.08);
+  --sy-shadow-xl: 0 24px 48px rgba(9, 9, 11, 0.12);
   --sy-shadow-thumb: 0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16);
 
   /* stacking — every floating/pinned element takes exactly one; arbitrary z-index forbidden */
@@ -300,9 +302,11 @@
   --sy-viz-1-bg: #2A314A; --sy-viz-2-bg: #283B39; --sy-viz-3-bg: #403526; --sy-viz-4-bg: #3F2B2F;
   --sy-viz-5-bg: #342E45; --sy-viz-6-bg: #283944; --sy-viz-7-bg: #3C2E3D; --sy-viz-8-bg: #303239;
 
-  --sy-shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --sy-shadow-overlay: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --sy-shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.6);
+  --sy-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sy-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.44);
+  --sy-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.47);
+  --sy-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --sy-shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.6);
   --sy-shadow-thumb: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 3px rgba(255, 255, 255, 0.22);
 }
 

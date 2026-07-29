@@ -26,7 +26,7 @@ NEVER mark AI presence any other way — no sparkle gradients, no purple, no rob
 - Streamed text is **append-only**: rendered markdown may progressively enhance (a heading completes, a list item closes) but existing lines never reflow or jump. Reserve block height where possible.
 - The **streaming cursor** is a 2px × 1em `ai.fg` vertical bar after the last character, blinking at 1s intervals. It is the only blinking element permitted in the system.
 - While streaming: a **Stop** control (`secondary` tonal Button, square-stop icon + "Stop" / "중지": ghost floated as bare text; the tonal fill gives the one interruption affordance a body, and matches the Composer's send→stop morph, which is also `secondary`) MUST be visible and reachable without scrolling. Stopping keeps partial output and appends a `fg.tertiary` caption: "Stopped by you" / "사용자가 중지함".
-- Scroll behavior: stick to bottom while the user is at the bottom; the moment the user scrolls up, release the lock and show a "Jump to latest" pill (Toast surface — `bg.raised-2` + border + `shadow.overlay` — bottom-center).
+- Scroll behavior: stick to bottom while the user is at the bottom; the moment the user scrolls up, release the lock and show a "Jump to latest" pill (Toast surface — `bg.raised-2` + border + `shadow.lg` — bottom-center).
 - Never disable the composer during generation — queue or interrupt, don't lock the user out.
 - Rate: render at natural token arrival. No artificial typewriter effects on non-streamed (already complete) content — instant render, no fake latency, ever.
 
@@ -165,7 +165,7 @@ When an agent escalates to a person (or a person takes over):
 
 Selected text inside an agent message is a first-class conversational object.
 
-**Reply pill:** selecting text in an agent message raises a single floating pill ("Reply" / "답장", reply icon) — `bg.raised-2`, `border.overlay`, `shadow.overlay`, pill radius, `z.dropdown`, standard entrance. One pill, no toolbar of options; it disappears on deselect or esc.
+**Reply pill:** selecting text in an agent message raises a single floating pill ("Reply" / "답장", reply icon) — `bg.raised-2`, `border.overlay`, `shadow.lg`, pill radius, `z.dropdown`, standard entrance. One pill, no toolbar of options; it disappears on deselect or esc.
 **Quote highlight:** the selected passage takes `ai.surface` fill + inset `ai.border` hairline while quoted.
 **ComposerQuote:** choosing Reply inserts a quote bar into the Composer above the textarea — `ai.surface` fill, `ai.fg` text, reply icon, single-line ellipsis, × remove. Radius `sm` (concentric: composer radius 12 − 4 padding = 8). Max one quote per send; quoting replaces any existing quote. The sent message renders the quote above the user text.
 
@@ -173,7 +173,7 @@ Selected text inside an agent message is a first-class conversational object.
 
 ## 19. Follow-up panel
 
-Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it: a **solid `bg.raised` panel** (NOT glass — it's small, dense, and sits over thread text where glass reads muddy; foundations §6) with a `border.default` hairline, `shadow.overlay`, radius `md`, 6px padding, 32px rows at radius `xs`; rows lead with the 12px follow-up arrow, full-bleed keyboard header row in keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). **Placement:** the panel is absolutely anchored **8px above the Composer's top edge** (a floating layer detaches from its anchor — flush contact reads as part of the input; anchored menus use 4px, the panel's larger mass earns 8) and OVERLAYS the last thread messages — it never pushes content down (layout shift on open is forbidden). Max 4 rows; selecting inserts the text into the Composer (never auto-sends). Chips and panel never show simultaneously.
+Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it: a **solid `bg.raised` panel** (NOT glass — it's small, dense, and sits over thread text where glass reads muddy; foundations §6) with a `border.default` hairline, `shadow.lg`, radius `md`, 6px padding, 32px rows at radius `xs`; rows lead with the 12px follow-up arrow, full-bleed keyboard header row in keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). **Placement:** the panel is absolutely anchored **8px above the Composer's top edge** (a floating layer detaches from its anchor — flush contact reads as part of the input; anchored menus use 4px, the panel's larger mass earns 8) and OVERLAYS the last thread messages — it never pushes content down (layout shift on open is forbidden). Max 4 rows; selecting inserts the text into the Composer (never auto-sends). Chips and panel never show simultaneously.
 
 **Chip honesty (adopted law):** a suggestion chip's visible label IS the query it sends — never a longer or different hidden prompt. If the real query needs more words than the chip can show, the chip inserts into the Composer for editing instead of sending.
 

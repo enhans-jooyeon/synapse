@@ -215,10 +215,12 @@
     },
     "shadow": {
       "$type": "shadow",
-      "$description": "Synapse is borders-first; shadows only for floating layers. See foundations.md §5.",
-      "raised":  { "$value": "0 1px 2px rgba(9, 9, 11, 0.05)" },
-      "overlay": { "$value": "0 8px 24px rgba(9, 9, 11, 0.08)" },
-      "modal":   { "$value": "0 24px 48px rgba(9, 9, 11, 0.12)" },
+      "$description": "Synapse is borders-first; shadows only for floating layers. Size scale xs→xl (referenced against the BeyondUI / Tailwind elevation scale). See foundations.md §6.",
+      "xs": { "$value": "0 1px 2px rgba(9, 9, 11, 0.05)", "$extensions": { "synapse": { "modes": { "light": "0 1px 2px rgba(9, 9, 11, 0.05)", "dark": "0 1px 2px rgba(0, 0, 0, 0.4)" } } }, "$description": "Resting elevation — the elevated Card, sticky bars." },
+      "sm": { "$value": "0 2px 6px rgba(9, 9, 11, 0.06)", "$extensions": { "synapse": { "modes": { "light": "0 2px 6px rgba(9, 9, 11, 0.06)", "dark": "0 2px 6px rgba(0, 0, 0, 0.44)" } } }, "$description": "Hover / lift on interactive Cards and draggable tiles." },
+      "md": { "$value": "0 4px 12px rgba(9, 9, 11, 0.07)", "$extensions": { "synapse": { "modes": { "light": "0 4px 12px rgba(9, 9, 11, 0.07)", "dark": "0 4px 12px rgba(0, 0, 0, 0.47)" } } }, "$description": "Shallow floating layers — menus/popovers close to the surface." },
+      "lg": { "$value": "0 8px 24px rgba(9, 9, 11, 0.08)", "$extensions": { "synapse": { "modes": { "light": "0 8px 24px rgba(9, 9, 11, 0.08)", "dark": "0 8px 24px rgba(0, 0, 0, 0.5)" } } }, "$description": "Standard floating layers — dropdowns, popovers, tooltips." },
+      "xl": { "$value": "0 24px 48px rgba(9, 9, 11, 0.12)", "$extensions": { "synapse": { "modes": { "light": "0 24px 48px rgba(9, 9, 11, 0.12)", "dark": "0 24px 48px rgba(0, 0, 0, 0.6)" } } }, "$description": "Deep elevation — dialogs, drawers." },
       "thumb":   { "$value": "0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16)" },
       "glass":   { "$value": "0 2px 6px rgba(9,9,11,0.28), 0 30px 60px rgba(9,9,11,0.44), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 0 0 1px rgba(255,255,255,0.06)", "$extensions": { "synapse": { "modes": { "light": "0 2px 6px rgba(9,9,11,0.28), 0 30px 60px rgba(9,9,11,0.44), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 0 0 1px rgba(255,255,255,0.06)", "dark": "0 2px 6px rgba(0,0,0,0.16), 0 26px 54px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.5)" } } } }
     },

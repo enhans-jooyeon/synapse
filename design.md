@@ -12,7 +12,7 @@ Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. I
 | `tokens/synapse.tokens.json` | canonical token values (DTCG) | Source of truth for all values |
 | `tokens/synapse.css` | generated CSS custom properties | Implementation artifact — regenerate from JSON, never hand-edit values |
 | `foundations.md` | color, type, spacing, sizing, elevation, motion, a11y — the *why* and usage rules | Governs token usage |
-| `components.md` | the closed set of components (52 entries) | Governs all UI structure |
+| `components.md` | the closed set of components (authoritative list in `synapse.manifest.json`) | Governs all UI structure |
 | `recipes.md` | preset multi-component assemblies (headers, stat grids, filter bars, footers) | Governs recurring compositions — use before composing from scratch |
 | `patterns.md` | page archetypes, layout, forms, feedback, bilingual patterns | Governs composition |
 | `ai-patterns.md` | agent interaction conventions: streaming, steps, approval, provenance, uncertainty, failure | Governs every AI surface |
@@ -25,9 +25,11 @@ Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. I
 
 Figma and any other design-tool representation of Synapse are **generated views** of these files, never sources of truth. If Figma and this repo disagree, the repo wins and Figma must be resynced.
 
+`preview.html` is the maintainer's primary **visual audit surface** — the place changes are spotted and requested — but it is downstream (Reference only). A change requested while looking at the preview must be made in its **authoritative source above** (the token, the spec, or the gate) and then reflected back into the render; never edit the render alone. The one exception is a pure **display bug in the preview's own hardcoded stories** (the spacing/palette/type reference tables are hand-authored, not token-driven, so they can drift out of sync with correct tokens) — those are render-only fixes.
+
 ## 2. Identity in one paragraph
 
-Neutral, black-key, borders-first, engineered restraint. The UI is built from a cool-gray ramp; black (white in dark mode) is the brand action color; AI surfaces and marks are slate; the **point color** (graphite — achromatic, inverting by mode: `#1A1A1F` light / `#F2F2F4` dark) is the one deliberate accent, restricted to brand-identity objects and AI emphasis (conversational-AI CTAs + active AI running states); functional blue `#3155C6` stays the quiet signal for focus rings, links, and informational status; status colors are desaturated and semantic-only. Pretendard serves Korean and English equally as the sole UI face; Artific (display family) appears at most once per screen, only at brand moments, and only on English copy — KO locale keeps Artific titles in English; JetBrains Mono marks machine-significant text. Density is a per-region option: `dense` compacts controls, spacing, and table rows (not type) for data-heavy surfaces, `focus` is the default; archetypes recommend one but it is not enforced.
+Neutral, black-key, borders-first, engineered restraint. The UI is built from a cool-gray ramp; black (white in dark mode) is the brand action color; AI surfaces and marks are slate; the **point color** (graphite — achromatic, inverting by mode: `#1A1A1F` light / `#F2F2F4` dark) is the one deliberate accent, restricted to brand-identity objects and AI emphasis (conversational-AI CTAs + active AI running states); functional blue `#3155C6` stays the quiet signal for focus rings, links, and informational status; status colors are desaturated and semantic-only. Pretendard serves Korean and English equally as the sole UI face; Artific (display family) appears at most once per screen, only at brand moments, and only on English copy — KO locale keeps Artific titles in English; JetBrains Mono marks machine-significant text. Synapse uses a **single size scale** — the former `focus`/`dense` density modes were removed as needless complexity; controls, spacing, and type are one scale everywhere (foundations §2.2).
 
 ## 3. Hard rules (the agent contract)
 

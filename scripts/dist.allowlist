@@ -17,7 +17,10 @@ icons.md
 # --- Tokens + machine index (load-first for agents) ---
 tokens/synapse.tokens.json
 tokens/synapse.css
+tokens/fonts.css
 synapse.manifest.json
+# NB: assets/fonts/ is intentionally NOT shipped — Artific is licensed to Enhans and
+# must not be redistributed in the public harness (see foundations.md §2.1 / assets/fonts/README.md).
 
 # --- Generation prompt + team workflow ---
 docs/process/prd-template.md

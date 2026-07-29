@@ -4,7 +4,7 @@
 
 Every spec follows the same schema. `variants` and `sizes` are exhaustive enumerations. `forbidden` lists the modifications agents most commonly attempt and must not. Components use the single system size scale; Table runs compact by default (foundations §4).
 
-Conventions: heights refer to `--sy-control-height-*` (`tokens/synapse.css`). "Focus ring" = a flush 2px ring in `--sy-border-focus` (box-shadow, so it hugs the corner radius) — except Buttons, whose focus ring is a lightened ~50% `color-mix` tint of the button’s own color.
+Conventions: heights refer to `--sy-control-height-*` (`tokens/synapse.css`). "Focus ring" = a 2px ring in `--sy-border-focus`, **offset 2px from the element** — a `bg.page` gap ring drawn inside the colored ring (box-shadow, so it follows the corner radius) — so the ring reads detached. Except Buttons, whose focus ring is a lightened ~50% `color-mix` tint of the button’s own color (same 2px gap + 2px ring).
 
 ---
 
@@ -25,13 +25,13 @@ Conventions: heights refer to `--sy-control-height-*` (`tokens/synapse.css`). "F
 **Sizes:** `sm` (height-sm, label 13/12), `md` (height-md, default), `lg` (height-lg, heroes only). **Radius by size** (not one fixed value): `sm` → `radius.sm` (8) · `md` → `radius.10` (10, default) · `lg` → `radius.md` (12); the pill option (Guided heroes) overrides to `full`.
 **States:** default, hover (`primary`: bg-hover; `secondary`: `secondary-bg-hover`; `ghost`: `bg.hover`), active/pressed (identical to hover by design — pressed feedback comes from the click itself, not a third fill), focus-visible (ring), disabled (`fg.disabled`, `bg.disabled` fill; 40% opacity is forbidden), loading (spinner 16px replaces leading icon; label stays; width MUST NOT change).
 **Pill option:** `primary` buttons in Guided-archetype heroes and empty-state first-use moments MAY use `radius.full`. NEVER in forms, toolbars, tables, or dense regions — the pill silhouette is a hero mark, not a general style.
-**Anatomy:** optional leading icon (16px) + label. **Optical padding trim:** on icon+text buttons, the icon side's padding is `--sy-control-padding-x` minus 2px (a 16px stroke icon carries internal whitespace, so equal padding reads heavier on the icon side); applies per side — leading icon trims left, trailing chevron/external mark trims right; icon-only buttons are exempt (they're squares). Icon-only buttons allowed only for: close, more (⋯), edit, delete, copy, refresh, expand/collapse, settings — and MUST have `aria-label`. **Icon-only buttons are always square**: width equals the size's control height (sm 32→32, md 36→36) — a non-square icon button is a bug, not a variant.
+**Anatomy:** optional leading icon (16px) + label + optional trailing affordance icon (16px — closed set, see Label & icon rules). **Optical padding trim:** on icon+text buttons, the icon side's padding is `--sy-control-padding-x` minus 2px (a 16px stroke icon carries internal whitespace, so equal padding reads heavier on the icon side); applies per side — leading icon trims left, trailing chevron/external mark trims right; icon-only buttons are exempt (they're squares). Icon-only buttons allowed only for: close, more (⋯), edit, delete, copy, refresh, expand/collapse, settings — and MUST have `aria-label`. **Icon-only buttons are always square**: width equals the size's control height (sm 32→32, md 36→36) — a non-square icon button is a bug, not a variant.
 
 **Label & icon rules (closed policy):**
 
 - **Text-only is the default.** A button earns an icon; it doesn't get one for decoration.
 - **Icon + text is permitted only when:** (a) it is the conversational-AI entry button (`primary`; the agent glyph is its marker), or (b) the button sits in a toolbar/filter-bar context and its icon is from the approved icon-action list, where the icon aids scanning across repeated controls. Everywhere else — dialog footers, forms, page headers — text only.
-- **Trailing icons:** only the chevron (menu-opening buttons, split buttons) and the external-link mark. Never a trailing decorative icon; never two icons on one button.
+- **Trailing icon (optional slot — one 16px icon *after* the label):** a closed affordance set that signals what the button *does to the flow*, never decoration — `chevron-down` (opens a menu; split / disclosure buttons), `external-link` (opens externally / in a new context), or `chevron-right` (advances a step — wizard "Continue" / "Next"). A leading icon *names* the action; a trailing icon *signals its behavior*. One trailing icon max; never both a leading and a trailing chevron on one button; the −2px trailing-side padding trim (Anatomy) applies.
 - **Label text:** the `label` typography style (semibold on `danger`); sentence case; verb-first EN ("Save changes") / noun or -하기 form KO ("변경사항 저장") per `content.md` §3.2; no terminal punctuation; "…" only for in-progress verbs ("Saving…" / "저장 중…") or when the action opens a follow-up step before executing ("Export…" opens the format dialog).
 
 **Forbidden:** fixed widths (KO/EN); custom colors; more than one `primary` per region; icon-only outside the approved list; ALL-CAPS labels; off-scale radius (radius is size-relative per Sizes, never an off-scale value).
@@ -55,6 +55,16 @@ Conventions: heights refer to `--sy-control-height-*` (`tokens/synapse.css`). "F
 **Sizes:** `md` only.
 **Affixes:** optional leading registry icon (16px, `fg.tertiary` — search's magnifier is one instance of this general slot) and/or trailing affix: a unit/format suffix (`fg.tertiary`, e.g. "KRW", "%") or one registry icon (e.g. eye/eye-off reveal on password). One leading + one trailing max; affixes sit inside the fill and never receive focus.
 
+**Add-ons (InputGroup).** For richer fields the Input composes with fused add-ons — segments visually attached to the field, sharing one outer shape (radius on the outer corners only; 1px `border.default` seams between segments, like ButtonGroup). Closed set, one add-on per side, never both a dropdown and a button on the same side:
+
+- **Leading / trailing text** — a static prefix/suffix on the field fill (`fg.secondary`), e.g. `https://` before a URL or `$` before an amount. Not editable, not focusable.
+- **Leading / trailing dropdown** — a fused `Select` (Input-anatomy trigger + chevron) for a unit or scope: a country code before a phone number, a currency after an amount. It is a real Select and follows Select's rules.
+- **Trailing button** — one fused `secondary` `Button` acting on the value (Copy, Apply); icon-only follows the icon-only rules. Never `primary`/`brand` inside a field.
+- **Keyboard-shortcut hint** — a trailing `.sy-kbd` badge (e.g. `⌘K`) on search/command fields; teaches the shortcut in place, never interactive.
+- **Help tooltip** — an inline `help-circle` icon beside the *label* opening a Tooltip, for a short clarification when persistent helper text below would be too heavy (helper text stays the default).
+
+Add-ons are for genuine input enhancement — a dropdown that changes the value's meaning, an action on the value — never decoration.
+
 **Forbidden:** placeholder as label (placeholder is example content only, `fg.tertiary`); floating labels (break with Hangul metrics); fixed field widths under 240px for translatable content; hiding the label visually except in table inline-edit cells.
 **A11y:** `<label for>` always; error linked via `aria-describedby`; `aria-invalid` on error.
 **Bilingual:** labels above the field (never left-aligned beside — KO/EN label width divergence breaks alignment); helper/error text wraps, never truncates.
@@ -70,7 +80,7 @@ Multi-line Input. Min-height 3 rows, vertical resize only, otherwise inherits al
 ## Select
 
 **Purpose:** choose one option from 5–15 known, static options. <5 options: use Radio. >15, async, or user-known values: use Combobox.
-Trigger renders as Input anatomy with trailing chevron (16px). Menu is a Popover: `bg.raised`, `border.default`, radius `lg`, `shadow.overlay`; options height-md, `bg.hover` on hover, `bg.selected` + leading 16px check on selected.
+Trigger renders as Input anatomy with trailing chevron (16px). Menu is a Popover: `bg.raised`, `border.default`, radius `lg`, `shadow.lg`; options height-md, `bg.hover` on hover, `bg.selected` + leading 16px check on selected.
 **States:** as Input, plus open (chevron rotates 180°, `fast` duration).
 **Forbidden:** native `<select>` styling mixed with custom menus; multi-select without chip rendering (use input Chips inside the trigger); menus wider than 480px or narrower than trigger.
 **A11y:** listbox pattern; full keyboard (arrows, Home/End, type-ahead); Esc closes.
@@ -173,7 +183,7 @@ One size per view, as with shape.
 |---|---|---|
 | `flat` (default) | `bg.surface`, no border | The standard card: grouping by surface step and spacing, not boxes. Also the sanctioned inner grouping (card-in-card nesting with borders remains forbidden). |
 | `outlined` | `bg.raised`, 1px `border.default` | Genuinely separable objects: items in a pickable grid, embedded data regions, anything `interactive` (clickability needs an edge — `interactive` implies `outlined` or `elevated`). |
-| `elevated` | `bg.raised`, 1px `border.default`, `shadow.raised` | Focus-archetype key moments only (the one thing the page is about); max one per page. The sole sanctioned static-card shadow. |
+| `elevated` | `bg.raised`, 1px `border.default`, `shadow.xs` | Focus-archetype key moments only (the one thing the page is about); max one per page. The sole sanctioned static-card shadow. |
 | `ai` | `ai.surface`, 1px `ai.border` | Container for agent-produced content. ProposalCard is a specialization of this variant. |
 | `stat` | `outlined` card with fixed anatomy: `label` + `fg.secondary` title · `stat`/`stat-lg` value · optional delta row · optional sparkline. (the `emphasized` opt-in is REMOVED — maintainer: no slate on stat cards; metric grids render uniform, urgency belongs to queues and status, not card tint) | KPI display. See `recipes.md` for grid presets. |
 
@@ -359,7 +369,7 @@ Path context for pages deeper than 2 levels. 13px, `fg.tertiary` links with `fg.
 
 ## Modal
 
-**Purpose:** blocking decision or focused short task. `bg.scrim` backdrop, opaque `bg.raised` panel (glass over a scrim reads muddy; the scrim carries the de-emphasis), radius `xl`, `shadow.modal`, width 480px (confirm: 400px, max 640px for forms; **browse-library modals: 760, the tier between form-max and the 800 wide Drawer; the Template Library is the reference case**), padding 24. Header: section title + ghost close icon-button. Footer: right-aligned Button pair — secondary ("Cancel") then primary; destructive confirms use `danger` primary.
+**Purpose:** blocking decision or focused short task. `bg.scrim` backdrop, opaque `bg.raised` panel (glass over a scrim reads muddy; the scrim carries the de-emphasis), radius `xl`, `shadow.xl`, width 480px (confirm: 400px, max 640px for forms; **browse-library modals: 760, the tier between form-max and the 800 wide Drawer; the Template Library is the reference case**), padding 24. Header: section title + ghost close icon-button. Footer: right-aligned Button pair — secondary ("Cancel") then primary; destructive confirms use `danger` primary.
 **Behavior:** `base` duration scale+fade enter; focus trapped; Esc and scrim-click close (disabled only when data would be lost — then require explicit cancel).
 **Forbidden:** modals opening modals; scrollable full-page content inside a modal (use Drawer or a page); more than 2 footer buttons; modals for non-blocking info (use Toast/Banner).
 
@@ -367,7 +377,7 @@ Path context for pages deeper than 2 levels. 13px, `fg.tertiary` links with `fg.
 
 ## Drawer
 
-Side panel for detail/edit without leaving context. Slides from right, width 480px (max 640px; **`wide` variant 800px** for data-review surfaces — DiffView, run inspection — where 640 forces unusable wrapping), full height, `shadow.modal`, opaque `bg.raised` panel (glass retired from scrimmed layers, foundations §6), same header pattern as Modal. Non-blocking variant (no scrim) allowed in data workspaces.
+Side panel for detail/edit without leaving context. Slides from right, width 480px (max 640px; **`wide` variant 800px** for data-review surfaces — DiffView, run inspection — where 640 forces unusable wrapping), full height, `shadow.xl`, opaque `bg.raised` panel (glass retired from scrimmed layers, foundations §6), same header pattern as Modal. Non-blocking variant (no scrim) allowed in data workspaces.
 **AI side surfaces:** the `wide` variant is also the home for agent **artifacts** (a generated doc/code/diagram/table opened for viewing and editing) and the **source browser** (retrieved sources shown beside the answer) — see `ai-patterns.md` §32–33. These are Drawer *content*, not new components; in the workbench archetype the same content MAY occupy a SplitPanel pane instead.
 **Forbidden:** left-side drawers (reserved for Sidebar); nested drawers.
 
@@ -375,7 +385,7 @@ Side panel for detail/edit without leaving context. Slides from right, width 480
 
 ## Popover / Menu
 
-Anchored floating panel: `bg.raised` (`bg.raised-2` when opened from an L2 surface such as a modal), `border.overlay`, radius `md`, **4px container padding** (concentric-corner rule: 12 − 4 = 8 = item radius `sm`), `shadow.overlay`, `fast` fade+4px-shift enter. Menu items: height 32px, radius `sm`, 13px, 16px optional leading icon, **4px vertical gap between items** (without it, adjacent hover and selected tints fuse; 2px proved sub-perceptual). Destructive items `status.danger` text, always last. Max ~8 visible items, then scroll.
+Anchored floating panel: `bg.raised` (`bg.raised-2` when opened from an L2 surface such as a modal), `border.overlay`, radius `md`, **4px container padding** (concentric-corner rule: 12 − 4 = 8 = item radius `sm`), `shadow.lg`, `fast` fade+4px-shift enter. Menu items: height 32px, radius `sm`, 13px, 16px optional leading icon, **4px vertical gap between items** (without it, adjacent hover and selected tints fuse; 2px proved sub-perceptual). Destructive items `status.danger` text, always last. Max ~8 visible items, then scroll.
 **Dividers:** 1px `border.subtle`, spanning the panel **edge to edge** (through the container padding — negative-margin the rule or the bordered row out to the panel edge), 4px vertical margin. Never inset. **This binds every horizontal rule inside any floating panel AND inside any padded pane of a Modal** (menus, popovers, NotificationCenter, follow-up panel, picker search/footer rows, palette, the Template Library's column internals) — a rule that stops short of the edges reads as a rendering bug (reaffirmation; the rule dates to). **An inset control sitting against a full-bleed divider (such as a footer button) takes equal padding on all four sides — the gap between the divider and the control MUST equal its side and outer-edge padding; an asymmetric divider gap reads as a misalignment. (Full-bleed hover rows like menu escape rows are a separate pattern and keep their row padding.)**
 **Optional search row:** menus with >8 items MAY start with a borderless filter input (search icon, 13px, `border.subtle` bottom rule, full-bleed) — same filtering behavior as Combobox, including match highlighting.
 **Forbidden:** forms beyond a single control inside popovers; submenus deeper than one level; inset dividers.
@@ -384,14 +394,14 @@ Anchored floating panel: `bg.raised` (`bg.raised-2` when opened from an L2 surfa
 
 ## Tooltip
 
-10-word max clarification of an icon or truncated string. `bg.raised-2`, 1px `border.default`, `fg.primary`, `caption` type, radius `xs`, padding 4/8, `shadow.overlay`, appears after 300ms hover/focus. **Kbd slot:** MAY append the action's shortcut as a trailing `.sy-kbd` hint ("Copy ⌘C") — the sanctioned way to teach shortcuts in place. Same-scheme surface: light in light mode, dark in dark mode (changed — inverse surfaces read too stark against the neutral field).
+10-word max clarification of an icon or truncated string. `bg.raised-2`, 1px `border.default`, `fg.primary`, `caption` type, radius `xs`, padding 4/8, `shadow.lg`, appears after 300ms hover/focus. **Kbd slot:** MAY append the action's shortcut as a trailing `.sy-kbd` hint ("Copy ⌘C") — the sanctioned way to teach shortcuts in place. Same-scheme surface: light in light mode, dark in dark mode (changed — inverse surfaces read too stark against the neutral field).
 **Forbidden:** interactive content; tooltips as error surfaces; tooltips on plainly labeled elements; inverse/contrast-flipped styling.
 
 ---
 
 ## Toast
 
-Transient outcome notification, bottom-right stack, max 3. `bg.raised-2` panel, 1px `border.default`, `shadow.overlay`, `fg.primary` `body-sm` text, radius `md`, leading status icon (`status.*` color), optional single action (`fg.link` text button), auto-dismiss 5s (errors: 8s + manual dismiss), `slow` slide+fade. **Undo convention:** reversible-lite mutations (archive, remove-from-view, single delete with soft-delete backing) confirm via Toast with an Undo action at 8s instead of pre-confirming — prefer undo over Popconfirm when the operation is safely reversible; the pair never both appear for one action. Same-scheme surface: light in light mode, dark in dark mode (changed). **First-line alignment:** contents top-align to the first text line — icon at +2px, action link on the text line-height, and the dismiss × as a compact 20px box (inline dismiss affordances in Toasts and quote bars are not form controls; the control-height scale does not apply to them). Trailing controls never center against a wrapped block.
+Transient outcome notification, bottom-right stack, max 3. `bg.raised-2` panel, 1px `border.default`, `shadow.lg`, `fg.primary` `body-sm` text, radius `md`, leading status icon (`status.*` color), optional single action (`fg.link` text button), auto-dismiss 5s (errors: 8s + manual dismiss), `slow` slide+fade. **Undo convention:** reversible-lite mutations (archive, remove-from-view, single delete with soft-delete backing) confirm via Toast with an Undo action at 8s instead of pre-confirming — prefer undo over Popconfirm when the operation is safely reversible; the pair never both appear for one action. Same-scheme surface: light in light mode, dark in dark mode (changed). **First-line alignment:** contents top-align to the first text line — icon at +2px, action link on the text line-height, and the dismiss × as a compact 20px box (inline dismiss affordances in Toasts and quote bars are not form controls; the control-height scale does not apply to them). Trailing controls never center against a wrapped block.
 **Forbidden:** toasts for validation errors (inline at the field); toasts requiring a decision (Modal); stacking >3 (queue instead); inverse/contrast-flipped styling.
 
 ---
@@ -452,7 +462,7 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 
 **Purpose:** universal keyboard-first entry point for navigation, actions, and asking the agent. Opened with ⌘K / Ctrl+K from anywhere; also via the topbar search affordance.
 
-**Anatomy:** centered overlay, 560px wide, offset 15vh from top, **opaque `bg.raised` over a `bg.scrim` backdrop** (foundations §6: overlays are opaque, not glass; the scrim gives separation on the light app; esc / scrim-click / click-away dismiss), radius `lg`, `border.default` hairline, `shadow.modal`. Search input (borderless, 16px, full-width, leading search icon) · result list (max 8 visible, then scroll) · footer strip (11px `fg.tertiary` keyboard hints using `.sy-kbd`).
+**Anatomy:** centered overlay, 560px wide, offset 15vh from top, **opaque `bg.raised` over a `bg.scrim` backdrop** (foundations §6: overlays are opaque, not glass; the scrim gives separation on the light app; esc / scrim-click / click-away dismiss), radius `lg`, `border.default` hairline, `shadow.xl`. Search input (borderless, 16px, full-width, leading search icon) · result list (max 8 visible, then scroll) · footer strip (11px `fg.tertiary` keyboard hints using `.sy-kbd`).
 **Results:** grouped under 11px medium `fg.tertiary` group labels (Recent / Navigation / Actions / Agents). Rows: height 40px, 16px leading icon, 13px label, trailing `.sy-kbd` shortcut or `fg.tertiary` context; selected row `bg.selected`. Actions that invoke AI carry the squared agent glyph.
 **States:** empty query → recent items; no results → single EmptyState-style row plus the mandatory final fallback row **"Ask agent: '{query}'"** (`ai.fg` text + squared glyph) — the palette never dead-ends; loading → 3 skeleton rows.
 **Behavior:** full keyboard (arrows, Enter, Esc, ⌘K toggles); type-ahead filters instantly (<50ms local, async results appended under their group); executing closes the palette; focus returns to the invoking context on close.
@@ -493,7 +503,7 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Purpose:** actions on an agent message: copy · regenerate · feedback (thumbs) · overflow. (Added.)
 
 **Anatomy:** row of `ghost` icon-buttons (16px icons), bottom-left of the agent message, `fg.tertiary` at rest. Order fixed: copy, regenerate, thumbs-up, thumbs-down, ⋯ overflow.
-**`media` variant (jurisdiction tightened):** a vertical pill rail (raised fill, `border.overlay`, `shadow.raised`, radius `full`, 4px padding) anchored beside a MediaGroup — copy + thumbs only, hover-reveal, one rail per group. ONLY when the MediaGroup is the message's sole content: when media accompanies text, the message-level toolbar governs the whole reply and the rail is forbidden (two feedback surfaces on one message is redundant).
+**`media` variant (jurisdiction tightened):** a vertical pill rail (raised fill, `border.overlay`, `shadow.xs`, radius `full`, 4px padding) anchored beside a MediaGroup — copy + thumbs only, hover-reveal, one rail per group. ONLY when the MediaGroup is the message's sole content: when media accompanies text, the message-level toolbar governs the whole reply and the rail is forbidden (two feedback surfaces on one message is redundant).
 **Placement:** hover/focus-reveal on desktop focus surfaces; persistent in dense consoles (hover-dependent affordances need persistent fallbacks there).
 **Behavior:** copy copies the markdown source (Toast confirms); regenerate only on the latest agent message (earlier messages drop it); thumbs select-state = `bg.selected` fill at the button's standard radius + `fg.primary` stroke (was `border.focus` blue + circle, a relic violating two later laws: blue is reserved for focus/links/status.info, and selection reads as fill + ink, not shape — the Composer send button stays the ONLY circular control) (NEVER a filled icon — stroke set only; the favorite star is the sole fill-on-active exception), mutually exclusive, tappable to undo. **Optical centering (numeral-nudge family):** the thumbs glyphs carry asymmetric ink (up is right-heavy, down left-heavy — ~1.5px off geometric center in a 16px render); both get a ∓1px translateX so ink centers inside any visible fill. Applies wherever the thumbs pair renders (message toolbar + media rail); thumbs-down MAY open a one-field comment Popover ("What went wrong?" / "어떤 점이 아쉬웠나요?"), never required.
 **Jurisdiction:** agent messages only — never on human bubbles, never on ProposalCards (those have their own footer).
@@ -624,7 +634,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Purpose:** agent-**generated** media (images, chart renders, previews) presented as a casual fan in Console replies — the system's one sanctioned playful moment. (Added.)
 
 **Anatomy:** cards `bg.page`, 1px `border.default`, radius `lg`, 2px page-colored outline ring for separation, overflow hidden; media area object-fit cover on top + **caption strip** below (`bg.surface`, hairline top rule, `micro` label; the `+N` Badge sits right-aligned in the strip). 2–3 cards fan with **±2.5° alternating rotation** and ~20% overlap; a single item renders flat. Max 3 visible + `+N` Badge on the last card; click opens the media viewer.
-**Behavior:** hover/focus straightens the card (rotate → 0) and raises it (`shadow.raised`) at `fast`; `prefers-reduced-motion` renders the whole group flat and static.
+**Behavior:** hover/focus straightens the card (rotate → 0) and raises it (`shadow.xs`) at `fast`; `prefers-reduced-motion` renders the whole group flat and static.
 **Jurisdiction (hard):** ONLY agent-generated media inside agent replies. Referenced/attached objects use ContextCard (always flat); thumbnails elsewhere are forbidden. **Rotation exists nowhere else in the system** — see design.md §8.
 **Principle:** playfulness lives in the agent's *output*, never in the chrome.
 
@@ -655,7 +665,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **Purpose:** rich preview of an entity reference (user, agent, run) on hover/focus. (P3.)
 
-**Anatomy:** popover ≤320px, `bg.raised-2`, `border.overlay`, `shadow.overlay`, `z.dropdown`: Avatar header (name + `caption` role/state) + 2–4 DescriptionList rows + optional single ghost action. Opens after 500ms hover or on focus; closes on leave/Esc.
+**Anatomy:** popover ≤320px, `bg.raised-2`, `border.overlay`, `shadow.lg`, `z.dropdown`: Avatar header (name + `caption` role/state) + 2–4 DescriptionList rows + optional single ghost action. Opens after 500ms hover or on focus; closes on leave/Esc.
 **Rule:** hover is enhancement, never requirement — everything in a HoverCard must also exist on the entity's click-through page (keyboard and assistive access must not depend on hover).
 **Forbidden:** forms; nested HoverCards; hover cards on elements that already open popovers.
 
@@ -716,7 +726,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **NodePalette:** a docked left panel (`bg.surface`, right `border.subtle`) or an "Add node" Popover; node types grouped under `micro-label` headers (mirroring the Pipeline Extract/Transform/Load grouping); drag-to-canvas or click-to-insert. Closed set — only node types in the manifest.
 
-**CanvasControls:** a floating cluster bottom-left (`bg.raised` + `border.overlay` + `shadow.overlay`): zoom in/out, fit-view, and an optional minimap (`bg.surface`, viewport rect in `border.strong`). Icon-only, square, `aria-label` required.
+**CanvasControls:** a floating cluster bottom-left (`bg.raised` + `border.overlay` + `shadow.lg`): zoom in/out, fit-view, and an optional minimap (`bg.surface`, viewport rect in `border.strong`). Icon-only, square, `aria-label` required.
 
 **Modes:** **Build** (edit — add/configure/connect; edit-permission gated) and **Run** (read-only + per-node run status + a `RunLog`).
 
@@ -752,7 +762,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **Purpose:** the persistent docked/floating global agent — a compact chat available across the app that maximizes into the full Console. A composite (like `CommandPalette` and `NotificationCenter`), assembled from existing parts, never a re-implemented chat.
 
-**Anatomy:** a floating launcher — a `brand` circular icon-button bottom-right (the sanctioned circular exception it shares with the Composer send) — opening a docked panel: `bg.raised`, radius `xl`, 1px `border.default`, `shadow.overlay`, `z.dropdown` tier. Panel = header (squared agent `Avatar` 24 + name + maximize + close ghost icon-buttons) · a scrolling message stream (agent turns on `ai.surface`, human turns plain; `AgentStep` / `ProposalCard` / `SourceChip` as usual) · one docked `Composer` at the bottom. Maximize navigates to the Console and carries state over.
+**Anatomy:** a floating launcher — a `brand` circular icon-button bottom-right (the sanctioned circular exception it shares with the Composer send) — opening a docked panel: `bg.raised`, radius `xl`, 1px `border.default`, `shadow.lg`, `z.dropdown` tier. Panel = header (squared agent `Avatar` 24 + name + maximize + close ghost icon-buttons) · a scrolling message stream (agent turns on `ai.surface`, human turns plain; `AgentStep` / `ProposalCard` / `SourceChip` as usual) · one docked `Composer` at the bottom. Maximize navigates to the Console and carries state over.
 
 **States:** collapsed (launcher only) · open (panel) · maximized (full Console) · running (AgentStep working line) · empty (starters per ai-patterns §27).
 
@@ -764,7 +774,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **Purpose:** a browsable overlay grid of system apps + user-published apps — the entry to the Application surface. Distinct from `CommandPalette` (which is ⌘K search); this is a tile grid.
 
-**Anatomy:** a centered overlay with a **faux-glass surface** over a `bg.scrim` backdrop — opaque frosted `glass.surface` + top inner-rim highlight (`glass.rim`, `inset 0 1px 0`) + `glass.border` hairline, reading as macOS-Launchpad frosted glass with **no `backdrop-filter`** (foundations §6; SY015 holds — the frost is baked into opaque tokens, not inherited from content behind). Radius `2xl`, `shadow.modal`, `z.modal`. **Header row:** `heading-lg` title + a right-aligned pill search (`bg.sunken`, `radius.md`, search icon + placeholder). Below, sections under `micro-label` headers (**system apps**, **your apps**), each a fixed-column grid of **icon-forward tiles** — a tile is a 56px squircle **image well** (`radius.lg`, `shadow.raised`) with the app **name** (`body-sm`) centered beneath, **no bordered card**. Whole tile opens the app; hover lifts the icon.
+**Anatomy:** a centered overlay with a **faux-glass surface** over a `bg.scrim` backdrop — opaque frosted `glass.surface` + top inner-rim highlight (`glass.rim`, `inset 0 1px 0`) + `glass.border` hairline, reading as macOS-Launchpad frosted glass with **no `backdrop-filter`** (foundations §6; SY015 holds — the frost is baked into opaque tokens, not inherited from content behind). Radius `2xl`, `shadow.xl`, `z.modal`. **Header row:** `heading-lg` title + a right-aligned pill search (`bg.sunken`, `radius.md`, search icon + placeholder). Below, sections under `micro-label` headers (**system apps**, **your apps**), each a fixed-column grid of **icon-forward tiles** — a tile is a 56px squircle **image well** (`radius.lg`, `shadow.xs`) with the app **name** (`body-sm`) centered beneath, **no bordered card**. Whole tile opens the app; hover lifts the icon.
 
 **Icon well (the fallback ladder):** the squircle is an image container that clips whatever a published app supplies (`object-fit: cover`) — a **user-generated custom icon** (user content, may carry color) → else a graphite `bg.inverse` squircle with a 2-letter **monogram** (`fg.inverse`, `text-16` semibold) → else a **system glyph** (white on graphite). A hairline (inset `border.subtle`) keeps a light/white custom icon defined against the panel; the graphite fallbacks self-define and take no ring. An unpublished/empty slot is a pale `bg.sunken` squircle + `fg.tertiary` "App name" placeholder.
 
@@ -773,3 +783,42 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Behavior:** icon-forward tiles (this is **not** the `Card` component — the earlier outlined-Card tile was replaced); the squircle is a fixed image well so generated icons drop in at a consistent size and shape. One action per tile; keyboard traversal + ↵ opens; fixed responsive column steps.
 
 **Forbidden:** color in the launcher's **own chrome** — panel, labels, frame, system-app tiles, and empty slots stay achromatic (graphite / neutral); color lives ONLY inside a user-supplied app icon, never in the frame or the system-app marks (the icon rule holds for chrome). A modal stacked on top; arbitrary grid reflow; bordered-card tiles (icon-forward, not boxed).
+
+## Divider
+
+**Purpose:** separate content with a 1px rule — the standalone, documented form of the borders-first divider (foundations §6). Most separation is already carried by whitespace or a component's own border; reach for Divider only when a visible line genuinely aids grouping.
+
+**Variants:**
+
+| Variant | Composition | Use |
+|---|---|---|
+| `full` | full-bleed 1px `border.subtle` horizontal rule | Separating stacked sections or list rows edge-to-edge. |
+| `inset` | horizontal rule indented to the content edge | Dividers between rows that align to text, not the container edge. |
+| `labeled` | rule broken by a centered or leading `caption`/`micro` label (`fg.tertiary`) | A titled break ("or", a group name) between sections. |
+| `vertical` | 1px `border.default` vertical rule at control height | Separating inline controls or meta items in a toolbar/row. |
+
+**Anatomy:** a 1px line — `border.subtle` for division inside a component (rows, sections), `border.default` for a stronger boundary and the `vertical` variant. Labeled: line · label · line (or label · line for leading). Margins come from the surrounding rhythm (`space-4` / `space-6`), never baked into the Divider itself.
+
+**Forbidden:** thick (>1px) or colored dividers; a Divider where whitespace already separates; decorative rules with no grouping purpose; more than one divider weight in a single region.
+
+**A11y:** `role="separator"` (add `aria-orientation="vertical"` for the vertical variant); a purely decorative rule is `aria-hidden`.
+
+## ToggleButton
+
+**Purpose:** a button that toggles a single on/off state — pin, favorite, mute, show/hide a panel, a display or formatting option. Distinct from **Switch** (an instant-effect *setting*, in forms and settings rows) and **SegmentedControl** (an *exclusive* choice among peers).
+
+**Variants:**
+
+| Variant | Composition | Use |
+|---|---|---|
+| `icon` | square icon-only toggle (control height) | Pin, favorite, mute, panel toggle — `aria-label` required. |
+| `labeled` | icon + label toggle | When the toggled state needs a word ("Pinned"). |
+| `group` | a `ToggleButtonGroup` of independently toggleable buttons | Multi-select display options (gridlines / legend / labels). NOT exclusive choice — that is SegmentedControl. |
+
+**Anatomy:** built on Button (`ghost` or `secondary`, size-relative radius). **On-state** = `bg.selected` fill + `fg.primary`, with the icon kept as a **stroke** glyph on the selected tint — never a filled icon. The favorite **star** is the single sanctioned fill-on-active exception (matching ResponseToolbar). Icon-only toggles are square (width = control height).
+
+**States:** off (default) · hover · **on** (`aria-pressed="true"`, `bg.selected`) · focus (the standard offset ring) · disabled (`fg.disabled`, never opacity).
+
+**Forbidden:** using a ToggleButton for an exclusive choice (that is SegmentedControl) or an instant-effect form setting (that is Switch); a filled-icon on-state (except the favorite star); the point/accent color for the on-state — selection is the neutral `bg.selected`, never the accent.
+
+**A11y:** `aria-pressed` reflects the state; icon-only toggles require `aria-label`; a `group` is `role="group"` with a label.
