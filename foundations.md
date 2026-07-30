@@ -41,7 +41,7 @@ Every surface sits on exactly one of five levels. Backgrounds express depth in d
 | L1 | `bg.surface` | gray-50 | gray-950 | Grouping regions: sidebar, table headers, toolbars, flat cards. |
 | L2 | `bg.raised` | white + border | gray-900 | Cards, modals, drawers, menus — anything with its own boundary. |
 | L3 | `bg.raised-2` | white + border + shadow | gray-800 | A layer on a layer: popover opened from a modal, nested panel, dragged item. |
-| well | `bg.sunken` | gray-100 | gray-950 | Recessed content: code blocks, input wells, skeleton fills, dropzones. |
+| well | `bg.sunken` | gray-100 | gray-950 | Recessed content: code blocks, recessed search fields, skeleton fills, dropzones. (Text Inputs are outlined white, not wells — components.md Input.) |
 
 - Floating layers additionally take the shadow tier matching their behavior (the size-named `xs`–`xl` elevation scale) — shadows communicate *floating*, levels communicate *stacking*.
 - Do not invent intermediate grays, and do not skip levels (a popover from a modal is L3, not L2 again — in dark mode two L2 surfaces would visually merge).

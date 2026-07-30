@@ -59,6 +59,8 @@
   .ex-cap { font: var(--sy-weight-semibold) var(--sy-text-16)/var(--sy-text-16-lh) var(--sy-font-sans); color: var(--sy-fg-primary); margin: var(--sy-space-6) 0 var(--sy-space-2); scroll-margin-top: var(--sy-space-4); }
   .example > .ex-cap:first-child { margin: 0 0 var(--sy-space-4); }
   .example { background: var(--sy-bg-page); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-lg); padding: var(--sy-space-6); }
+  /* multiple example sections live in ONE wrap, separated by a full-bleed rule (headings stay inline) */
+  .ex-div { height: 1px; background: var(--sy-border-default); margin: var(--sy-space-6) calc(-1 * var(--sy-space-6)); }
   .example > .row { margin: 0; }
   .on-this-page { margin: var(--sy-space-4) 0; padding: var(--sy-space-3) var(--sy-space-4); background: var(--sy-bg-surface); border: 1px solid var(--sy-border-subtle); border-radius: var(--sy-radius-md); }
   .on-this-page .otp-label { font-size: 12px; color: var(--sy-fg-tertiary); margin-bottom: var(--sy-space-2); }
@@ -71,13 +73,15 @@
   .pg-field > span { font-size: 12px; color: var(--sy-fg-tertiary); flex: none; }
   .pg-field select, .pg-field input[type="text"] { width: 180px; height: var(--sy-control-height-sm); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); background: var(--sy-bg-page); color: var(--sy-fg-primary); font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans); padding: 0 var(--sy-space-2); }
   .pg-field select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2383838d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right var(--sy-space-2) center; padding-right: var(--sy-space-8); }
-  .pg-sel { appearance: none; -webkit-appearance: none; border: none; color: var(--sy-fg-primary); font: inherit; cursor: pointer; height: 100%; padding: 0 var(--sy-space-7) 0 var(--sy-space-2); background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2383838d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right var(--sy-space-2) center; }
+  .pg-sel { appearance: none; -webkit-appearance: none; border: none; color: var(--sy-fg-primary); font: inherit; cursor: pointer; height: 100%; padding: 0 var(--sy-space-8) 0 var(--sy-control-padding-x); background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2383838d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right var(--sy-control-padding-x) center; }
   .pg-check { display: flex; align-items: center; gap: var(--sy-space-2); font-size: var(--sy-text-13); color: var(--sy-fg-secondary); }
   .pg-check input { accent-color: var(--sy-action-primary-bg); }
-  .pg-ig { display: flex; align-items: stretch; background: var(--sy-bg-sunken); border: 1px solid transparent; border-radius: var(--sy-radius-10); overflow: hidden; height: var(--sy-control-height-md); }
+  .pg-ig { display: flex; align-items: stretch; background: var(--sy-bg-page); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-10); overflow: hidden; height: var(--sy-control-height-md); }
   .pg-ig.error { border-color: var(--sy-border-error); }
-  .pg-ig:focus-within { border-color: var(--sy-border-focus-input); background: var(--sy-bg-page); }
+  .pg-ig:hover:not(:focus-within) { border-color: var(--sy-border-strong); }
+  .pg-ig:focus-within { border-color: var(--sy-border-focus-input); }
   .pg-ig input:focus-visible, .pg-ig select:focus-visible, .pg-ig .btn:focus-visible { outline: none; box-shadow: none; }
+  .pg-tgl[aria-pressed="true"] { background: var(--sy-bg-selected); color: var(--sy-fg-primary); }
   @media (max-width: 760px) { .pg-grid { grid-template-columns: minmax(0, 1fr); } .pg-controls { width: auto; border-left: none; padding-left: 0; border-top: 1px solid var(--sy-border-subtle); padding-top: var(--sy-space-4); } }
   .story .desc { font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
     color: var(--sy-fg-secondary); max-width: 680px; margin-bottom: var(--sy-space-6); }
@@ -227,19 +231,42 @@
   .field label { font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans); }
   .field .ctrl { position: relative; display: flex; align-items: center; }
   .field input, .field textarea { width: 100%; padding: 0 var(--sy-control-padding-x);
-    border: 1px solid transparent; border-radius: var(--sy-radius-10);
-    background: var(--sy-bg-sunken); color: var(--sy-fg-primary);
+    border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-10);
+    background: var(--sy-bg-page); color: var(--sy-fg-primary);
     font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); }
   .field input { height: var(--sy-control-height-md); }
   .field textarea { padding: var(--sy-space-2) var(--sy-control-padding-x); min-height: 66px; resize: vertical; }
   .field input::placeholder, .field textarea::placeholder { color: var(--sy-fg-tertiary); }
-  .field input:hover, .field textarea:hover { background: var(--sy-bg-selected-hover); }
-  .field input:focus-visible, .field textarea:focus-visible { outline: none; border-color: var(--sy-border-focus-input); background: var(--sy-bg-page); }
+  .field input:hover:not([disabled]):not([readonly]):not(:focus-visible), .field textarea:hover:not([disabled]):not([readonly]):not(:focus-visible) { border-color: var(--sy-border-strong); }
+  .field input:focus-visible, .field textarea:focus-visible { outline: none; border-color: var(--sy-border-focus-input); }
   .field .help { font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); color: var(--sy-fg-secondary); }
   .field.error input { border-color: var(--sy-border-error); }
   .field.error .help { color: var(--sy-status-danger); }
+  /* checkboxes/radios inside a field (e.g. Combobox menu options) must not inherit the text-field box styling */
+  .field input[type="checkbox"], .field input[type="radio"] { width: auto; height: auto; min-height: 0; padding: 0; border: none; background: none; border-radius: 0; }
   .field input[disabled] { background: var(--sy-bg-disabled); color: var(--sy-fg-disabled); }
   .field input[readonly] { background: var(--sy-bg-surface); }
+  /* Select/DatePicker triggers are readonly inputs but are interactive, not read-only fields: keep them white + hoverable */
+  .field .ctrl input[readonly] { background: var(--sy-bg-page); cursor: pointer; }
+  .field .ctrl:hover input[readonly]:not(:focus-visible) { border-color: var(--sy-border-strong); }
+  /* interactive Select popover (preview): menu anchored under the trigger, shown on .open */
+  .ctrl[data-select] .sel-menu { position: absolute; top: calc(100% + var(--sy-space-1)); left: 0; min-width: 100%; display: none; z-index: 20; }
+  .ctrl[data-select].open .sel-menu { display: block; }
+  .ctrl[data-select].open input[readonly] { border-color: var(--sy-border-focus-input); }
+  .ctrl[data-select] .sel-chev { transition: transform var(--sy-duration-fast) var(--sy-ease-standard); }
+  .ctrl[data-select].open .sel-chev { transform: rotate(180deg); }
+  /* generic popover anchor (Combobox menu, DatePicker calendar) */
+  .pop { position: relative; }
+  .pop > .pop-panel { position: absolute; top: calc(100% + var(--sy-space-1)); left: 0; display: none; z-index: 20; }
+  .pop.open > .pop-panel { display: block; }
+  .pop.open > .pop-panel.menu { display: flex; }       /* combobox listbox keeps its flex column */
+  .pop.open > .pop-panel.pop-flex { display: flex; }   /* range picker keeps preset rail + calendar side by side */
+  .pop .pop-flex { gap: var(--sy-space-2); }
+  .combo-trigger[data-pop] { cursor: pointer; }
+  .combo-trigger[data-pop] .sel-chev { transition: transform var(--sy-duration-fast) var(--sy-ease-standard); }
+  .pop.open .combo-trigger[data-pop] { border-color: var(--sy-border-focus-input); }
+  .pop.open .combo-trigger[data-pop] .sel-chev { transform: rotate(180deg); }
+  .pop.open .ctrl[data-pop] input[readonly] { border-color: var(--sy-border-focus-input); }
   .field .lead { position: absolute; left: var(--sy-control-padding-x); color: var(--sy-fg-tertiary); }
   .field .lead + input { padding-left: calc(var(--sy-control-padding-x) + var(--sy-space-6)); }
   .counter { align-self: flex-end; font-size: var(--sy-text-12); color: var(--sy-fg-tertiary); }
@@ -598,8 +625,10 @@
     border-top: 1px solid var(--sy-border-subtle); font-size: 11px; color: var(--sy-fg-tertiary); }
 
   .combo-trigger { display: flex; flex-wrap: wrap; gap: var(--sy-space-1); align-items: center; min-height: var(--sy-control-height-md);
-    padding: var(--sy-space-1) var(--sy-space-2); border: 1px solid transparent; border-radius: var(--sy-radius-10);
-    background: var(--sy-bg-sunken); width: 300px; }
+    padding: var(--sy-space-1) var(--sy-space-2); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-10);
+    background: var(--sy-bg-page); width: 300px; }
+  .combo-trigger:hover:not(:focus-within) { border-color: var(--sy-border-strong); }
+  .combo-trigger:focus-within { border-color: var(--sy-border-focus-input); }
   .cal { width: 252px; background: var(--sy-bg-raised); border: 1px solid var(--sy-border-overlay);
     border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-lg); padding: var(--sy-space-3); }
   .cal .cal-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sy-space-2);
@@ -872,11 +901,17 @@
       <div class="story" data-group="Components" data-title="Select · Menu" data-doc="components.md · Select / Popover" id="s-select">
         <p class="desc">Select = 5–15 static options. Menus: full-bleed dividers, destructive last, optional search row above 8 items.</p>
         <div class="row" style="align-items: flex-start; gap: var(--sy-space-8);">
-          <div class="field">
+          <div class="field" style="width: 220px;">
             <label for="s1">Language</label>
-            <div class="ctrl">
+            <div class="ctrl" data-select>
               <input id="s1" value="한국어 (Korean)" readonly style="cursor: pointer;">
-              <svg class="icon" viewBox="0 0 24 24" style="position: absolute; right: 10px; color: var(--sy-fg-tertiary);"><path d="m6 9 6 6 6-6"/></svg>
+              <svg class="icon sel-chev" viewBox="0 0 24 24" style="position: absolute; right: 10px; color: var(--sy-fg-tertiary); pointer-events: none;"><path d="m6 9 6 6 6-6"/></svg>
+              <div class="menu sel-menu" role="listbox" aria-label="Language">
+                <div class="menu-item selected" role="option" aria-selected="true">한국어 (Korean)</div>
+                <div class="menu-item" role="option" aria-selected="false">English</div>
+                <div class="menu-item" role="option" aria-selected="false" lang="ja">日本語 (Japanese)</div>
+                <div class="menu-item" role="option" aria-selected="false" lang="zh">中文 (Chinese)</div>
+              </div>
             </div>
           </div>
           <div>
@@ -895,24 +930,23 @@
       <div class="story" data-group="Components" data-title="Combobox" data-doc="components.md · Combobox" id="s-combobox">
         <p class="desc">Large/async sets. Multi-select with tags, filtered select-all, match highlighting, creatable mode.</p>
         <div class="row" style="align-items: flex-start; gap: var(--sy-space-8);">
-          <div class="field" style="width: auto;">
+          <div class="field" style="width: 300px;">
             <label>Assign teams</label>
-            <div class="combo-trigger">
-              <span class="tag">Finance <span class="x" role="button" aria-label="Remove">✕</span></span>
-              <span class="tag" lang="ko">재무팀 <span class="x" role="button" aria-label="제거">✕</span></span>
-              <span class="tag">+2</span>
-              <span style="color: var(--sy-fg-tertiary); font-size: var(--sy-text-13);">Search…</span>
-              <svg class="icon" viewBox="0 0 24 24" style="margin-left:auto; color: var(--sy-fg-tertiary);"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-          </div>
-          <div>
-            <span class="region-tag">open, filtered by "fin" · select-all on filtered set</span>
-            <div class="menu" role="listbox">
-              <div class="menu-item" style="font-weight: var(--sy-weight-medium);"><input type="checkbox" style="accent-color: var(--sy-action-primary-bg);"> Select all (2)<span style="margin-left:auto; color: var(--sy-fg-link); font-size: var(--sy-text-12); cursor:pointer;">Clear</span></div>
-              <div class="menu-sep"></div>
-              <div class="menu-item selected"><input type="checkbox" checked style="accent-color: var(--sy-action-primary-bg);"> <strong style="font-weight:600">Fin</strong>ance</div>
-              <div class="menu-item"><input type="checkbox"> <strong style="font-weight:600">Fin</strong>Ops</div>
-              <div class="menu-item" style="color: var(--sy-fg-secondary);"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Create "fin-review"</div>
+            <div class="pop">
+              <div class="combo-trigger" data-pop>
+                <span class="tag">Finance <span class="x" role="button" aria-label="Remove">✕</span></span>
+                <span class="tag" lang="ko">재무팀 <span class="x" role="button" aria-label="제거">✕</span></span>
+                <span class="tag">+2</span>
+                <span style="color: var(--sy-fg-tertiary); font-size: var(--sy-text-13);">Search…</span>
+                <svg class="icon sel-chev" viewBox="0 0 24 24" style="margin-left:auto; color: var(--sy-fg-tertiary); pointer-events: none;"><path d="m6 9 6 6 6-6"/></svg>
+              </div>
+              <div class="menu pop-panel" role="listbox" style="min-width: 100%;">
+                <div class="menu-item" style="font-weight: var(--sy-weight-medium);"><input type="checkbox" style="accent-color: var(--sy-action-primary-bg);"> Select all (2)<span style="margin-left:auto; color: var(--sy-fg-link); font-size: var(--sy-text-12); cursor:pointer;">Clear</span></div>
+                <div class="menu-sep"></div>
+                <div class="menu-item selected"><input type="checkbox" checked style="accent-color: var(--sy-action-primary-bg);"> <strong style="font-weight:600">Fin</strong>ance</div>
+                <div class="menu-item"><input type="checkbox"> <strong style="font-weight:600">Fin</strong>Ops</div>
+                <div class="menu-item" style="color: var(--sy-fg-secondary);"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Create "fin-review"</div>
+              </div>
             </div>
           </div>
         </div>
@@ -922,43 +956,58 @@
         <p class="desc">Four closed variants: date · range · datetime · time. Today outlined, endpoints filled, range interior squared. Timezone labels are mandatory on datetime values.</p>
         <h3 class="sub">range — localized preset rail</h3>
         <div class="row" style="align-items: flex-start;">
-          <div class="menu" style="width: 140px;" lang="ko">
-            <div class="menu-item">오늘</div>
-            <div class="menu-item selected">지난 7일</div>
-            <div class="menu-item">지난 30일</div>
-            <div class="menu-item">이번 달</div>
-            <div class="menu-item">직접 선택</div>
-          </div>
-          <div class="cal">
-            <div class="cal-h"><svg class="icon" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg><span lang="ko">2026년 7월</span><svg class="icon" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
-            <table><thead><tr><th class="wd" lang="ko">일</th><th class="wd" lang="ko">월</th><th class="wd" lang="ko">화</th><th class="wd" lang="ko">수</th><th class="wd" lang="ko">목</th><th class="wd" lang="ko">금</th><th class="wd" lang="ko">토</th></tr></thead>
-            <tbody>
-              <tr><td class="d out">28</td><td class="d out">29</td><td class="d out">30</td><td class="d">1</td><td class="d ep">2</td><td class="d in">3</td><td class="d in">4</td></tr>
-              <tr><td class="d in">5</td><td class="d in">6</td><td class="d in">7</td><td class="d ep">8</td><td class="d today">9</td><td class="d">10</td><td class="d">11</td></tr>
-              <tr><td class="d">12</td><td class="d">13</td><td class="d">14</td><td class="d">15</td><td class="d">16</td><td class="d">17</td><td class="d">18</td></tr>
-            </tbody></table>
+          <div class="field" style="width: 260px;">
+            <label lang="ko">기간</label>
+            <div class="pop">
+              <div class="ctrl" data-pop>
+                <input value="2026.07.02 – 2026.07.08" readonly style="cursor: pointer;">
+                <svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary); pointer-events: none;"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg>
+              </div>
+              <div class="pop-panel pop-flex">
+                <div class="menu" style="width: 140px;" lang="ko">
+                  <div class="menu-item">오늘</div>
+                  <div class="menu-item selected">지난 7일</div>
+                  <div class="menu-item">지난 30일</div>
+                  <div class="menu-item">이번 달</div>
+                  <div class="menu-item">직접 선택</div>
+                </div>
+                <div class="cal">
+                  <div class="cal-h"><svg class="icon" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg><span lang="ko">2026년 7월</span><svg class="icon" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
+                  <table><thead><tr><th class="wd" lang="ko">일</th><th class="wd" lang="ko">월</th><th class="wd" lang="ko">화</th><th class="wd" lang="ko">수</th><th class="wd" lang="ko">목</th><th class="wd" lang="ko">금</th><th class="wd" lang="ko">토</th></tr></thead>
+                  <tbody>
+                    <tr><td class="d out">28</td><td class="d out">29</td><td class="d out">30</td><td class="d">1</td><td class="d ep">2</td><td class="d in">3</td><td class="d in">4</td></tr>
+                    <tr><td class="d in">5</td><td class="d in">6</td><td class="d in">7</td><td class="d ep">8</td><td class="d today">9</td><td class="d">10</td><td class="d">11</td></tr>
+                    <tr><td class="d">12</td><td class="d">13</td><td class="d">14</td><td class="d">15</td><td class="d">16</td><td class="d">17</td><td class="d">18</td></tr>
+                  </tbody></table>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <h3 class="sub">datetime — calendar with time footer, tz always labeled</h3>
         <div class="row" style="align-items: flex-start;">
           <div class="field" style="width: 260px;">
             <label lang="ko">실행 예약</label>
-            <div class="ctrl">
-              <input value="2026년 1월 9일 14:02 KST" lang="ko" readonly style="cursor: pointer;">
-              <svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary);"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg>
-            </div>
-          </div>
-          <div class="cal">
-            <div class="cal-h"><svg class="icon" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg><span lang="ko">2026년 1월</span><svg class="icon" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
-            <table><thead><tr><th class="wd" lang="ko">일</th><th class="wd" lang="ko">월</th><th class="wd" lang="ko">화</th><th class="wd" lang="ko">수</th><th class="wd" lang="ko">목</th><th class="wd" lang="ko">금</th><th class="wd" lang="ko">토</th></tr></thead>
-            <tbody>
-              <tr><td class="d out">28</td><td class="d out">29</td><td class="d out">30</td><td class="d out">31</td><td class="d">1</td><td class="d">2</td><td class="d">3</td></tr>
-              <tr><td class="d">4</td><td class="d">5</td><td class="d">6</td><td class="d">7</td><td class="d">8</td><td class="d ep">9</td><td class="d">10</td></tr>
-            </tbody></table>
-            <div style="display:flex; align-items:center; gap: var(--sy-space-2); border-top: 1px solid var(--sy-border-subtle); margin: var(--sy-space-2) -12px 0; padding: var(--sy-space-2) var(--sy-space-3) 0;">
-              <svg class="icon" viewBox="0 0 24 24" style="color: var(--sy-fg-tertiary);"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-              <input value="14:02" style="width: 64px; height: var(--sy-control-height-sm); padding: 0 var(--sy-space-2); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); background: var(--sy-bg-page); color: var(--sy-fg-primary); font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-mono); font-variant-numeric: tabular-nums;">
-              <span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">KST</span>
+            <div class="pop">
+              <div class="ctrl" data-pop>
+                <input value="2026년 1월 9일 14:02 KST" lang="ko" readonly style="cursor: pointer;">
+                <svg class="icon" viewBox="0 0 24 24" style="position:absolute; right:10px; color: var(--sy-fg-tertiary); pointer-events: none;"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 11h16"/></svg>
+              </div>
+              <div class="pop-panel">
+                <div class="cal">
+                  <div class="cal-h"><svg class="icon" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg><span lang="ko">2026년 1월</span><svg class="icon" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></div>
+                  <table><thead><tr><th class="wd" lang="ko">일</th><th class="wd" lang="ko">월</th><th class="wd" lang="ko">화</th><th class="wd" lang="ko">수</th><th class="wd" lang="ko">목</th><th class="wd" lang="ko">금</th><th class="wd" lang="ko">토</th></tr></thead>
+                  <tbody>
+                    <tr><td class="d out">28</td><td class="d out">29</td><td class="d out">30</td><td class="d out">31</td><td class="d">1</td><td class="d">2</td><td class="d">3</td></tr>
+                    <tr><td class="d">4</td><td class="d">5</td><td class="d">6</td><td class="d">7</td><td class="d">8</td><td class="d ep">9</td><td class="d">10</td></tr>
+                  </tbody></table>
+                  <div style="display:flex; align-items:center; gap: var(--sy-space-2); border-top: 1px solid var(--sy-border-subtle); margin: var(--sy-space-2) -12px 0; padding: var(--sy-space-2) var(--sy-space-3) 0;">
+                    <svg class="icon" viewBox="0 0 24 24" style="color: var(--sy-fg-tertiary);"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                    <input value="14:02" style="width: 64px; height: var(--sy-control-height-sm); padding: 0 var(--sy-space-2); border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-sm); background: var(--sy-bg-page); color: var(--sy-fg-primary); font: var(--sy-weight-regular) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-mono); font-variant-numeric: tabular-nums;">
+                    <span class="sy-type-caption" style="color: var(--sy-fg-tertiary);">KST</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -3123,13 +3172,11 @@ team: finance</pre>
     's-toggle': {
       controls: [
         { key: 'variant', label: 'Variant', type: 'select', options: ['icon', 'labeled'], default: 'icon' },
-        { key: 'state', label: 'State', type: 'select', options: ['off', 'on'], default: 'off' },
         { key: 'label', label: 'Label', type: 'text', default: 'Pin' }
       ],
-      render: function (v) { var on = v.state === 'on'; var pin = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 4h6M10 4v6l-2 3h8l-2-3V4M12 16v4"/></svg>';
-        var st = on ? ' style="background:var(--sy-bg-selected);color:var(--sy-fg-primary);"' : '';
-        if (v.variant === 'icon') return '<button type="button" class="btn btn-icon' + (on ? '' : ' btn-ghost') + '" aria-pressed="' + on + '" aria-label="' + pgEsc(v.label) + '"' + st + '>' + pin + '</button>';
-        return '<button type="button" class="btn' + (on ? '' : ' btn-secondary') + '" aria-pressed="' + on + '"' + st + '>' + pin + pgEsc(v.label) + '</button>';
+      render: function (v) { var pin = '<svg class="icon" viewBox="0 0 24 24"><path d="M9 4h6M10 4v6l-2 3h8l-2-3V4M12 16v4"/></svg>';
+        if (v.variant === 'icon') return '<button type="button" class="btn btn-ghost btn-icon pg-tgl" data-pg-toggle aria-pressed="false" aria-label="' + pgEsc(v.label) + '">' + pin + '</button>';
+        return '<button type="button" class="btn btn-secondary pg-tgl" data-pg-toggle aria-pressed="false">' + pin + pgEsc(v.label) + '</button>';
       }
     },
     's-segmented': {
@@ -3170,13 +3217,13 @@ team: finance</pre>
           control = '<input' + at + ' placeholder="' + ph + '">';
         } else {
           var ig = 'pg-ig' + (v.state === 'error' ? ' error' : '');
-          var inp = '<input' + at + ' placeholder="' + ph + '" style="flex:1;min-width:0;border:none;background:transparent;padding:0 var(--sy-space-2);color:var(--sy-fg-primary);font:var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans);">';
-          var segTxt = 'display:inline-flex;align-items:center;padding:0 var(--sy-space-2);color:var(--sy-fg-secondary);font-size:var(--sy-text-13);white-space:nowrap;';
+          var inp = '<input' + at + ' placeholder="' + ph + '" style="flex:1;min-width:0;border:none;background:transparent;padding:0 var(--sy-control-padding-x);color:var(--sy-fg-primary);font:var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans);">';
+          var segTxt = 'display:inline-flex;align-items:center;padding:0 var(--sy-control-padding-x);color:var(--sy-fg-secondary);font-size:var(--sy-text-13);white-space:nowrap;';
           if (a === 'leading text') control = '<div class="' + ig + '"><span style="' + segTxt + 'border-right:1px solid var(--sy-border-default);">https://</span>' + inp + '</div>';
           else if (a === 'leading dropdown') control = '<div class="' + ig + '"><select class="pg-sel" style="border-right:1px solid var(--sy-border-default);"><option>US</option><option>CA</option><option>EU</option></select>' + inp + '</div>';
           else if (a === 'trailing dropdown') control = '<div class="' + ig + '">' + inp + '<select class="pg-sel" style="border-left:1px solid var(--sy-border-default);"><option>USD</option><option>CAD</option><option>EUR</option></select></div>';
           else if (a === 'trailing button') control = '<div class="' + ig + '">' + inp + '<button class="btn btn-secondary" type="button" style="border-radius:0;border:none;border-left:1px solid var(--sy-border-default);">Copy</button></div>';
-          else control = '<div class="' + ig + '">' + inp + '<span style="display:inline-flex;align-items:center;padding:0 var(--sy-space-2);"><span class="sy-kbd">⌘K</span></span></div>';
+          else control = '<div class="' + ig + '">' + inp + '<span style="display:inline-flex;align-items:center;padding:0 var(--sy-control-padding-x);"><span class="sy-kbd">⌘K</span></span></div>';
         }
         return '<div class="' + cls + '" style="width:300px;">' + lbl + control + help + '</div>';
       }
@@ -3267,6 +3314,7 @@ team: finance</pre>
     var cap = document.createElement('div'); cap.className = 'ex-cap'; cap.textContent = 'Playground'; cell.appendChild(cap);
     var grid = document.createElement('div'); grid.className = 'pg-grid';
     var stage = document.createElement('div'); stage.className = 'pg-stage';
+    stage.addEventListener('click', function (e) { var t = e.target.closest && e.target.closest('[data-pg-toggle]'); if (t) { t.setAttribute('aria-pressed', t.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); } });
     var controls = document.createElement('div'); controls.className = 'pg-controls';
     var inputs = {};
     schema.controls.forEach(function (c) {
@@ -3291,23 +3339,42 @@ team: finance</pre>
     return { cell: cell, wire: wire };
   }
   function frameExamples(nodes) {
-    // already in the new format (Button/etc.) — leave as authored
-    var already = nodes.some(function (n) { return n.classList && (n.classList.contains('ex-cap') || n.classList.contains('example')); });
-    if (already) return nodes;
-    // each h3.sub starts a new .example cell with the heading as its first child (header inside the wrap)
-    var out = [], cell = null;
-    function newCell() { cell = document.createElement('div'); cell.className = 'example'; out.push(cell); }
+    // Normalize any authoring shape (raw h3.sub sections, or hand-authored .ex-cap + .example blocks)
+    // into a flat sequence of headings and content, then assemble ONE .example wrap with a full-bleed
+    // .ex-div rule between sections. Headings stay inline in the wrap (no separate top-of-page list).
+    var flat = [], shells = [];
     nodes.forEach(function (n) {
       if (n.tagName === 'H3' && n.classList && n.classList.contains('sub')) {
-        newCell();
-        var cap = document.createElement('div'); cap.className = 'ex-cap'; cap.textContent = n.textContent;
-        cell.appendChild(cap);
+        // reuse the original heading (move it into the wrap) so it never lingers in its old spot
+        n.classList.remove('sub'); n.classList.add('ex-cap');
+        flat.push({ heading: n });
+      } else if (n.classList && n.classList.contains('ex-cap')) {
+        flat.push({ heading: n });
+      } else if (n.classList && n.classList.contains('example')) {
+        // unwrap an authored box: its inner ex-cap becomes a heading, the rest is content; drop the empty shell
+        shells.push(n);
+        Array.prototype.forEach.call(n.childNodes, function (k) {
+          if (k.nodeType === 1 && k.classList && k.classList.contains('ex-cap')) flat.push({ heading: k });
+          else flat.push({ node: k });
+        });
       } else {
-        if (!cell) newCell();
-        cell.appendChild(n);
+        flat.push({ node: n });
       }
     });
-    return out;
+    var cell = document.createElement('div'); cell.className = 'example';
+    var placed = false;
+    flat.forEach(function (item) {
+      if (item.heading) {
+        if (placed) { var d = document.createElement('div'); d.className = 'ex-div'; cell.appendChild(d); }
+        cell.appendChild(item.heading); placed = true;
+      } else if (item.node) {
+        // skip pure-whitespace text nodes so they don't create phantom gaps
+        if (item.node.nodeType === 3 && !/\S/.test(item.node.nodeValue)) return;
+        cell.appendChild(item.node); placed = true;
+      }
+    });
+    shells.forEach(function (sh) { if (sh.parentNode) sh.parentNode.removeChild(sh); });
+    return [cell];
   }
   function buildToc(nodes) {
     var caps = [];
@@ -3394,7 +3461,6 @@ team: finance</pre>
       main.appendChild(hdr);
       if (desc) main.appendChild(desc);
       specInto(main, s.id);
-      var toc = buildToc(framed); if (toc) main.appendChild(toc);
       guidanceInto(main, s.id);
       var rel = relatedBlock(s, g, cat); if (rel) main.appendChild(rel);
       aside.appendChild(secLabel('Examples'));
@@ -4366,6 +4432,71 @@ team: finance</pre>
       if (next >= 0 && next < t.length) { sel = next; paintSel(); }
     });
     renderBody();
+  })();
+
+  // interactive dropdowns (preview): Select listbox, Combobox menu, DatePicker calendar — open on click
+  (function () {
+    function closeAll(except) {
+      var open = document.querySelectorAll('.ctrl[data-select].open, .pop.open');
+      for (var i = 0; i < open.length; i++) { if (open[i] !== except) open[i].classList.remove('open'); }
+    }
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest) return;
+      // 1) single-select option chosen (Select) — update value + close
+      var opt = e.target.closest('.sel-menu [role="option"]');
+      if (opt) {
+        var cs = opt.closest('.ctrl[data-select]'), inpO = cs && cs.querySelector('input');
+        var opts = cs.querySelectorAll('[role="option"]');
+        for (var j = 0; j < opts.length; j++) { opts[j].setAttribute('aria-selected', 'false'); opts[j].classList.remove('selected'); }
+        opt.setAttribute('aria-selected', 'true'); opt.classList.add('selected');
+        if (inpO) inpO.value = opt.textContent.trim();
+        cs.classList.remove('open');
+        return;
+      }
+      // 2) click inside an open .pop panel — a calendar day or preset closes; combobox options stay open
+      var panel = e.target.closest('.pop.open .pop-panel');
+      if (panel) {
+        var anchorP = panel.closest('.pop');
+        var day = e.target.closest('.cal td.d');
+        var preset = e.target.closest('.pop-flex .menu .menu-item');
+        if ((day && !day.classList.contains('out')) || preset) anchorP.classList.remove('open');
+        return;
+      }
+      // 3) a trigger toggles its own popover
+      var trig = e.target.closest('.ctrl[data-select], [data-pop]');
+      if (trig) {
+        var anchorT = trig.matches('.ctrl[data-select]') ? trig : trig.closest('.pop');
+        var willOpen = !anchorT.classList.contains('open');
+        closeAll(anchorT);
+        anchorT.classList.toggle('open', willOpen);
+        return;
+      }
+      // 4) outside — close everything
+      closeAll(null);
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(null); });
+
+    // Pre-size each hosting example cell to the fully-expanded dropdown height ONCE, so the layout is
+    // already at its needed height and opening a dropdown causes no shift or overlap.
+    function presize() {
+      var prev = document.querySelectorAll('.example[data-pop-reserved]');
+      for (var p = 0; p < prev.length; p++) { prev[p].style.paddingBottom = ''; prev[p].removeAttribute('data-pop-reserved'); }
+      var anchors = document.querySelectorAll('.ctrl[data-select], .pop');
+      var exs = [], need = [];
+      for (var i = 0; i < anchors.length; i++) {
+        var a = anchors[i], pnl = a.querySelector('.pop-panel, .sel-menu'); if (!pnl) continue;
+        var ex = a.closest('.example'); if (!ex) continue;
+        var disp = (pnl.classList.contains('menu') || pnl.classList.contains('pop-flex')) ? 'flex' : 'block';
+        var pv = pnl.style.visibility, pd = pnl.style.display;
+        pnl.style.visibility = 'hidden'; pnl.style.display = disp;
+        var over = pnl.getBoundingClientRect().bottom - ex.getBoundingClientRect().bottom;
+        pnl.style.visibility = pv; pnl.style.display = pd;
+        if (over > 0) { var k = exs.indexOf(ex); if (k < 0) { exs.push(ex); need.push(over); } else { need[k] = Math.max(need[k], over); } }
+      }
+      for (var j = 0; j < exs.length; j++) { exs[j].style.paddingBottom = (24 + need[j] + 8) + 'px'; exs[j].setAttribute('data-pop-reserved', ''); }
+    }
+    if (window.requestAnimationFrame) requestAnimationFrame(presize); else setTimeout(presize, 0);
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(presize, 150); });
   })();
 </script>
 </body>
