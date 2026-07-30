@@ -18,7 +18,7 @@ Not adoptable under §8 or product reality: the sparkle/glow backdrop (glow forb
 
 **B1. ContextCard + stack.** Attached objects (docs, meetings, tables) render as small cards in the thread: 16px icon tile + title (13 medium, truncating) + `caption` meta, outlined, radius `sm`. Multiple attachments stack with a flat 4px offset (max 3 visible + "+N") — no rotation, we're not playful, we're precise. Doubles as the @-mention render inside Composer text.
 
-**B2. Slash commands + ghost completion.** `/` in an empty Composer opens the command palette scoped to agent actions; mid-word the rest of the match renders as `fg.placeholder` ghost text completed with →. Content rule: commands come from the closed action glossary.
+**B2. Slash commands + ghost completion.** `/` in an empty Composer opens the command palette scoped to agent actions; mid-word the rest of the match renders as `text.placeholder` ghost text completed with →. Content rule: commands come from the closed action glossary.
 
 **B3. Dropzone.** ~~New component~~ Correction: FileUpload already exists with a dropzone variant — this is a retune of it: `bg.sunken` fill, 1px **dashed** `border.strong` (the system's first sanctioned dashed border — jurisdiction: drop targets only), radius `xl` shell, icon medallion + title + `caption` format list + browse Link. Drag-over: border → `border.focus-input`, fill → `emphasis.surface`.
 

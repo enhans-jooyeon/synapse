@@ -20,7 +20,7 @@ What the references actually do, distilled:
 
 | # | Change | Concrete delta |
 |---|---|---|
-| A1 | Hairline the chrome | `border.default` #E3E3E8 → #E9E9ED (closer to subtle); component boundaries get quieter. Table outer frame removed in focus tables (kept in dense/scrolling tables); table header row loses its `bg.surface` fill — `label` `fg.tertiary` headers on the page bg with a single hairline rule. |
+| A1 | Hairline the chrome | `border.default` #E3E3E8 → #E9E9ED (closer to subtle); component boundaries get quieter. Table outer frame removed in focus tables (kept in dense/scrolling tables); table header row loses its `bg.surface` fill — `label` `text.tertiary` headers on the page bg with a single hairline rule. |
 | A2 | Soften elevation | `shadow.overlay` → `0 8px 24px rgba(9,9,11,0.08)`; `shadow.modal` → `0 24px 48px rgba(9,9,11,0.12)`; floating layers drop their 1px border in light mode (keep in dark, where shadows die). |
 | A3 | Radius step-up | `sm` 6→8 (controls), `md` 8→10 (cards, menus), `lg` 12→16 (modals). Full-pill stays for Badge/avatar. |
 | A4 | Heading finish | Latin letter-spacing −0.01em on `heading-xl/lg` (Hangul exempt, as with display); `heading-xl` may go 700 for contrast. |

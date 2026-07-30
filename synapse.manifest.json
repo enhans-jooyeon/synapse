@@ -63,11 +63,12 @@
   "R16": "builder workbench shell"
  },
  "never": [
+  "--sy-text-* on an icon — icons take the dedicated --sy-icon-* family (2026-07-30); only icon.primary differs in value, the rest alias text.*/status.*",
   "raw color/spacing/radius/type values (semantic tokens + typography styles only)",
   "components or variants outside this manifest",
   "icons outside icons.md registry",
   "italics, ALL-CAPS, fixed-width text containers, line-height below paired floor",
-  ">1 primary button or Banner per region; the deprecated accent variant anywhere",
+  ">1 primary button or Banner per region; the pre-rename 'accent' variant name anywhere (it is 'brand')",
   "carousels; infinite scroll in tables; nested modals; custom scrollbars; per-client theming; arbitrary z-index",
   "gradients; glow; blur / backdrop-filter (overlays are opaque, no glassmorphism); rotation outside MediaGroup's generated-media fan",
   "particle attached to a variable in Korean; concatenated sentence fragments",
@@ -78,30 +79,34 @@
   "Button": {
    "purpose": "Trigger an action; never navigation (that is Link).",
    "variants": [
-    "primary",
-    "secondary (tonal)",
-    "ghost",
-    "danger",
-    "accent (POINT color — graphite, mode-inverting — conversational-AI CTA only: Ask agent / Composer send)"
+    "TWO AXES as of 2026-07-30",
+    "buttonStyle: primary | secondary (tonal, was tertiary) | outline (white+border, was secondary) | ghost",
+    "target: default | destructive | brand (bright AZURE azure.500 #0073E6, NOT the indigo info blue; conversational-AI CTA only, max 1/screen across ALL styles)"
    ],
    "sizes": [
+    "xs (24, INLINE-ONLY per WCAG 2.5.8 Inline exception)",
     "sm",
     "md",
     "lg"
    ],
    "key_rules": [
     "max 1 primary per region",
-    "conversational-AI entry (Ask agent / Composer send) = accent = the graphite point color (max 1/screen); operational agent actions (Run/Retry/Resume) stay primary/black — executing a configured run never earns the point color; slate stays the AI surface, the graphite point is a distinct accent on top (never accent-on-slate)",
-    "text-only labels by default; icon+text only for accent AI actions and toolbar/filter contexts (approved icons)",
-    "pill radius only in Guided heroes / empty-state first-use",
+    "target=brand = bright AZURE (azure ramp; never the indigo blue ramp, which is functional info/link/focus — the two blues must never be mixed), max 1/screen across ALL FOUR styles — scarcity is no longer enforced by absence and MUST be enforced by review/lint; operational agent actions (Run/Retry/Resume) stay target=default; primary x destructive (solid red) stays destructive-confirmation-only, lower-emphasis destructive styles serve row/inline deletes; secondary on bg.sunken MUST open to bg.page (tray rule) or it becomes indistinguishable from ghost; tonal coloured fills are one ramp step lighter than status.*-bg so they do not duplicate the subtle Banner/Badge tint",
+    "text-only labels by default; icon+text only for brand AI actions and toolbar/filter contexts (approved icons)",
+    "pill radius: primary + lg ONLY, in Guided heroes / empty-state first-use, target=default or brand (never destructive, never xs/sm/md, never secondary/outline/ghost)",
     "icon-only buttons are always square (width = size height)",
-    "optical trim: icon+text buttons drop 2px padding on the icon side",
-    "loading keeps width; disabled is a fill, never opacity",
-    "danger labels semibold; danger hover darkens to AA"
+    "optical trim: icon+text buttons drop 2px padding on the icon side, computed from the SIZE-SPECIFIC control-padding-x-{xs,sm,md,lg} = 8/10/12/16",
+    "leading + trailing icon together is permitted (confirmed 2026-07-30) but only reachable in toolbar/filter context; never two chevrons",
+    "pill: primary + lg only, Guided heroes / empty-state first-use, target default or brand, never destructive",
+    "NO active/pressed state (dropped 2026-07-30) — pressed feedback comes from the click; bg.active is NOT a Button token, it belongs to table rows and menu items",
+    "focus ring: HUE from target, STRENGTH from buttonStyle — primary takes the strong ring (border.focus-input / border.error-hover / action.brand-border-hover), secondary/outline/ghost take the soft one (border.focus-soft / border.error-soft / action.brand-border-soft); soft rings are mode-invariant 500 steps",
+    "loading: spinner (registry loader-2) replaces the leading icon, or on an icon-only button the glyph itself; aria-label MUST persist + aria-busy=true since the affordance is gone while busy; width never changes; disabled is a fill, never opacity; the disabled LABEL is text.disabled in ALL 12 cells (per-target disabled labels withdrawn 2026-07-30 — the brand one was azure.500, the same hex as the live brand fill, so disabled read as available)",
+    "danger solid clears AA at 4.62:1 with NORMAL label weight (status.danger-bg-solid moved red.400->red.500 on 2026-07-30; danger LEFT the §9 solid-label deviation — do not emit semibold for it)",
+    "render/asChild: polymorphic slot for framework routing ONLY — one child, no nested interactivity, never on target=brand; not a licence to style links as buttons"
    ]
   },
   "Link": {
-   "purpose": "Navigation. fg.link; underline on hover/focus; inline links always underlined.",
+   "purpose": "Navigation. text.link; underline on hover/focus; inline links always underlined.",
    "key_rules": [
     "never styled as a button",
     "external links take the arrow-up-right mark",
@@ -121,7 +126,12 @@
    ]
   },
   "Textarea": {
-   "purpose": "Multi-line Input; min 3 rows; vertical resize; char counter counts characters not bytes."
+   "purpose": "Multi-line Input; min 3 rows; vertical resize; char counter counts characters not bytes.",
+   "key_rules": [
+    "autogrow variant: 1 row to a declared max (default 8), then internal scroll, resize handle removed",
+    "action bar (2026-07-30): trailing row fused to the field bottom, border.subtle full-bleed seam, height 40, bg.page, control-padding-x matching the field body; counter moves into it; max 2 buttons, secondary/ghost ONLY — never primary/brand/danger; forbidden inside the Composer, which owns its own send row",
+    "action bar follows the Textarea in tab order, never precedes it"
+   ]
   },
   "Select": {
    "purpose": "Choose one of 5–15 static options. <5 → Radio; >15/async → Combobox.",
@@ -142,9 +152,9 @@
   "Badge": {
    "purpose": "Static annotation: status, counts, categories. Never interactive (that is Chip).",
    "variants": [
-    "colors: neutral,info,success,warning,danger,ai,category(subtle only)",
-    "emphasis: subtle,solid,outline,dot",
-    "shapes: pill(default),rounded — one shape per view",
+    "colors: neutral,info,success,warning,danger,ai,category(subtle only) — NOTE solid neutral RETIRED: that treatment moved to Chip's selected state; release markers (New/Beta/Early access) now use neutral SUBTLE, never info (blue is already link+focus+info+brand)",
+    "emphasis: subtle,solid,dot — outline RETIRED 2026-07-30 (outline is now Chip's resting state; dense-table case covered by dot)",
+    "shape: pill(default) | rounded — a density/tone choice, one per view. Interactivity is encoded by FILL not shape (2026-07-30): Badge is filled/tinted, Chip is outlined at rest",
     "sizes: md, lg(page headers only)"
    ],
    "key_rules": [
@@ -160,12 +170,16 @@
   "Chip": {
    "purpose": "Interactive compact element: select, refine, remove, accept a suggestion. Clickable=Chip, informs-only=Badge.",
    "variants": [
-    "input (removable)",
-    "filter (toggleable)",
-    "category (click-to-filter, system-assigned viz color)",
+    "input (removable — outlined at rest + trailing X)",
+    "filter (toggleable; selected treatment depends on selection model — multi-select takes NO FILL: transparent + border.selected + text.primary + check, which keeps dense filter rows quiet; single-select/toggle takes bg.inverse-soft + text.on-inverse + check)",
+    "category RETIRED 2026-07-30 — it duplicated Badge category, split only by clickability. Label-only = Badge category; click-to-filter = filter chip",
     "suggestion (outlined bg.raised + hairline, hover bg.hover/border.strong — style swap w/ source pills; Console/empty states only, max 3)"
    ],
    "key_rules": [
+    "interactivity is encoded by FILL not shape (2026-07-30): Chip is OUTLINED at rest, Badge is filled/tinted; shape is a free density choice on Badge",
+    "every Chip carries an affordance glyph — trailing X removable, leading check selected, trailing chevron opens a menu; a chip with no glyph and no selected state is a mislabelled Badge",
+    "chips do NOT carry the full colour palette — interactive stays quieter than status",
+    "disabled uses text.disabled + border.subtle, NEVER opacity",
     "never carries commands (that is Button)",
     "no manual colors",
     "labels never truncate"
@@ -190,7 +204,7 @@
    "purpose": "Workhorse for data-heavy records with aligned columns.",
    "key_rules": [
     "18 closed cell renderers fix alignment/format per column; empty cell = em dash",
-    "header row: label-size medium fg.tertiary, transparent fill, hairline rule only; sort glyph space reserved",
+    "header row: label-size medium text.tertiary, transparent fill, hairline rule only; sort glyph space reserved",
     "selection column: 40px, zero padding, centered both axes — control cell, not text cell",
     "emphasis column opt-in: emphasis.surface fill marks current period/totals, max 1/table",
     "status columns default dot+text; solid opt-in for ops walls",
@@ -254,8 +268,12 @@
   "Tabs": {
    "purpose": "Peer views of one object (2–7). Underline style only.",
    "key_rules": [
-    "never for sequential steps (use Stepper recipe)",
-    "overflow scrolls, never wraps"
+    "never for sequential steps (use Stepper recipe — recipes.md R9)",
+    "overflow scrolls, never wraps",
+    "editable variant (2026-07-30) for USER-created tabs: trailing X per tab, trailing + after the last, double-click renames in place; closing the active tab activates its right neighbour",
+    "the 7-tab cap holds — author-defined tabs are capped by review, editable tabs by DISABLING the + at 7; beyond 7 open items is a Sidebar list or Tree, not a tab strip",
+    "editable never for product-defined views (if the user cannot create it, they must not close it); never close the last remaining tab",
+    "dirty state = 6px text.tertiary dot replacing the X until hover"
    ]
   },
   "Sidebar (app navigation)": {
@@ -277,16 +295,21 @@
     "widths 400(confirm)/480/640 max",
     "opaque bg.raised (glass retired from scrimmed layers)",
     "footer: Cancel + one primary (danger for destructive, consequences named by count+noun)",
-    "no modal-on-modal; z.modal"
+    "no modal-on-modal; z.modal",
+    "header action slot (2026-07-30): at most ONE ghost action/icon-button/Link between title and close, 12px gap; for ancillary affordances only (Learn more, Open in full page, view toggle)",
+    "the two-button footer cap counts DECISIONS — a header action never resolves the modal; if it would close or commit, it is a decision and belongs in the footer",
+    "no header action on a 400px confirm modal; never primary/brand/danger styling in the header"
    ]
   },
   "Drawer": {
-   "purpose": "Side detail/edit without leaving context; right side only; 480/640.",
+   "purpose": "Side detail/edit without leaving context; right side (bottom below 768px); 480/640.",
    "key_rules": [
     "full-screen data drawers for review surfaces",
     "wide 800 variant for data review (DiffView)",
     "opaque bg.raised always (glass retired from scrimmed layers)",
-    "z.drawer"
+    "z.drawer",
+    "bottom rendering below the 768 breakpoint (2026-07-30): full width, max-height 85vh, radius xl on the top two corners, 32x4 border.strong grab handle — this is RESPONSIVE, not an author-set side prop; edge is a function of available space so the system decides it",
+    "side is NOT author-controlled: left is forbidden (Sidebar), top is forbidden (the top edge is app chrome — topbar/palette/Banner — so a panel from there reads as a system message; use a Modal or Banner), bottom is forbidden at >=768"
    ]
   },
   "Popover / Menu": {
@@ -295,7 +318,9 @@
     "border.overlay (none in light, visible in dark) + shadow.lg; z.dropdown",
     "6px container padding (concentric: 10-6=4 item radius); items 32px with 4px gaps; destructive last; dividers full-bleed — binds EVERY horizontal rule in any floating panel, incl. search/hint/footer rows",
     "search row optional >8 items",
-    "one submenu level max"
+    "one submenu level max",
+    "Kbd slot (2026-07-30): a menu item MAY carry its shortcut right-aligned as a .sy-kbd hint in text.tertiary, min 24px from the label, label truncates before the hint; renders IDENTICALLY to Tooltip's Kbd slot and CommandPalette's trailing kbd — one shortcut vocabulary across all three",
+    "never invent a shortcut hint for a binding that does not exist; never a Kbd slot on a danger item"
    ]
   },
   "Tooltip": {
@@ -371,7 +396,7 @@
    "purpose": "Long-running work. 4px track.",
    "variants": [
     "default (meter.fill gray)",
-    "ai (accent)"
+    "ai (brand blue)"
    ],
    "key_rules": [
     "determinate needs a real denominator",
@@ -452,7 +477,7 @@
     "never fake citations — unsourced claims get the 'Model knowledge' badge",
     "≤3 per sentence",
     "sources row: 출처 eyebrow ABOVE pill source cards — leading 18px page-filled numeral circle (mirrors the inline marker) + 12px type icon + name (icon restored); card↔marker hover linkage; ≥24px hit areas",
-    "marker = 18px circle, neutral bg.sunken + fg.secondary, bare numeral 11 semibold tabular — brackets/mono retired"
+    "marker = 18px circle, neutral bg.sunken + text.secondary, bare numeral 11 semibold tabular — brackets/mono retired"
    ]
   },
   "ContextCard": {
@@ -632,7 +657,7 @@
    ],
    "key_rules": [
     "1px only — border.subtle inside components, border.default for stronger boundaries + the vertical variant",
-    "labeled = rule · caption/micro label (fg.tertiary) · rule",
+    "labeled = rule · caption/micro label (text.tertiary) · rule",
     "margins come from surrounding rhythm, never baked in",
     "reach for it only when a visible line aids grouping — whitespace/component borders first",
     "no thick or colored dividers; one divider weight per region",
@@ -652,10 +677,11 @@
     "lg"
    ],
    "key_rules": [
+    "disabled = bg.disabled fill + text.disabled label, never text-only and never opacity (aligned to Button 2026-07-30; ToggleButton was the only control disabling without a fill)",
     "distinct from Switch (instant setting) and SegmentedControl (exclusive choice)",
-    "on-state = bg.selected + fg.primary; icon stays stroke — favorite star is the sole fill-on-active exception",
+    "on-state = bg.selected + text.primary; icon stays stroke — favorite star is the sole fill-on-active exception",
     "aria-pressed reflects state; icon-only requires aria-label",
-    "never the point/accent color for the on-state — selection is neutral bg.selected",
+    "never the point/brand color for the on-state — selection is neutral bg.selected",
     "group is multi-select (role=group + label); exclusive choice is SegmentedControl",
     "icon-only toggles are square (width = control height)"
    ]

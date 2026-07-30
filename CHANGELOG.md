@@ -4,6 +4,134 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **`preview.html` brought up to spec — the component demos had not followed the token changes.** Token renames propagated automatically through `var()`, so the preview *rendered* in the new colours (azure brand, rebuilt viz, icon family, neutral identity). But the **structural** spec changes had not been applied: the Button playground still offered the retired flat variant list (`primary/secondary/ghost/danger/brand`) with no `target` axis, no `outline` style, and no `xs` size; Chip was still filled at rest; Badge had no rounded-shape rule. A reader would have seen correct colours on an out-of-date API.
+
+  **Applied:** Button gains the `outline` style, the full `target` axis wired as `[data-target]` across all four styles (12 combinations), `xs` at `control-height-xs`, and per-target disabled labels (`action.danger-fg-disabled` / `action.brand-fg-disabled` on the neutral fill). The playground now exposes **buttonStyle × target × 4 sizes** instead of a flat 5-item list. Chip is **outlined at rest** (`bg.page` + `border.default`), multi-select selected takes **no fill** (`border.selected` only), single-select keeps `bg.inverse-soft`, and `input` chips keep their tonal fill since they are values rather than toggles. Badge gains `.badge-rounded`, with the retirement of `outline` emphasis and `neutral solid` recorded in a comment where a contributor will find it. Standalone icons resolve to `icon.secondary`/`icon.primary` rather than the text scale; icons inside coloured controls keep `currentColor` so they track their label.
+
+  **Verified:** 13/13 structural checks · gate 0/0 · **JS syntax checked with `node --check`** after editing the playground wiring · zero `--sy-category-*` or `--sy-fg-*` references remaining.
+
+- **BREAKING — `category-*` removed; identity marks are no longer colour-coded.** Deletes 16 semantic tokens (`category-1…8-bg` / `-text`) plus the `purple`, `teal` and `magenta` primitive ramps (33 steps) whose only consumer they were. Avatars, taxonomy Badges/Chips and calendar event dots now take **`bg.sunken` + `text.secondary`** — one neutral treatment, no hash.
+
+  **Why.** The family assigned one of eight hues by hashing a label, which meant the token index carried no meaning — `category-5` meant "hash slot 5", which happened to be purple. Worse, the label→slot mapping was an **undocumented stability contract**: changing the hash function, the slot count, or a label would have silently recoloured every existing tag, and users build memory around these ("the purple one is Billing"). Measured against foundations §1.1 — *"colour is a scarce resource spent only on meaning"* — an arbitrary hash hue is decoration. Identity was always carried by **shape** (squared avatar = agent, round = human) and the **label**; those channels are untouched.
+
+  **Knock-on:** `purple`/`teal`/`magenta` were added earlier the same day specifically to back `viz-5/6/7`, then re-justified as backing `category-5/6/7` when viz became a separate chart palette. With category gone they had zero consumers, so they were removed rather than left as dead JSON. Primitive ramps are now `gray`, `slate`, `alpha`, `blue`, `azure`, `point`, `green`, `amber`, `red`, `viz`.
+
+  **Applied across:** `tokens/synapse.tokens.json`, `tokens/synapse.css` (32 vars), `tools/validate.py` (8 contrast pairs), `preview.html` (**111 references** → neutral), `foundations.md` §1.2 + surface table, `components.md` Badge `category` / CalendarView event dot / Sidebar collection dot, `migration/visual-diff.html`. Semantic colour tokens **120 → 104**. Gate 0/0; parity sweep **207 mode-values, zero drift**.
+
+  **Not applied:** `migration/token-naming-proposal.md` (111 renames) and `migration/token-restructure-krds.md` (three-tier restructure) remain proposals. Verified no tokens from either leaked into the system.
+
+- **BREAKING — three naming renames batched into one release: `fg-*` → `text-*`, `-inverse` → `-on-inverse`, `radius-10` → `radius-control-md`.** 832 references updated across 28 files. Zero value changes — every hex is identical; only names moved. Batched deliberately so consumers absorb one breaking version instead of three.
+
+  **1. `fg-*` → `text-*` (9 tokens).** Once icons got their own family, the "foreground" scale covered only text, so the name was imprecise. Matches Atlassian `color.text.*`, Carbon `text-*`, Polaris `--p-color-text`, and restores symmetry: `text` / `icon` / `border` / `bg` now read as four parallel property families where `fg` / `icon` was lopsided. It also **reduces** FE migration friction — the old system used `text-*`, so ~11 rows of `color-token-map` become near-identity.
+
+  **The standalone/compound distinction is now a documented rule.** `action.primary-fg`, `ai.fg`, `emphasis.fg` and `brand.point-fg` **keep** the `-fg` suffix: there it means *"the foreground that pairs with this family's fill"* — the relational concept behind Material's `onPrimary` and Carbon's `text-on-color` — which is a different idea from a position on the text scale. **`text-*` is a scale; `<family>-fg` is a pairing.** Renaming those too would have destroyed the distinction; leaving them undocumented would have looked like a half-finished rename.
+
+  **2. `-inverse` → `-on-inverse` where it means "for use on" (5 tokens).** `text-on-inverse`, `icon-on-inverse`, `text-link-on-inverse`, `status-{info,success,warning,danger}-on-inverse`. Resolves Defect 2 of `migration/token-convention-audit.md`: `-inverse` meant both *"is the inverted thing"* and *"is for use on inverted things"*, while `text-on-solid` already used the better convention for the second sense. **`bg-inverse` / `bg-inverse-soft` keep their names** — they ARE the surface, not something used on one.
+
+  **3. `radius-10` → `radius-control-md`.** Resolves Defect 3: a raw pixel literal sitting inside a t-shirt scale (`xs`/`sm`/**10**/`md`/`lg`), which was the one defect a contributor would copy as precedent. Now named for its only job — the `md`-height control radius, per the size-relative rule (`sm`→8, `md`→this, `lg`→12).
+
+  **Two non-text uses reassigned, so the new name isn't a lie.** The scrollbar thumb hover and the Composer/Button 6px deviation dot were using the text scale for *graphical marks*. Both moved to `icon-*`. Without this, `text-*` would have been inaccurate in exactly the way `fg-*` was.
+
+  **Also corrected:** `color-token-map.README.md` still claimed "icons have no separate scale — old `icon-*` maps onto `fg-*`", which the previous release had already falsified.
+
+  **Verification:** gate 0/0 · full parity sweep **239 mode-values, zero drift** · **zero occurrences** of `--sy-fg-`, `--sy-radius-10`, or any bare `-inverse` variant remaining anywhere in the repo (checked across every file, including `storybook/`, `proposals/`, `app-generation/`) · every token name rendered in `migration/visual-diff.html` verified to exist in its own system's stylesheet, per column.
+
+- **Dedicated `icon-*` token family added (9 tokens) — reverses the "icons draw from `fg-*`" rule.** Aligns with the field: Atlassian (`color.icon.*`), Carbon (a distinct Icon token category) and Polaris (`--p-color-icon`, deliberately a *different value* from `--p-color-text`) all maintain separate icon families. Material 3 is the outlier that unifies them under `onSurface`, and the new system had been following Material.
+
+  **The reason is optical weight, and it is verifiable.** A 1.5px stroke icon is more contiguous dark area than a text glyph, so at equal value it reads heavier. `icon.primary` therefore sits **one ramp step less extreme than text** — `gray.900 #1E1E24` against `fg.primary` black in light mode (16.58:1 vs 19.9:1), `gray.200` against near-white in dark. Old Synapse (`#000000` text / `#262627` icon) and Polaris (`#303030` / `#4A4A4A`) independently reached the same correction **in the same direction**. This is the colour counterpart of the **−2px icon padding trim** already in foundations §5 — the identical perceptual fact, previously handled for space but not for colour, and with no icon-colour guidance anywhere in the specs.
+
+  **Deliberately NOT a full parallel scale.** The old system shipped `text-*` and `icon-*` as 22 hand-maintained tokens of which **8 of 10 comparable pairs were byte-identical** — 80% duplication kept in sync manually. Here **only `icon.primary` carries its own value**; `secondary`/`tertiary`/`disabled`/`inverse` alias `fg.*` and `info`/`success`/`warning`/`danger` alias `status.*`. That keeps the API surface — icons can be retuned independently later without a breaking change, which is the actual benefit of a dedicated family — while making drift structurally impossible.
+
+  **Correction to earlier work in this changelog.** When first mapping the old tokens I recorded "icons have no separate scale — the new system draws icons with `fg-*`" and argued a parallel scale "would need to stay in lockstep for no gain." That was wrong: there is a gain, and three of four major systems bank it. **All 10 old `icon-*` rows in `migration/color-token-map.*` are remapped** from `fg-*` to `icon-*`; `icon-primary` in particular is now near-1:1 (`#262627` → `#1E1E24`) rather than a collapse into `fg-primary`.
+
+  **Gate:** `validate.py` +8 pairs at the WCAG 1.4.11 3:1 non-text floor, both modes. `foundations.md` §1.2 icon rule + surface-table row; `components.md` illustration ink repointed to `icon.primary`; manifest `never` list forbids `fg-*` on an icon. Semantic colour tokens now **120** (was 111). Full parity sweep: **239 mode-values, zero drift.** All 0/0.
+
+- **Chip `filter` multi-select selected state loses its fill (spec, 0 token changes).** Multi-select selected is now *transparent* + 1px `border.selected` + `fg.primary` + leading ✓, replacing the `bg.selected` tonal fill specified earlier the same day. Single-select/toggle keeps `bg.inverse-soft`.
+
+  **Why the earlier objection doesn't apply.** The rule that "border weight alone cannot answer *am I on?*" was about `border.strong` vs `border.default`, which sit **1.35:1** apart. `border.selected` `#09090B` against the rest state's `border.default` `#E9E9ED` is **19.9:1 vs 1.13:1** on the page — plus the ✓ appears and the label steps from `fg.secondary` to `fg.primary`. Three channels change simultaneously; the fill was redundant.
+
+  **It also serves the density argument better than the fill did.** Removing the fill is the strongest version of the reason multi-select was split from single-select in the first place: five selected filters should not out-weigh the content they filter. `bg.selected` was quieter than `bg.inverse-soft` but still added mass; no fill adds none. Single-select keeps its fill because there is only ever one active chip, so density never applies.
+
+  `components.md` Chip variants + rationale, `tools/build_manifest.py` + manifest, `migration/visual-diff.html` (rest→selected strip added). No token values changed — `bg.selected` is still used by rows and cards. All 0/0.
+
+- **`semantic.color.viz.1–8` added — viz no longer bypasses the semantic tier (architecture fix, no visual change).** Found while auditing for unused colour scales. `--sy-viz-*` was written straight into the CSS from `primitive.color.viz`, making viz **the only family in the system whose shipped variable was a raw primitive**, and the only one with zero references from the semantic layer — which is what made it look "unused" in a reference audit when it was in fact heavily used. Now: 8 semantic tokens alias the primitives (24 references), per-mode values stay on the primitive, and the resolution chain `semantic.viz.N → primitive.viz.N → value` was verified per mode against the CSS. No token values changed.
+
+  **Audit result recorded so this doesn't recur:** *no colour scale is unused.* All 12 ramps have consumers; the thinnest are `purple`/`teal`/`magenta` at 4 of 11 steps, feeding `category-5/6/7`. **Trimming unused ramp steps would save zero bytes** — 0 of 215 shipped CSS variables are primitives, so ramps exist only in the JSON source that no browser loads. Of the 31 shipped variables with no reference anywhere, none are dead: scale members (`space-*`, `text-*`) can't have holes without breaking the validator's allowed sets; `padding-*`, `ease-enter/exit`, `z-sticky`, `font-display` are infrastructure awaiting use; `border-strong-hover` and `control-height-xs` were added the same day and nothing is built with them yet; `glass-blur`/`glass-filter`/`shadow-glass` are dormant **by decree** (foundations: "do not apply them"). "Unused" and "dead" are not the same thing here.
+
+- **Data-visualization colours SEPARATED from UI and rebuilt for discriminability; `viz-*` is now chart-only and per-mode; new `category-*` family for UI identity tints (governance).** Reverses the "muted saturation by design" rule.
+
+  **1. The muting rule is gone, and the coupling that required it is gone with it.** `viz-*` previously served both chart series *and* UI identity tints (category Badges/Chips, Avatar tints, calendar event dots). That dual duty is why the palette had to be muted — a saturated chart colour *would* compete with status when it appeared as a badge. Cloudscape states the rule plainly: *"Don't use colors specific to data visualization for UI elements."* Splitting the two jobs removes the constraint, so the chart palette can be optimised for what a categorical palette is actually for.
+
+  **2. The old palette's measured defects.** Minimum pairwise ΔE **16.6** — a categorical palette wants 25–30, and Carbon publishes ">2:1 average between neighbouring colours". Lightness spread only **13 L\***, which matters because lightness is the channel that survives colour-vision deficiency. And `viz-8 #7A828E` sat at **chroma 7** — effectively grey, reading as "no data" rather than as a category. Minimum contrast vs background was **2.71:1**, so it never met the 3:1 floor it was implicitly measured against anyway.
+
+  **3. Rebuilt palette.** Light: min ΔE **45.8** normal / **11.6** deuteranopia / **22.7** protanopia, spread 36 L\*, chroma floor 37. Dark: **51.9 / 27.4 / 19.5**, spread 37 L\*, chroma floor 41. Every figure beats the old palette including colour-blind robustness. **Lightness alternates by position deliberately** — the first attempt put green at L\*67 and lime at L\*68, which collapsed deuteranopia to **5.5**, *worse* than the old palette; splitting same-family hues far apart in lightness (green L\*65 vs lime L\*30) is what fixed it.
+
+  **4. `viz-*` is now PER-MODE.** It previously lived in `:root`, identical in both themes — so the darkest members (lime at L\*30) were nearly invisible on a dark page. The light set is measured against white, the dark set against `#09090B`. Caught by the contrast gate, not by eye.
+
+  **5. Contrast floor is 2.5:1 — a documented deviation, registered in foundations §9** alongside the solid-label one. At 3:1 nothing in a chart palette can be light and every warm hue collapses to olive or brown; a 3:1 version was measured at min ΔE 31.4 and is recorded as the fallback if strict conformance is ever required. The deviation is bounded to chart marks only — never UI, text or borders — and `components.md` Chart now **requires** labels, legends or series filters, since colour alone may not identify a series. Will surface in a formal WCAG/VPAT audit.
+
+  **6. New `category-1…8-bg` / `-text` for UI identity tints**, replacing the retired `viz-*-bg` / `viz-*-text`. Draws `ramp.100` / `ramp.700` from eight UI hues (blue, green, amber, red, purple, teal, magenta, slate), so **all sixteen tokens are references rather than literals and every pair is gate-checked at AA (4.61–7.22:1)** — the old viz literals never were. This is the real close-out of Defect 4 in `migration/token-convention-audit.md`. Three of the eight hues are the status hues; a category badge still cannot be read as a status because status labels are a **closed vocabulary** (`content.md` §3.3) — a badge reading "Billing" is not a status regardless of hue.
+
+  **Note on the earlier purple/teal/magenta work:** those ramps were added hours earlier specifically to back `viz-5/6/7`. That coupling is now undone — `viz` is its own chart palette again — but the ramps are *more* useful than before, because they are what `category-5/6/7` draw from. Net effect is the same architectural win, reached through the UI side rather than the chart side.
+
+  **Honest caveat carried into the docs:** ΔE and CVD figures come from simulation. Cloudscape's own guidance — *"do not rely on vision simulators as a precise representation"* — applies, and no palette is truly colour-blind safe, which is why the required-labels rule matters more than the palette tuning.
+
+  **Gate:** `validate.py` +16 pairs — 8 category tint/text at full AA, 8 viz-vs-background at the 2.5:1 policy floor (both modes). `foundations.md` §1.2 viz rule rewritten + category rule added + surface table + §9 deviation register; `components.md` Badge `category`, Chart, CalendarView; `preview.html` **111 token references renamed** from `viz-*-bg`/`-text` to `category-*`; manifest regenerated. All 0/0.
+
+- **Brand re-hued to BRIGHT AZURE (second re-hue); `azure` / `purple` / `teal` / `magenta` primitive ramps added; viz 5/6/7 variants converted from literals to references (governance).**
+
+  **1. Brand = `azure.500 #0073E6`; indigo stays functional.** Supersedes the graphite→indigo change earlier the same day. `action.brand-*` and `ai.solid` take the new **azure** ramp (hue 210, full saturation — the old `@enhans/synapse` brand family); `fg.link` / `border.focus` / `status.info` keep **indigo** (`blue`). **`azure.500` is tuned 7% deeper than the old `#0A84FF`** because that value runs **3.65:1** with white — below AA — which would have made brand the fourth member of the §9 solid-label deviation, on the most-clicked control in the product. At `#0073E6` a white label clears **4.57:1**, so normal weight holds and no deviation applies. Saturation reduction was tested and does not help (3.61→3.73); lightness was the only lever. **Two blues is an accepted cost:** the jobs differ (brand is a filled surface, functional is text and 1px rings) and they are separated by saturation as much as hue — 100% @ 210° vs 60% @ 226°. The never-mix rule is therefore absolute, and `foundations.md` §1 states it: no third blue, never azure for a link, never indigo for a CTA fill.
+
+  **2. Brand cannot lighten on hover — a genuine asymmetry, documented.** Every azure step lighter than 500 fails white-label contrast (`azure.400` = 2.91:1), so `action.brand-bg-hover` **darkens** in both modes (`azure.600`, 6.19:1) while `action.primary-bg-hover` lightens in light mode. Two hover directions now coexist in one component; both are spec'd.
+
+  **3. Four new brand-target tokens fix a real bug.** `outline × brand` and `ghost × brand` previously borrowed `border.focus` and `fg.link` — putting *functional indigo* on a *brand* control. Added `action.brand-border`, `action.brand-fg-on-page`, `action.secondary-brand-fg`, and repointed `action.secondary-brand-bg`/`-hover` to the azure ramp. The tonal brand label is `azure.700`, not `fg.link`, for the same reason.
+
+  **4. `purple` / `teal` / `magenta` added — and they close a real architecture gap.** Each was built so that **`500` = `viz.N`, `100` = `viz-bg.N`, `700` = `viz-text.N` exactly** (viz-5, viz-6, viz-7 respectively). So `viz-bg.5/6/7` and `viz-text.5/6/7` — **6 hardcoded hex literals that bypassed the primitive tier entirely** — are now references, with **zero visual change**, and each tint/text pair is gate-checked for the first time (4.61 / 4.63 / 4.66). This was Defect 4 in `migration/token-convention-audit.md`. **Teal was included although not requested:** `viz-6` needed a ramp too, and adding purple and magenta alone would have left one chromatic viz hue unbacked. **Follow-up:** `viz-1/2/3/4/8` still hold literals; backing ramps for those would close the gap entirely.
+
+  **5. Purple's own resolution.** Old `theme="purple"` had 2 uses, both demos (a story placeholder and a `"New"` release marker, which resolves to `neutral subtle`), so nothing in the product depended on it. Purple now exists as a real ramp anyway — but as *viz support*, not a semantic status role. There is still no `status-purple`, and adding one would need a meaning the other six cannot express.
+
+  **Ramp construction.** All four are monotonic in lightness with the house cadence measured from the existing `blue` ramp. The old azure ramp was **not** imported verbatim: its light end is malformed (50→100 is a 14-point lightness jump vs 3 for 100→200), which made the tonal-brand hover fail AA at every candidate label. The rebuilt ramp has a proper light end, so the tonal brand pair clears AA at 7.63 rest / 6.98 hover.
+
+  **Gate:** `validate.py` CONTRAST_PAIRS extended by 7 — tonal brand rest and hover, `brand-fg-on-page`, `brand-fg-disabled`, and the three viz tint/text pairs. **Full CSS↔JSON parity verified across all 205 semantic mode-values: zero drift.** `foundations.md` §1 rewritten (the two-blues bullet plus the functional-blue bullet, which had become self-contradictory — it still claimed AI emphasis took graphite *and* that brand was indigo). `components.md` Button brand row + rationale, `tools/build_manifest.py` + manifest regenerated. All 0/0.
+
+- **Badge / Chip: interactivity re-encoded from SHAPE to FILL; Badge shape freed; Badge `neutral solid` and `emphasis outline` retired; Chip `category` retired (governance, 0 new tokens).** Adopts the old `@enhans/synapse` logic — badges filled with both shapes available, chips outlined — after a best-practice review.
+
+  **1. Fill, not radius, encodes static-vs-interactive.** A Badge is filled/tinted; a Chip is **outlined at rest**. Reverses the "Badge is pill-only / cornered belongs to Chip" rule. Rationale: fill-vs-hollow is a far stronger perceptual difference than corner radius, nobody learns that a pill means "do not click", and no major design system uses radius as its primary interactivity cue. The static/interactive *split* is unchanged and remains industry-standard (Polaris Badge/Tag, Atlassian Lozenge/Tag, Ant Badge/Tag, Material Badge/Chip) — only the channel carrying it changed. **`shape: pill | rounded` is restored on Badge** as a density/tone choice, one per view, pill default.
+
+  **2. Chip gains two non-negotiables.** Every Chip carries an **affordance glyph** naming what it does (trailing `✕` removable, leading `✓` selected, trailing `▾` menu) — outline says "actionable", the glyph says how; a chip with neither glyph nor selected state is a mislabelled Badge. And `filter` chips take a **filled selected state**, because border weight alone cannot answer "am I on?". Outline means *at rest*, not *always*. Chips also do **not** take the full colour palette — status must be scannable across a screen while chips sit in known locations, so seven coloured chips would compete with the badges beside them.
+
+  **3. Badge `neutral solid` retired; the treatment became Chip's selected state.** The old spec forbade it for general use because `bg.inverse` *"renders in the key color, so misuse reads as a primary action"* — an admission that it reads as actionable, so it now belongs to the component that is. **Uses `bg.inverse-soft` (`#33333A`, white at 12.53:1), not `bg.inverse`** — `#09090B` is byte-identical to `action.primary-bg`, so a selected chip would have rendered as a primary button; the softened key has precedent in the notification count overlay ("softened key, visible against any chrome without pure-black harshness"). **The selected fill splits by selection model:** single-select/toggle takes the dark fill (one dark chip reads as "the active one"); **multi-select filter rows take `bg.selected` + `border.selected` + `✓`**, because five selected filters as five dark blocks out-weigh the content they filter — which is why Material uses tonal fills for selected chips, and which matches `border.selected`'s existing rule that "selection ≠ focus: focus is blue, selection is the key colour."
+
+  **4. Two retirements and a relocation.** Badge `emphasis: outline` retired — a hollow Badge breaks the fill rule, and the dense-table case it served is covered by `dot`, which is quieter still. Chip `category` retired — it duplicated Badge `category`, separated only by clickability, and that redundancy is precisely what made shape-encoding look necessary; label-only is now Badge `category`, click-to-filter is a `filter` chip, with no third thing. **Release markers** ("New"/"신규", "Beta", "Early access") move from `neutral solid` to `neutral` **`subtle`** — not `info`, since blue already carries link, focus, informational status *and* brand/AI, and a blue "New" would add a fifth meaning to one hue; a marker capped at one per view and expiring within a release cycle need not be the loudest element on screen.
+
+  **Migration notes.** Old `theme=` maps 1:1 for red/green/blue/yellow/gray → danger/success/info/warning/neutral. `purple` (2 uses, both demos — one a placeholder, one a `"New"` release marker) and `slate` (0 uses) squash to `neutral`; `outline={true}` (0 uses, added only a `border-opacity-10` hairline) and `active={false}` (0 uses, dimmed via forbidden `opacity-50`) are dropped — all four are absent even from the library's own stories, so no FE audit is needed. **Badge size names invert:** old sm/md/lg 20/24/28 vs new md/lg 20/24, so old `md` (24) → new `lg` (24) and old `sm` (20) → new `md` (20); a literal `md → md` rename silently shrinks a badge, though *dropping* the prop lands correctly since both default to 20px. Old `lg` (28px) has no equivalent. Old `shape="rounded"` Badges are now **valid as-is**; old `shape="pill"` Chips become cornered.
+
+  **Still open:** whether to rename **Chip → Tag** (Polaris/Carbon/Atlassian all use "Tag"; "Chip" is Material's term). Not applied — it is a rename with FE impact.
+
+  **Gate:** no new tokens — `bg.inverse-soft`, `bg.selected`, `border.selected`, `bg.sunken`, `border.default` all exist. `components.md` Badge + Chip rewritten; `tools/build_manifest.py` + manifest regenerated. Also fixed manifest drift: it still listed `shapes: pill(default),rounded` while `components.md` had retired the rounded Badge — the same class of staleness as the Button `accent` string, missed by SY017 for the same reason (it compares the manifest to what `build_manifest.py` emits, and both held the stale text). All 0/0.
+
+- **Button reverted to a TWO-AXIS API (`buttonStyle` × `target`), matching `@enhans/synapse` v0.13.6; `outline` restored; `xs` added inline-only (governance).** Driven by the visual diff in `migration/visual-diff.html`.
+
+  **1. Two axes, with values renamed to remove the inversion.** `buttonStyle` (emphasis) × `target` (intent), replacing the flat 5-variant list. Old `tertiary` (tonal) → **`secondary`**; old `secondary` (white + border) → **`outline`**. This renaming is what makes the change cheap: the tonal tier keeps the `secondary` name, so **`action.secondary-bg` needs no token rename**, and the FE's 43 `buttonStyle="secondary"` call sites migrate to `outline` — a prop rename where the appearance *also* changes, so it cannot pass review by accident. (The reverse mapping would have been the trap: `secondary → secondary` silently turning white+border into grey-fill.) Rationale for the axis split: emphasis and intent are orthogonal, and separating them is the stronger API — Chakra `variant`×`colorScheme`, Ant `type`×`danger`. Restores three things the flat list could not express: `ghost × destructive` (low-emphasis delete — the most plausible real capability loss), `outline × destructive`, `outline × brand`.
+
+  **2. Tonal coloured fills sit one ramp step lighter than the status tints — `action.secondary-danger-bg` (`red.50`/`red.950`), `action.secondary-brand-bg` (`blue.50`/`blue.950`), plus `-hover` (`red.100`/`blue.100`).** Two problems solved by one shift. (a) At `red.100` the tonal destructive button is **byte-identical** to the subtle danger Banner/Badge (`status.danger-bg` + `status.danger`) — an inert-looking status surface and a control rendering the same. (b) More decisively, the obvious hover pairing failed AA: `red.200` + `status.danger` is **3.84:1** and `blue.200` + `fg.link` is **4.25:1**, and label contrast must hold in every state. Shifting rest→`ramp.50` / hover→`ramp.100` clears AA at all four states (5.61 / 5.07 / 5.87 / 5.38) and separates rest from the status tint; hover landing on the tint is acceptable because hover is transient.
+
+  **3. `xs` size (24px) added, scoped to inline contexts.** `--sy-control-height-xs: 24px`, radius `xs` (4). 24px is exactly the WCAG 2.5.8 target-size minimum, permitted **only** under that criterion's *Inline* exception ("the target is in a sentence or its size is otherwise constrained by the line-height of non-target text"). Sanctioned inside a sentence or a table cell's text flow; **forbidden** in toolbars, dialog footers, form rows, or anywhere a 32px control fits — used for general density it loses the exception and becomes a 2.5.8 failure.
+
+  **4. Jurisdiction rules that do NOT relax now that `target` is an axis.** `primary × destructive` (solid red) stays destructive-confirmation-only; the lower-emphasis destructive styles serve row-level and inline deletes. `target="brand"` stays **max 1 per screen across all four styles** — scarcity was previously enforced by absence and now MUST be enforced by review/lint, which is a real governance cost of the change. **`secondary` on `bg.sunken` MUST open to `bg.page`** (the ProposalCard tray rule): the tonal fill `#F4F4F6` *is* the sunken surface colour, so on sunken it vanishes and `secondary` becomes indistinguishable from `ghost` — a pre-existing flaw that adding a third low-emphasis tier made worth fixing, and which falsifies foundations' claim that "the transparent/tonal split is what keeps ghost and secondary distinguishable."
+
+  **Gate:** `validate.py` CONTRAST_PAIRS extended by 8 — tonal coloured rest *and* hover in both modes (the hover pairs specifically, since that is where the first attempt failed), plus the `outline`/`ghost` label-on-`bg.page` pairs. `components.md` Button rewritten; `tools/build_manifest.py` + manifest regenerated (Button variants/sizes/key_rules). Tokens 0/0, all 0/0.
+
+- **Brand / AI-emphasis re-hued graphite → blue; variant-specific disabled labels; border ladder uncapped (governance).** Three linked token changes, driven by the old→new migration audit in `migration/`.
+
+  **1. Brand is blue again (maintainer reversal of the graphite point retarget).** `action.brand-bg` → `blue.600` light / `blue.500` dark, hover/active tracking `blue.500`/`blue.700` (hover lightens in light mode, darkens in dark — matching the existing `action.primary` mode-reversal). `action.brand-fg` is now **white in both modes** — the brand color is a saturated hue, so it no longer inverts by mode. `ai.solid` follows it (AI *emphasis* is blue; AI *surfaces* stay fully slate). **`brand.point` stays graphite** — the point color's jurisdiction narrows to brand-identity objects only (monogram tiles, brand marks, Artific hero), while AI emphasis moves to blue. Deliberately shares `blue.600` with `fg.link`/`status.info` rather than introducing a second near-identical blue: functional blue renders as **text and 1px rings**, brand blue as a **filled surface**, and that render-mode split is what separates them. Focus does not collide — Buttons take a ~50% `color-mix` ring of their own fill offset 2px by a `bg.page` gap ring (foundations §6/§9), never `border.focus`. All six brand fill states clear AA with a white label (min **5.21:1** at `blue.500`), so normal label weight holds and the §9 solid-label deviation does **not** apply to brand. Cost accepted: the accent no longer clears AA by graphite's very large margin, and `action.brand-fg` loses its mode-inverting property.
+
+  **2. Variant-specific disabled labels — `action.danger-fg-disabled` (`red.400`/`red.300`) + `action.brand-fg-disabled` (`blue.500`/`blue.300`).** The old `@enhans/synapse` tinted disabled *fills* per variant (`#ffa59f` destructive, `#e2e8f0` brand); those are **not** carried over. The fill stays neutral `bg.disabled` in every variant — components.md Input reserves the grey fill as the single unambiguous disabled signal, and a pale-red fill with a legible same-hue label renders **pixel-identical to the subtle danger Banner/Badge** (`status.danger-bg` + `status.danger`), i.e. an inert control and an active alert would look the same. Hue is carried by the **label** instead: 3.63:1 / 4.75:1 light, 6.46:1 / 7.99:1 dark. WCAG 1.4.3 exempts disabled controls, so 3:1 is a self-imposed bar — but it beats the old system's destructive-disabled (**1.89:1**, which failed even the 3:1 floor) and the current neutral `fg.disabled` baseline (2.12:1). `danger` uses `red.400`, not the `red.600` `status.danger` text token, precisely so it cannot be read as an enabled subtle-danger surface.
+
+  **3. `border.strong-hover` (`gray.400`/`gray.500`) — uncaps the border ladder.** The border family encodes state by **ladder position**, not a `-hover` suffix (`border.default` → `border.strong` *is* the hover). That left an element resting **at** `border.strong` with nowhere to hover except `border.selected` (near-black, 19.9:1), which reads as selection rather than hover — the reason old `border-border-300-hover` had no migration target. Hairlines are exempt from the 3:1 non-text floor.
+
+  **Gate:** `validate.py` CONTRAST_PAIRS extended — brand hover and active states are now gated at full AA (previously only the resting fill was), plus both new disabled labels at the 3:1 policy floor. Docs updated: `foundations.md` §1 (the "blue means link/focus/info **and nothing else**" invariant was made false by this change and is rewritten; point-color jurisdiction narrowed), `components.md` (Button §States disabled label table; the `ai` solid-Badge row's brand-adjacency rule now names the shared blue). Tokens 0/0.
+
 - **`preview.html` — interactive dropdowns + unified multi-section example layout (preview-only).** Select, Combobox, and DatePicker (range + datetime) triggers now open their listbox/menu/calendar as an anchored popover on click (Escape / outside-click close; single-select updates the value; combobox multi-select stays open; calendar day/preset closes). Multi-section stories now render as **one `.example` wrap with a full-bleed `.ex-div` rule between sections** (headings inline) instead of several separate boxes, and the redundant "On this page" heading list was removed. Example cells are pre-sized once on load to the fully-expanded dropdown height so opening causes no layout shift or spill past the frame. Fixed along the way: focus outline now appears on click regardless of pointer position (hover no longer outranks focus); Combobox menu checkboxes no longer inherit the text-field box styling. No spec/token/manifest change; gate green.
 
 - **InputGroup add-on segments align to the input body's side padding (spec).** Codified that every fused add-on segment (text prefix/suffix, dropdown, button, ⌘K hint) takes the **same horizontal side padding as the input body it is attached to** (`control-padding-x`; a dropdown's chevron uses that value as its right inset), so the group aligns on a single inset instead of reading tighter than a plain field. Written into `components.md` (Input · Add-ons subsection) and the manifest `Input (text)` key_rules (rebuilt); `preview.html` already implemented it (in-group input, `segTxt`, `.pg-sel`, kbd span moved from `space-2`/8px to `control-padding-x`/12px, chevron right inset to 12px with 32px text clearance). Gate green.
@@ -118,3 +246,202 @@ Housekeeping and consumption-layer fixes; no new components, tokens, or rules.
 The first public/team release. Re-baselined from the internal 6.x pre-release line to **1.0.0** and adopted release-based versioning (the number now marks a team release, not each internal edit). **No spec or token changes in this bump** — it renumbers the system; everything shipped through internal 6.62.0 is the content of 1.0.0. The internal 6.x pre-release history — and the per-rule `(vX.Y)` provenance tags that used to annotate the specs — are preserved in git, not here; the specs now read as a clean v1 contract.
 
 Also added in 1.0.0: **`app-generation/`** — the App Generation feature's ECharts chart/component catalog, **reconciled from its old azure `#0a84ff` token system to the v1.0.0 tokens** (brand → `#0621C4`, neutrals/borders/text → `--sy-*` values, radius → on-scale, Pretendard). Mapping in `app-generation/tokens-map.md`. The chart blue data ramp was computed from `#0621C4` (Synapse has no blue ramp token) and is flagged for a designer's review.
+
+## 2026-07-30 — shadcn → v1 colour mapping locked; danger solid fill shifted a step deeper
+
+**Decision 1 — all 32 shadcn semantic colour tokens ruled.** `migration/shadcn-token-map.csv` (38 rows, machine-readable) and `migration/shadcn-color-map.html` (visual, light/dark toggle) are the handoff artefacts. 25 tokens map directly; 7 needed a ruling and all 7 are now closed:
+
+| shadcn token | ruling |
+|---|---|
+| `--card` | `bg.raised` + `variant=outlined` — reproduces today's look on all 237 sites |
+| `--muted-foreground` | `text.secondary` by default (**1,557 sites**); `text.tertiary` for placeholder/timestamp/column-header/unit-suffix; `icon.secondary` for icons |
+| `--accent` | `bg.hover` for `hover:`/`focus:`; `bg.selected` for `data-[state=selected]` |
+| `--destructive` | split kept: `status.danger` for `text-`/`border-`, `status.danger-bg-solid` for `bg-` |
+| `--border` | `border.default`; `border.subtle` for `<Separator>` (41 sites); `border.strong` for emphasised outlines |
+| `--ring` | `border.focus` |
+| `--sidebar-primary` (+`-foreground`) | `bg.selected` + `text.primary` — *not* shadcn's near-black block, which would break "max one primary per region" |
+
+Mapping is **role-based, not value-based**, so it holds regardless of the app's local hex values. Four of the seven (`accent`, `destructive`, `border`, and the `<Separator>` seam) separate mechanically by class prefix or component identity, so they automate without per-site review.
+
+**Two systemic a11y failures fixed by the migration, not caused by it.** shadcn's stock focus ring is grey `#A1A1A1` at **2.58:1** — below the 3:1 WCAG 1.4.11 requires for non-text indicators — against `border.focus` at 5.21:1. And `muted-foreground` on a muted surface runs 4.35:1 today, below AA, against 5.50:1 after. Focus rings across the app will visibly turn blue; announce it before QA files it.
+
+**Decision 2 — `status.danger-bg-solid` shifted `red.400 #DB504D` → `red.500 #D2403E`; hover `red.500` → `red.600 #B23230`.** Both modes.
+
+The shadcn mapping surfaced the only contrast regression in the table: a white label on the solid danger fill ran **3.99:1**, below AA, versus shadcn's own `#E7000B` at 4.77:1. The §9 solid-label deviation covered it and mandated semibold. Rejected that mitigation here and fixed the value instead — the deviation's justification is that it applies to short, glanceable labels where weight compensation suffices, and the destructive **Button** is not that case: it is the confirmation step for irreversible actions, the one control where a misread has consequences, and it carried the thinnest contrast in the set.
+
+After: **4.62:1 with normal weight.** Consequences:
+
+- **Danger left the §9 deviation.** `foundations.md` §9 narrowed to `success`/`warning` only; the semibold mandate on danger Button labels is withdrawn.
+- **All 12 Button `buttonStyle × target` cells now clear AA outright** (min 4.62:1, which is `primary × destructive`). No Button variant depends on weight compensation any more — previously one did.
+- **Gate tightened**: `validate.py` CONTRAST_PAIRS moved the danger-solid pair from the 3.0 policy floor to **4.5**. Passes.
+- **Rest→hover separation improved** ΔE 5.9 → 10.1.
+- **Dark mode was worse than light and is now fixed**: white on the dark-mode danger fill ran 2.89:1 (a genuine failure, not a documented deviation) and now runs 4.62:1.
+- **Side effect, not the reason**: `#D2403E` is a *closer* match to both shadcn's `#E7000B` (ΔE 30.5 vs 35.0) and the old library's `#e6483d` than the value it replaced. The original rationale offered for picking this token — colour proximity — did not survive measurement (35.0 vs 36.7 is a 1.7 ΔE margin at a distance of 35, where both are simply a different red); the AA argument is what carried it.
+- **Cost accepted**: the hover value `red.600` is shared with `status.danger`, the danger *text* token. Deliberate reuse — a solid fill and page text never adjoin, so there is no visual collision, only untidiness in the token graph.
+
+Propagated to: `tokens/synapse.{json,css}`, `foundations.md` §1.1/§9, `components.md` Button matrix, `tools/validate.py`, `synapse.manifest.json` (rebuilt, 59 components), `migration/color-token-map.{csv,md,json,README.md}`, `migration/visual-diff.html`, `migration/component-token-mapping.html`, `app-generation/{CLAUDE.md,tokens-map.md,component-catalog.html}`.
+
+**Still open (unchanged by this entry):** `success`/`warning` solid labels remain in the §9 deviation at ~3.5:1 with semibold compensation. Six sy token families have no shadcn source at all — `status.success`, `status.warning`, `status.info`, `status.danger-bg`, the `ai.*`/`action.brand-*` azure set, and `text.disabled`/`bg.disabled`. The first four mean every green and amber in the app is part of the ~5,000 hardcoded colours and cannot be helped by this table. The last is worse than a gap: shadcn disables with `opacity-50`, which this system forbids outright, so disabled states need rewriting rather than remapping.
+
+## 2026-07-30 — six component gaps added; every refusal now names its replacement
+
+Reconciled the FE audit's ⚠ list against the actual spec. **Most of it was stale or misattributed:** `Popover / Menu`, `ToggleButton`, `SegmentedControl`, `NumberInput`, `PivotTable`, `InputGroup` (specified under Input as "Add-ons"), Combobox async/creatable/sections (which covers the old `Autocomplete`), DatePicker presets and min/max, Table `Caption`/`Footer`, Switch `mixed`, Slider `step`, Button icon-only and trailing icon, Input size scale and search leading icon, one-level submenus, Pagination's page-size Select, and ProgressBar's value row **all already exist**. Two of those I had myself wrongly called gaps earlier in the session (`stepper` — it is `recipes.md` R9, a recipe not a component; Pagination `pageSize`); both corrected, including the mislabel in `migration/component-token-mapping.html`.
+
+### Added — six gaps, each either consequence-free or constrained so it cannot collide with an existing rule
+
+| Addition | Component | The constraint that keeps it safe |
+|---|---|---|
+| **Action bar** | `Textarea` | Max 2 buttons, `secondary`/`ghost` only — a text field never hosts a page's main action. Forbidden inside the Composer, which owns its own send row. Follows the field in tab order. Replaces `Textarea.Actions`. |
+| **Header action slot** | `Modal` | One `ghost` action, non-resolving. Does **not** breach the two-button footer cap, because that cap counts *decisions* — a header action opens, navigates, or toggles presentation. If it would close or commit the modal it is a decision and belongs in the footer. Replaces `DialogHeaderWithAction`. |
+| **`bottom` side** | `Drawer` | A **responsive rendering** below 768px, not an author-set prop: a 480px right panel is wider than the viewport there. `side` stays author-uncontrollable — edge is a function of available space, so the system decides it. `top` stays forbidden. |
+| **`editable` variant** | `Tabs` | For user-created tabs (open queries/documents/runs). The 7-tab cap survives, enforced differently: author-defined tabs are capped by review, `editable` by **disabling the `+` at 7**. Beyond 7 open items is a Sidebar list or Tree. Replaces `DynamicTabs`. |
+| **Kbd slot** | `Popover / Menu` | Completes the shortcut vocabulary already in Tooltip's Kbd slot and CommandPalette's trailing `.sy-kbd` — all three render identically, which is the point. Never on a `danger` item; never invents a binding. Replaces `DropdownMenuShortcut`. |
+| **`render` (polymorphic)** | `Button` | The one addition that is a **functional requirement, not a variant**: without it `<Button asChild><NextLink>` emits a `<button>` wrapping an `<a>`, which is invalid HTML and announces unpredictably. One child, no nested interactivity, never on `target=brand`. Explicitly not a licence to style links as buttons. |
+
+### Ruled as refusals — each now names its substitute in its own Forbidden line
+
+The spec answers the question in place rather than sending the reader to a migration doc: `Button` custom colours → pick a `target`; `Button` `link` style → `Link` (with a four-row decision table added to the `Link` section, since this is the migration's most common question); `Button` unapproved icon-only → add a visible label; `Badge` hex/`theme=purple` → one of the six semantic colours, mapped by *meaning* not hue; `Badge` `active` → `Chip selected`; `Chip` colour dot → `Badge` `dot` variant; `Radio` check indicator → the dot (circle+dot vs box+check is the only pre-click signal of single vs multi choice — `ChoiceCard` if large check-marked options are wanted); `Switch` left label → label stays right, change the *layout* instead; `Tooltip` arrow → **nothing, dropped on purpose** (no floating surface in the system has one, and one growing a tail while `Popover`/`HoverCard`/`Popconfirm` do not is exactly the drift the closed-variant policy prevents).
+
+**Opacity-based disabling** got its own passage in `foundations.md` §1.2 because it is the one rule that cannot be expressed as a token swap. shadcn's `disabled:opacity-50` → `bg.disabled` + `text.disabled` + `border.subtle` + `icon.disabled`. Three reasons it is a substitution: opacity multiplies through every descendant (a disabled Card dims its own borders, shadows and focus rings to values in no ramp); the result depends on what sits behind the element, so the same control renders differently on `bg.page` and `bg.sunken`; and a semi-transparent control still composites its original hue, so a disabled `danger` button stays recognisably red and keeps signalling danger.
+
+### Caught a live parity bug — and confirmed audit Defect 7
+
+`tools/build_manifest.py` does **not** read `components.md`. The component entries are hardcoded in the generator, and `SY017` compares the manifest to that same generator's output — so the gate passes while the two documents drift. Consequence found immediately: after danger left the §9 deviation earlier today, the manifest was still asserting **"danger labels semibold; danger hover darkens to AA"** to the App Builder agent. The gate was green throughout.
+
+Fixed the stale rule and hand-propagated all six additions into the generator, so the manifest now carries them (verified present). But **the underlying defect stands and is now demonstrated, not theoretical**: nothing gates `components.md` ↔ `synapse.manifest.json` parity, and this is the second time it has silently shipped a contradiction. Every spec edit currently needs a matching hand-edit in the generator. That is the highest-value open item in the tooling.
+
+### New artefacts
+
+- `migration/replacement-rules.md` + `.csv` — **42 rules**, grouped by mode: 20 mechanical · 13 review · 1 rewrite · 2 drop · 2 engineering decisions · 1 build task · 2 no-change. This is what the codemod is driven from.
+- The `Link` section gained a Button-vs-Link decision table, since `variant="link"` resolves to one of four different outcomes.
+
+**Blocking the plan:** three site counts are unknown and all three need per-site judgement — `size="icon"`, `variant="link"`, and `disabled:opacity-50`. They are the highest-volume rules in the replacement table. Get them before committing to the one-sprint rollout; everything else is mechanical or low-volume.
+
+**Also open:** `Popover` is specified but not exported by the built package — 78 call sites are waiting on a build change, not a design decision. `Toast`'s imperative queue and `FileUpload`'s transport need an owner, not a rule.
+
+## 2026-07-30 — icons: every glyph now generated from a pinned Tabler package
+
+Triggered by a warped gear in `migration/button-matrix.html`. The gear was mine — a hand-drawn approximation whose arc commands did not connect. Chasing it surfaced that the problem was systemic and much older.
+
+### What was wrong
+
+`icons.md` line 3 has always said inventing an SVG is a **contract violation**, and line 111 that the agent glyph is the sole AI iconography. In practice `preview.html` carried **313 hand-written icon renders across 72 distinct shapes** — Lucide-style approximations of concepts that already existed in its own `TICONS` table. So **51 concepts were each rendering with two different glyphs**, which is precisely what "one concept, one icon" forbids and precisely the kind of drift no reviewer catches by eye.
+
+Not everything flagged was wrong, and the distinction matters: the 36 `TICONS` entries that differed from Tabler 3.31.0 turned out to be **notation variants, not different shapes** (`dots` as `M4 12a1 1 0…` vs `M5 12m-1 0a1 1 0…`; `star`/`table` differing only by a `z` closure). Those were a different Tabler version, not inventions. Illustrations (`ILLU`/`ILLU2`/`GICON`/`CICON`), chart polylines and the donut rings are **not** icons — foundations §8.1 governs them separately at their own scale — and were left untouched.
+
+### What changed
+
+- **`assets/icons/tabler-registry.json`** — new vendored asset, **89 icons / 94 concepts**, generated from `@tabler/icons@3.31.0` by the new **`scripts/build_icons.py`**. Paths are generated, never typed. `preview.html`'s `TICONS` is now produced from it (80 → 89 entries, closing 7 registry names that had no glyph at all).
+- **284 renders in `preview.html` re-pointed at the registry** (273 in the first pass, 11 more that had been drawn with `<circle>`/`<rect>` primitives instead of paths). 51 distinct concepts. Only 2 bare primitives remain, both correctly *not* icons: a frame rect and an unread dot.
+- **The agent glyph is canonicalised.** It is legitimately custom — the registry's sole non-Tabler entry, `"custom": true` — but it had drifted into two different 4-point stars (37 renders and 3). The 37-render form is now the only one. `sparkles`/`wand`/`robot` remain permanently forbidden.
+- **`chevron-up` deleted as a concept.** Collapse is `chevron-down` rotated 180°, per the disclosure row; 3 renders converted. A separate up-glyph would make one concept two icons.
+- **Stroke normalised.** Two icons were at 3 and 2.5; foundations §8.1 says never scale the stroke with the drawing. All icon strokes are now 1.5.
+
+### Two spec defects the cleanup exposed
+
+**1. The icon size scale contradicted itself.** foundations §8 said "16px, 20px, 24px. **No other sizes**" while `components.md` simultaneously specified 12px icons in two places — Badge's `with-icon` option and the SourceChip sources row — and `preview.html` rendered **92 off-scale icons** (55 at 12, 22 at 14, 14 at 11, 1 at 10). The spec was already broken; the choice was to add the step or delete the components needing it. **12 is now on the scale** as the metadata step, and 10/11/14/18 are explicitly off-scale. 14→16, 11→12, 10→12 applied; sizes are now `{12, 16, 20, 24}` only. Corollary recorded: a 24px `xs` Button cannot carry a 16px icon without swallowing it, so `xs` icons take 12 — which resolves the open question from the Button matrix audit. The 20 step remains unassigned to any control height.
+
+**2. There was no `loading` concept in the registry** — despite the system shipping a `Spinner` component, a Button `loading` state, and an indeterminate ProgressBar. Every spinner in the repo was therefore an off-registry glyph. Added `loading / in-progress` → `loader-2`, with the note that rotation is CSS and the glyph never swaps under reduced-motion.
+
+### New gate — SY018
+
+**`tools/check_icons.py`** fails the build on: an icon path not in the registry, an off-scale size, or a stroke ≠ 1.5. Illustrations and chart marks are excluded by design. It reports 2 warnings (the frame rect, the unread dot) so bare primitives get a human look rather than a silent pass. Documented in `validate.py`'s rule list. **This is the first gate in the repo that checks a generated asset against the spec that defines it** — unlike SY017, which compares the manifest to its own generator and is why the manifest drift went unnoticed twice.
+
+### Flagged, not fixed — needs a ruling
+
+**"Toggle panel" / "Panel shown" has no concept in the registry.** Two renders currently borrow `table` (which means "table view"), because I mapped them there before checking. Per icons.md an unlisted concept gets **no icon** — so this needs either a registry entry or the chevron treatment the adjacent "Collapse inspector" affordance already uses. I did not want to invent a concept to close a gate.
+
+## 2026-07-30 — Button coverage audit: all 12 items ruled, 3 were defects not omissions
+
+Went through `migration/button-matrix.html` §6 one item at a time. The variant space was never incomplete — it is closed at 12 cells (4 `buttonStyle` × 3 `target`). Everything here was a **combination the spec failed to resolve**, which is the class of problem that makes two engineers build the same button differently. Three turned out to be outright defects.
+
+### Defects
+
+**1. Coloured `outline` buttons had no hover state at all.** `outline × default` stepped `border.default → border.strong`; the destructive and brand targets named a rest border and nothing else, so those cells gave *zero* feedback that they were live. Closed by stepping the border: **`border.error-hover`** (red.600) and **`action.brand-border-hover`** (azure.600), both modes, dark stepping *lighter*. ΔE 10.1 and 18.5 — both above the ΔE 8.6 the default step already ships with. Tinting the fill was rejected on axis grounds: `buttonStyle` owns behaviour, `target` owns hue, so `target` must never change the interaction model — that is the whole point of restoring the two-axis API.
+
+**2. The focus-ring rule failed WCAG 1.4.11 in 11 of 12 cells.** §9 said Buttons take "a ~50% `color-mix` tint of the button's own color." Measured against the `bg.page` gap ring: `secondary × default` **1.04:1**, `outline × default` **1.10:1** — effectively invisible rings on the two most-used variants. Only `primary × default` passed, at 3.74:1. A lightened tint of an already-light fill can never reach 3:1, so the clause was **unimplementable, not merely underspecified**. Deleted. Rings are now keyed to **`target` at full strength**: `default → border.focus` (5.21/9.58), `destructive → border.error-hover` (6.19/7.75), `brand → action.brand-border-hover` (6.19/6.42). Independent of `buttonStyle`, so all four styles in a target share one ring — the ring signals *intent*, which is what `target` means. All three pairs added to `validate.py` CONTRAST_PAIRS at 3.0.
+
+**3. `control-height-xs` shipped in the CSS but was never in the JSON.** Found while adding the padding ladder. The canonical source did not describe a size the system renders. This is audit **Defect 7 caught live** — nothing gates CSS↔JSON parity, and this is now the third time that gap has produced a real inconsistency. Recovered.
+
+### Rulings
+
+| Item | Decision |
+|---|---|
+| Coloured `ghost` hover | **Stays neutral** — `bg.hover` for all four cells, hue stays in the label. A tinted ghost hover would be *byte-identical* to `secondary × target` at rest (`#FDF1F0` / `#F1F7FE`), collapsing the lowest and standard tiers. Label contrast holds at 5.54/5.68/5.67:1. |
+| Padding per size | **Ladder 8/10/12/16** (`control-padding-x-{xs,sm,md,lg}`). Padding was the only Button dimension that did not step; `xs` sat at a padding:height ratio of 0.50, `lg` at 0.30. Now 0.31–0.40, `md` unchanged. Bare `control-padding-x` kept as a deprecated `md` alias. Inherited by Select/Combobox/DatePicker triggers, Menu items, nav items, Chips, Tabs, Banner and Toast per foundations §5. |
+| `loading` on icon-only | **Spinner replaces the glyph.** Width preserved trivially (fixed square). Because the affordance vanishes, `aria-label` MUST persist unchanged and `aria-busy="true"` is added alongside — never relabelled to "Loading". |
+| `pill` scope | **`lg` only; `default` and `brand`, never `destructive`.** Pill and `lg` are both hero-scoped. `brand` allowed because a first-run "Ask the agent" hero is the most plausible pill context in the product, and the combination self-limits by stacking max-1-brand-per-screen with hero-only-pill. Hero-scale delete is incoherent — solid destructive is confirmation-only and dialogs are never Guided heroes. |
+| Leading + trailing icon | **Confirmed legal, now explicitly.** Reachable only in a toolbar (leading icons are restricted to AI-entry and toolbar/filter contexts), where icon + label + `chevron-down` is a filter dropdown. Both trims apply. Never two chevrons. |
+| `ghost` disabled fill | **Confirmed** — and it exposed that `ToggleButton` disabled with `text.disabled` and **no fill**, the only control in the system doing so, at 2.12:1 with nothing framing it. ToggleButton now matches. |
+| `active` = `hover` · disabled hue in label · `xs` inline-only | Already specified; no action. |
+
+### QA note to send ahead of the migration
+
+**A disabled `ghost` now renders a grey box where it had none.** Correct per "`bg.disabled` fill in every variant," but shadcn and old Synapse both left disabled ghosts transparent, so this is the single most visible appearance change the migration produces. Announce it rather than letting it be filed as a regression. Same for focus rings turning blue (shadcn's stock ring was grey at 2.58:1 and non-compliant).
+
+### State
+
+`migration/button-matrix.html` regenerated — **0 unspecified combinations**, 12/12 audit items ruled, 64 tokens all verified defined, 211 static cells plus the live grid. Both gates clean; manifest rebuilt with the new Button and ToggleButton rules.
+
+## 2026-07-30 — four Button reversals from visual review
+
+Reviewing the rendered matrix produced four corrections, three of which reverse decisions made earlier the same day. Two were caught only because the matrix put every state side by side.
+
+**1. Disabled labels collapsed to one token — the per-`target` labels made disabled buttons look available.** `action.brand-fg-disabled` was `azure.500`: the **exact same hex as the live brand fill**. `action.danger-fg-disabled` was `red.400`, one step off the live danger fill. Both therefore ran at *higher* contrast on the disabled fill (4.16:1, 3.63:1) than the neutral label does (2.12:1) — so the two hued variants read as the most clickable things on screen while being the only unclickable ones. Both tokens **deleted**; all 12 cells use `text.disabled`. The rationale that produced them ("the fill stays neutral so the hue is carried by the label") does not survive inspection: a disabled control has no need to signal intent, because intent only matters to someone who can invoke it, and the label text already says which action it is. The gate then caught two dangling references in `preview.html` and three stale `CONTRAST_PAIRS` entries — SY008 doing exactly its job.
+
+**2. The `default` focus ring is neutral.** `border.focus-input` `#33333A` at 12.53:1 replaces indigo `border.focus` at 5.21:1. Higher measured contrast, yet it reads *quieter*: at a 2px band chroma pulls the eye harder than luminance, and a saturated band had no fill weight to balance it on `outline` and `ghost` — which is precisely where the ring looked too strong. It also settles §1.1's own claim that the primary action colour is black, not blue. `destructive` and `brand` keep hued rings: the two intents worth spending attention on, and rare by construction. **This is the one place Button diverges** from "non-entry controls focus in `border.focus`" — and it reuses the token entry surfaces already use, so the system still carries two focus colours, not three.
+
+**3. `active` is a real third step — "identical to hover by design" was only ever true of `primary`.** The matrix made the redundancy visible, and checking it exposed that the rule contradicted the shipped tokens: `action.brand-bg-active` `#0B4F93` ≠ its hover `#0D61B5`, and `bg.active` `.06` ≠ `bg.hover` `.04`. **Two of three targets already shipped distinct pressed values the spec told implementers to discard.** Now all four styles press: `primary` steps once further in the direction hover establishes (rest is near-black so hover lightens; pressed lightens again — `gray.800 → gray.700` light, `gray.200 → gray.300` dark, white label 8.78:1); `secondary`/`ghost` take `bg.active`; `outline` steps its border *and* fills. Verified afterwards that no cell still duplicates: `primary × destructive` was the last one, so it gained `status.danger-bg-solid-active` (`red.700`, 8.40:1). A mouse user already hovering previously received no click confirmation at all.
+
+**4. Ring strength** — resolved by (2). The complaint was chroma, not width: the visible band is already only 2px (a 4px spread minus the 2px `bg.page` gap ring).
+
+### Net token change
+
+| | |
+|---|---|
+| Deleted | `action.danger-fg-disabled`, `action.brand-fg-disabled` |
+| Added | `status.danger-bg-solid-active` (red.700) |
+| Revalued | `action.primary-bg-active` (was identical to hover) |
+| Repointed | Button `default` focus ring → `border.focus-input` |
+
+`CONTRAST_PAIRS` net 62 → 61: three retired, two added (`primary-bg-active`, `danger-bg-solid-active`), one added for the neutral ring. Both gates clean, manifest rebuilt.
+
+**Matrix state:** 0 unspecified combinations · 12/12 audit items ruled · 65 tokens all defined · **no cell where `active` still equals `hover`** · every disabled label resolves to `text.disabled` · rings resolve to exactly three tokens.
+
+## 2026-07-30 — `active` dropped; focus-ring strength keyed to button value
+
+Two corrections to the previous entry, both from looking at the rendered matrix.
+
+### `active`/pressed removed from Button
+
+Reversed twice in one day — first "identical to hover by design," then a real third step — and the second reversal made the underlying point clearly: a pressed fill buys roughly one frame of feedback, on a control the cursor is already resting on, whose hover state has already confirmed it is live. Dropped.
+
+Three tokens deleted: `action.primary-bg-active`, `action.brand-bg-active`, `status.danger-bg-solid-active` (the last two having been added hours earlier). **`bg.active` survives** — it was never a Button token. `components.md` uses it for table rows and menu items, where the pointer crosses a large target and the confirmation does earn its keep. Checking that before deleting is the only reason the row/menu pressed states still work.
+
+The Button state axis is now **5 states, not 6**: rest · hover · focus-visible · disabled · loading. Matrix drops from 72 to 60 cells.
+
+### Focus-ring strength now comes from `buttonStyle`, hue from `target`
+
+The earlier reading of "too strong" was wrong. It was not about chroma — it was about **value**. `primary` is near-black, so a strong dark ring sits naturally on it. The same ring around a `#F4F4F6` tonal fill or a transparent ghost is darker than anything else in the control, so it stops reading as part of the button and starts reading as something drawn on top of it.
+
+| target | `primary` (strong) | `secondary` / `outline` / `ghost` (soft) |
+|---|---|---|
+| `default` | `border.focus-input` `#33333A` | **`border.focus-soft`** `#83838D` |
+| `destructive` | `border.error-hover` `#B23230` | **`border.error-soft`** `#D2403E` |
+| `brand` | `action.brand-border-hover` `#0D61B5` | **`action.brand-border-soft`** `#0073E6` |
+
+Hue still comes from `target`, so intent survives; only weight changes. The three soft rings are the **`500` step of each family** and are **mode-invariant** — a mid-tone clears 1.4.11 against both pages (3.75/5.30, 4.62/4.30, 4.57/4.35), so one value inverts correctly by context rather than needing a per-mode pair. `azure.400` was rejected for the soft brand ring at 3.10:1 in light mode: too little margin above the 3:1 floor to survive a rounding difference.
+
+**Cost accepted:** the ring now varies on both axes, which the gap-2 ruling had deliberately avoided ("all four styles in a target share one ring"). Six combinations instead of three. Justified because the mismatch it fixes is visible on three of the four styles, i.e. on most buttons in the product.
+
+### Net
+
+| | |
+|---|---|
+| Deleted | `action.primary-bg-active`, `action.brand-bg-active`, `status.danger-bg-solid-active` |
+| Added | `border.focus-soft`, `border.error-soft`, `action.brand-border-soft` (all mode-invariant) |
+| Kept deliberately | `bg.active` — belongs to rows and menus, not Button |
+
+`CONTRAST_PAIRS`: two active pairs removed, three soft-ring pairs added at 3.0. Both gates clean, manifest rebuilt.
+
+**Matrix verified:** 60 cells · 5 states · 0 unspecified combinations · 64 tokens all defined · no retired token referenced anywhere · rings resolve to exactly 6 tokens split cleanly primary-vs-rest · every disabled label `text.disabled`.

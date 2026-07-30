@@ -21,6 +21,7 @@ Rules (E = error, W = warning):
   SY015 E backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §6)
   SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
   SY017 E synapse.manifest.json stale vs a fresh build — run tools/build_manifest.py (mirrors the CI gate locally)
+  SY018 E icon not in assets/icons/tabler-registry.json, off-scale size, or stroke != 1.5 — run tools/check_icons.py (icons.md)
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
@@ -68,36 +69,85 @@ def contrast(a, b):
 
 # text-on-background pairs the docs guarantee, per mode: (name, fg-var, bg-var)
 CONTRAST_PAIRS = [
-    ("fg-primary on bg-page", "--sy-fg-primary", "--sy-bg-page", 4.5),
-    ("fg-secondary on bg-page", "--sy-fg-secondary", "--sy-bg-page", 4.5),
-    ("fg-secondary on bg-surface", "--sy-fg-secondary", "--sy-bg-surface", 4.5),
-    ("fg-secondary on bg-raised", "--sy-fg-secondary", "--sy-bg-raised", 4.5),
-    ("fg-secondary on bg-sunken", "--sy-fg-secondary", "--sy-bg-sunken", 4.5),
-    ("fg-link on bg-page", "--sy-fg-link", "--sy-bg-page", 4.5),
+    # Chart series vs background: 2.5:1 is a DOCUMENTED DEVIATION from WCAG 1.4.11 / Carbon / Cloudscape (3:1),
+    # taken so warm hues stay bright rather than collapsing to olive. Identification is carried by labels,
+    # legends and series filters, never colour alone. Will surface in a formal audit — see foundations 9.
+    ("viz-1 on bg-page [chart policy 2.5:1]", "--sy-viz-1", "--sy-bg-page", 2.5),
+    ("viz-2 on bg-page [chart policy 2.5:1]", "--sy-viz-2", "--sy-bg-page", 2.5),
+    ("viz-3 on bg-page [chart policy 2.5:1]", "--sy-viz-3", "--sy-bg-page", 2.5),
+    ("viz-4 on bg-page [chart policy 2.5:1]", "--sy-viz-4", "--sy-bg-page", 2.5),
+    ("viz-5 on bg-page [chart policy 2.5:1]", "--sy-viz-5", "--sy-bg-page", 2.5),
+    ("viz-6 on bg-page [chart policy 2.5:1]", "--sy-viz-6", "--sy-bg-page", 2.5),
+    ("viz-7 on bg-page [chart policy 2.5:1]", "--sy-viz-7", "--sy-bg-page", 2.5),
+    ("viz-8 on bg-page [chart policy 2.5:1]", "--sy-viz-8", "--sy-bg-page", 2.5),
+    ("fg-primary on bg-page", "--sy-text-primary", "--sy-bg-page", 4.5),
+    # Dedicated icon family (2026-07-30). Meaningful icons are non-text content: WCAG 1.4.11 asks 3:1.
+    # icon-primary is the one optical override — one ramp step less extreme than fg-primary.
+    ("icon-primary on bg-page [1.4.11 non-text]", "--sy-icon-primary", "--sy-bg-page", 3.0),
+    ("icon-secondary on bg-page", "--sy-icon-secondary", "--sy-bg-page", 3.0),
+    ("icon-tertiary on bg-page", "--sy-icon-tertiary", "--sy-bg-page", 3.0),
+    ("icon-info on bg-page", "--sy-icon-info", "--sy-bg-page", 3.0),
+    ("icon-success on bg-page", "--sy-icon-success", "--sy-bg-page", 3.0),
+    ("icon-warning on bg-page", "--sy-icon-warning", "--sy-bg-page", 3.0),
+    ("icon-danger on bg-page", "--sy-icon-danger", "--sy-bg-page", 3.0),
+    ("icon-inverse on bg-inverse", "--sy-icon-on-inverse", "--sy-bg-inverse", 3.0),
+    ("fg-secondary on bg-page", "--sy-text-secondary", "--sy-bg-page", 4.5),
+    ("fg-secondary on bg-surface", "--sy-text-secondary", "--sy-bg-surface", 4.5),
+    ("fg-secondary on bg-raised", "--sy-text-secondary", "--sy-bg-raised", 4.5),
+    ("fg-secondary on bg-sunken", "--sy-text-secondary", "--sy-bg-sunken", 4.5),
+    ("fg-link on bg-page", "--sy-text-link", "--sy-bg-page", 4.5),
     ("emphasis-fg on emphasis-surface", "--sy-emphasis-fg", "--sy-emphasis-surface", 4.5),
     ("ai-fg on ai-surface", "--sy-ai-fg", "--sy-ai-surface", 4.5),
     ("action-brand-fg on ai-solid", "--sy-action-brand-fg", "--sy-ai-solid", 3.0),
     ("emphasis-fg-soft on bg-surface (non-text mark)", "--sy-emphasis-fg-soft", "--sy-bg-surface", 3.0),
-    ("fg-primary on emphasis-surface", "--sy-fg-primary", "--sy-emphasis-surface", 4.5),
-    ("fg-primary on bg-selected", "--sy-fg-primary", "--sy-bg-selected", 4.5),
-    ("fg-link-inverse on bg-inverse", "--sy-fg-link-inverse", "--sy-bg-inverse", 4.5),
+    ("fg-primary on emphasis-surface", "--sy-text-primary", "--sy-emphasis-surface", 4.5),
+    ("fg-primary on bg-selected", "--sy-text-primary", "--sy-bg-selected", 4.5),
+    ("fg-link-inverse on bg-inverse", "--sy-text-link-on-inverse", "--sy-bg-inverse", 4.5),
     ("action-primary-fg on action-primary-bg", "--sy-action-primary-fg", "--sy-action-primary-bg", 4.5),
-    ("action-brand-fg on action-brand-bg [point, AA]", "--sy-action-brand-fg", "--sy-action-brand-bg", 4.5),
-    ("brand-point-fg on brand-point [AA]", "--sy-brand-point-fg", "--sy-brand-point", 4.5),
-    ("action-danger-fg on status-danger-bg-solid [policy 3:1]", "--sy-action-danger-fg", "--sy-status-danger-bg-solid", 3.0),
+    # brand is a saturated blue as of 2026-07-30 (was the graphite point). All THREE fill
+    # states are gated at full AA: white label, normal weight, no §9 solid-label deviation.
+    ("action-brand-fg on action-brand-bg [AA]", "--sy-action-brand-fg", "--sy-action-brand-bg", 4.5),
+    ("action-brand-fg on action-brand-bg-hover [AA]", "--sy-action-brand-fg", "--sy-action-brand-bg-hover", 4.5),
+    ("brand-point-fg on brand-point [AA, still graphite]", "--sy-brand-point-fg", "--sy-brand-point", 4.5),
+    # Disabled labels: WCAG 1.4.3 exempts disabled controls, so the floor here is 3:1 as a
+    # self-imposed quality bar — the old system's destructive-disabled ran 1.89:1.
+    # Two-axis Button (2026-07-30): tonal coloured styles, rest AND hover. The hover pairs are
+    # gated because red.200 / blue.200 were tried first and failed AA (3.84 / 4.25) — the whole
+    # reason these fills sit one ramp step lighter than status.*-bg.
+    ("status-danger on secondary-danger-bg [tonal rest]", "--sy-status-danger", "--sy-action-secondary-danger-bg", 4.5),
+    ("status-danger on secondary-danger-bg-hover [tonal hover]", "--sy-status-danger", "--sy-action-secondary-danger-bg-hover", 4.5),
+    # brand is bright AZURE as of 2026-07-30 (was indigo). azure.500 was tuned to clear AA with
+    # white at normal weight (4.57) rather than accept the §9 deviation the old #0A84FF required (3.65).
+    ("secondary-brand-fg on secondary-brand-bg [tonal rest]", "--sy-action-secondary-brand-fg", "--sy-action-secondary-brand-bg", 4.5),
+    ("secondary-brand-fg on secondary-brand-bg-hover [tonal hover]", "--sy-action-secondary-brand-fg", "--sy-action-secondary-brand-bg-hover", 4.5),
+    ("brand-fg-on-page on bg-page [outline/ghost x brand]", "--sy-action-brand-fg-on-page", "--sy-bg-page", 4.5),
+    # viz 5/6/7 now derive from the purple/teal/magenta ramps, so each tint/text pair is checkable
+    # outline style: label on the page fill it opens to
+    ("fg-primary on bg-page [outline default]", "--sy-text-primary", "--sy-bg-page", 4.5),
+    ("status-danger on bg-page [outline destructive]", "--sy-status-danger", "--sy-bg-page", 4.5),
+    ("fg-link on bg-page [outline brand]", "--sy-text-link", "--sy-bg-page", 4.5),
+    ("fg-secondary on bg-page [ghost default]", "--sy-text-secondary", "--sy-bg-page", 4.5),
+    ("action-danger-fg on status-danger-bg-solid", "--sy-action-danger-fg", "--sy-status-danger-bg-solid", 4.5),  # tightened 3.0 -> 4.5 on 2026-07-30: danger left the §9 solid-label deviation (red.400 -> red.500, 4.62:1 normal weight)
     ("status-info on status-info-bg", "--sy-status-info", "--sy-status-info-bg", 4.5),
     ("status-success on status-success-bg", "--sy-status-success", "--sy-status-success-bg", 4.5),
     ("status-warning on status-warning-bg", "--sy-status-warning", "--sy-status-warning-bg", 4.5),
     ("status-danger on status-danger-bg", "--sy-status-danger", "--sy-status-danger-bg", 4.5),
-    ("status-success-inverse on bg-inverse", "--sy-status-success-inverse", "--sy-bg-inverse", 4.5),
-    ("status-warning-inverse on bg-inverse", "--sy-status-warning-inverse", "--sy-bg-inverse", 4.5),
+    ("status-success-inverse on bg-inverse", "--sy-status-success-on-inverse", "--sy-bg-inverse", 4.5),
+    ("status-warning-inverse on bg-inverse", "--sy-status-warning-on-inverse", "--sy-bg-inverse", 4.5),
     # solid-label policy (foundations §9): success/warning solids accept >=3:1 by documented deviation
-    ("on-solid on success-bg-solid [policy 3:1]", "--sy-fg-on-solid", "--sy-status-success-bg-solid", 3.0),
-    ("on-solid on warning-bg-solid [policy 3:1]", "--sy-fg-on-solid", "--sy-status-warning-bg-solid", 3.0),
-    ("on-solid on info-bg-solid", "--sy-fg-on-solid", "--sy-status-info-bg-solid", 4.5),
-    ("danger-fg on danger-hover", "--sy-action-danger-fg", "--sy-status-danger-bg-solid-hover", 4.5),
-    ("status-danger-inverse on bg-inverse", "--sy-status-danger-inverse", "--sy-bg-inverse", 4.5),
-    ("status-info-inverse on bg-inverse", "--sy-status-info-inverse", "--sy-bg-inverse", 4.5),
+    ("on-solid on success-bg-solid [policy 3:1]", "--sy-text-on-solid", "--sy-status-success-bg-solid", 3.0),
+    ("on-solid on warning-bg-solid [policy 3:1]", "--sy-text-on-solid", "--sy-status-warning-bg-solid", 3.0),
+    ("on-solid on info-bg-solid", "--sy-text-on-solid", "--sy-status-info-bg-solid", 4.5),
+    ("default focus ring on page [1.4.11 3:1]", "--sy-border-focus-input", "--sy-bg-page", 3.0),
+    ("soft focus ring on page [1.4.11 3:1]", "--sy-border-focus-soft", "--sy-bg-page", 3.0),
+    ("soft destructive ring on page [1.4.11 3:1]", "--sy-border-error-soft", "--sy-bg-page", 3.0),
+    ("soft brand ring on page [1.4.11 3:1]", "--sy-action-brand-border-soft", "--sy-bg-page", 3.0),
+    ("focus ring on page [1.4.11 3:1]", "--sy-border-focus", "--sy-bg-page", 3.0),
+    ("destructive focus ring on page [1.4.11 3:1]", "--sy-border-error-hover", "--sy-bg-page", 3.0),
+    ("brand focus ring on page [1.4.11 3:1]", "--sy-action-brand-border-hover", "--sy-bg-page", 3.0),
+    ("danger-fg on danger-hover", "--sy-action-danger-fg", "--sy-status-danger-bg-solid-hover", 4.5),  # now red.600, 6.19:1
+    ("status-danger-inverse on bg-inverse", "--sy-status-danger-on-inverse", "--sy-bg-inverse", 4.5),
+    ("status-info-inverse on bg-inverse", "--sy-status-info-on-inverse", "--sy-bg-inverse", 4.5),
 ]
 
 def parse_css_modes(css):

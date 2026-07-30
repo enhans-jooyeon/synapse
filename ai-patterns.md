@@ -25,7 +25,7 @@ NEVER mark AI presence any other way — no sparkle gradients, no purple, no rob
 
 - Streamed text is **append-only**: rendered markdown may progressively enhance (a heading completes, a list item closes) but existing lines never reflow or jump. Reserve block height where possible.
 - The **streaming cursor** is a 2px × 1em `ai.fg` vertical bar after the last character, blinking at 1s intervals. It is the only blinking element permitted in the system.
-- While streaming: a **Stop** control (`secondary` tonal Button, square-stop icon + "Stop" / "중지": ghost floated as bare text; the tonal fill gives the one interruption affordance a body, and matches the Composer's send→stop morph, which is also `secondary`) MUST be visible and reachable without scrolling. Stopping keeps partial output and appends a `fg.tertiary` caption: "Stopped by you" / "사용자가 중지함".
+- While streaming: a **Stop** control (`secondary` tonal Button, square-stop icon + "Stop" / "중지": ghost floated as bare text; the tonal fill gives the one interruption affordance a body, and matches the Composer's send→stop morph, which is also `secondary`) MUST be visible and reachable without scrolling. Stopping keeps partial output and appends a `text.tertiary` caption: "Stopped by you" / "사용자가 중지함".
 - Scroll behavior: stick to bottom while the user is at the bottom; the moment the user scrolls up, release the lock and show a "Jump to latest" pill (Toast surface — `bg.raised-2` + border + `shadow.lg` — bottom-center).
 - Never disable the composer during generation — queue or interrupt, don't lock the user out.
 - Rate: render at natural token arrival. No artificial typewriter effects on non-streamed (already complete) content — instant render, no fake latency, ever.
@@ -36,13 +36,13 @@ All agent activity between "request" and "answer" renders as **AgentStep** rows 
 
 | State | Indicator | Text color |
 |---|---|---|
-| `pending` | 12px `border.strong` hollow circle | `fg.tertiary` |
-| `running` | 12px Spinner | `fg.secondary` |
-| `success` | 12px `status.success` check | `fg.tertiary` |
-| `failed` | 12px `status.danger` ✕ | `fg.secondary` + trailing Retry ghost button |
-| `skipped` | 12px `border.strong` dash | `fg.disabled` |
+| `pending` | 12px `border.strong` hollow circle | `text.tertiary` |
+| `running` | 12px Spinner | `text.secondary` |
+| `success` | 12px `status.success` check | `text.tertiary` |
+| `failed` | 12px `status.danger` ✕ | `text.secondary` + trailing Retry ghost button |
+| `skipped` | 12px `border.strong` dash | `text.disabled` |
 
-- Steps are 13px rows, one line each: verb-first summary ("Fetched 328 tickets" / "문의 데이터 328건 조회됨") + optional duration (`fg.tertiary`, tabular-nums).
+- Steps are 13px rows, one line each: verb-first summary ("Fetched 328 tickets" / "문의 데이터 328건 조회됨") + optional duration (`text.tertiary`, tabular-nums).
 - **Collapse rule:** while running, show at most the last 3 steps; on completion, collapse to a single summary row — "5 steps · 12s" / "5단계 · 12초" — expandable. Expanded step detail (tool payloads) renders as `.sy-code-block`, collapsed by default.
 - Step hierarchy is flat or one level deep. NEVER nest deeper — restructure the agent's reporting instead.
 
@@ -72,7 +72,7 @@ The agent never performs a consequential action silently. It proposes; the human
 ## 6. Provenance — SourceChip
 
 - Any agent claim derived from retrievable sources SHOULD carry inline **SourceChips**: numbered chips `[1]` (18px height, `bg.sunken`, radius `xs`, mono 11) placed after the sentence they support. Hover/click opens a Popover: source title, origin (favicon or connector icon), timestamp, and an open-source link.
-- A sources footer lists all citations for the message (13px, `fg.secondary`).
+- A sources footer lists all citations for the message (13px, `text.secondary`).
 - Claims with no retrievable source and low verifiability are marked once per message with a `neutral` Badge: "Model knowledge" / "모델 지식" — never fake a citation, never cite the agent itself.
 - Numbers, quotes, and named facts in agent-generated *documents* (not just chat) follow the same rule. If AgentOS renders an agent-written report, the chips come with it.
 - **Sources row:** below the message, sources render as compact ContextCards (index + icon tile + name) under a 출처 `micro-label` — never as a plain-text footnote line. Card↔marker hover linkage makes the mapping visual. Inline markers stay ≤3 per sentence.
@@ -92,7 +92,7 @@ The agent never performs a consequential action silently. It proposes; the human
 
 ## 9. Attribution
 
-- Agent-produced artifacts (documents, table rows, configs) carry an attribution row: squared avatar + agent name + timestamp, 12px `fg.tertiary`.
+- Agent-produced artifacts (documents, table rows, configs) carry an attribution row: squared avatar + agent name + timestamp, 12px `text.tertiary`.
 - When a human edits agent output, attribution flips to "AI-drafted · edited by June" / "AI 초안 · June 편집" — the AI origin never silently disappears, and the human edit is never presented as AI output.
 - In mixed lists (human and agent actors), every row shows its actor's avatar; shape alone (round vs squared) must be sufficient to scan authorship.
 - **Name the action, not just "AI":** a disclosure label states *what was done*, not a generic tag — "AI가 요약함" / "Summarized by agent", "AI 초안 · 주간 보고서 에이전트", not a bare "AI" chip. The actor identity (squared avatar + name) persists across a handoff (§16) so any passage can be traced to who or what produced it. Disclosure is an affordance (the AI treatment — squared avatar, point-color mark) reserved for AI-touched content and never applied decoratively elsewhere.
@@ -117,9 +117,9 @@ Agent output is markdown; without fixed rendering rules every message improvises
 - **Headings demote:** agent `#` renders as `heading-md`, `##` as `heading-sm`, deeper levels as semibold `body`. Agent text NEVER produces `heading-xl/lg` — page hierarchy belongs to the page, not the message.
 - **Body** = `body` style; lists get `space-1` item gaps, one level of nesting rendered, deeper flattened.
 - **Code:** fences → the code block treatment (`bg.sunken`, `code` style, copy button, language chip, max-height 400px + expand); inline → `sy-code-inline`.
-- **Links** = `fg.link` with the external mark for off-app targets; bare URLs auto-link and middle-truncate.
+- **Links** = `text.link` with the external mark for off-app targets; bare URLs auto-link and middle-truncate.
 - **Tables** render as bare (frameless) dense tables — hairline header rule, `label` headers; wider than the message column → horizontal scroll, never reflow.
-- **Blockquote:** 2px `border.strong` left rule + `fg.secondary`; one level, deeper flattened.
+- **Blockquote:** 2px `border.strong` left rule + `text.secondary`; one level, deeper flattened.
 - **Images:** only user/workspace attachments render inline (max-width 100%, radius `lg`, `caption` caption); remote URLs render as links, never fetched — provenance and safety. **Human messages:** attachments stack above the bubble text in fixed order — document ContextCards first, then images (bubble-aligned, radius `lg` + hairline, max-height 240; two side by side, 3+ as a 2-wide grid, never a MediaGroup fan — that is generated media only), then the text.
 - **Task lists** → read-only Checkboxes; **hr** → full-bleed `border.subtle`; emphasis follows system rules (bold = 600; italics normalize to 600 per foundations §2.3.2).
 - **Streaming safety:** block elements (tables, fences) render when their block closes — partial tables never flash unstyled; text streams per §2.
@@ -132,8 +132,8 @@ The palette (⌘K / Ctrl+K, see `components.md`) is the universal entry surface:
 
 When the product exposes an agent's working/reasoning text, it renders as a **disclosure row**, never as answer content:
 
-- Collapsed by default: chevron + "Reasoning" / "추론 과정" (`label`, `fg.tertiary`) + duration. Expanding reveals the text in `body-sm` `fg.secondary` on `bg.surface`, rendered with the agent-markdown rules (§12) but capped: no headings, no images.
-- Reasoning is visually subordinate to the answer — it never uses `fg.primary`, never carries SourceChips (citations belong to claims in the *answer*), and is excluded from copy/regenerate (the ResponseToolbar acts on the answer only).
+- Collapsed by default: chevron + "Reasoning" / "추론 과정" (`label`, `text.tertiary`) + duration. Expanding reveals the text in `body-sm` `text.secondary` on `bg.surface`, rendered with the agent-markdown rules (§12) but capped: no headings, no images.
+- Reasoning is visually subordinate to the answer — it never uses `text.primary`, never carries SourceChips (citations belong to claims in the *answer*), and is excluded from copy/regenerate (the ResponseToolbar acts on the answer only).
 - Expand state persists per user per conversation; auto-expand is forbidden.
 - Reasoning MAY be redacted by policy; a redacted section says so plainly ("Reasoning not available for this response" / "이 응답의 추론 과정은 제공되지 않습니다") — never renders as empty.
 
@@ -141,7 +141,7 @@ When the product exposes an agent's working/reasoning text, it renders as a **di
 
 A refusal or blocked action is a *policy outcome*, not an error — it must not wear error styling:
 
-- Render as an inline notice on `bg.sunken` with the shield icon and `fg.secondary` text (the neutral Banner treatment). NEVER `status.danger` — red teaches users that policy is breakage.
+- Render as an inline notice on `bg.sunken` with the shield icon and `text.secondary` text (the neutral Banner treatment). NEVER `status.danger` — red teaches users that policy is breakage.
 - Copy names the category and the path forward, without lecturing: "This request can't be completed under your workspace's data policy. An admin can review the policy in Settings." / "워크스페이스 데이터 정책에 따라 처리할 수 없는 요청입니다. 정책은 관리자가 설정에서 확인할 수 있습니다."
 - Partial blocks (some sources excluded from an answer) note it in a `caption` line + the SourceChip broken state — the answer renders, the exclusion is visible.
 - NEVER disguise a policy block as a technical failure, and never the reverse.
@@ -150,7 +150,7 @@ A refusal or blocked action is a *policy outcome*, not an error — it must not 
 
 When an agent escalates to a person (or a person takes over):
 
-- The transfer renders as a conversation row: transfer icon + "Handed off to {name}" / "{name}님에게 전달됨" (`caption`, `fg.tertiary`) with the assignee's round Avatar — from that row on, the actor shape flips and stays flipped. The avatar shape system (round=human, squared=agent) carries the state; no extra chrome.
+- The transfer renders as a conversation row: transfer icon + "Handed off to {name}" / "{name}님에게 전달됨" (`caption`, `text.tertiary`) with the assignee's round Avatar — from that row on, the actor shape flips and stays flipped. The avatar shape system (round=human, squared=agent) carries the state; no extra chrome.
 - The waiting state is a status Badge: "Needs review" / "확인 필요" (`warning` subtle) on the run/task wherever it appears in lists.
 - Handing *back* to the agent is an explicit action — `primary` or `secondary` per the region's hierarchy ("Resume agent" / "에이전트 계속하기"); it is operational, not a conversational entry, so never `brand`. Agents never silently reclaim a task a human took.
 - In mixed activity feeds, handoffs are first-class events, never inferred from adjacent rows.
@@ -182,7 +182,7 @@ Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the C
 ## 20. Answer anatomy & named working states
 
 **Titled answer sections:** agent replies longer than ~4 paragraphs or produced by a multi-step run MAY open with an answer header: title (`heading-sm`, from the run's stated goal) + total duration Badge (`neutral` subtle, tabular numerals) + collapse chevron (ghost icon-button). Collapsed keeps title + duration; expansion state persists in the transcript. One header per reply — never per paragraph.
-**Named working line:** during multi-step generation, a status line above the steps names the current activity from the step plan ("보고서 초안 생성 중…" / "Drafting the report…"), `body-sm` `fg.secondary` with the `pulse` opacity animation (skeleton precedent — gradients/shimmer remain forbidden). Replaces a bare spinner whenever step names exist; the stop control stays adjacent per §2. The line resolves into the answer header's title on completion.
+**Named working line:** during multi-step generation, a status line above the steps names the current activity from the step plan ("보고서 초안 생성 중…" / "Drafting the report…"), `body-sm` `text.secondary` with the `pulse` opacity animation (skeleton precedent — gradients/shimmer remain forbidden). Replaces a bare spinner whenever step names exist; the stop control stays adjacent per §2. The line resolves into the answer header's title on completion.
 
 **Point color for active states:** while an agent run is ACTIVELY working, its running-state indicators use the point color (graphite `ai.solid`) — the live-agent beacon Badge and the in-progress `ai` ProgressBar. Because the point is now achromatic (graphite, mode-inverting), "AI at work" reads by the beacon/progress shape and its context, not by hue; the moment it completes or idles, the indicator returns to neutral/slate. The AI *surface* (ai.surface/border/fg) stays slate throughout — the point is a solid accent mark, never a tint on the slate fill.
 
@@ -198,12 +198,12 @@ Agent-generated media renders as a MediaGroup fan (see components.md). Media-onl
 ## 23. Prompt templates & placeholders
 
 **Library:** prompts can be saved ("템플릿으로 저장" in the sent message's ⋯ overflow) and recalled two ways — the Composer's `/` scope gains a 템플릿 group (expert quick-insert), and the **bookmark icon-button opens the Template Library Modal (upgraded from a menu: title-only rows cannot answer "what does this template do to my prompt?"; a library shows content before commitment).** Modal anatomy (opaque `bg.raised`, **760 — the browse-library width, a named Modal exception: forms cap at 640, data-review Drawers run 800, libraries sit between**, **two-pane**): header (title + close, **16 vertical / 24 sides — vertical symmetric against the hairline; sides match the pane's 24 content column**) over a hairline · left list column (260, **`bg.surface` fill — the layered-pane read**: full-bleed search row · **scope SegmentedControl (전체 / 내 템플릿 / 팀)** · **즐겨찾기 group always first** (star toggles — was pin/고정됨) — favoriting is the volume answer: the working set stays on top regardless of library size — then `micro-label` group headers per scope, borderless 32px rows with a **hover-reveal star toggle** (20px compact, `aria-pressed`; idle = stroke, **active = FILLED at `emphasis.fg-soft` (slate.500/400, the lightest legal value: one step above the 3:1 non-text floor, gate-checked; the fill carries the mass so the mark affords lightness text cannot) — the one sanctioned fill-on-active icon: a favorite toggle's job is broadcasting state, and stroke+color alone read inactive.** Thumbs and all other icons stay stroke-only; favorited rows keep the star visible), selected = `bg.selected`; "새 템플릿 만들기" pinned at the bottom over a full-bleed hairline, uniform 8px padding around the row) · right preview pane (uniform 24 padding): **eyebrow lockup with a star toggle top-right (24px, mirrors the row state)** — group as a `micro-label` eyebrow over the `heading-sm` name (the eyebrow carries ownership; no badge needed), one-line description, the **cloze preview as a blockquote** (2px `border.strong` left rule — the system's quotation language, slots highlighted in `emphasis.surface`), and 삽입 (`primary`) bottom-right. Below the description sits a `caption` meta line (owner · last edited), and under the cloze a `caption` slot summary ("입력 항목 N개 · 삽입 후 →로 이동", functional texture that teaches the → behavior); the pane footer pairs keycap hints (↵ 삽입 · esc 닫기, `micro` + `.sy-kbd`) left with 삽입 (`primary`) right, and ↵ inserts the selected template. Column-internal rules (search row, pinned footer) bleed to the column edges per the divider law. **At scale:** the modal body fixes its height (420) and the row region scrolls independently — scrollbar at the column edge per the scroll-container law — with sticky group headers (surface-filled so rows slide beneath); search filters live on title, hiding emptied groups, with the compact no-results line ('…에 대한 결과가 없습니다'); ↑↓ move the selection through visible rows (scrolling it into view), ↵ inserts. Selecting a row previews; 삽입 or ↵ inserts with slot chips and closes. Content appears once in the pane — never repeated per row (boxes-in-boxes is the wireframe formula's cousin).
-**Placeholders:** templates carry named slots rendered as inline slot chips in the Composer text — `emphasis.surface` fill, `fg.secondary`, radius `xs`, "[기간]" label. → moves between slots (consistent with ghost completion; never Tab — IME). Send with an unfilled slot is blocked with a caption error naming the slot (extends the empty-send rule; the ONLY other sanctioned send-block).
+**Placeholders:** templates carry named slots rendered as inline slot chips in the Composer text — `emphasis.surface` fill, `text.secondary`, radius `xs`, "[기간]" label. → moves between slots (consistent with ghost completion; never Tab — IME). Send with an unfilled slot is blocked with a caption error naming the slot (extends the empty-send rule; the ONLY other sanctioned send-block).
 **Bilingual hard rule:** templates are authored as complete per-locale sentences with slots — a slot NEVER has a Korean particle attached to it (content.md §4); if the sentence needs a particle, rewrite the template so the slot sits particle-free.
 
 ## 24. Authoring coach
 
-**Quality hint:** while the Composer is focused, ONE `caption` `fg.tertiary` line MAY appear below it naming a concrete improvement ("기간을 지정하면 더 정확한 결과를 얻습니다"). Anti-nag rules are absolute: max one hint visible, never blocks or delays send, disappears on send or edit, never reappears for the same draft after dismissal, never uses warning/danger color — coaching is an offer, not a gate.
+**Quality hint:** while the Composer is focused, ONE `caption` `text.tertiary` line MAY appear below it naming a concrete improvement ("기간을 지정하면 더 정확한 결과를 얻습니다"). Anti-nag rules are absolute: max one hint visible, never blocks or delays send, disappears on send or edit, never reappears for the same draft after dismissal, never uses warning/danger color — coaching is an offer, not a gate.
 **Refine prompt (extended — assisted editing):** the `edit` `ghost` icon-button (contextual: floats at the input's top-right only while the draft is non-empty) opens a small menu of **preset refinements** — a CLOSED set: 전체 다듬기 (general; relabeled from 프롬프트 다듬기 — that string became the menu's micro-label header, and a row must never duplicate its header), 더 자세히, 더 간결하게, 기간·범위 구체화, 형식 지정. Menu anatomy matches the picker family: `micro-label` header + rows + separator before the preset group; the preset list is part of this spec and extends only by governance (freeform "rewrite styles" are forbidden — that is glossary drift into the input). The chosen rewrite REPLACES the composer text with an Undo Toast (reversible-lite); on an empty draft the button is NOT RENDERED (visibility replaces disablement: a contextual affordance appears when applicable rather than sitting disabled). Never automatic; the rewritten text is the user's to edit — no provenance marking inside the input (authorship stays with the user). **Reviewable rewrite:** the change is not silent — on apply, the material text the refinement *added* is briefly marked with a one-shot `emphasis.surface` highlight that clears on the next keystroke, and the pre-rewrite draft stays one Undo away. The user sees what the coach changed and keeps authorship. No diff panel — the input is not a document (that is §31); the highlight plus Undo is the whole affordance.
 **Not adopted:** generative inline autocomplete of prompt text. Ghost completion stays closed-glossary — model output inside the user's input muddies authorship where provenance cannot mark it.
 
@@ -218,7 +218,7 @@ Agent-generated media renders as a MediaGroup fan (see components.md). Media-onl
 **Scope: dictation, not voice messages.** Speech becomes editable text in the Composer — the user reviews and sends. Audio never posts to the thread: agent conversations stay textual so provenance, search, and quote-reply hold. Authorship stays with the user (§24 logic — the transcript is the user's own speech).
 
 **Trigger:** mic `ghost` icon-button on the Composer footer's trailing side, immediately left of send (relocated from the leading group: dictation fills the message about to be sent). Never inside the ⋯ overflow — voice input must stay one tap away.
-**Recording state:** the Composer tray morphs in place (never a separate overlay): Cancel (`ghost` Button, "취소") · pulsing 8px `status.danger-bg-solid` dot + tabular timer ("0:04") · compact level meter (≤5 bars, 2px wide, `fg.tertiary`, transform-scaleY animation only — motion law; static under reduced-motion) · pause `ghost` icon-button · confirm as a **`primary` icon-only circle (check)** in the send position — the same morph language as send↔stop. Esc cancels; ↵ confirms.
+**Recording state:** the Composer tray morphs in place (never a separate overlay): Cancel (`ghost` Button, "취소") · pulsing 8px `status.danger-bg-solid` dot + tabular timer ("0:04") · compact level meter (≤5 bars, 2px wide, `text.tertiary`, transform-scaleY animation only — motion law; static under reduced-motion) · pause `ghost` icon-button · confirm as a **`primary` icon-only circle (check)** in the send position — the same morph language as send↔stop. Esc cancels; ↵ confirms.
 **After confirm:** a working line ("받아쓰는 중…", pulse) while transcribing, then the transcript inserts at the caret — appended to any existing draft, NEVER auto-sent.
 **A11y:** recording state change announced via `aria-live`; the ticking timer is `aria-hidden` (announce on start/stop, not every second); the mic button reflects state in its `aria-label`.
 **Forbidden:** auto-send on transcription end; audio artifacts in the thread; waveform decoration outside the recording bar; recording without the visible danger-dot indicator.
@@ -235,7 +235,7 @@ Agent-generated media renders as a MediaGroup fan (see components.md). Media-onl
 
 ## 28. Attachment intelligence
 
-After attach, the chip/tile MAY gain an advisory caption: extracted shape, not content judgment ("CSV · 328행 · 7/6–7/12 접수 문의") — `caption` style, `fg.tertiary`, marked 자동 요약. Laws: **advisory only** — never blocks send, never modifies the attachment, never required for send; pending state uses the `pulse` opacity animation (named-working-state family, §20); analysis failure falls back silently to the plain chip (no error surface for an optional nicety); agent-attributed like all generated text. Purpose: the user verifies the RIGHT file went in before spending a run.
+After attach, the chip/tile MAY gain an advisory caption: extracted shape, not content judgment ("CSV · 328행 · 7/6–7/12 접수 문의") — `caption` style, `text.tertiary`, marked 자동 요약. Laws: **advisory only** — never blocks send, never modifies the attachment, never required for send; pending state uses the `pulse` opacity animation (named-working-state family, §20); analysis failure falls back silently to the plain chip (no error surface for an optional nicety); agent-attributed like all generated text. Purpose: the user verifies the RIGHT file went in before spending a run.
 
 ## 29. Batch input processing
 
@@ -249,7 +249,7 @@ Multiple homogeneous inputs (files, records, queries) submitted at once run as a
 
 ## 30. Predictive text (generalizes the slash-command ghost completion)
 
-Whole-prompt continuations MAY render as ghost text after the caret: `fg.placeholder`, max one line, plain text only.
+Whole-prompt continuations MAY render as ghost text after the caret: `text.placeholder`, max one line, plain text only.
 
 - **→ accepts. Tab NEVER accepts** (IME law, same ruling as slash completion and template slots).
 - Suppressed entirely while Hangul composition is active (compositionstart→compositionend) — ghost text inside composing syllables is unreadable.

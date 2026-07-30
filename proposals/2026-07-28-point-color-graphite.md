@@ -6,7 +6,7 @@
 
 The system's single accent — the point color, formerly the blue `#0621C4` — is retargeted to **graphite (achromatic near-black)**. Because a near-black accent is invisible on a dark page, the point now **inverts by mode**: near-black in light, near-white in dark. This matches the ElevenLabs / Sana benchmark direction (a restrained, monochrome accent) while preserving the "one deliberate point per screen" doctrine — it's simply no longer a hue.
 
-**Blue is not gone from the system.** The functional blue ramp — `--sy-fg-link` (`#3155C6` / `#9DB3EE`) and `--sy-border-focus` (`#3D63DD` / `#9DB3EE`) — is unchanged, by explicit decision. Blue now survives only in hyperlinks and focus rings, never in CTAs or AI markers.
+**Blue is not gone from the system.** The functional blue ramp — `--sy-text-link` (`#3155C6` / `#9DB3EE`) and `--sy-border-focus` (`#3D63DD` / `#9DB3EE`) — is unchanged, by explicit decision. Blue now survives only in hyperlinks and focus rings, never in CTAs or AI markers.
 
 ## Values
 
@@ -20,7 +20,7 @@ The system's single accent — the point color, formerly the blue `#0621C4` — 
 | `--sy-brand-point-fg` | `#FFFFFF` | `#1A1A1F` |
 | `--sy-ai-solid` | `#1A1A1F` | `#F2F2F4` |
 | `--sy-glass-accent` (dormant) | `#33333B` | `#E4E4E7` |
-| `--sy-fg-link` / `--sy-border-focus` | *unchanged (blue)* | *unchanged (blue)* |
+| `--sy-text-link` / `--sy-border-focus` | *unchanged (blue)* | *unchanged (blue)* |
 
 Primitive `point` ramp retargeted to graphite and extended with light steps (`100`/`200`) so the dark-mode inverted fills resolve from the ramp rather than ad-hoc values: `50 #F4F5F6 · 100 #F2F2F4 · 200 #E4E4E7 · 400 #33333B · 500 #1A1A1F · 600 #0E0E12`.
 
@@ -29,7 +29,7 @@ Primitive `point` ramp retargeted to graphite and extended with light steps (`10
 A colored accent could keep a constant-white foreground in both modes. An inverting achromatic accent cannot — white text on the near-white dark-mode button is illegible. So the accent's **foreground** inverts too:
 
 - `action.brand-fg` and `category.point-fg`: light `white` → dark near-black (`point.500`). These are dedicated to the brand button / brand mark, so flipping them is safe.
-- **AI-marker and Composer-send glyphs** previously drew their icon from `fg.on-solid` (constant white, shared with the status `*-bg-solid` fills). They were **re-routed to `action.brand-fg`** so they invert with the accent. `fg.on-solid` stays constant white — status solids (danger/success/warning) remain saturated and still need white labels, so that token was left untouched.
+- **AI-marker and Composer-send glyphs** previously drew their icon from `text.on-solid` (constant white, shared with the status `*-bg-solid` fills). They were **re-routed to `action.brand-fg`** so they invert with the accent. `text.on-solid` stays constant white — status solids (danger/success/warning) remain saturated and still need white labels, so that token was left untouched.
 
 ## Gate change
 

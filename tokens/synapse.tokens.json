@@ -2,440 +2,2289 @@
   "$schema": "https://design-tokens.github.io/community-group/format/",
   "$description": "Synapse design tokens — source of truth for AgentOS. Primitives are mode-independent raw values. Semantic tokens resolve per color mode via $extensions.synapse.modes. Agents MUST reference semantic tokens, never primitives, in generated UI. See design.md §3.",
   "$version": "1.0.2",
-
   "primitive": {
     "color": {
       "$type": "color",
-      "white": { "$value": "#FFFFFF" },
-      "black": { "$value": "#09090B" },
+      "white": {
+        "$value": "#FFFFFF"
+      },
+      "black": {
+        "$value": "#09090B"
+      },
       "gray": {
-        "50":  { "$value": "#FAFAFB" },
-        "100": { "$value": "#F4F4F6" },
-        "150": { "$value": "#ECECEF" },
-        "175": { "$value": "#E9E9ED", "$description": "Hairline chrome step ( sleek restyle) — border.default's light value." },
-        "200": { "$value": "#E3E3E8" },
-        "300": { "$value": "#D1D1D8" },
-        "400": { "$value": "#A9A9B2" },
-        "500": { "$value": "#83838D" },
-        "600": { "$value": "#62626B" },
-        "700": { "$value": "#4A4A52" },
-        "800": { "$value": "#33333A" },
-        "900": { "$value": "#1E1E24" },
-        "950": { "$value": "#141419" }
+        "50": {
+          "$value": "#FAFAFB"
+        },
+        "100": {
+          "$value": "#F4F4F6"
+        },
+        "150": {
+          "$value": "#ECECEF"
+        },
+        "175": {
+          "$value": "#E9E9ED",
+          "$description": "Hairline chrome step ( sleek restyle) — border.default's light value."
+        },
+        "200": {
+          "$value": "#E3E3E8"
+        },
+        "300": {
+          "$value": "#D1D1D8"
+        },
+        "400": {
+          "$value": "#A9A9B2"
+        },
+        "500": {
+          "$value": "#83838D"
+        },
+        "600": {
+          "$value": "#62626B"
+        },
+        "700": {
+          "$value": "#4A4A52"
+        },
+        "800": {
+          "$value": "#33333A"
+        },
+        "900": {
+          "$value": "#1E1E24"
+        },
+        "950": {
+          "$value": "#141419"
+        }
       },
       "slate": {
         "$description": "Quiet-emphasis family — NOT a second neutral. Enters UI only through emphasis.*, ai.* surfaces, and slate-valued selected states; never default surfaces/borders/text. AI and emphasis share the family by design: agency is signaled by ai.fg blue marks + the squared avatar, never by tint alone.",
-        "50":  { "$value": "#F7F9FB" },
-        "100": { "$value": "#EFF3F7" },
-        "200": { "$value": "#DCE3EB" },
-        "300": { "$value": "#C2CCD9" },
-        "400": { "$value": "#93A1B3" },
-        "500": { "$value": "#6B7A8D" },
-        "600": { "$value": "#4F5D6F" },
-        "700": { "$value": "#3C4756" },
-        "800": { "$value": "#2A333F" },
-        "900": { "$value": "#1A212B" },
-        "950": { "$value": "#10151C" }
+        "50": {
+          "$value": "#F7F9FB"
+        },
+        "100": {
+          "$value": "#EFF3F7"
+        },
+        "200": {
+          "$value": "#DCE3EB"
+        },
+        "300": {
+          "$value": "#C2CCD9"
+        },
+        "400": {
+          "$value": "#93A1B3"
+        },
+        "500": {
+          "$value": "#6B7A8D"
+        },
+        "600": {
+          "$value": "#4F5D6F"
+        },
+        "700": {
+          "$value": "#3C4756"
+        },
+        "800": {
+          "$value": "#2A333F"
+        },
+        "900": {
+          "$value": "#1A212B"
+        },
+        "950": {
+          "$value": "#10151C"
+        }
       },
       "alpha": {
-        "black-4":  { "$value": "rgba(9, 9, 11, 0.04)" },
-        "black-6":  { "$value": "rgba(9, 9, 11, 0.06)" },
-        "black-10": { "$value": "rgba(9, 9, 11, 0.10)" },
-        "black-15": { "$value": "rgba(9, 9, 11, 0.15)" },
-        "black-40": { "$value": "rgba(9, 9, 11, 0.40)" },
-        "black-60": { "$value": "rgba(9, 9, 11, 0.60)" },
-        "white-6":  { "$value": "rgba(255, 255, 255, 0.06)" },
-        "white-10": { "$value": "rgba(255, 255, 255, 0.10)" },
-        "white-16": { "$value": "rgba(255, 255, 255, 0.16)" },
-        "white-40": { "$value": "rgba(255, 255, 255, 0.40)" }
+        "black-4": {
+          "$value": "rgba(9, 9, 11, 0.04)"
+        },
+        "black-6": {
+          "$value": "rgba(9, 9, 11, 0.06)"
+        },
+        "black-10": {
+          "$value": "rgba(9, 9, 11, 0.10)"
+        },
+        "black-15": {
+          "$value": "rgba(9, 9, 11, 0.15)"
+        },
+        "black-40": {
+          "$value": "rgba(9, 9, 11, 0.40)"
+        },
+        "black-60": {
+          "$value": "rgba(9, 9, 11, 0.60)"
+        },
+        "white-6": {
+          "$value": "rgba(255, 255, 255, 0.06)"
+        },
+        "white-10": {
+          "$value": "rgba(255, 255, 255, 0.10)"
+        },
+        "white-16": {
+          "$value": "rgba(255, 255, 255, 0.16)"
+        },
+        "white-40": {
+          "$value": "rgba(255, 255, 255, 0.40)"
+        }
       },
       "blue": {
-        "50":  { "$value": "#F0F4FD" },
-        "100": { "$value": "#E4EAFB" },
-        "200": { "$value": "#C4D1F5" },
-        "300": { "$value": "#9DB3EE" },
-        "400": { "$value": "#6B89E6" },
-        "500": { "$value": "#3D63DD" },
-        "600": { "$value": "#3155C6" },
-        "700": { "$value": "#2A48A5" },
-        "800": { "$value": "#22397F" },
-        "900": { "$value": "#1B2C60" },
-        "950": { "$value": "#111A3C" }
+        "50": {
+          "$value": "#F0F4FD"
+        },
+        "100": {
+          "$value": "#E4EAFB"
+        },
+        "200": {
+          "$value": "#C4D1F5"
+        },
+        "300": {
+          "$value": "#9DB3EE"
+        },
+        "400": {
+          "$value": "#6B89E6"
+        },
+        "500": {
+          "$value": "#3D63DD"
+        },
+        "600": {
+          "$value": "#3155C6"
+        },
+        "700": {
+          "$value": "#2A48A5"
+        },
+        "800": {
+          "$value": "#22397F"
+        },
+        "900": {
+          "$value": "#1B2C60"
+        },
+        "950": {
+          "$value": "#111A3C"
+        }
+      },
+      "azure": {
+        "$description": "BRIGHT AZURE — the brand hue (added 2026-07-30). 500 = #0073E6: hue 210 at full saturation, the old @enhans/synapse brand family, tuned 7% deeper than the old #0A84FF so a white label clears AA (4.57:1) at normal weight instead of needing the §9 solid-label deviation. Kept DISTINCT from `blue` (indigo), which remains the functional info/link/focus hue.",
+        "50": {
+          "$value": "#F1F7FE"
+        },
+        "100": {
+          "$value": "#E0EEFD"
+        },
+        "200": {
+          "$value": "#B8DAFC"
+        },
+        "300": {
+          "$value": "#7BBBFC"
+        },
+        "400": {
+          "$value": "#2994FF"
+        },
+        "500": {
+          "$value": "#0073E6"
+        },
+        "600": {
+          "$value": "#0D61B5"
+        },
+        "700": {
+          "$value": "#0B4F93"
+        },
+        "800": {
+          "$value": "#0A3D71"
+        },
+        "900": {
+          "$value": "#082B4E"
+        },
+        "950": {
+          "$value": "#061B30"
+        }
       },
       "point": {
         "$description": "Point/accent — GRAPHITE (retargeted from the point blue #0621C4). The system's single accent is now achromatic near-black and INVERTS by mode: near-black in light, near-white in dark, so the one point moment reads on either background. Jurisdiction unchanged (brand-identity objects + conversational-AI emphasis). Links/focus/status.info keep the functional indigo/blue ramp — the point is no longer a hue. Light steps (100/200) exist to supply the dark-mode inverted fills.",
-        "50":  { "$value": "#F4F5F6" },
-        "100": { "$value": "#F2F2F4" },
-        "200": { "$value": "#E4E4E7" },
-        "400": { "$value": "#33333B" },
-        "500": { "$value": "#1A1A1F" },
-        "600": { "$value": "#0E0E12" }
+        "50": {
+          "$value": "#F4F5F6"
+        },
+        "100": {
+          "$value": "#F2F2F4"
+        },
+        "200": {
+          "$value": "#E4E4E7"
+        },
+        "400": {
+          "$value": "#33333B"
+        },
+        "500": {
+          "$value": "#1A1A1F"
+        },
+        "600": {
+          "$value": "#0E0E12"
+        }
       },
       "green": {
-        "50":  { "$value": "#EEF9F3" },
-        "100": { "$value": "#DCF2E6" },
-        "200": { "$value": "#A9E3C4" },
-        "300": { "$value": "#3FBF7F" },
-        "400": { "$value": "#2FAF6D" },
-        "500": { "$value": "#1F9D5B" },
-        "600": { "$value": "#0E7A42" },
-        "700": { "$value": "#135933" },
-        "800": { "$value": "#124A2C" },
-        "900": { "$value": "#123F27" },
-        "950": { "$value": "#0C2A1A" }
+        "50": {
+          "$value": "#EEF9F3"
+        },
+        "100": {
+          "$value": "#DCF2E6"
+        },
+        "200": {
+          "$value": "#A9E3C4"
+        },
+        "300": {
+          "$value": "#3FBF7F"
+        },
+        "400": {
+          "$value": "#2FAF6D"
+        },
+        "500": {
+          "$value": "#1F9D5B"
+        },
+        "600": {
+          "$value": "#0E7A42"
+        },
+        "700": {
+          "$value": "#135933"
+        },
+        "800": {
+          "$value": "#124A2C"
+        },
+        "900": {
+          "$value": "#123F27"
+        },
+        "950": {
+          "$value": "#0C2A1A"
+        }
       },
       "amber": {
-        "50":  { "$value": "#FDF6E7" },
-        "100": { "$value": "#FBEED3" },
-        "200": { "$value": "#F3D492" },
-        "300": { "$value": "#D99A27" },
-        "400": { "$value": "#CC8B1E" },
-        "500": { "$value": "#BA7C14" },
-        "600": { "$value": "#8C5A00" },
-        "700": { "$value": "#6B4708" },
-        "800": { "$value": "#5A3C08" },
-        "900": { "$value": "#4A3208" },
-        "950": { "$value": "#332305" }
+        "50": {
+          "$value": "#FDF6E7"
+        },
+        "100": {
+          "$value": "#FBEED3"
+        },
+        "200": {
+          "$value": "#F3D492"
+        },
+        "300": {
+          "$value": "#D99A27"
+        },
+        "400": {
+          "$value": "#CC8B1E"
+        },
+        "500": {
+          "$value": "#BA7C14"
+        },
+        "600": {
+          "$value": "#8C5A00"
+        },
+        "700": {
+          "$value": "#6B4708"
+        },
+        "800": {
+          "$value": "#5A3C08"
+        },
+        "900": {
+          "$value": "#4A3208"
+        },
+        "950": {
+          "$value": "#332305"
+        }
       },
       "red": {
-        "50":  { "$value": "#FDF1F0" },
-        "100": { "$value": "#FBE3E2" },
-        "200": { "$value": "#F7BEBB" },
-        "300": { "$value": "#EE837D" },
-        "400": { "$value": "#DB504D" },
-        "500": { "$value": "#D2403E" },
-        "600": { "$value": "#B23230" },
-        "700": { "$value": "#8F2826" },
-        "800": { "$value": "#73201E" },
-        "900": { "$value": "#571716" },
-        "950": { "$value": "#3D100F" }
+        "50": {
+          "$value": "#FDF1F0"
+        },
+        "100": {
+          "$value": "#FBE3E2"
+        },
+        "200": {
+          "$value": "#F7BEBB"
+        },
+        "300": {
+          "$value": "#EE837D"
+        },
+        "400": {
+          "$value": "#DB504D"
+        },
+        "500": {
+          "$value": "#D2403E"
+        },
+        "600": {
+          "$value": "#B23230"
+        },
+        "700": {
+          "$value": "#8F2826"
+        },
+        "800": {
+          "$value": "#73201E"
+        },
+        "900": {
+          "$value": "#571716"
+        },
+        "950": {
+          "$value": "#3D100F"
+        }
       },
       "viz": {
-        "$description": "Categorical palette for data visualization only. Order is fixed: assign in sequence, never skip. Muted saturation by design — must not compete with status colors.",
-        "1": { "$value": "#5B7CE0" },
-        "2": { "$value": "#4FAE8B" },
-        "3": { "$value": "#C9932E" },
-        "4": { "$value": "#C15D5D" },
-        "5": { "$value": "#8A6FC9" },
-        "6": { "$value": "#4FA3C4" },
-        "7": { "$value": "#B36FA3" },
-        "8": { "$value": "#7A828E" }
+        "$description": "CHART-ONLY categorical palette (rebuilt 2026-07-30). Order is fixed: assign in sequence, never skip. Optimised for DISCRIMINABILITY, not harmony — reversing the previous 'muted saturation by design' rule, which produced a min pairwise dE of 16.6 (below the 25-30 a categorical palette needs) and one member at chroma 7 (effectively grey). Now: min dE 45.8 normal / 11.6 deuteranopia / 22.7 protanopia, lightness spread 36 L*, chroma floor 37. Lightness ALTERNATES by position on purpose — lightness is the channel that survives colour-vision deficiency, so green (L*65) and lime (L*30) are split far apart rather than sitting together. Contrast floor is 2.5:1 vs background, a DOCUMENTED DEVIATION from the 3:1 of WCAG 1.4.11 / Carbon / Cloudscape, taken so warm hues can stay bright instead of collapsing to olive. PER-MODE as of 2026-07-30: the light set is measured against bg.page white, the dark set against bg.page #09090B — a single shared set left the dark members (lime at L*30) nearly invisible on a dark page. Dark-mode figures: min dE 51.9 normal / 27.4 deuteranopia / 19.5 protanopia. NEVER used in UI — UI category tints are the separate `category.*` family.",
+        "1": {
+          "$value": "#016BE4",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#016BE4",
+                "dark": "#0158BC"
+              }
+            }
+          }
+        },
+        "2": {
+          "$value": "#01B75C",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#01B75C",
+                "dark": "#037D40"
+              }
+            }
+          }
+        },
+        "3": {
+          "$value": "#A27201",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#A27201",
+                "dark": "#8E6401"
+              }
+            }
+          }
+        },
+        "4": {
+          "$value": "#FE5D58",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#FE5D58",
+                "dark": "#FE8E8A"
+              }
+            }
+          }
+        },
+        "5": {
+          "$value": "#7A03E2",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#7A03E2",
+                "dark": "#7D01E9"
+              }
+            }
+          }
+        },
+        "6": {
+          "$value": "#01A9CB",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#01A9CB",
+                "dark": "#05C9F0"
+              }
+            }
+          }
+        },
+        "7": {
+          "$value": "#CB0188",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#CB0188",
+                "dark": "#CD048A"
+              }
+            }
+          }
+        },
+        "8": {
+          "$value": "#215100",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#215100",
+                "dark": "#49D204"
+              }
+            }
+          }
+        }
       }
     },
     "font": {
       "family": {
-        "sans": { "$type": "fontFamily", "$value": ["Pretendard Variable", "Pretendard", "-apple-system", "BlinkMacSystemFont", "system-ui", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "sans-serif"] },
+        "sans": {
+          "$type": "fontFamily",
+          "$value": [
+            "Pretendard Variable",
+            "Pretendard",
+            "-apple-system",
+            "BlinkMacSystemFont",
+            "system-ui",
+            "Segoe UI",
+            "Apple SD Gothic Neo",
+            "Noto Sans KR",
+            "sans-serif"
+          ]
+        },
         "display": {
           "$type": "fontFamily",
-          "$value": ["Artific", "Pretendard Variable", "Pretendard", "sans-serif"],
+          "$value": [
+            "Artific",
+            "Pretendard Variable",
+            "Pretendard",
+            "sans-serif"
+          ],
           "$description": "Stylized brand family (Power Type Foundry, self-hosted in assets/fonts/, commercial license required). Latin only — Hangul intentionally falls back to Pretendard. Permitted ONLY for Display roles (30/40, 36/48) in sanctioned brand moments; max one per screen. See foundations.md §2.1."
         },
         "mono": {
           "$type": "fontFamily",
-          "$value": ["JetBrains Mono", "SF Mono", "D2Coding", "Consolas", "monospace"],
+          "$value": [
+            "JetBrains Mono",
+            "SF Mono",
+            "D2Coding",
+            "Consolas",
+            "monospace"
+          ],
           "$description": "Code blocks, inline code, IDs/hashes/keys, log output, keyboard hints. Numeric table columns use sans + tabular-nums, not mono, unless the column holds identifiers. See foundations.md §2.1."
         }
       },
       "weight": {
         "$type": "fontWeight",
-        "regular":  { "$value": 400 },
-        "medium":   { "$value": 500 },
-        "semibold": { "$value": 600 },
-        "bold":     { "$value": 700 }
+        "regular": {
+          "$value": 400
+        },
+        "medium": {
+          "$value": 500
+        },
+        "semibold": {
+          "$value": 600
+        },
+        "bold": {
+          "$value": 700
+        }
       },
       "size": {
         "$type": "dimension",
         "$description": "Line heights are deliberately generous to accommodate Hangul glyph height. Never tighten below the paired value. See foundations.md §2.",
-        "11": { "$value": "11px" },
-        "12": { "$value": "12px" },
-        "13": { "$value": "13px" },
-        "14": { "$value": "14px" },
-        "16": { "$value": "16px" },
-        "18": { "$value": "18px" },
-        "20": { "$value": "20px" },
-        "24": { "$value": "24px" },
-        "30": { "$value": "30px" },
-        "36": { "$value": "36px" },
-        "44": { "$value": "44px" }
+        "11": {
+          "$value": "11px"
+        },
+        "12": {
+          "$value": "12px"
+        },
+        "13": {
+          "$value": "13px"
+        },
+        "14": {
+          "$value": "14px"
+        },
+        "16": {
+          "$value": "16px"
+        },
+        "18": {
+          "$value": "18px"
+        },
+        "20": {
+          "$value": "20px"
+        },
+        "24": {
+          "$value": "24px"
+        },
+        "30": {
+          "$value": "30px"
+        },
+        "36": {
+          "$value": "36px"
+        },
+        "44": {
+          "$value": "44px"
+        }
       },
       "lineHeight": {
         "$type": "dimension",
-        "11": { "$value": "16px" },
-        "12": { "$value": "18px" },
-        "13": { "$value": "20px" },
-        "14": { "$value": "22px" },
-        "16": { "$value": "24px" },
-        "18": { "$value": "27px" },
-        "20": { "$value": "30px" },
-        "24": { "$value": "34px" },
-        "30": { "$value": "40px" },
-        "36": { "$value": "48px" },
-        "44": { "$value": "56px" }
+        "11": {
+          "$value": "16px"
+        },
+        "12": {
+          "$value": "18px"
+        },
+        "13": {
+          "$value": "20px"
+        },
+        "14": {
+          "$value": "22px"
+        },
+        "16": {
+          "$value": "24px"
+        },
+        "18": {
+          "$value": "27px"
+        },
+        "20": {
+          "$value": "30px"
+        },
+        "24": {
+          "$value": "34px"
+        },
+        "30": {
+          "$value": "40px"
+        },
+        "36": {
+          "$value": "48px"
+        },
+        "44": {
+          "$value": "56px"
+        }
       }
     },
     "space": {
       "$type": "dimension",
       "$description": "Tailwind-style index scale: token name x 4px = value (name 4 = 16px = 1rem). Fine steps use an underscore for the fractional Tailwind key (space-0_5 = 2px, 1_5 = 6px, 2_5 = 10px), since a dot is invalid in a CSS custom-property name. Runs 0 -> 96 (384px). Values outside this scale are forbidden in generated UI.",
-      "0":  { "$value": "0px" },
-      "0_5":  { "$value": "2px" },
-      "1":  { "$value": "4px" },
-      "1_5":  { "$value": "6px" },
-      "2":  { "$value": "8px" },
-      "2_5": { "$value": "10px" },
-      "3": { "$value": "12px" },
-      "4": { "$value": "16px" },
-      "5": { "$value": "20px" },
-      "6": { "$value": "24px" },
-      "7": { "$value": "28px" },
-      "8": { "$value": "32px" },
-      "10": { "$value": "40px" },
-      "12": { "$value": "48px" },
-      "16": { "$value": "64px" },
-      "20": { "$value": "80px" },
-      "24": { "$value": "96px" },
-      "32": { "$value": "128px" },
-      "40": { "$value": "160px" },
-      "48": { "$value": "192px" },
-      "56": { "$value": "224px" },
-      "64": { "$value": "256px" },
-      "80": { "$value": "320px" },
-      "96": { "$value": "384px" }
+      "0": {
+        "$value": "0px"
+      },
+      "0_5": {
+        "$value": "2px"
+      },
+      "1": {
+        "$value": "4px"
+      },
+      "1_5": {
+        "$value": "6px"
+      },
+      "2": {
+        "$value": "8px"
+      },
+      "2_5": {
+        "$value": "10px"
+      },
+      "3": {
+        "$value": "12px"
+      },
+      "4": {
+        "$value": "16px"
+      },
+      "5": {
+        "$value": "20px"
+      },
+      "6": {
+        "$value": "24px"
+      },
+      "7": {
+        "$value": "28px"
+      },
+      "8": {
+        "$value": "32px"
+      },
+      "10": {
+        "$value": "40px"
+      },
+      "12": {
+        "$value": "48px"
+      },
+      "16": {
+        "$value": "64px"
+      },
+      "20": {
+        "$value": "80px"
+      },
+      "24": {
+        "$value": "96px"
+      },
+      "32": {
+        "$value": "128px"
+      },
+      "40": {
+        "$value": "160px"
+      },
+      "48": {
+        "$value": "192px"
+      },
+      "56": {
+        "$value": "224px"
+      },
+      "64": {
+        "$value": "256px"
+      },
+      "80": {
+        "$value": "320px"
+      },
+      "96": {
+        "$value": "384px"
+      }
     },
     "radius": {
       "$type": "dimension",
-      "none": { "$value": "0px" },
-      "xs":   { "$value": "4px" },
-      "sm":   { "$value": "8px" },
-      "10": { "$value": "10px", "$description": "10px step, off the 4px scale by design: 12px (md) read too round on 32-36px controls. Default control radius; controls scale radius with size — sm size uses sm (8), default uses this 10, lg size uses md (12)." },
-      "md":   { "$value": "12px" },
-      "lg":   { "$value": "16px" },
-      "xl":   { "$value": "20px", "$description": "Section shells ONLY: the outermost rounded well a page region sits in — SplitPanel container, content wells, hero/empty wells. Never on cards, overlays, or anything nested inside a shell. Shells pad >= space-24 so the concentric-corner rule never binds their children." },
-      "2xl":  { "$value": "24px" },
-      "full": { "$value": "9999px" }
+      "none": {
+        "$value": "0px"
+      },
+      "xs": {
+        "$value": "4px"
+      },
+      "sm": {
+        "$value": "8px"
+      },
+      "10": {
+        "$value": "10px",
+        "$description": "10px step, off the 4px scale by design: 12px (md) read too round on 32-36px controls. Default control radius; controls scale radius with size — sm size uses sm (8), default uses this 10, lg size uses md (12)."
+      },
+      "md": {
+        "$value": "12px"
+      },
+      "lg": {
+        "$value": "16px"
+      },
+      "xl": {
+        "$value": "20px",
+        "$description": "Section shells ONLY: the outermost rounded well a page region sits in — SplitPanel container, content wells, hero/empty wells. Never on cards, overlays, or anything nested inside a shell. Shells pad >= space-24 so the concentric-corner rule never binds their children."
+      },
+      "2xl": {
+        "$value": "24px"
+      },
+      "full": {
+        "$value": "9999px"
+      }
     },
     "shadow": {
       "$type": "shadow",
       "$description": "Synapse is borders-first; shadows only for floating layers. Size scale xs→xl (referenced against the BeyondUI / Tailwind elevation scale). See foundations.md §6.",
-      "xs": { "$value": "0 1px 2px rgba(9, 9, 11, 0.05)", "$extensions": { "synapse": { "modes": { "light": "0 1px 2px rgba(9, 9, 11, 0.05)", "dark": "0 1px 2px rgba(0, 0, 0, 0.4)" } } }, "$description": "Resting elevation — the elevated Card, sticky bars." },
-      "sm": { "$value": "0 2px 6px rgba(9, 9, 11, 0.06)", "$extensions": { "synapse": { "modes": { "light": "0 2px 6px rgba(9, 9, 11, 0.06)", "dark": "0 2px 6px rgba(0, 0, 0, 0.44)" } } }, "$description": "Hover / lift on interactive Cards and draggable tiles." },
-      "md": { "$value": "0 4px 12px rgba(9, 9, 11, 0.07)", "$extensions": { "synapse": { "modes": { "light": "0 4px 12px rgba(9, 9, 11, 0.07)", "dark": "0 4px 12px rgba(0, 0, 0, 0.47)" } } }, "$description": "Shallow floating layers — menus/popovers close to the surface." },
-      "lg": { "$value": "0 8px 24px rgba(9, 9, 11, 0.08)", "$extensions": { "synapse": { "modes": { "light": "0 8px 24px rgba(9, 9, 11, 0.08)", "dark": "0 8px 24px rgba(0, 0, 0, 0.5)" } } }, "$description": "Standard floating layers — dropdowns, popovers, tooltips." },
-      "xl": { "$value": "0 24px 48px rgba(9, 9, 11, 0.12)", "$extensions": { "synapse": { "modes": { "light": "0 24px 48px rgba(9, 9, 11, 0.12)", "dark": "0 24px 48px rgba(0, 0, 0, 0.6)" } } }, "$description": "Deep elevation — dialogs, drawers." },
-      "thumb":   { "$value": "0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16)" },
-      "glass":   { "$value": "0 2px 6px rgba(9,9,11,0.28), 0 30px 60px rgba(9,9,11,0.44), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 0 0 1px rgba(255,255,255,0.06)", "$extensions": { "synapse": { "modes": { "light": "0 2px 6px rgba(9,9,11,0.28), 0 30px 60px rgba(9,9,11,0.44), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 0 0 1px rgba(255,255,255,0.06)", "dark": "0 2px 6px rgba(0,0,0,0.16), 0 26px 54px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.5)" } } } }
+      "xs": {
+        "$value": "0 1px 2px rgba(9, 9, 11, 0.05)",
+        "$extensions": {
+          "synapse": {
+            "modes": {
+              "light": "0 1px 2px rgba(9, 9, 11, 0.05)",
+              "dark": "0 1px 2px rgba(0, 0, 0, 0.4)"
+            }
+          }
+        },
+        "$description": "Resting elevation — the elevated Card, sticky bars."
+      },
+      "sm": {
+        "$value": "0 2px 6px rgba(9, 9, 11, 0.06)",
+        "$extensions": {
+          "synapse": {
+            "modes": {
+              "light": "0 2px 6px rgba(9, 9, 11, 0.06)",
+              "dark": "0 2px 6px rgba(0, 0, 0, 0.44)"
+            }
+          }
+        },
+        "$description": "Hover / lift on interactive Cards and draggable tiles."
+      },
+      "md": {
+        "$value": "0 4px 12px rgba(9, 9, 11, 0.07)",
+        "$extensions": {
+          "synapse": {
+            "modes": {
+              "light": "0 4px 12px rgba(9, 9, 11, 0.07)",
+              "dark": "0 4px 12px rgba(0, 0, 0, 0.47)"
+            }
+          }
+        },
+        "$description": "Shallow floating layers — menus/popovers close to the surface."
+      },
+      "lg": {
+        "$value": "0 8px 24px rgba(9, 9, 11, 0.08)",
+        "$extensions": {
+          "synapse": {
+            "modes": {
+              "light": "0 8px 24px rgba(9, 9, 11, 0.08)",
+              "dark": "0 8px 24px rgba(0, 0, 0, 0.5)"
+            }
+          }
+        },
+        "$description": "Standard floating layers — dropdowns, popovers, tooltips."
+      },
+      "xl": {
+        "$value": "0 24px 48px rgba(9, 9, 11, 0.12)",
+        "$extensions": {
+          "synapse": {
+            "modes": {
+              "light": "0 24px 48px rgba(9, 9, 11, 0.12)",
+              "dark": "0 24px 48px rgba(0, 0, 0, 0.6)"
+            }
+          }
+        },
+        "$description": "Deep elevation — dialogs, drawers."
+      },
+      "thumb": {
+        "$value": "0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16)"
+      },
+      "glass": {
+        "$value": "0 2px 6px rgba(9,9,11,0.28), 0 30px 60px rgba(9,9,11,0.44), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 0 0 1px rgba(255,255,255,0.06)",
+        "$extensions": {
+          "synapse": {
+            "modes": {
+              "light": "0 2px 6px rgba(9,9,11,0.28), 0 30px 60px rgba(9,9,11,0.44), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 0 0 1px rgba(255,255,255,0.06)",
+              "dark": "0 2px 6px rgba(0,0,0,0.16), 0 26px 54px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.5)"
+            }
+          }
+        }
+      }
     },
     "z": {
       "$type": "number",
       "$description": "Stacking scale. Every floating/pinned element takes exactly one of these; arbitrary z-index values are forbidden. Order is law: sticky < dropdown < drawer < modal < toast < tooltip.",
-      "sticky":   { "$value": 100 },
-      "dropdown": { "$value": 200 },
-      "drawer":   { "$value": 300 },
-      "modal":    { "$value": 400 },
-      "toast":    { "$value": 500 },
-      "tooltip":  { "$value": 600 }
+      "sticky": {
+        "$value": 100
+      },
+      "dropdown": {
+        "$value": 200
+      },
+      "drawer": {
+        "$value": 300
+      },
+      "modal": {
+        "$value": 400
+      },
+      "toast": {
+        "$value": 500
+      },
+      "tooltip": {
+        "$value": 600
+      }
     },
     "motion": {
       "duration": {
         "$type": "duration",
-        "instant": { "$value": "100ms" },
-        "fast":    { "$value": "150ms" },
-        "base":    { "$value": "200ms" },
-        "slow":    { "$value": "300ms" }
+        "instant": {
+          "$value": "100ms"
+        },
+        "fast": {
+          "$value": "150ms"
+        },
+        "base": {
+          "$value": "200ms"
+        },
+        "slow": {
+          "$value": "300ms"
+        }
       },
       "easing": {
         "$type": "cubicBezier",
-        "standard":   { "$value": [0.2, 0, 0, 1] },
-        "enter":      { "$value": [0, 0, 0.2, 1] },
-        "exit":       { "$value": [0.4, 0, 1, 1] }
+        "standard": {
+          "$value": [
+            0.2,
+            0,
+            0,
+            1
+          ]
+        },
+        "enter": {
+          "$value": [
+            0,
+            0,
+            0.2,
+            1
+          ]
+        },
+        "exit": {
+          "$value": [
+            0.4,
+            0,
+            1,
+            1
+          ]
+        }
       }
     }
   },
-
   "semantic": {
     "$description": "Mode-aware tokens. 'light' / 'dark' under $extensions.synapse.modes. These are the ONLY color tokens agents may reference.",
     "padding": {
       "$type": "dimension",
       "$description": "Semantic padding scale — aliases the spacing primitives (never redefines a value); use for component/container padding by intent. Role-specific paddings (control/card/page) live in synapse.css.",
-      "none": { "$value": "0px" },
-      "2xs":  { "$value": "{primitive.space.1}" },
-      "xs":   { "$value": "{primitive.space.2}" },
-      "sm":   { "$value": "{primitive.space.3}" },
-      "md":   { "$value": "{primitive.space.4}" },
-      "lg":   { "$value": "{primitive.space.6}" },
-      "xl":   { "$value": "{primitive.space.8}" }
+      "none": {
+        "$value": "0px"
+      },
+      "2xs": {
+        "$value": "{primitive.space.1}"
+      },
+      "xs": {
+        "$value": "{primitive.space.2}"
+      },
+      "sm": {
+        "$value": "{primitive.space.3}"
+      },
+      "md": {
+        "$value": "{primitive.space.4}"
+      },
+      "lg": {
+        "$value": "{primitive.space.6}"
+      },
+      "xl": {
+        "$value": "{primitive.space.8}"
+      }
     },
     "type": {
       "$description": "Typography styles — the ONLY way agents set typography. Each style = family + size/lineHeight + weight. Rendered as .sy-type-* classes in synapse.css. Styles marked 'display' use the display family (Latin) with Pretendard Hangul fallback.",
-      "display-xl":  { "$value": { "family": "display", "size": "{primitive.font.size.44}", "lineHeight": "{primitive.font.lineHeight.44}", "weight": 700 }, "$description": "Marketing-adjacent heroes only." },
-      "display":     { "$value": { "family": "display", "size": "{primitive.font.size.36}", "lineHeight": "{primitive.font.lineHeight.36}", "weight": 600 }, "$description": "Guided-archetype heroes, empty-state heroes." },
-      "display-sm":  { "$value": { "family": "display", "size": "{primitive.font.size.30}", "lineHeight": "{primitive.font.lineHeight.30}", "weight": 600 }, "$description": "Compact brand moments." },
-      "heading-xl":  { "$value": { "family": "sans", "size": "{primitive.font.size.24}", "lineHeight": "{primitive.font.lineHeight.24}", "weight": 700, "letterSpacing": "-0.01em (Latin only)" }, "$description": "Page title. One per page. Bold + tight Latin tracking." },
-      "heading-lg":  { "$value": { "family": "sans", "size": "{primitive.font.size.18}", "lineHeight": "{primitive.font.lineHeight.18}", "weight": 600 }, "$description": "Section / card / modal titles." },
-      "heading-md":  { "$value": { "family": "sans", "size": "{primitive.font.size.16}", "lineHeight": "{primitive.font.lineHeight.16}", "weight": 600 }, "$description": "Subsections, drawer titles, empty-state titles." },
-      "heading-sm":  { "$value": { "family": "sans", "size": "{primitive.font.size.14}", "lineHeight": "{primitive.font.lineHeight.14}", "weight": 600 }, "$description": "Group titles inside cards, dense panel headers. Fixed 14/22 (no longer density-bound)." },
-      "body-lg":     { "$value": { "family": "sans", "size": "{primitive.font.size.16}", "lineHeight": "{primitive.font.lineHeight.16}", "weight": 400 }, "$description": "Long-form reading: agent reports, docs, onboarding prose." },
-      "body":        { "$value": { "family": "sans", "size": "{primitive.font.size.14}", "lineHeight": "{primitive.font.lineHeight.14}", "weight": 400 }, "$description": "Default text. Fixed 14/22 (density type re-typesetting removed)." },
-      "body-sm":     { "$value": { "family": "sans", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 400 }, "$description": "Secondary prose fixed at 13 regardless of density (menu items, toast, meta sentences)." },
-      "label":       { "$value": { "family": "sans", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 500 }, "$description": "Form labels, table headers, buttons. Fixed 13/20 (no longer density-bound)." },
-      "label-sm":    { "$value": { "family": "sans", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 500 }, "$description": "Compact labels, nav group headers pair with micro." },
-      "caption":     { "$value": { "family": "sans", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 400 }, "$description": "Helper text, footnotes, attribution rows." },
-      "micro":       { "$value": { "family": "sans", "size": "{primitive.font.size.11}", "lineHeight": "{primitive.font.lineHeight.11}", "weight": 600 }, "$description": "Badges, kbd hints. Never sentences. Weight 600 by rule: the floor size carries the reinforced weight — 500 fuzzes at 11px, especially Hangul; 700 clogs counters." },
-      "micro-label": { "$value": { "family": "sans", "size": "{primitive.font.size.11}", "lineHeight": "{primitive.font.lineHeight.11}", "weight": 600, "tracking": "0.02em Latin only" }, "$description": "Eyebrow/group labels: sidebar groups, palette groups, card eyebrows, chart axis labels. +2% tracking on Latin (Hangul never tracked); NEVER all-caps — tracking does the work caps would." },
-      "code":        { "$value": { "family": "mono", "size": "{primitive.font.size.13}", "lineHeight": "{primitive.font.lineHeight.13}", "weight": 400 }, "$description": "Code blocks, log output." },
-      "code-sm":     { "$value": { "family": "mono", "size": "{primitive.font.size.12}", "lineHeight": "{primitive.font.lineHeight.12}", "weight": 400 }, "$description": "Inline code, IDs in table cells." },
-      "stat-lg":     { "$value": { "family": "sans", "size": "{primitive.font.size.30}", "lineHeight": "{primitive.font.lineHeight.30}", "weight": 600, "numeric": "tabular-nums" }, "$description": "Hero KPI values." },
-      "stat":        { "$value": { "family": "sans", "size": "{primitive.font.size.24}", "lineHeight": "{primitive.font.lineHeight.24}", "weight": 600, "numeric": "tabular-nums" }, "$description": "Standard stat-card values." },
-      "stat-sm":     { "$value": { "family": "sans", "size": "{primitive.font.size.20}", "lineHeight": "{primitive.font.lineHeight.20}", "weight": 600, "numeric": "tabular-nums" }, "$description": "Dense dashboards, inline metrics." }
+      "display-xl": {
+        "$value": {
+          "family": "display",
+          "size": "{primitive.font.size.44}",
+          "lineHeight": "{primitive.font.lineHeight.44}",
+          "weight": 700
+        },
+        "$description": "Marketing-adjacent heroes only."
+      },
+      "display": {
+        "$value": {
+          "family": "display",
+          "size": "{primitive.font.size.36}",
+          "lineHeight": "{primitive.font.lineHeight.36}",
+          "weight": 600
+        },
+        "$description": "Guided-archetype heroes, empty-state heroes."
+      },
+      "display-sm": {
+        "$value": {
+          "family": "display",
+          "size": "{primitive.font.size.30}",
+          "lineHeight": "{primitive.font.lineHeight.30}",
+          "weight": 600
+        },
+        "$description": "Compact brand moments."
+      },
+      "heading-xl": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.24}",
+          "lineHeight": "{primitive.font.lineHeight.24}",
+          "weight": 700,
+          "letterSpacing": "-0.01em (Latin only)"
+        },
+        "$description": "Page title. One per page. Bold + tight Latin tracking."
+      },
+      "heading-lg": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.18}",
+          "lineHeight": "{primitive.font.lineHeight.18}",
+          "weight": 600
+        },
+        "$description": "Section / card / modal titles."
+      },
+      "heading-md": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.16}",
+          "lineHeight": "{primitive.font.lineHeight.16}",
+          "weight": 600
+        },
+        "$description": "Subsections, drawer titles, empty-state titles."
+      },
+      "heading-sm": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.14}",
+          "lineHeight": "{primitive.font.lineHeight.14}",
+          "weight": 600
+        },
+        "$description": "Group titles inside cards, dense panel headers. Fixed 14/22 (no longer density-bound)."
+      },
+      "body-lg": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.16}",
+          "lineHeight": "{primitive.font.lineHeight.16}",
+          "weight": 400
+        },
+        "$description": "Long-form reading: agent reports, docs, onboarding prose."
+      },
+      "body": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.14}",
+          "lineHeight": "{primitive.font.lineHeight.14}",
+          "weight": 400
+        },
+        "$description": "Default text. Fixed 14/22 (density type re-typesetting removed)."
+      },
+      "body-sm": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.13}",
+          "lineHeight": "{primitive.font.lineHeight.13}",
+          "weight": 400
+        },
+        "$description": "Secondary prose fixed at 13 regardless of density (menu items, toast, meta sentences)."
+      },
+      "label": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.13}",
+          "lineHeight": "{primitive.font.lineHeight.13}",
+          "weight": 500
+        },
+        "$description": "Form labels, table headers, buttons. Fixed 13/20 (no longer density-bound)."
+      },
+      "label-sm": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.12}",
+          "lineHeight": "{primitive.font.lineHeight.12}",
+          "weight": 500
+        },
+        "$description": "Compact labels, nav group headers pair with micro."
+      },
+      "caption": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.12}",
+          "lineHeight": "{primitive.font.lineHeight.12}",
+          "weight": 400
+        },
+        "$description": "Helper text, footnotes, attribution rows."
+      },
+      "micro": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.11}",
+          "lineHeight": "{primitive.font.lineHeight.11}",
+          "weight": 600
+        },
+        "$description": "Badges, kbd hints. Never sentences. Weight 600 by rule: the floor size carries the reinforced weight — 500 fuzzes at 11px, especially Hangul; 700 clogs counters."
+      },
+      "micro-label": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.11}",
+          "lineHeight": "{primitive.font.lineHeight.11}",
+          "weight": 600,
+          "tracking": "0.02em Latin only"
+        },
+        "$description": "Eyebrow/group labels: sidebar groups, palette groups, card eyebrows, chart axis labels. +2% tracking on Latin (Hangul never tracked); NEVER all-caps — tracking does the work caps would."
+      },
+      "code": {
+        "$value": {
+          "family": "mono",
+          "size": "{primitive.font.size.13}",
+          "lineHeight": "{primitive.font.lineHeight.13}",
+          "weight": 400
+        },
+        "$description": "Code blocks, log output."
+      },
+      "code-sm": {
+        "$value": {
+          "family": "mono",
+          "size": "{primitive.font.size.12}",
+          "lineHeight": "{primitive.font.lineHeight.12}",
+          "weight": 400
+        },
+        "$description": "Inline code, IDs in table cells."
+      },
+      "stat-lg": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.30}",
+          "lineHeight": "{primitive.font.lineHeight.30}",
+          "weight": 600,
+          "numeric": "tabular-nums"
+        },
+        "$description": "Hero KPI values."
+      },
+      "stat": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.24}",
+          "lineHeight": "{primitive.font.lineHeight.24}",
+          "weight": 600,
+          "numeric": "tabular-nums"
+        },
+        "$description": "Standard stat-card values."
+      },
+      "stat-sm": {
+        "$value": {
+          "family": "sans",
+          "size": "{primitive.font.size.20}",
+          "lineHeight": "{primitive.font.lineHeight.20}",
+          "weight": 600,
+          "numeric": "tabular-nums"
+        },
+        "$description": "Dense dashboards, inline metrics."
+      }
     },
     "color": {
       "$type": "color",
       "bg": {
-        "page":      { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.black}" } } } },
-        "surface":   { "$value": "{primitive.color.gray.50}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.50}", "dark": "{primitive.color.gray.950}" } } } },
-        "raised":    { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.gray.900}" } } } },
-        "raised-2":  { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.gray.800}" } } }, "$description": "Layer above raised (popover on modal, nested panel). In light mode differentiation comes from border + shadow; in dark mode from this background step. See foundations §1.3 layering model." },
-        "sunken":    { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.950}" } } } },
-        "hover":     { "$value": "{primitive.color.alpha.black-4}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.alpha.black-4}", "dark": "{primitive.color.alpha.white-6}" } } } },
-        "active":    { "$value": "{primitive.color.alpha.black-6}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.alpha.black-6}", "dark": "{primitive.color.alpha.white-10}" } } } },
-        "selected":  { "$value": "{primitive.color.slate.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.100}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Lightened so badge tints keep differentiation on highlighted rows. Sits close to bg.hover — selected states lean on their secondary cues (checkbox, fg.primary + weight in nav, check in menus)." },
-        "selected-hover": { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.700}" } } }, "$description": "Hover on an already-selected row/item." },
-        "disabled":  { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.900}" } } }, "$description": "Fill of disabled controls. Pairs with fg.disabled and border.disabled semantics — never opacity." },
-        "scrim":     { "$value": "{primitive.color.alpha.black-40}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.alpha.black-40}", "dark": "{primitive.color.alpha.black-60}" } } } },
-        "inverse":   { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.white}" } } } },
-        "inverse-soft": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Softened key fill — count overlays and key-color marks that pure black/white would overpower. Pairs with fg.inverse." }
+        "page": {
+          "$value": "{primitive.color.white}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.white}",
+                "dark": "{primitive.color.black}"
+              }
+            }
+          }
+        },
+        "surface": {
+          "$value": "{primitive.color.gray.50}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.50}",
+                "dark": "{primitive.color.gray.950}"
+              }
+            }
+          }
+        },
+        "raised": {
+          "$value": "{primitive.color.white}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.white}",
+                "dark": "{primitive.color.gray.900}"
+              }
+            }
+          }
+        },
+        "raised-2": {
+          "$value": "{primitive.color.white}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.white}",
+                "dark": "{primitive.color.gray.800}"
+              }
+            }
+          },
+          "$description": "Layer above raised (popover on modal, nested panel). In light mode differentiation comes from border + shadow; in dark mode from this background step. See foundations §1.3 layering model."
+        },
+        "sunken": {
+          "$value": "{primitive.color.gray.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.100}",
+                "dark": "{primitive.color.gray.950}"
+              }
+            }
+          }
+        },
+        "hover": {
+          "$value": "{primitive.color.alpha.black-4}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.alpha.black-4}",
+                "dark": "{primitive.color.alpha.white-6}"
+              }
+            }
+          }
+        },
+        "active": {
+          "$value": "{primitive.color.alpha.black-6}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.alpha.black-6}",
+                "dark": "{primitive.color.alpha.white-10}"
+              }
+            }
+          }
+        },
+        "selected": {
+          "$value": "{primitive.color.slate.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.100}",
+                "dark": "{primitive.color.slate.800}"
+              }
+            }
+          },
+          "$description": "Lightened so badge tints keep differentiation on highlighted rows. Sits close to bg.hover — selected states lean on their secondary cues (checkbox, fg.primary + weight in nav, check in menus)."
+        },
+        "selected-hover": {
+          "$value": "{primitive.color.slate.200}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.200}",
+                "dark": "{primitive.color.slate.700}"
+              }
+            }
+          },
+          "$description": "Hover on an already-selected row/item."
+        },
+        "disabled": {
+          "$value": "{primitive.color.gray.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.100}",
+                "dark": "{primitive.color.gray.900}"
+              }
+            }
+          },
+          "$description": "Fill of disabled controls. Pairs with fg.disabled and border.disabled semantics — never opacity."
+        },
+        "scrim": {
+          "$value": "{primitive.color.alpha.black-40}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.alpha.black-40}",
+                "dark": "{primitive.color.alpha.black-60}"
+              }
+            }
+          }
+        },
+        "inverse": {
+          "$value": "{primitive.color.black}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.black}",
+                "dark": "{primitive.color.white}"
+              }
+            }
+          }
+        },
+        "inverse-soft": {
+          "$value": "{primitive.color.gray.800}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.800}",
+                "dark": "{primitive.color.gray.200}"
+              }
+            }
+          },
+          "$description": "Softened key fill — count overlays and key-color marks that pure black/white would overpower. Pairs with fg.inverse."
+        }
       },
-      "fg": {
-        "primary":   { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.gray.100}" } } } },
-        "secondary": { "$value": "{primitive.color.gray.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.600}", "dark": "{primitive.color.gray.400}" } } } },
-        "tertiary":  { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.500}" } } } },
-        "placeholder": { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.500}" } } }, "$description": "Placeholder/example text in inputs and the mixed-value marker. Placeholders never carry required information." },
-        "disabled":  { "$value": "{primitive.color.gray.400}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.400}", "dark": "{primitive.color.gray.600}" } } } },
-        "on-solid":  { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } }, "$description": "Text/icons on any status *-bg-solid fill. Constant white in both modes." },
-        "inverse":   { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.black}" } } } },
-        "link":      { "$value": "{primitive.color.blue.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.600}", "dark": "{primitive.color.blue.300}" } } } },
-        "link-inverse": { "$value": "{primitive.color.blue.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.300}", "dark": "{primitive.color.blue.600}" } } } }
+      "text": {
+        "primary": {
+          "$value": "{primitive.color.black}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.black}",
+                "dark": "{primitive.color.gray.100}"
+              }
+            }
+          }
+        },
+        "secondary": {
+          "$value": "{primitive.color.gray.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.600}",
+                "dark": "{primitive.color.gray.400}"
+              }
+            }
+          }
+        },
+        "tertiary": {
+          "$value": "{primitive.color.gray.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.500}",
+                "dark": "{primitive.color.gray.500}"
+              }
+            }
+          }
+        },
+        "placeholder": {
+          "$value": "{primitive.color.gray.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.500}",
+                "dark": "{primitive.color.gray.500}"
+              }
+            }
+          },
+          "$description": "Placeholder/example text in inputs and the mixed-value marker. Placeholders never carry required information."
+        },
+        "disabled": {
+          "$value": "{primitive.color.gray.400}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.400}",
+                "dark": "{primitive.color.gray.600}"
+              }
+            }
+          }
+        },
+        "on-solid": {
+          "$value": "{primitive.color.white}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.white}",
+                "dark": "{primitive.color.white}"
+              }
+            }
+          },
+          "$description": "Text/icons on any status *-bg-solid fill. Constant white in both modes."
+        },
+        "on-inverse": {
+          "$value": "{primitive.color.white}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.white}",
+                "dark": "{primitive.color.black}"
+              }
+            }
+          }
+        },
+        "link": {
+          "$value": "{primitive.color.blue.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.blue.600}",
+                "dark": "{primitive.color.blue.300}"
+              }
+            }
+          }
+        },
+        "link-on-inverse": {
+          "$value": "{primitive.color.blue.300}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.blue.300}",
+                "dark": "{primitive.color.blue.600}"
+              }
+            }
+          }
+        },
+        "$description": "Text colours (renamed from `fg.*` 2026-07-30). Now that icons have their own family, this scale is text only — matching Atlassian `color.text.*`, Carbon `text-*`, Polaris `--p-color-text`. NOTE the compound `<family>-fg` tokens (`action.primary-fg`, `ai.fg`, `emphasis.fg`) deliberately KEEP the `-fg` suffix: there it means \"the foreground that pairs with this fill\", the same relational concept as Material's `onPrimary` or Carbon's `text-on-color` — a different idea from the standalone text scale. `inverse` became `on-inverse` because it is white text FOR USE ON dark surfaces, the same sense as `on-solid`; `bg.inverse` keeps its name because it IS the surface."
+      },
+      "icon": {
+        "$description": "Dedicated icon colour family (added 2026-07-30). Icons previously drew from `fg.*`; a separate family is what Atlassian (`color.icon.*`), Carbon (a distinct Icon token category) and Polaris (`--p-color-icon`, deliberately a different value from `--p-color-text`) all do — Material 3 is the outlier that unifies them under `onSurface`. **Deliberately NOT a full parallel scale.** The old `@enhans/synapse` shipped `text-*` and `icon-*` as 22 hand-maintained tokens of which **8 of 10 comparable pairs were byte-identical** — 80% duplication kept in sync by hand. Here only `icon.primary` carries a real value; everything else ALIASES its `fg.*` or `status.*` counterpart, so the API surface exists (icons can be retuned independently later without a breaking change) while drift is structurally impossible.",
+        "primary": {
+          "$value": "{primitive.color.gray.900}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.900}",
+                "dark": "{primitive.color.gray.200}"
+              }
+            }
+          },
+          "$description": "The ONE optical override. A stroke icon is more contiguous dark area than a text glyph, so at equal value it reads heavier — icons therefore sit ONE RAMP STEP LESS EXTREME than text: lighter in light mode (`gray.900` vs `fg.primary` black, 16.58:1 vs 19.9:1), darker in dark mode (`gray.200` vs `fg.primary` near-white, 15.56:1 vs 18.11:1). Both old Synapse (`#000000` text / `#262627` icon) and Polaris (`#303030` / `#4A4A4A`) independently landed on the same correction and the same direction. Clears the WCAG 1.4.11 3:1 floor for meaningful non-text content by a wide margin."
+        },
+        "secondary": {
+          "$value": "{semantic.color.text.secondary}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{semantic.color.text.secondary}",
+                "dark": "{semantic.color.text.secondary}"
+              }
+            }
+          },
+          "$description": "Aliased — no optical delta needed at mid-grey; the effect is strongest at high contrast."
+        },
+        "tertiary": {
+          "$value": "{semantic.color.text.tertiary}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{semantic.color.text.tertiary}",
+                "dark": "{semantic.color.text.tertiary}"
+              }
+            }
+          },
+          "$description": "Aliased."
+        },
+        "disabled": {
+          "$value": "{semantic.color.text.disabled}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{semantic.color.text.disabled}",
+                "dark": "{semantic.color.text.disabled}"
+              }
+            }
+          },
+          "$description": "Aliased."
+        },
+        "on-inverse": {
+          "$value": "{semantic.color.text.on-inverse}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{semantic.color.text.on-inverse}",
+                "dark": "{semantic.color.text.on-inverse}"
+              }
+            }
+          },
+          "$description": "Aliased — icons on inverse surfaces."
+        },
+        "info": {
+          "$value": "{semantic.color.status.info}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{semantic.color.status.info}",
+                "dark": "{semantic.color.status.info}"
+              }
+            }
+          },
+          "$description": "Aliased — status icons take the status text token, matching the icon+colour+text triple-redundancy rule."
+        },
+        "success": {
+          "$value": "{semantic.color.status.success}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{semantic.color.status.success}",
+                "dark": "{semantic.color.status.success}"
+              }
+            }
+          },
+          "$description": "Aliased."
+        },
+        "warning": {
+          "$value": "{semantic.color.status.warning}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{semantic.color.status.warning}",
+                "dark": "{semantic.color.status.warning}"
+              }
+            }
+          },
+          "$description": "Aliased."
+        },
+        "danger": {
+          "$value": "{semantic.color.status.danger}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{semantic.color.status.danger}",
+                "dark": "{semantic.color.status.danger}"
+              }
+            }
+          },
+          "$description": "Aliased."
+        }
       },
       "border": {
-        "subtle":  { "$value": "{primitive.color.gray.150}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.150}", "dark": "{primitive.color.gray.800}" } } } },
-        "default": { "$value": "{primitive.color.gray.175}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.175}", "dark": "{primitive.color.gray.700}" } } } },
-        "overlay": { "$value": "transparent", "$extensions": { "synapse": { "modes": { "light": "transparent", "dark": "{primitive.color.gray.700}" } } }, "$description": "Border for floating layers (menus, toasts, tooltips, popovers): none in light mode — soft shadow carries the edge — visible in dark mode where shadows die." },
-        "strong":  { "$value": "{primitive.color.gray.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.300}", "dark": "{primitive.color.gray.600}" } } } },
-        "focus":   { "$value": "{primitive.color.blue.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.500}", "dark": "{primitive.color.blue.300}" } } }, "$description": "Keyboard-focus ring on non-entry controls (buttons, checkboxes, rows, links)." },
-        "focus-input": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Focus perimeter on ENTRY surfaces (Input, Textarea, Select/Combobox/DatePicker triggers) — neutral, not blue ( maintainer ruling): text fields show focus on every click-to-type, so blue overexposed the accent during ordinary form-filling. Softened key tone (gray.800, matching the bg.inverse-soft precedent), never pure black." },
-        "selected": { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.gray.100}" } } }, "$description": "Key-color outline for selected cards/tiles (selection ≠ focus: focus is blue, selection is the key color)." },
-        "error": { "$value": "{primitive.color.red.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.500}", "dark": "{primitive.color.red.300}" } } }, "$description": "Invalid-field borders. Brighter than status.danger text for 3:1 non-text contrast on inputs." }
+        "subtle": {
+          "$value": "{primitive.color.gray.150}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.150}",
+                "dark": "{primitive.color.gray.800}"
+              }
+            }
+          }
+        },
+        "default": {
+          "$value": "{primitive.color.gray.175}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.175}",
+                "dark": "{primitive.color.gray.700}"
+              }
+            }
+          }
+        },
+        "overlay": {
+          "$value": "transparent",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "transparent",
+                "dark": "{primitive.color.gray.700}"
+              }
+            }
+          },
+          "$description": "Border for floating layers (menus, toasts, tooltips, popovers): none in light mode — soft shadow carries the edge — visible in dark mode where shadows die."
+        },
+        "strong": {
+          "$value": "{primitive.color.gray.300}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.300}",
+                "dark": "{primitive.color.gray.600}"
+              }
+            }
+          }
+        },
+        "strong-hover": {
+          "$value": "{primitive.color.gray.400}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.400}",
+                "dark": "{primitive.color.gray.500}"
+              }
+            }
+          },
+          "$description": "Hover step ABOVE border.strong — uncaps the border ladder. The border family encodes state by ladder position rather than a -hover suffix (border.default -> border.strong IS the hover for default-weight elements); before this token, an element resting AT border.strong had nowhere to hover except border.selected (near-black, 19.9:1), which reads as selection. Hairlines are exempt from the 3:1 non-text floor."
+        },
+        "focus": {
+          "$value": "{primitive.color.blue.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.blue.500}",
+                "dark": "{primitive.color.blue.300}"
+              }
+            }
+          },
+          "$description": "Keyboard-focus ring on non-entry controls (buttons, checkboxes, rows, links)."
+        },
+        "focus-input": {
+          "$value": "{primitive.color.gray.800}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.800}",
+                "dark": "{primitive.color.gray.200}"
+              }
+            }
+          },
+          "$description": "Focus perimeter on ENTRY surfaces (Input, Textarea, Select/Combobox/DatePicker triggers) — neutral, not blue ( maintainer ruling): text fields show focus on every click-to-type, so blue overexposed the accent during ordinary form-filling. Softened key tone (gray.800, matching the bg.inverse-soft precedent), never pure black."
+        },
+        "selected": {
+          "$value": "{primitive.color.black}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.black}",
+                "dark": "{primitive.color.gray.100}"
+              }
+            }
+          },
+          "$description": "Key-color outline for selected cards/tiles (selection ≠ focus: focus is blue, selection is the key color)."
+        },
+        "error": {
+          "$value": "{primitive.color.red.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.red.500}",
+                "dark": "{primitive.color.red.300}"
+              }
+            }
+          },
+          "$description": "Invalid-field borders. Brighter than status.danger text for 3:1 non-text contrast on inputs."
+        },
+        "error-hover": {
+          "$value": "{primitive.color.red.600}",
+          "$type": "color",
+          "$description": "Hover step for the error/destructive border. Added 2026-07-30 to close a real defect: outline x destructive had NO hover state, so a coloured outline button gave no feedback that it was live. Mirrors border.strong-hover; red.500 -> red.600 measures dE 10.1, above the dE 8.6 the shipping default step already uses."
+        },
+        "focus-soft": {
+          "$value": "{primitive.color.gray.500}",
+          "$type": "color",
+          "$description": "Softened focus ring for the LIGHT-valued button styles (secondary, outline, ghost). Added 2026-07-30: primary is near-black so the strong dark ring sits naturally on it, but the same ring on a #F4F4F6 or transparent button is far darker than anything else in the control and reads as foreign. Mode-invariant — gray.500 clears 1.4.11 against both pages (3.75:1 on white, 5.30:1 on near-black), so one mid-tone value inverts correctly by context instead of needing a per-mode pair."
+        },
+        "error-soft": {
+          "$value": "{primitive.color.red.500}",
+          "$type": "color",
+          "$description": "Softened destructive focus ring for secondary/outline/ghost. red.500; 4.62:1 light, 4.30:1 dark."
+        }
       },
       "action": {
         "$description": "Key-color actions. Primary action is black-on-light / white-on-dark by brand definition.",
-        "primary-bg":        { "$value": "{primitive.color.black}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.black}", "dark": "{primitive.color.white}" } } } },
-        "primary-bg-hover":  { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } } },
-        "primary-bg-active": { "$value": "{primitive.color.gray.800}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.800}", "dark": "{primitive.color.gray.200}" } } }, "$description": "Aliases hover by maintainer decision — pressed and hover share one fill. Kept as a separate token so they can diverge later without an API change." },
-        "primary-fg":        { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.black}" } } } },
-        "secondary-bg":       { "$value": "{primitive.color.gray.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.100}", "dark": "{primitive.color.gray.800}" } } }, "$description": "Tonal secondary button fill (replaced the outlined secondary). Ghost stays transparent." },
-        "secondary-bg-hover": { "$value": "{primitive.color.gray.150}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.150}", "dark": "{primitive.color.gray.700}" } } } },
-        "brand-bg":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.100}" } } }, "$description": "The POINT / brand color (button variant renamed accent→brand): graphite, inverts by mode (near-black light / near-white dark). Jurisdiction = brand-identity objects + conversational-AI CTAs (Ask agent / Composer send), max 1 per screen. Operational agent actions (Run/Retry/Resume) stay primary/black — invoking the agent conversationally is the sanctioned point moment, executing a configured run is not." },
-        "brand-bg-hover":   { "$value": "{primitive.color.point.400}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.400}", "dark": "{primitive.color.point.200}" } } } },
-        "brand-bg-active":  { "$value": "{primitive.color.point.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.600}", "dark": "{primitive.color.point.200}" } } }, "$description": "Pressed state of the inverting point button." },
-        "brand-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.point.500}" } } } },
-        "danger-fg":         { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.white}" } } } }
+        "primary-bg": {
+          "$value": "{primitive.color.black}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.black}",
+                "dark": "{primitive.color.white}"
+              }
+            }
+          }
+        },
+        "primary-bg-hover": {
+          "$value": "{primitive.color.gray.800}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.800}",
+                "dark": "{primitive.color.gray.200}"
+              }
+            }
+          }
+        },
+        "primary-fg": {
+          "$value": "{primitive.color.white}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.white}",
+                "dark": "{primitive.color.black}"
+              }
+            }
+          }
+        },
+        "secondary-bg": {
+          "$value": "{primitive.color.gray.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.100}",
+                "dark": "{primitive.color.gray.800}"
+              }
+            }
+          },
+          "$description": "Tonal secondary button fill (replaced the outlined secondary). Ghost stays transparent."
+        },
+        "secondary-bg-hover": {
+          "$value": "{primitive.color.gray.150}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.150}",
+                "dark": "{primitive.color.gray.700}"
+              }
+            }
+          }
+        },
+        "brand-bg": {
+          "$value": "{primitive.color.azure.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.500}",
+                "dark": "{primitive.color.azure.500}"
+              }
+            }
+          },
+          "$description": "BRAND = bright azure (2026-07-30, second re-hue). azure.500 #0073E6 in BOTH modes. White label clears AA at 4.57:1 so normal weight holds and the §9 solid-label deviation does NOT apply. Distinct from `blue` (indigo), which stays the functional info/link/focus hue: brand is saturated azure, functional is muted indigo."
+        },
+        "brand-bg-hover": {
+          "$value": "{primitive.color.azure.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.600}",
+                "dark": "{primitive.color.azure.600}"
+              }
+            }
+          },
+          "$description": "Hover DARKENS in both modes (6.19:1). Every azure step lighter than 500 fails white-label contrast (400 = 2.91:1), so a bright brand physically cannot lighten on hover — unlike action.primary, which lightens in light mode."
+        },
+        "brand-fg": {
+          "$value": "{primitive.color.white}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.white}",
+                "dark": "{primitive.color.white}"
+              }
+            }
+          },
+          "$description": "White both modes, normal weight — brand clears AA, unlike `danger` which needs semibold."
+        },
+        "danger-fg": {
+          "$value": "{primitive.color.white}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.white}",
+                "dark": "{primitive.color.white}"
+              }
+            }
+          }
+        },
+        "secondary-danger-bg": {
+          "$value": "{primitive.color.red.50}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.red.50}",
+                "dark": "{primitive.color.red.950}"
+              }
+            }
+          },
+          "$description": "Tonal coloured Button fill (buttonStyle=secondary × target=destructive), added 2026-07-30 with the two-axis Button API. Deliberately one ramp step LIGHTER than status.danger-bg so a tonal coloured button is not byte-identical to the subtle Banner/Badge tint — the hover step lands on the status tint, which is acceptable because hover is transient. Label is status.danger. Rest 5.61:1 / hover 5.07:1 in light; all four states clear AA in both modes."
+        },
+        "secondary-danger-bg-hover": {
+          "$value": "{primitive.color.red.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.red.100}",
+                "dark": "{primitive.color.red.900}"
+              }
+            }
+          },
+          "$description": "Hover for the tonal destructive Button. Darkens in light, lightens in dark — matching the neutral secondary's direction per mode."
+        },
+        "secondary-brand-bg": {
+          "$value": "{primitive.color.azure.50}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.50}",
+                "dark": "{primitive.color.azure.950}"
+              }
+            }
+          },
+          "$description": "Tonal brand Button fill — retuned to azure with the brand re-hue."
+        },
+        "secondary-brand-bg-hover": {
+          "$value": "{primitive.color.azure.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.100}",
+                "dark": "{primitive.color.azure.900}"
+              }
+            }
+          },
+          "$description": "Tonal brand hover."
+        },
+        "secondary-brand-fg": {
+          "$value": "{primitive.color.azure.700}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.700}",
+                "dark": "{primitive.color.azure.300}"
+              }
+            }
+          },
+          "$description": "Label for the tonal brand Button — azure.700, NOT fg.link. fg.link is indigo (the info hue) and would put functional blue on a brand fill. 7.63/6.98 light, 8.58/7.06 dark."
+        },
+        "brand-border": {
+          "$value": "{primitive.color.azure.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.500}",
+                "dark": "{primitive.color.azure.300}"
+              }
+            }
+          },
+          "$description": "Border for outline x target=brand. Previously borrowed border.focus, which is indigo — functional blue on a brand control. Now azure."
+        },
+        "brand-fg-on-page": {
+          "$value": "{primitive.color.azure.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.600}",
+                "dark": "{primitive.color.azure.300}"
+              }
+            }
+          },
+          "$description": "Brand LABEL on an unfilled surface — outline x brand and ghost x brand. 6.19:1 on bg.page."
+        },
+        "brand-border-hover": {
+          "$value": "{primitive.color.azure.600}",
+          "$type": "color",
+          "$description": "Hover step for the brand outline border. Same defect as border.error-hover. azure.500 -> azure.600 measures dE 18.5. Value equals action.brand-bg-hover; kept as a separate token because a border and a fill are different roles and the brand fill may be retuned without dragging the outline with it."
+        },
+        "brand-border-soft": {
+          "$value": "{primitive.color.azure.500}",
+          "$type": "color",
+          "$description": "Softened brand focus ring for secondary/outline/ghost. azure.500; 4.57:1 light, 4.35:1 dark. azure.400 was rejected at 3.10:1 light — too little margin above the 3:1 floor."
+        }
       },
       "status": {
-        "info":            { "$value": "{primitive.color.blue.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.600}", "dark": "{primitive.color.blue.300}" } } } },
-        "info-bg":         { "$value": "{primitive.color.blue.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.100}", "dark": "{primitive.color.blue.900}" } } } },
-        "success":         { "$value": "{primitive.color.green.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.green.600}", "dark": "{primitive.color.green.300}" } } } },
-        "success-bg":      { "$value": "{primitive.color.green.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.green.100}", "dark": "{primitive.color.green.900}" } } } },
-        "warning":         { "$value": "{primitive.color.amber.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.amber.600}", "dark": "{primitive.color.amber.300}" } } } },
-        "warning-bg":      { "$value": "{primitive.color.amber.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.amber.100}", "dark": "{primitive.color.amber.900}" } } } },
-        "danger":          { "$value": "{primitive.color.red.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.600}", "dark": "{primitive.color.red.300}" } } } },
-        "danger-bg":       { "$value": "{primitive.color.red.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.100}", "dark": "{primitive.color.red.900}" } } } },
-        "danger-bg-solid": { "$value": "{primitive.color.red.400}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.400}", "dark": "{primitive.color.red.400}" } } }, "$description": "Light-leaning resting fill, ~3.4:1 with white under §8 policy — labels on it are semibold. Hover darkens to red.500 (AA)." },
-        "danger-bg-solid-hover": { "$value": "{primitive.color.red.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.500}", "dark": "{primitive.color.red.500}" } } }, "$description": "Hover/pressed fill — darkens from the resting red.400 and passes AA with white." },
-        "info-bg-solid":    { "$value": "{primitive.color.blue.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.500}", "dark": "{primitive.color.blue.500}" } } } },
-        "success-bg-solid": { "$value": "{primitive.color.green.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.green.500}", "dark": "{primitive.color.green.500}" } } }, "$description": "Mid fill + fg.on-solid white at ~3.5:1 — documented policy deviation from AA for short solid labels (foundations §9)." },
-        "warning-bg-solid": { "$value": "{primitive.color.amber.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.amber.500}", "dark": "{primitive.color.amber.500}" } } }, "$description": "Mid fill + fg.on-solid white at ~3.5:1 — documented policy deviation from AA for short solid labels (foundations §9)." },
-        "info-inverse":    { "$value": "{primitive.color.blue.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.blue.300}", "dark": "{primitive.color.blue.600}" } } } },
-        "success-inverse": { "$value": "{primitive.color.green.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.green.300}", "dark": "{primitive.color.green.600}" } } } },
-        "warning-inverse": { "$value": "{primitive.color.amber.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.amber.300}", "dark": "{primitive.color.amber.600}" } } } },
-        "danger-inverse":  { "$value": "{primitive.color.red.300}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.red.300}", "dark": "{primitive.color.red.600}" } } } }
+        "info": {
+          "$value": "{primitive.color.blue.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.blue.600}",
+                "dark": "{primitive.color.blue.300}"
+              }
+            }
+          }
+        },
+        "info-bg": {
+          "$value": "{primitive.color.blue.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.blue.100}",
+                "dark": "{primitive.color.blue.900}"
+              }
+            }
+          }
+        },
+        "success": {
+          "$value": "{primitive.color.green.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.green.600}",
+                "dark": "{primitive.color.green.300}"
+              }
+            }
+          }
+        },
+        "success-bg": {
+          "$value": "{primitive.color.green.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.green.100}",
+                "dark": "{primitive.color.green.900}"
+              }
+            }
+          }
+        },
+        "warning": {
+          "$value": "{primitive.color.amber.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.amber.600}",
+                "dark": "{primitive.color.amber.300}"
+              }
+            }
+          }
+        },
+        "warning-bg": {
+          "$value": "{primitive.color.amber.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.amber.100}",
+                "dark": "{primitive.color.amber.900}"
+              }
+            }
+          }
+        },
+        "danger": {
+          "$value": "{primitive.color.red.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.red.600}",
+                "dark": "{primitive.color.red.300}"
+              }
+            }
+          }
+        },
+        "danger-bg": {
+          "$value": "{primitive.color.red.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.red.100}",
+                "dark": "{primitive.color.red.900}"
+              }
+            }
+          }
+        },
+        "danger-bg-solid": {
+          "$value": "{primitive.color.red.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.red.400}",
+                "dark": "{primitive.color.red.400}"
+              }
+            }
+          },
+          "$description": "Solid danger fill. Shifted red.400 -> red.500 on 2026-07-30: a white label now clears AA at 4.62:1 with NORMAL weight, so the §9 solid-label deviation no longer applies to danger. Chosen over red.400 because 3.99:1 sat on the delete-confirmation button, the one control where a misread has consequences."
+        },
+        "danger-bg-solid-hover": {
+          "$value": "{primitive.color.red.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.red.500}",
+                "dark": "{primitive.color.red.500}"
+              }
+            }
+          },
+          "$description": "Hover step for the solid danger fill, red.500 -> red.600. Shares red.600 with status.danger (the danger TEXT token) — deliberate reuse; a solid fill and text on the page never touch, so there is no visual collision."
+        },
+        "info-bg-solid": {
+          "$value": "{primitive.color.blue.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.blue.500}",
+                "dark": "{primitive.color.blue.500}"
+              }
+            }
+          }
+        },
+        "success-bg-solid": {
+          "$value": "{primitive.color.green.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.green.500}",
+                "dark": "{primitive.color.green.500}"
+              }
+            }
+          },
+          "$description": "Mid fill + fg.on-solid white at ~3.5:1 — documented policy deviation from AA for short solid labels (foundations §9)."
+        },
+        "warning-bg-solid": {
+          "$value": "{primitive.color.amber.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.amber.500}",
+                "dark": "{primitive.color.amber.500}"
+              }
+            }
+          },
+          "$description": "Mid fill + fg.on-solid white at ~3.5:1 — documented policy deviation from AA for short solid labels (foundations §9)."
+        },
+        "info-on-inverse": {
+          "$value": "{primitive.color.blue.300}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.blue.300}",
+                "dark": "{primitive.color.blue.600}"
+              }
+            }
+          }
+        },
+        "success-on-inverse": {
+          "$value": "{primitive.color.green.300}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.green.300}",
+                "dark": "{primitive.color.green.600}"
+              }
+            }
+          }
+        },
+        "warning-on-inverse": {
+          "$value": "{primitive.color.amber.300}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.amber.300}",
+                "dark": "{primitive.color.amber.600}"
+              }
+            }
+          }
+        },
+        "danger-on-inverse": {
+          "$value": "{primitive.color.red.300}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.red.300}",
+                "dark": "{primitive.color.red.600}"
+              }
+            }
+          }
+        }
       },
       "meter": {
         "$description": "Progress/meter fills. Non-text elements — 3:1 floor against the sunken track.",
-        "fill": { "$value": "{primitive.color.gray.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.gray.500}", "dark": "{primitive.color.gray.400}" } } }, "$description": "Default (user-initiated work). AI runs use action.brand-bg; failed uses status.danger-bg-solid." }
+        "fill": {
+          "$value": "{primitive.color.gray.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.gray.500}",
+                "dark": "{primitive.color.gray.400}"
+              }
+            }
+          },
+          "$description": "Default (user-initiated work). AI runs use action.brand-bg; failed uses status.danger-bg-solid."
+        }
       },
-      "viz-bg": {
-        "$description": "Category tint fills — SOLID (opaque) viz tints, mode-aware. Replaces color-mix(...,transparent) alpha fills; alpha is reserved for bg.hover/active/scrim only. Pairs with viz-text.",
-        "1": { "$value": "#DEE5F9", "$extensions": { "synapse": { "modes": { "light": "#DEE5F9", "dark": "#2A314A" } } } },
-        "2": { "$value": "#DCEFE8", "$extensions": { "synapse": { "modes": { "light": "#DCEFE8", "dark": "#283B39" } } } },
-        "3": { "$value": "#F4E9D5", "$extensions": { "synapse": { "modes": { "light": "#F4E9D5", "dark": "#403526" } } } },
-        "4": { "$value": "#F3DFDF", "$extensions": { "synapse": { "modes": { "light": "#F3DFDF", "dark": "#3F2B2F" } } } },
-        "5": { "$value": "#E8E2F4", "$extensions": { "synapse": { "modes": { "light": "#E8E2F4", "dark": "#342E45" } } } },
-        "6": { "$value": "#DCEDF3", "$extensions": { "synapse": { "modes": { "light": "#DCEDF3", "dark": "#283944" } } } },
-        "7": { "$value": "#F0E2ED", "$extensions": { "synapse": { "modes": { "light": "#F0E2ED", "dark": "#3C2E3D" } } } },
-        "8": { "$value": "#E4E6E8", "$extensions": { "synapse": { "modes": { "light": "#E4E6E8", "dark": "#303239" } } } }
-      },
-      "viz-text": {
-        "$description": "Category-chip label text — darkened (light mode) / lightened (dark mode) viz hues, AA-verified on the viz 20% tint. Chip labels ONLY; raw viz-* is chart-swatch-only and fails AA as text.",
-        "1": { "$value": "#4761AF", "$extensions": { "synapse": { "modes": { "light": "#4761AF", "dark": "#7F99E7" } } } },
-        "2": { "$value": "#34735C", "$extensions": { "synapse": { "modes": { "light": "#34735C", "dark": "#5AB392" } } } },
-        "3": { "$value": "#85611E", "$extensions": { "synapse": { "modes": { "light": "#85611E", "dark": "#CC993B" } } } },
-        "4": { "$value": "#9A4A4A", "$extensions": { "synapse": { "modes": { "light": "#9A4A4A", "dark": "#D18787" } } } },
-        "5": { "$value": "#6E59A1", "$extensions": { "synapse": { "modes": { "light": "#6E59A1", "dark": "#A692D6" } } } },
-        "6": { "$value": "#366F85", "$extensions": { "synapse": { "modes": { "light": "#366F85", "dark": "#5DAAC9" } } } },
-        "7": { "$value": "#88547C", "$extensions": { "synapse": { "modes": { "light": "#88547C", "dark": "#C28CB5" } } } },
-        "8": { "$value": "#5F656F", "$extensions": { "synapse": { "modes": { "light": "#5F656F", "dark": "#979EA7" } } } }
+      "viz": {
+        "$description": "Chart series colours — the SEMANTIC layer over `primitive.color.viz` (added 2026-07-30 to fix a structural bug: `--sy-viz-*` was previously written straight into the CSS from the primitive tier, making viz the only family in the system that bypassed the semantic layer and the only shipped variable that was a raw primitive). Consumers reference these, never the primitives. Charts ONLY — UI identity tints are `category-*`. Fixed order, assign in sequence, never skip.",
+        "1": {
+          "$value": "{primitive.color.viz.1}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.viz.1}",
+                "dark": "{primitive.color.viz.1}"
+              }
+            }
+          },
+          "$description": "Chart series 1. Per-mode values live on the primitive; light #016BE4 / dark #0158BC."
+        },
+        "2": {
+          "$value": "{primitive.color.viz.2}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.viz.2}",
+                "dark": "{primitive.color.viz.2}"
+              }
+            }
+          },
+          "$description": "Chart series 2. Per-mode values live on the primitive; light #01B75C / dark #037D40."
+        },
+        "3": {
+          "$value": "{primitive.color.viz.3}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.viz.3}",
+                "dark": "{primitive.color.viz.3}"
+              }
+            }
+          },
+          "$description": "Chart series 3. Per-mode values live on the primitive; light #A27201 / dark #8E6401."
+        },
+        "4": {
+          "$value": "{primitive.color.viz.4}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.viz.4}",
+                "dark": "{primitive.color.viz.4}"
+              }
+            }
+          },
+          "$description": "Chart series 4. Per-mode values live on the primitive; light #FE5D58 / dark #FE8E8A."
+        },
+        "5": {
+          "$value": "{primitive.color.viz.5}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.viz.5}",
+                "dark": "{primitive.color.viz.5}"
+              }
+            }
+          },
+          "$description": "Chart series 5. Per-mode values live on the primitive; light #7A03E2 / dark #7D01E9."
+        },
+        "6": {
+          "$value": "{primitive.color.viz.6}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.viz.6}",
+                "dark": "{primitive.color.viz.6}"
+              }
+            }
+          },
+          "$description": "Chart series 6. Per-mode values live on the primitive; light #01A9CB / dark #05C9F0."
+        },
+        "7": {
+          "$value": "{primitive.color.viz.7}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.viz.7}",
+                "dark": "{primitive.color.viz.7}"
+              }
+            }
+          },
+          "$description": "Chart series 7. Per-mode values live on the primitive; light #CB0188 / dark #CD048A."
+        },
+        "8": {
+          "$value": "{primitive.color.viz.8}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.viz.8}",
+                "dark": "{primitive.color.viz.8}"
+              }
+            }
+          },
+          "$description": "Chart series 8. Per-mode values live on the primitive; light #215100 / dark #49D204."
+        }
       },
       "brand": {
         "$description": "Brand-identity objects. The graphite point (inverts by mode) marks the brand: the topbar workspace monogram tile, the docs-hub/preview brand mark, and the sanctioned Artific brand-hero moment. Logo lockups & marketing surfaces also use point. NOT for general chrome — the frame stays monochrome; the point is the single deliberate brand pop.",
-        "point":    { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.100}" } } } },
-        "point-fg": { "$value": "{primitive.color.white}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.white}", "dark": "{primitive.color.point.500}" } } } }
+        "point": {
+          "$value": "{primitive.color.point.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.point.500}",
+                "dark": "{primitive.color.point.100}"
+              }
+            }
+          }
+        },
+        "point-fg": {
+          "$value": "{primitive.color.white}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.white}",
+                "dark": "{primitive.color.point.500}"
+              }
+            }
+          }
+        }
       },
       "ai": {
-        "$description": "Surfaces and marks that identify agent/AI presence.: FULL slate theme — surfaces, borders, fg and solid fills all draw from slate. The squared avatar is the primary agency marker; ai.* slate treatments support it. Blue no longer appears on AI (accent deprecated). Distinct from emphasis.* in semantics even where values match. See ai-patterns.md §1.",
-        "surface":       { "$value": "{primitive.color.slate.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.100}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Dark mode uses slate.800 (one step up from slate.900) so the AI surface separates from bg.raised without a border." },
-        "surface-hover": { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.700}" } } }, "$description": "Hover state for interactive AI fills; dark tracks the lightened ai.surface (slate.700)." },
-        "border":        { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.800}" } } }, "$description": "Hairline weight; slate. AI surfaces are layered (tinted zone on a neutral card), never outlined in saturated color." },
-        "fg":            { "$value": "{primitive.color.slate.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.600}", "dark": "{primitive.color.slate.300}" } } }, "$description": ": slate — the full-slate AI theme. The squared avatar is THE agency marker; ai.fg marks support it." },
-        "solid":         { "$value": "{primitive.color.point.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.point.500}", "dark": "{primitive.color.point.100}" } } }, "$description": "Solid AI fills for ACTIVE running states (live-activity beacon Badge, in-progress ai ProgressBar) — the graphite point, inverts by mode. The point marks AI at work; idle/complete/surface stay slate (ai.surface/border/fg unchanged). Pairs with fg.on-solid under the §8 solid-label ≥3:1 policy." }
+        "$description": "Surfaces and marks that identify agent/AI presence.: FULL slate theme — surfaces, borders, fg and solid fills all draw from slate. The squared avatar is the primary agency marker; ai.* slate treatments support it. AI *emphasis* (ai.solid) is blue as of 2026-07-30, tracking action.brand-*; AI *surfaces* remain fully slate. Distinct from emphasis.* in semantics even where values match. See ai-patterns.md §1.",
+        "surface": {
+          "$value": "{primitive.color.slate.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.100}",
+                "dark": "{primitive.color.slate.800}"
+              }
+            }
+          },
+          "$description": "Dark mode uses slate.800 (one step up from slate.900) so the AI surface separates from bg.raised without a border."
+        },
+        "surface-hover": {
+          "$value": "{primitive.color.slate.200}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.200}",
+                "dark": "{primitive.color.slate.700}"
+              }
+            }
+          },
+          "$description": "Hover state for interactive AI fills; dark tracks the lightened ai.surface (slate.700)."
+        },
+        "border": {
+          "$value": "{primitive.color.slate.200}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.200}",
+                "dark": "{primitive.color.slate.800}"
+              }
+            }
+          },
+          "$description": "Hairline weight; slate. AI surfaces are layered (tinted zone on a neutral card), never outlined in saturated color."
+        },
+        "fg": {
+          "$value": "{primitive.color.slate.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.600}",
+                "dark": "{primitive.color.slate.300}"
+              }
+            }
+          },
+          "$description": ": slate — the full-slate AI theme. The squared avatar is THE agency marker; ai.fg marks support it."
+        },
+        "solid": {
+          "$value": "{primitive.color.azure.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.500}",
+                "dark": "{primitive.color.azure.500}"
+              }
+            }
+          },
+          "$description": "Solid AI fills for ACTIVE running states. Tracks action.brand-bg (azure as of 2026-07-30) so the beacon and the AI CTA cannot drift. AI *surfaces* stay fully slate."
+        }
       },
       "glass": {
         "$description": "FAUX-GLASS (reactivated) — the AppLauncher surface reads as frosted glass using an OPAQUE frosted tint (glass.surface) + a top rim highlight (glass.rim) + soft hairline (glass.border), NOT translucency. There is NO backdrop-filter: SY015 still forbids it, and glass.blur/glass.filter remain dormant. Chosen because a real translucent blur over an austere mostly-light app reads muddy (see below). CommandPalette and Modals/Drawers stay opaque bg.raised. Historical translucent spec follows (dormant). The glass material — two tints chosen by the surface behind (foundations §6). The tint always INVERTS the surface so the pane reads as glass: DARK glass over light/neutral surfaces (light theme), LIGHT glass over dark/colorful surfaces (dark theme). Text is fg.inverse (white on dark glass, ink on light glass), so legibility holds regardless of what's behind. Unscrimmed floating overlays only — CommandPalette and AppLauncher (the Composer follow-up panel is solid bg.raised, not glass). Scrimmed layers (Modal, Drawer) stay opaque. reduced-transparency falls back opaque (bg.inverse for dark glass, bg.raised for light). backdrop-filter legal ONLY as var(--sy-glass-filter) or blur(var(--sy-glass-blur)) (SY015). Edge recipe: bright top rim + inner ring on dark glass; soft neutral hairline + gentle rim on light glass (glass.border + shadow.glass).",
-        "surface": { "$value": "#F6F8FB", "$extensions": { "synapse": { "modes": { "light": "#F6F8FB", "dark": "#262B33" } } }, "$description": "Opaque frosted panel fill (faux-glass). Light: cool luminous near-white; dark: graphite lifted above bg.raised." },
-        "blur":    { "$value": "26px", "$type": "dimension" },
-        "filter":  { "$value": "blur(26px) saturate(1.5) brightness(1.12)", "$extensions": { "synapse": { "modes": { "light": "blur(26px) saturate(1.5) brightness(1.12)", "dark": "blur(26px) saturate(1.4) brightness(1.05)" } } } },
-        "border":  { "$value": "#E4E9F0", "$extensions": { "synapse": { "modes": { "light": "#E4E9F0", "dark": "#363C46" } } } },
-        "rim":     { "$value": "#FFFFFF", "$extensions": { "synapse": { "modes": { "light": "#FFFFFF", "dark": "#3C424C" } } }, "$description": "Top inner-rim highlight (inset 0 1px 0) that gives the faux-glass its luminous edge." },
-        "accent":  { "$value": "#33333B", "$extensions": { "synapse": { "modes": { "light": "#33333B", "dark": "#E4E4E7" } } } },
-        "selected": { "$value": "rgba(255, 255, 255, 0.10)", "$extensions": { "synapse": { "modes": { "light": "rgba(255, 255, 255, 0.10)", "dark": "rgba(9, 9, 11, 0.06)" } } } }
+        "surface": {
+          "$value": "#F6F8FB",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#F6F8FB",
+                "dark": "#262B33"
+              }
+            }
+          },
+          "$description": "Opaque frosted panel fill (faux-glass). Light: cool luminous near-white; dark: graphite lifted above bg.raised."
+        },
+        "blur": {
+          "$value": "26px",
+          "$type": "dimension"
+        },
+        "filter": {
+          "$value": "blur(26px) saturate(1.5) brightness(1.12)",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "blur(26px) saturate(1.5) brightness(1.12)",
+                "dark": "blur(26px) saturate(1.4) brightness(1.05)"
+              }
+            }
+          }
+        },
+        "border": {
+          "$value": "#E4E9F0",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#E4E9F0",
+                "dark": "#363C46"
+              }
+            }
+          }
+        },
+        "rim": {
+          "$value": "#FFFFFF",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#FFFFFF",
+                "dark": "#3C424C"
+              }
+            }
+          },
+          "$description": "Top inner-rim highlight (inset 0 1px 0) that gives the faux-glass its luminous edge."
+        },
+        "accent": {
+          "$value": "#33333B",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "#33333B",
+                "dark": "#E4E4E7"
+              }
+            }
+          }
+        },
+        "selected": {
+          "$value": "rgba(255, 255, 255, 0.10)",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "rgba(255, 255, 255, 0.10)",
+                "dark": "rgba(9, 9, 11, 0.06)"
+              }
+            }
+          }
+        }
       },
       "emphasis": {
         "$description": "Quiet emphasis without vibrant color. Closed job list (hero stat card removed): table emphasis column/cell fill, timeline/calendar now-markers. Selected states (bg.selected) also draw from slate. Anti-collision rule: AI surfaces always carry a squared avatar or ai.fg text — a bare cool tint alone NEVER signals AI, and emphasis.* is never used on AI surfaces.",
-        "surface": { "$value": "{primitive.color.slate.100}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.100}", "dark": "{primitive.color.slate.900}" } } } },
-        "border":  { "$value": "{primitive.color.slate.200}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.200}", "dark": "{primitive.color.slate.800}" } } } },
-        "fg":      { "$value": "{primitive.color.slate.600}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.600}", "dark": "{primitive.color.slate.300}" } } } },
-        "fg-soft": { "$value": "{primitive.color.slate.500}", "$extensions": { "synapse": { "modes": { "light": "{primitive.color.slate.500}", "dark": "{primitive.color.slate.400}" } } }, "$description": "Soft emphasis marks where a FILL carries the visual mass (the favorite star). One step above the 3:1 non-text floor vs surfaces — gate-checked; nothing lighter is legal for stateful marks. Never for text." }
+        "surface": {
+          "$value": "{primitive.color.slate.100}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.100}",
+                "dark": "{primitive.color.slate.900}"
+              }
+            }
+          }
+        },
+        "border": {
+          "$value": "{primitive.color.slate.200}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.200}",
+                "dark": "{primitive.color.slate.800}"
+              }
+            }
+          }
+        },
+        "fg": {
+          "$value": "{primitive.color.slate.600}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.600}",
+                "dark": "{primitive.color.slate.300}"
+              }
+            }
+          }
+        },
+        "fg-soft": {
+          "$value": "{primitive.color.slate.500}",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.slate.500}",
+                "dark": "{primitive.color.slate.400}"
+              }
+            }
+          },
+          "$description": "Soft emphasis marks where a FILL carries the visual mass (the favorite star). One step above the 3:1 non-text floor vs surfaces — gate-checked; nothing lighter is legal for stateful marks. Never for text."
+        }
       }
     }
   },
-
   "density": {
     "$description": "Control & layout dimensions (density modes removed; single scale). Tables use the compact table-row/table-cell-x by default. content-max is the reading-column cap; data regions go fluid as a layout choice.",
     "control": {
       "$type": "dimension",
-      "height-sm": { "$value": "32px" },
-      "height-md": { "$value": "36px" },
-      "height-lg": { "$value": "40px" },
-      "padding-x": { "$value": "12px" },
-      "gap":       { "$value": "12px" }
+      "height-sm": {
+        "$value": "32px"
+      },
+      "height-md": {
+        "$value": "36px"
+      },
+      "height-lg": {
+        "$value": "40px"
+      },
+      "padding-x": {
+        "$value": "12px",
+        "$description": "DEPRECATED ALIAS as of 2026-07-30 — equals padding-x-md. New code reads the per-size token."
+      },
+      "gap": {
+        "$value": "12px"
+      },
+      "height-xs": {
+        "$value": "24px",
+        "$type": "dimension",
+        "$description": "xs control height. RECOVERED 2026-07-30 — this token shipped in synapse.css but was never added to the JSON source of truth, so the canonical file did not describe a size the system renders. Exactly the CSS/JSON parity gap recorded as audit Defect 7; nothing gates it."
+      },
+      "padding-x-xs": {
+        "$value": "{primitive.space.2}",
+        "$type": "dimension",
+        "$description": "Horizontal control padding at the xs step. Added 2026-07-30 — padding was the only Button dimension that did not step per size (height, radius, label size all did), leaving xs at a padding:height ratio of 0.50 and lg cramped at 0.30. Ladder 8/10/12/16, all on the space scale; md keeps the old single value so the default size is unchanged."
+      },
+      "padding-x-sm": {
+        "$value": "{primitive.space.2_5}",
+        "$type": "dimension",
+        "$description": "Horizontal control padding at the sm step. Added 2026-07-30 — padding was the only Button dimension that did not step per size (height, radius, label size all did), leaving xs at a padding:height ratio of 0.50 and lg cramped at 0.30. Ladder 8/10/12/16, all on the space scale; md keeps the old single value so the default size is unchanged."
+      },
+      "padding-x-md": {
+        "$value": "{primitive.space.3}",
+        "$type": "dimension",
+        "$description": "Horizontal control padding at the md step. Added 2026-07-30 — padding was the only Button dimension that did not step per size (height, radius, label size all did), leaving xs at a padding:height ratio of 0.50 and lg cramped at 0.30. Ladder 8/10/12/16, all on the space scale; md keeps the old single value so the default size is unchanged."
+      },
+      "padding-x-lg": {
+        "$value": "{primitive.space.4}",
+        "$type": "dimension",
+        "$description": "Horizontal control padding at the lg step. Added 2026-07-30 — padding was the only Button dimension that did not step per size (height, radius, label size all did), leaving xs at a padding:height ratio of 0.50 and lg cramped at 0.30. Ladder 8/10/12/16, all on the space scale; md keeps the old single value so the default size is unchanged."
+      }
     },
     "layout": {
       "$type": "dimension",
-      "page-padding":   { "$value": "32px" },
-      "section-gap":    { "$value": "40px" },
-      "card-padding":   { "$value": "28px" },
-      "stack-gap":      { "$value": "16px" },
-      "table-row":      { "$value": "36px", "$description": "Compact by default — tables run tight regardless of context." },
-      "table-cell-x":   { "$value": "12px" },
-      "content-max":    { "$value": "760px", "$description": "Reading-column cap; workbench/data regions go fluid per patterns.md §1 (a layout choice, not a density mode)." }
+      "page-padding": {
+        "$value": "32px"
+      },
+      "section-gap": {
+        "$value": "40px"
+      },
+      "card-padding": {
+        "$value": "28px"
+      },
+      "stack-gap": {
+        "$value": "16px"
+      },
+      "table-row": {
+        "$value": "36px",
+        "$description": "Compact by default — tables run tight regardless of context."
+      },
+      "table-cell-x": {
+        "$value": "12px"
+      },
+      "content-max": {
+        "$value": "760px",
+        "$description": "Reading-column cap; workbench/data regions go fluid per patterns.md §1 (a layout choice, not a density mode)."
+      }
     }
   }
 }

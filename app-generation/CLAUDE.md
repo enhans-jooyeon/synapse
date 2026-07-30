@@ -13,7 +13,7 @@
 | TextPrimary | #09090B |
 | TextSecondary | #62626B |
 | Brand | #0621C4 |
-| Error | #DB504D |
+| Error | #D2403E |
 | Success | #1F9D5B |
 | Background/0 | #ffffff |
 | Background/50 | #FAFAFB |

@@ -15,7 +15,7 @@ The top block of every Object and Workbench page.
 space-1
 [heading-xl page title] [Badge status, size lg] [actions: ≤1 primary/accent + ≤1 secondary + overflow menu]
 space-1
-[caption fg.tertiary meta line: owner · updated timestamp · id]
+[caption text.tertiary meta line: owner · updated timestamp · id]
 space-6
 ```
 
@@ -28,7 +28,7 @@ Above any content section or data region.
 ```
 [heading-lg] [count Badge] [≤1 secondary or ghost action]
 space-1
-[body-sm fg.secondary one-line description] ← optional
+[body-sm text.secondary one-line description] ← optional
 space-4
 ```
 
@@ -42,7 +42,7 @@ Inside Card: `heading-md` (or `heading-lg` for page-dominant cards) + optional t
 
 2–6 `stat` Cards in an equal-column grid, gutter `space-6`.
 
-Stat card internals (fixed order): `label` `fg.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row**: 12px `trending-up`/`trending-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `fg.tertiary` comparison period ("vs last week" / "전주 대비").
+Stat card internals (fixed order): `label` `text.secondary` title → `stat` value (`stat-lg` if the grid has ≤3 cards; stat styles carry −1% numeral tracking) with optional right-aligned **sparkline** on the same baseline row (64×24, 1.5px `viz.1` stroke, no fill, `aria-hidden`) → **delta row**: 12px `trending-up`/`trending-down` registry icon + 12 medium tabular text, colored by direction of *goodness* (`status.success`/`status.danger`) — never a Badge (a badge inside a stat card is a box inside a box) → `caption` `text.tertiary` comparison period ("vs last week" / "전주 대비").
 
 ## R5 · Action pair & footer conventions
 
@@ -67,7 +67,7 @@ Dense workbench control strip: height 40px, items gap `space-2`, groups separate
 ## R8 · Form section
 
 ```
-[heading-md] + optional [body-sm fg.secondary description]
+[heading-md] + optional [body-sm text.secondary description]
 space-4
 [fields, stack-gap] ← single column, patterns.md §3
 space-6
@@ -83,11 +83,11 @@ Sequential flow indicator for Guided archetypes (composed, not a component). **N
 [step dot/number 20px] — [label label-role] — [connector 1px border.default line] — …
 ```
 
-States: done (key-color fill + check), current (key-color ring + `fg.primary` label), upcoming (`border.strong` ring + `fg.tertiary` label). Compact variant: "2/4" `label` `fg.tertiary` + 4-dot row. Horizontal ≤5 steps; vertical with descriptions for onboarding checklists.
+States: done (key-color fill + check), current (key-color ring + `text.primary` label), upcoming (`border.strong` ring + `text.tertiary` label). Compact variant: "2/4" `label` `text.tertiary` + 4-dot row. Horizontal ≤5 steps; vertical with descriptions for onboarding checklists.
 
 ## R10 · Topbar
 
-App-frame top strip (when a product surface needs one in addition to Sidebar): height 48px, `bg.surface`, full-bleed bottom `border.subtle`. Left: context (workspace switcher — ghost Button: **20px squared monogram tile** (`bg.inverse` fill, `fg.inverse` letter, radius `xs` — the frame's one deliberate dark object) + workspace name + chevron). Center: nothing (search lives in ⌘K). Right: solid Banner slot (system-critical only) never here — it pins *above* the topbar; then notification bell (icon-button + count Badge), help, Avatar 32 menu.
+App-frame top strip (when a product surface needs one in addition to Sidebar): height 48px, `bg.surface`, full-bleed bottom `border.subtle`. Left: context (workspace switcher — ghost Button: **20px squared monogram tile** (`bg.inverse` fill, `text.on-inverse` letter, radius `xs` — the frame's one deliberate dark object) + workspace name + chevron). Center: nothing (search lives in ⌘K). Right: solid Banner slot (system-critical only) never here — it pins *above* the topbar; then notification bell (icon-button + count Badge), help, Avatar 32 menu.
 
 ## R11 · Key-value panel
 

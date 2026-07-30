@@ -20,7 +20,7 @@ What is deliberately NOT proposed: zebra striping, decorative illustration, glas
 
 ## Tranche 2 — micro-typography & data texture
 
-**2a. New type style `micro-label`** (20th style): 11px medium, +0.02em tracking (Latin only; Hangul exempt per foundations §2.3), fg.tertiary. Jurisdiction: table headers, sidebar group labels, palette group labels, card eyebrow labels, axis labels. This is the single cheapest "finished product" signal in the reference set — currently these five surfaces each improvise 11px styling.
+**2a. New type style `micro-label`** (20th style): 11px medium, +0.02em tracking (Latin only; Hangul exempt per foundations §2.3), text.tertiary. Jurisdiction: table headers, sidebar group labels, palette group labels, card eyebrow labels, axis labels. This is the single cheapest "finished product" signal in the reference set — currently these five surfaces each improvise 11px styling.
 **2b. Table header pass.** Apply `micro-label`, drop header fill on framed tables from `bg.surface` to transparent-with-hairline (the fill adds weight without signal), sort glyph reserved-space so columns don't shift on sort.
 **2c. Keycap kbd.** Kbd hints become true keycaps: sunken fill, hairline border, **2px bottom border** (stepped edge — border, not shadow), radius-xs, mono 11. Applied in palette, tooltips, menu shortcut column.
 

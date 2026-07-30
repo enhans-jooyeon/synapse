@@ -33,7 +33,7 @@ Data tables, dashboards, monitoring, queues, logs.
 Detail view of one entity (a project, an agent run, a document).
 
 - Content max-width `--sy-content-max` (760px) centered, except when embedding a data table which MAY extend to 1200px.
-- Structure: Breadcrumb → **header block** (title 24/34, meta line of Badges + `fg.tertiary` timestamps, actions right: max primary + secondary + overflow menu) → Tabs (if the object has facets) → stacked content sections (`--sy-section-gap`).
+- Structure: Breadcrumb → **header block** (title 24/34, meta line of Badges + `text.tertiary` timestamps, actions right: max primary + secondary + overflow menu) → Tabs (if the object has facets) → stacked content sections (`--sy-section-gap`).
 - Related records inside an Object page render as an embedded Table region — with a visible container boundary (Card frame).
 
 ### C. Settings
@@ -47,7 +47,7 @@ Detail view of one entity (a project, an agent run, a document).
 Onboarding, wizards, empty first-run, irreversible decisions. The only archetype where Display type (30/40, 36/48) and `lg` buttons are permitted — and, alongside EmptyState and full-page status states, one of the sanctioned homes for **illustration** (foundations §8.1): first-run heroes and feature-intro cards MAY carry a curated spot illustration (one per surface).
 
 - Single centered column, max-width 560px, generous `--sy-space-16` top offset.
-- Multi-step flows: step indicator (13 medium, `fg.tertiary` "2/4" or dot row — composed from primitives, this is the sanctioned "stepper"), one decision per step, primary continue + ghost back.
+- Multi-step flows: step indicator (13 medium, `text.tertiary` "2/4" or dot row — composed from primitives, this is the sanctioned "stepper"), one decision per step, primary continue + ghost back.
 
 ### E. Console
 
@@ -98,7 +98,7 @@ The workspace's start surface: today's state plus the conversational entry.
 ```
 Records with comparable fields → Table
 Visual/preview-led records → Card grid (2–4 col)
-Single figure + trend → Stat card (label 13 medium fg.secondary,
+Single figure + trend → Stat card (label 13 medium text.secondary,
                                         value 24 semibold tabular-nums, delta Badge)
 Trends over time → line chart · Composition → stacked bar
 Distribution → bar/histogram · NEVER pie beyond 3 slices

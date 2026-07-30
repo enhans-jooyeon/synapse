@@ -13,10 +13,10 @@ The App Generation catalog arrived on a divergent (pre-v6.x) token set. This map
 
 | Old | v1.0.0 | Synapse token |
 |---|---|---|
-| `#000000` TextPrimary | `#09090B` | `--sy-fg-primary` |
-| `#808081` TextSecondary / Gray-600 | `#62626B` | `--sy-fg-secondary` |
-| `#b2b2b3` text-tertiary | `#83838D` | `--sy-fg-tertiary` |
-| `#262627` Gray-900 / dark surface | `#09090B` | `--sy-bg-inverse` / `--sy-fg-primary` |
+| `#000000` TextPrimary | `#09090B` | `--sy-text-primary` |
+| `#808081` TextSecondary / Gray-600 | `#62626B` | `--sy-text-secondary` |
+| `#b2b2b3` text-tertiary | `#83838D` | `--sy-text-tertiary` |
+| `#262627` Gray-900 / dark surface | `#09090B` | `--sy-bg-inverse` / `--sy-text-primary` |
 | `#e5e5e6` Border-100 / Gray-300 | `#E9E9ED` | `--sy-border-default` |
 | `#d9d9da` Border-200 (`#cfcfcf` legacy typo) | `#D1D1D8` | `--sy-border-strong` |
 | `#f2f2f3` Gray-200 / `#f7f7f8` bg-100 | `#F4F4F6` | `--sy-bg-sunken` |
@@ -28,7 +28,7 @@ The App Generation catalog arrived on a divergent (pre-v6.x) token set. This map
 | Old | v1.0.0 | Synapse token |
 |---|---|---|
 | `#10b978` Success | `#1F9D5B` | `--sy-status-success-bg-solid` |
-| `#e6483d` Error | `#DB504D` | `--sy-status-danger-bg-solid` |
+| `#e6483d` Error | `#D2403E` | `--sy-status-danger-bg-solid` |
 
 ## Radius (CSS)
 
