@@ -1,0 +1,43 @@
+component,source,old_api,v1_replacement,mode,sites,rule
+Button,shadcn,"variant=""link""","Link, or buttonStyle=ghost",review,?,Navigates → Link. Acts → ghost. Decide per site; see components.md Link §decision table. GET THE COUNT — this is the largest unknown in the plan.
+Button,shadcn,"size=""icon"" / size=""icon-sm""",buttonType=icon (approved glyphs only) OR icon + visible label,review,?,"Allowed bare only for close, more, edit, delete, copy, refresh, expand/collapse, settings. Anything else gains a label. GET THE COUNT."
+Button,both,disabled:opacity-50,bg.disabled + text.disabled + border.subtle,mechanical-per-component,?,Cannot be a token swap — opacity multiplies through descendants. foundations §1.2. Apply the component’s own disabled recipe.
+Button,shadcn,asChild,render (same slot semantics),mechanical,?,ADDED to v1 2026-07-30. Prop may keep the asChild name; behaviour is identical.
+Button,old,"buttonStyle=""tertiary""","buttonStyle=""secondary""",mechanical,43,Rename only — the tonal tier kept the secondary name so no token renames.
+Button,old,"buttonStyle=""secondary""","buttonStyle=""outline""",mechanical,43,Rename only.
+Button,shadcn,"variant=""outline""","buttonStyle=""outline""",mechanical,?,v1 HAS outline. Do NOT flatten to the tonal secondary — that was an error in the 07-29 prop sheet.
+Button,shadcn,"variant=""destructive""","target=""destructive""",mechanical,?,"Two-axis API: target, not variant."
+Button,old,"size=""xs""","size=""xs"" (kept)",none,?,xs was retained for inline cases. The 07-29 sheet said xs→sm; that is stale.
+Button,old,tailIcon,trailing affordance icon (closed set),review,?,Exists in v1. Closed set — verify the glyph is sanctioned.
+Badge,both,"color={hex} / theme=""purple""",one of neutral|info|success|warning|danger|ai,review,154,"Map by MEANING not hue. A purple category badge → neutral, not ai. ai is reserved for agent output."
+Badge,old,active,Chip selected,mechanical,?,Selection is interaction → Chip. This is where the retired neutral solid went.
+Badge,old,"badgeStyle=""light"" / ""filled""","emphasis=""subtle"" / ""solid""",mechanical,71,Rename.
+Badge,shadcn,"variant=""secondary"" / ""default""","emphasis=""subtle"" color=""neutral""",review,83,NOT neutral+solid — that combination is retired. Grey badges become subtle.
+Chip,old,tag (colour dot),Badge dot variant,review,13,"Chip owns selection, Badge owns colour-keyed status. If the thing is selectable AND colour-coded, split it."
+Chip,old,tailIcon,— none,drop,?,Chip has one trailing slot and it is the remove ✕.
+Radio,shadcn,"indicatorType=""check""",the dot (default),mechanical,8,Circle+dot vs box+check is the only pre-click signal of single vs multi choice. Large check-marked options are ChoiceCard.
+Switch,old,"labelPosition=""left""",label right + DescriptionList row layout,review,10,"Label is always right. For a far-apart settings row, change the LAYOUT, not the label side."
+Tooltip,both,TooltipArrow / tip / tipPosition,— none,drop,77,Ruled 2026-07-30: no floating surface in the system has an arrow. No replacement.
+Tabs,old,DynamicTabs,"Tabs variant=""editable""",mechanical,16,ADDED to v1 2026-07-30. + button disables at 7.
+Tabs,shadcn,icon-only triggers,icon + label,review,?,An icon alone cannot carry a user-named view.
+Textarea,old,Textarea.Actions,Textarea action bar,mechanical,19,"ADDED to v1 2026-07-30. Max 2 buttons, secondary/ghost only."
+Modal,old,DialogHeaderWithAction,Modal header action slot,mechanical,35,ADDED to v1 2026-07-30. One ghost action; if it resolves the modal it belongs in the footer.
+Modal,shadcn,showCloseButton={false},hideClose,mechanical,126,BOOLEAN INVERSION — the classic codemod bug. Require a test.
+Drawer,shadcn,"side=""top""","Modal, or Banner for non-blocking notice",review,?,Top edge is app chrome. Forbidden with no direct substitute.
+Drawer,shadcn,"side=""bottom""",Drawer (responsive — bottom below 768 automatically),mechanical,?,"ADDED to v1 2026-07-30 as a responsive rendering, NOT an author-set side. Drop the prop."
+Drawer,shadcn,"side=""left""","Sidebar, or right-side Drawer",review,?,Left is reserved for Sidebar.
+Menu,shadcn,DropdownMenuShortcut,Menu Kbd slot (.sy-kbd),mechanical,?,ADDED to v1 2026-07-30. Same rendering as Tooltip and CommandPalette.
+Menu,shadcn,CheckboxItem / RadioItem,Menu items with leading Checkbox / Radio,mechanical,42,"Already specified via Select/Combobox multi-select menus, incl. pinned select-all with mixed state."
+Menu,shadcn,DropdownMenuSub (2+ levels),flatten to one level,review,?,One level of submenu is allowed; deeper is forbidden.
+Pagination,old,pageSize,page-size Select (already specified),mechanical,13,"Exists — ""optional page-size Select in dense tables""."
+ProgressBar,old,.Header / .Value subparts,the anatomy label row,mechanical,14,"Exists as anatomy: description left, ""N of M"" or percent right."
+Progress,shadcn,indicatorColor,variant (default|ai|danger|success),mechanical,12,Rename to the closed variant set.
+Select,old,options={[...]} array API,compound Trigger/Value/Content/Item,rewrite,26,"Structural rewrite, not a rename."
+Combobox,old,"trigger=""search"" / ""input""",Combobox (async + creatable already specified),review,69,Covers the old Autocomplete too — no separate component needed.
+Slider,old,.Control showStepper / showMinMax,Slider min/max display (specified),mechanical,?,Exists.
+Sheet→Drawer,shadcn,import { Sheet },Drawer,mechanical,17,Renamed component.
+Toast,old,toast() / Toaster queue,Toast (visual) + app-owned queue,decide,1,Spec mentions the queue; the built package does not export an imperative API. Engineering decision: library ships it or the app owns it.
+FileUpload,old,Uploader strategy / onUploadComplete,Dropzone + FileRow + app-owned transport,decide,1,v1 is presentational. Upload transport stays in the app.
+AlertDialog,shadcn,AlertDialog,Modal (destructive/typed confirm) or Popconfirm (simple),review,62,"RULE: destructive, or requires typed confirmation → Modal. Everything else → Popconfirm. Makes it mechanical."
+Popover,shadcn,Popover,Popover / Menu,build-drift,78,"EXISTS in the design system. The built package does not export it — that is a build task, not a design gap."
+SortableList / WhatIfPanel / ThemeSwitcher / WidgetGrid,old,—,out of scope,none,?,BI/domain. Confirm once in the tracker so it is not re-litigated per feature.

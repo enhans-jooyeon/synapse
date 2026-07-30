@@ -1,0 +1,83 @@
+group,old_tailwind_class,old_hex,new_sy_token,new_hex_light,status,note
+Text,text-text-primary,#000000,--sy-text-primary,#09090B,direct,Pure black → near-black.
+Text,text-text-primary-disabled,#d9d9da,--sy-text-disabled,#A9A9B2,review,New disabled fg is darker/more legible.
+Text,text-text-secondary,#808081,--sy-text-secondary,#62626B,direct,Slightly darker.
+Text,text-text-secondary-disabled,#f2f2f3,--sy-text-disabled,#A9A9B2,review,New system has ONE disabled fg; old two collapse into it.
+Text,text-text-tertiary,#b2b2b3,--sy-text-tertiary,#83838D,direct,
+Text,text-text-inverted,#ffffff,--sy-text-on-inverse,#FFFFFF,direct,
+Text,text-text-inverted-disabled,#f7f7f8,--sy-text-on-inverse,#FFFFFF,review,"RESOLVED (no new token). The old token was never a disabled treatment: #f7f7f8 on the old inverse #262627 runs 14.12:1 vs plain white's 15.12:1 — a 1.0 delta, visually identical to enabled. Mapping to fg-inverse is behaviour-preserving. A real on-inverse disabled affordance would be a governance proposal (foundations.md §glass: an inverse-surface context requires every component to carry an on-dark variant); no bg.inverse surface in the new system renders disabled text."
+Text,text-text-error,#e6483d,--sy-status-danger,#B23230,review,New danger TEXT deepened for AA; #e6483d survives as the solid fill.
+Text,text-text-success,#10b978,--sy-status-success,#0E7A42,review,New success TEXT deepened for AA; #10b978 survives as the solid fill.
+Text,text-text-brand,#0a84ff,--sy-text-link,#3155C6,review,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Brand-blue-as-link -> functional link blue. If it was an accent rather than a link, see the brand note in the README."
+Text,text-text-syntax,#64748b,--sy-text-secondary,#62626B,direct,"RESOLVED (no new token, by design). Code/ID/mono TEXT is text.secondary (components.md Table §id row). Syntax HIGHLIGHTING is deliberately untokenized: 'one muted theme system-wide, ≤5 colors drawn from viz + fg tokens, defined once at implementation' (components.md CodeBlock §Syntax theme)."
+Background,bg-background-0,#ffffff,--sy-bg-page,#FFFFFF,direct,
+Background,bg-background-0-hover,#fbfbfc,--sy-bg-hover,"rgba(9,9,11,0.04)",review,New hovers are alpha overlays; solid nearest is --sy-bg-surface.
+Background,bg-background-50,#fbfbfc,--sy-bg-surface,#FAFAFB,direct,Subtle surface.
+Background,bg-background-50-hover,#f7f7f8,--sy-bg-sunken,#F4F4F6,direct,
+Background,bg-background-100,#f7f7f8,--sy-bg-sunken,#F4F4F6,review,"Old card/INPUT fill. Cards → --sy-bg-surface; text inputs are now white+outlined, not filled grey."
+Background,bg-background-100-hover,#f2f2f3,--sy-bg-sunken,#F4F4F6,direct,
+Background,bg-background-200,#f2f2f3,--sy-bg-sunken,#F4F4F6,direct,Elevated surface.
+Background,bg-background-200-hover,#e5e5e6,--sy-bg-active,"rgba(9,9,11,0.06)",review,New uses an alpha active overlay.
+Background,bg-background-track,#e5e5e6,--sy-bg-sunken,#F4F4F6,direct,Slider/Switch track.
+Background,bg-background-inverted,#262627,--sy-bg-inverse,#09090B,direct,
+Background,bg-background-inverted-hover,#666667,--sy-bg-inverse-soft,#33333A,direct,
+Background,bg-background-brand,#0a84ff,--sy-action-brand-bg,#3155C6,review,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Brand IS azure in v0.13.6, and the new brand is blue.600 -> hue-preserving. Still decide per element: AI/brand CTA -> --sy-action-brand-bg; ordinary primary -> --sy-action-primary-bg #09090B; info surface -> --sy-status-info-bg."
+Background,bg-background-brand-light,#e6f2ff,--sy-status-info-bg,#E4EAFB,direct,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). #e6f2ff is old blue-50; new info tint E4EAFB is new blue.100. Light brand tint -> info tint, same role, near-same value."
+Background,bg-background-highlight,#e2e8f0,--sy-bg-selected,#EFF3F7,review,Selection/highlight surface.
+Background,bg-background-highlight-light,#f8fafc,--sy-bg-selected,#EFF3F7,review,Subtle highlight; or --sy-bg-surface if not selection.
+Border,border-border-100,#e5e5e6,--sy-border-default,#E9E9ED,direct,
+Border,border-border-100-hover,#d9d9da,--sy-border-strong,#D1D1D8,direct,
+Border,border-border-200,#d9d9da,--sy-border-strong,#D1D1D8,direct,
+Border,border-border-200-hover,#b2b2b3,--sy-border-strong,#D1D1D8,review,New has one 'strong' border; old 200/300 collapse in.
+Border,border-border-300,#b2b2b3,--sy-border-strong,#D1D1D8,review,
+Border,border-border-300-hover,#808081,--sy-border-strong-hover,#A9A9B2,direct,"RESOLVED by adding a token (2026-07-30), superseding the earlier squash to border-strong. The border ladder was capped at border.strong; --sy-border-strong-hover (gray.400) is the hover step above it. This old token now has a true 1:1 target."
+Border,border-border-500,#64748b,--sy-ai-border,#DCE3EB,review,"RESOLVED (no new token) — CONDITIONAL, the one row needing FE-side inspection. Slate is now the AI-surface family: if this bordered an AI/slate surface → --sy-ai-border; otherwise → --sy-border-strong. NOTE this is a role reassignment, not a value swap (#64748b = 4.76:1 on white; ai-border = 1.29:1) because the new system forbids tint + saturated outline."
+Border,border-border-900,#262627,--sy-border-selected,#09090B,direct,Darkest border → selected (near-black).
+Border,border-border-inverted,#ffffff,--sy-text-on-inverse,#FFFFFF,direct,Border on dark surfaces.
+Border,border-border-success,#6ee7b7,--sy-status-success-bg,#DCF2E6,review,"RESOLVED (no new token, by design). Success surfaces are borderless tints: Banner `subtle` is 'borderless status.*-bg fill, status.* text — no border, no rail' and 'tint + saturated outline remains the forbidden wireframe formula' (components.md Banner/Alert). border.error exists only as a form-field validation perimeter, and there is no success field state — principled asymmetry, not an oversight."
+Border,border-border-success-hover,#10b978,--sy-status-success-bg,#DCF2E6,review,"RESOLVED (no new token, by design). Same as border-border-success: no success outline exists to hover. If a success surface needs an interactive step, use the tint's hover on the container, not a saturated border."
+Border,border-border-error,#ff5c51,--sy-border-error,#D2403E,direct,Dedicated error border exists.
+Border,border-border-error-hover,#e6483d,--sy-border-error,#D2403E,direct,
+Border,border-border-brand,#369aff,--sy-border-focus,#3D63DD,review,Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Old blue-400 brand border -> functional focus blue.
+Border,border-border-brand-hover,#0a84ff,--sy-border-focus,#3D63DD,review,Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Old brand border hover -> the single new focus token (new focus has no hover step).
+Icon,text-icon-primary,#262627,--sy-icon-primary,#1E1E24,direct,"Verified against @enhans/synapse v0.13.6. CORRECTED 2026-07-30 — the new system now has a DEDICATED icon family, so this no longer collapses into fg-primary. Old #262627 -> new icon-primary #1E1E24: both are one ramp step lighter than their text counterpart, for the same optical reason (a stroke icon reads heavier than a glyph at equal value). Near 1:1."
+Icon,text-icon-primary-disabled,#d9d9da,--sy-icon-disabled,#A9A9B2,review,Verified against @enhans/synapse v0.13.6. -> icon-disabled (aliases fg-disabled).
+Icon,text-icon-secondary,#808081,--sy-icon-secondary,#62626B,direct,Verified against @enhans/synapse v0.13.6. -> icon-secondary (aliases fg-secondary; no optical delta at mid-grey).
+Icon,text-icon-secondary-disabled,#e5e5e6,--sy-icon-disabled,#A9A9B2,review,Verified against @enhans/synapse v0.13.6. Old had three icon-disabled steps; new has one.
+Icon,text-icon-tertiary,#b2b2b3,--sy-icon-tertiary,#83838D,direct,Verified against @enhans/synapse v0.13.6. -> icon-tertiary (aliases fg-tertiary).
+Icon,text-icon-tertiary-disabled,#f7f7f8,--sy-icon-disabled,#A9A9B2,review,Verified against @enhans/synapse v0.13.6. Collapses into the single icon-disabled.
+Icon,text-icon-inverted,#ffffff,--sy-icon-on-inverse,#FFFFFF,direct,Verified against @enhans/synapse v0.13.6. -> icon-inverse.
+Icon,text-icon-error,#e6483d,--sy-icon-danger,#B23230,review,Verified against @enhans/synapse v0.13.6. -> icon-danger (aliases status-danger; deepened for AA — #e6483d survives as the solid fill).
+Icon,text-icon-success,#10b978,--sy-icon-success,#0E7A42,review,Verified against @enhans/synapse v0.13.6. -> icon-success (aliases status-success).
+Icon,text-icon-brand,#0a84ff,--sy-icon-info,#3155C6,review,Verified against @enhans/synapse v0.13.6. Old brand-blue icon -> icon-info (functional indigo). Use --sy-action-brand-fg-on-page (azure) if it marked a brand/AI action rather than information.
+Button,bg-button-primary,#262627,--sy-action-primary-bg,#09090B,direct,Primary = black (new is truer black).
+Button,bg-button-primary-hover,#4d4d4c,--sy-action-primary-bg-hover,#33333A,direct,
+Button,bg-button-primary-disabled,#e5e5e6,--sy-bg-disabled,#F4F4F6,review,Pair text with --sy-text-disabled.
+Button,bg-button-secondary,#ffffff,--sy-action-secondary-bg,#F4F4F6,review,Secondary bg white → light grey. For outlined-white use --sy-bg-page + --sy-border-default.
+Button,bg-button-secondary-hover,#fbfbfc,--sy-action-secondary-bg-hover,#ECECEF,direct,
+Button,bg-button-tertiary,#f2f2f3,--sy-action-secondary-bg,#F4F4F6,review,No tertiary button in new system — folds into secondary.
+Button,bg-button-tertiary-hover,#e5e5e6,--sy-action-secondary-bg-hover,#ECECEF,review,
+Button,bg-button-tertiary-disabled,#f7f7f8,--sy-bg-disabled,#F4F4F6,review,
+Button,bg-button-ghost,transparent,(transparent),transparent,direct,Ghost stays transparent.
+Button,bg-button-ghost-hover,#fbfbfc,--sy-bg-hover,"rgba(9,9,11,0.04)",review,Ghost hover is now an alpha overlay.
+Button,bg-button-destructive,#e6483d,--sy-status-danger-bg-solid,#D2403E,direct,"Destructive solid fill. Value changed 2026-07-30: red.400 -> red.500 so a white label clears AA at 4.62:1 with normal weight. Old #e6483d -> #D2403E is now a CLOSER match than before (delta-E 30.5 vs 35.0)."
+Button,bg-button-destructive-hover,#c4342a,--sy-status-danger-bg-solid-hover,#B23230,direct,Hover moved red.500 -> red.600 with the rest-state shift. Shares red.600 with status.danger (the danger TEXT token) by design.
+Button,bg-button-destructive-disabled,#ffa59f,--sy-bg-disabled,#F4F4F6,review,"RESOLVED by adding a token (2026-07-30), superseding the earlier squash. Fill -> neutral --sy-bg-disabled; the danger hue moves to the LABEL via the new --sy-action-danger-fg-disabled #DB504D (3.63:1). Old #ffa59f ran 1.89:1 with white and is not carried over. A pale-red FILL was rejected: it renders identically to the subtle danger Banner/Badge."
+Button,bg-button-brand,#0a84ff,--sy-action-brand-bg,#3155C6,direct,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Near-mechanical swap: old azure brand button -> new brand blue. Reserved for conversational-AI CTAs (Ask agent / Composer send), max 1/screen; operational agent actions (Run/Retry/Resume) stay --sy-action-primary-bg."
+Button,bg-button-brand-hover,#006bd6,--sy-action-brand-bg-hover,#3D63DD,review,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Direction FLIPPED: old hover darkened (#0a84ff -> #006bd6); new hover lightens in light mode (blue.600 -> blue.500) and darkens in dark mode. Use the token, never hand-derive."
+Button,bg-button-brand-disabled,#e2e8f0,--sy-bg-disabled,#F4F4F6,review,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Old #e2e8f0 is slate-200 — a cool tinted disabled fill. New fill is neutral --sy-bg-disabled with the hue moved to the label via --sy-action-brand-fg-disabled #3D63DD (4.75:1). So v0.13.6 DID tint brand-disabled, which retroactively justifies that token."
+Radius,rounded-small (4px),4px,--sy-radius-xs,4px,direct,
+Radius,rounded-medium (6px),6px,--sy-radius-sm,8px,review,6→8. Control radius is size-relative now: sm8/md10/lg12; buttons/inputs usually → --sy-radius-control-md.
+Radius,rounded-large (8px),8px,--sy-radius-sm,8px,review,Value matches; cards use --sy-radius-lg 16px in new system.
+Radius,rounded-xlarge (12px),12px,--sy-radius-md,12px,direct,
+Radius,rounded-round,9999px,--sy-radius-full,9999px,direct,
+Chart,chart-0 blue,#3b82f6,--sy-viz-1,#5B7CE0,direct,Categorical ramp by index.
+Chart,chart-1 green,#10b981,--sy-viz-2,#4FAE8B,direct,
+Chart,chart-2 yellow,#eab308,--sy-viz-3,#C9932E,direct,
+Chart,chart-3 red,#ef4444,--sy-viz-4,#C15D5D,direct,
+Chart,chart-4 purple,#a855f7,--sy-viz-5,#8A6FC9,direct,
+Chart,chart-5 teal,#14b8a6,--sy-viz-6,#4FA3C4,direct,
+Chart,chart-6 pink,#ec4899,--sy-viz-7,#B36FA3,direct,
+Chart,chart-7 lime,#84cc16,--sy-viz-8,#7A828E,review,"New viz-8 is a NEUTRAL grey, not lime — reassign if lime carried meaning."
+Button,bg-button-secondary-disabled,#ffffff,--sy-bg-disabled,#F4F4F6,review,"ADDED 2026-07-30 — missing from the original map, found by auditing component token usage. Old secondary-disabled was WHITE (no visual disabled signal at all); the new system uses the neutral bg-disabled fill in every variant with the label carrying the state."
+Button,bg-button-ghost-disabled,transparent,--sy-bg-disabled,#F4F4F6,review,"ADDED 2026-07-30 — missing from the original map. Old ghost-disabled was TRANSPARENT. New: disabled is a fill in every variant (components.md Button §States, ""40% opacity is forbidden""), so a disabled ghost now gains the grey fill — a deliberate appearance change."

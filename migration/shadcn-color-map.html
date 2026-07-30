@@ -1,0 +1,321 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>shadcn → Synapse v1 colour token map</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Pretendard,system-ui,sans-serif;color:#09090B;background:#FAFAFB;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 28px 90px}
+h1{font-size:26px;font-weight:640;letter-spacing:-.02em;margin:0 0 8px}
+.sub{color:#62626B;margin:0 0 4px;max-width:760px}
+.sub code{background:#F4F4F6;padding:1px 5px;border-radius:4px;font-size:12px}
+.warn{margin:22px 0 0;padding:13px 16px;background:#FBEED3;border-radius:10px;font-size:13px;color:#5C3B00;line-height:1.5}
+.warn b{color:#3d2700}
+.stats{display:flex;gap:10px;margin:24px 0 10px;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid #E9E9ED;border-radius:12px;padding:12px 16px;min-width:112px}
+.stat b{display:block;font-size:22px;font-weight:640;letter-spacing:-.02em}
+.stat span{font-size:11.5px;color:#83838D;text-transform:uppercase;letter-spacing:.05em}
+.bar{position:sticky;top:0;z-index:9;background:rgba(250,250,251,.9);backdrop-filter:blur(10px);padding:14px 0 12px;margin-bottom:6px;border-bottom:1px solid #E9E9ED;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input[type=search]{flex:1;min-width:170px;height:34px;padding:0 12px;border:1px solid #E9E9ED;border-radius:8px;font:inherit;font-size:13px;background:#fff}
+input[type=search]:focus{outline:2px solid #3D63DD;outline-offset:2px;border-color:#33333A}
+button{height:34px;padding:0 13px;border:1px solid #E9E9ED;border-radius:8px;background:#fff;font:inherit;font-size:12.5px;cursor:pointer;color:#09090B}
+button:hover{background:#F4F4F6}button.on{background:#09090B;color:#fff;border-color:#09090B}
+button:focus-visible{outline:2px solid #3D63DD;outline-offset:2px}
+section{margin:26px 0 0}
+h2{font-size:12px;font-weight:640;text-transform:uppercase;letter-spacing:.07em;color:#62626B;margin:0 0 10px;display:flex;align-items:baseline;gap:10px}
+.cnt{font-weight:400;text-transform:none;letter-spacing:0;font-size:11.5px;color:#A9A9B2}
+.r{display:grid;grid-template-columns:1fr 150px 20px 1fr 74px;gap:12px;align-items:center;background:#fff;border:1px solid #E9E9ED;border-radius:10px 10px 0 0;padding:11px 14px;margin-top:9px}
+.r+.note{border-radius:0 0 10px 10px;border:1px solid #E9E9ED;border-top:0;margin-top:0}
+.r.split,.r.decide{border-left:3px solid #BA7C14}
+.note{background:#FAFAFB;padding:10px 14px;font-size:12.5px;color:#62626B;line-height:1.55}
+.note code{background:#F4F4F6;padding:1px 4px;border-radius:3px;font-size:11.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.note b{color:#09090B}
+.opts{margin:8px 0 2px;padding:0;list-style:none}
+.opts li{padding:5px 0 5px 16px;position:relative;border-top:1px dashed #E9E9ED}
+.opts li:before{content:"○";position:absolute;left:0;color:#D1D1D8}
+.opts li.rec:before{content:"●";color:#0E7A42}
+code.sc{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;font-weight:600;display:block}
+.use{font-size:11.5px;color:#83838D;display:block;margin-top:1px}
+.pair{display:flex;align-items:center;gap:6px;font-size:11.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#62626B}
+.pair+.pair{margin-top:4px}
+.pair.sy code{font-size:11.5px;color:#09090B}
+.pair.rec code{font-weight:640}
+.pair i{width:15px;height:15px;border-radius:4px;flex:0 0 15px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.10)}
+.pair em{font-style:normal;color:#A9A9B2;font-size:10.5px}
+.arw{color:#D1D1D8;text-align:center}
+.chip{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;padding:3px 7px;border-radius:5px;font-weight:600}
+.chip.direct{background:#DCF2E6;color:#0E7A42}
+.chip.split{background:#FBEED3;color:#8C5A00}
+.chip.decide,.chip.locked{background:#DCF2E6;color:#0E7A42}
+.r.locked{border-left:3px solid #0E7A42}
+.ok-note{margin:22px 0 0;padding:13px 16px;background:#DCF2E6;border-radius:10px;font-size:13px;color:#0B5B33;line-height:1.5}
+.ok-note b{color:#083F24}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #E9E9ED;border-radius:10px;overflow:hidden;font-size:12.5px}
+td{padding:7px 12px;border-top:1px solid #F4F4F6}
+tr:first-child td{border-top:0}
+td.n{font-family:ui-monospace,Menlo,monospace;text-align:right;width:66px}
+td.m{color:#A9A9B2;width:48px;font-size:11px}
+td.mn{color:#A9A9B2}
+tr.bad td.n{color:#B23230}
+.reg{color:#B23230}.fix{color:#0E7A42}
+.gap{background:#fff;border:1px solid #E9E9ED;border-radius:10px;padding:4px 16px;margin-top:10px}
+.gap li{list-style:none;padding:10px 0;border-top:1px solid #F4F4F6;display:flex;gap:12px;align-items:baseline}
+.gap li:first-child{border-top:0}
+.gap code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:#F4F4F6;padding:2px 6px;border-radius:4px;white-space:nowrap;flex:0 0 auto}
+.gap span{color:#62626B;font-size:12.5px}
+.hide{display:none!important}
+@media(max-width:840px){.r{grid-template-columns:1fr;gap:7px}.arw{display:none}.c4{margin-top:2px}}
+</style>
+<div class="wrap">
+<h1>shadcn → Synapse v1 · colour token map</h1>
+<p class="sub">All <b>32</b> shadcn semantic colour tokens mapped to shipped <code>--sy-*</code> tokens. Mapping is <b>role-based, not value-based</b> — shadcn token names describe roles, so this holds even though your app's hex values differ from shadcn stock. Left-hand values shown are shadcn's stock defaults, for reference only.</p>
+<div class="ok-note"><b>All 32 rulings are locked, and there are no contrast regressions.</b> Every mapped pair holds or improves in both modes, and three fix existing failures. The one regression this table originally surfaced — <code>bg-destructive</code> landing a white label at 3.99:1 — was resolved at the source rather than papered over: <code>--sy-status-danger-bg-solid</code> shifted <code>red.400 #DB504D</code> → <code>red.500 #D2403E</code> on 2026-07-30, clearing AA at <b>4.62:1 with normal weight</b>. Danger has been removed from the §9 solid-label deviation, the validator pair was tightened from the 3:1 policy floor to 4.5:1, and <b>the codemod no longer needs to touch font weight.</b></div>
+<div class="stats">
+ <div class="stat"><b>32</b><span>shadcn tokens</span></div>
+ <div class="stat"><b>25</b><span>direct</span></div>
+ <div class="stat"><b>7</b><span>rulings — all locked</span></div>
+ <div class="stat"><b>1,557</b><span>muted-foreground sites</span></div>
+ <div class="stat"><b>3</b><span>a11y bugs fixed</span></div>
+</div>
+<div class="bar">
+ <input type="search" id="q" placeholder="Search token…" aria-label="Search token">
+ <button data-filt="all" class="on">All</button>
+ <button data-filt="decide">Rulings (7)</button>
+ <button data-filt="direct">Direct (25)</button>
+ <span style="flex:0 0 12px"></span>
+ <button data-mode="light" class="on">Light</button>
+ <button data-mode="dark">Dark</button>
+</div>
+<section><h2>Surfaces <span class="cnt">6 tokens · 1 ruled</span></h2><div class="r direct" data-st="direct" data-q="background bg-page">
+ <div class="c1"><code class="sc">--background</code><span class="use">page canvas</span></div>
+ <div class="c2"><span class="pair" data-tok="background" data-side="sc"><i style="background:#FFFFFF;"></i><em>#FFFFFF</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="bg-page" data-side="sy"><i style="background:#FFFFFF;"></i><code>--sy-bg-page</code><em>#FFFFFF</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">Both pure white. Nothing to decide.</div><div class="r direct" data-st="direct" data-q="foreground text-primary">
+ <div class="c1"><code class="sc">--foreground</code><span class="use">default body text</span></div>
+ <div class="c2"><span class="pair" data-tok="foreground" data-side="sc"><i style="background:#0A0A0A;"></i><em>#0A0A0A</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="text-primary" data-side="sy"><i style="background:#09090B;"></i><code>--sy-text-primary</code><em>#09090B</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">#0A0A0A vs #09090B — same colour to the eye (ΔE 0.4).</div><div class="r locked" data-st="locked" data-q="card bg-raised bg-surface">
+ <div class="c1"><code class="sc">--card</code><span class="use">card / panel fill</span></div>
+ <div class="c2"><span class="pair" data-tok="card" data-side="sc"><i style="background:#FFFFFF;"></i><em>#FFFFFF</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy rec" data-tok="bg-raised" data-side="sy"><i style="background:#FFFFFF;"></i><code>--sy-bg-raised</code><em>#FFFFFF</em></span><span class="pair sy" data-tok="bg-surface" data-side="sy"><i style="background:#FAFAFB;"></i><code>--sy-bg-surface</code><em>#FAFAFB</em></span></div>
+ <div class="c4"><span class="chip locked">ruled</span></div>
+</div><div class="note"><b>Decided: <code>bg.raised</code> + <code>variant=outlined</code>.</b> 237 sites. shadcn Card is one flat white fill + border. Your Card has <code>variant: flat / outlined / elevated / ai</code>. The token choice and the variant choice are the same decision: <code>bg.raised</code> only reads as a card if something else (border or shadow) separates it, because <code>bg.raised</code> is also #FFFFFF in light mode.<ul class="opts"><li class=rec><code>--sy-bg-raised</code> — ✔ CHOSEN — keep it white and let variant=outlined draw the 1px border, which is exactly how shadcn Card looks today</li><li><code>--sy-bg-surface</code> — alternative — tonal #FAFAFB separates without a border, but changes the look of all 237 card sites</li></ul></div><div class="r direct" data-st="direct" data-q="card-foreground text-primary">
+ <div class="c1"><code class="sc">--card-foreground</code><span class="use">text on card</span></div>
+ <div class="c2"><span class="pair" data-tok="card-foreground" data-side="sc"><i style="background:#0A0A0A;"></i><em>#0A0A0A</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="text-primary" data-side="sy"><i style="background:#09090B;"></i><code>--sy-text-primary</code><em>#09090B</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="r direct" data-st="direct" data-q="popover bg-raised">
+ <div class="c1"><code class="sc">--popover</code><span class="use">overlay fill (Popover, Dropdown, Command, Tooltip surface)</span></div>
+ <div class="c2"><span class="pair" data-tok="popover" data-side="sc"><i style="background:#FFFFFF;"></i><em>#FFFFFF</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="bg-raised" data-side="sy"><i style="background:#FFFFFF;"></i><code>--sy-bg-raised</code><em>#FFFFFF</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">Overlays are raised by definition; separation comes from the elevation shadow, not the fill.</div><div class="r direct" data-st="direct" data-q="popover-foreground text-primary">
+ <div class="c1"><code class="sc">--popover-foreground</code><span class="use">text on overlay</span></div>
+ <div class="c2"><span class="pair" data-tok="popover-foreground" data-side="sc"><i style="background:#0A0A0A;"></i><em>#0A0A0A</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="text-primary" data-side="sy"><i style="background:#09090B;"></i><code>--sy-text-primary</code><em>#09090B</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div></section><section><h2>Actions <span class="cnt">4 tokens · 0 ruled</span></h2><div class="r direct" data-st="direct" data-q="primary action-primary-bg">
+ <div class="c1"><code class="sc">--primary</code><span class="use">primary action fill</span></div>
+ <div class="c2"><span class="pair" data-tok="primary" data-side="sc"><i style="background:#171717;"></i><em>#171717</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="action-primary-bg" data-side="sy"><i style="background:#09090B;"></i><code>--sy-action-primary-bg</code><em>#09090B</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">Both near-black neutrals, and <b>both invert in dark mode</b> (shadcn → #EBEBEB, yours → #FFFFFF). No surprise there.</div><div class="r direct" data-st="direct" data-q="primary-foreground action-primary-fg">
+ <div class="c1"><code class="sc">--primary-foreground</code><span class="use">label on primary</span></div>
+ <div class="c2"><span class="pair" data-tok="primary-foreground" data-side="sc"><i style="background:#FAFAFA;"></i><em>#FAFAFA</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="action-primary-fg" data-side="sy"><i style="background:#FFFFFF;"></i><code>--sy-action-primary-fg</code><em>#FFFFFF</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="r direct" data-st="direct" data-q="secondary action-secondary-bg">
+ <div class="c1"><code class="sc">--secondary</code><span class="use">secondary action fill</span></div>
+ <div class="c2"><span class="pair" data-tok="secondary" data-side="sc"><i style="background:#F5F5F5;"></i><em>#F5F5F5</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="action-secondary-bg" data-side="sy"><i style="background:#F4F4F6;"></i><code>--sy-action-secondary-bg</code><em>#F4F4F6</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">#F5F5F5 vs #F4F4F6 — ΔE 0.4.</div><div class="r direct" data-st="direct" data-q="secondary-foreground text-primary">
+ <div class="c1"><code class="sc">--secondary-foreground</code><span class="use">label on secondary</span></div>
+ <div class="c2"><span class="pair" data-tok="secondary-foreground" data-side="sc"><i style="background:#171717;"></i><em>#171717</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="text-primary" data-side="sy"><i style="background:#09090B;"></i><code>--sy-text-primary</code><em>#09090B</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div></section><section><h2>De-emphasis <span class="cnt">4 tokens · 2 ruled</span></h2><div class="r direct" data-st="direct" data-q="muted bg-sunken">
+ <div class="c1"><code class="sc">--muted</code><span class="use">de-emphasized surface</span></div>
+ <div class="c2"><span class="pair" data-tok="muted" data-side="sc"><i style="background:#F5F5F5;"></i><em>#F5F5F5</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="bg-sunken" data-side="sy"><i style="background:#F4F4F6;"></i><code>--sy-bg-sunken</code><em>#F4F4F6</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">Value-identical to <code>action.secondary-bg</code> — as it already is in shadcn, where <code>muted</code> and <code>secondary</code> are the same hex. No information lost, <b>but</b> it means a secondary button sitting on a muted panel is invisible. Your tray rule already covers this (“secondary on bg.sunken MUST open to bg.page”) — it now needs to be linted, not just documented.</div><div class="r locked" data-st="locked" data-q="muted-foreground text-secondary text-tertiary icon-secondary">
+ <div class="c1"><code class="sc">--muted-foreground</code><span class="use">ALL de-emphasized text and icons</span></div>
+ <div class="c2"><span class="pair" data-tok="muted-foreground" data-side="sc"><i style="background:#737373;"></i><em>#737373</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy rec" data-tok="text-secondary" data-side="sy"><i style="background:#62626B;"></i><code>--sy-text-secondary</code><em>#62626B</em></span><span class="pair sy" data-tok="text-tertiary" data-side="sy"><i style="background:#83838D;"></i><code>--sy-text-tertiary</code><em>#83838D</em></span><span class="pair sy" data-tok="icon-secondary" data-side="sy"><i style="background:#62626B;"></i><code>--sy-icon-secondary</code><em>#62626B</em></span></div>
+ <div class="c4"><span class="chip locked">ruled</span></div>
+</div><div class="note"><b>Decided: default to <code>text.secondary</code>.</b> 1,557 sites — this was the decision your engineer was blocked on. shadcn has one token where you have three. The good news: today all 1,557 render at 4.74:1, and the default mapping to <code>text.secondary</code> <i>improves</i> every one of them. The risk is the opposite direction — if you route placeholders to <code>text.secondary</code> they become too dark and read as filled values. Ask her for the split between description text and placeholder/metadata before finalising.<ul class="opts"><li class=rec><code>--sy-text-secondary</code> — <b>✔ CHOSEN as the default.</b> Descriptions, helper text, secondary body copy, card descriptions. Raises contrast from 4.74:1 to 6.04:1.</li><li><code>--sy-text-tertiary</code> — Placeholder text, timestamps, table column headers, unit suffixes — genuinely non-essential text only. <b>3.75:1, below AA</b>, so never use it for anything a user must read.</li><li><code>--sy-icon-secondary</code> — Icons paired with text. Same hex as text.secondary today, but keeping the family correct is the whole point of having a separate icon tier.</li></ul></div><div class="r split" data-st="split" data-q="accent bg-hover bg-selected">
+ <div class="c1"><code class="sc">--accent</code><span class="use">hover + selected surface</span></div>
+ <div class="c2"><span class="pair" data-tok="accent" data-side="sc"><i style="background:#F5F5F5;"></i><em>#F5F5F5</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy rec" data-tok="bg-hover" data-side="sy"><i style="background:rgba(9, 9, 11, 0.04);"></i><code>--sy-bg-hover</code><em>rgba(9, 9, 11, 0.04)</em></span><span class="pair sy" data-tok="bg-selected" data-side="sy"><i style="background:#EFF3F7;"></i><code>--sy-bg-selected</code><em>#EFF3F7</em></span></div>
+ <div class="c4"><span class="chip split">split</span></div>
+</div><div class="note">Mechanically separable: the state modifier in the class name tells you which. <code>hover:</code>/<code>focus:</code> → <code>bg.hover</code>; <code>data-[state=selected]</code> → <code>bg.selected</code>. This one can be automated with high confidence.<ul class="opts"><li class=rec><code>--sy-bg-hover</code> — <b>✔ CHOSEN as the default.</b> Matches <code>hover:bg-accent</code>, <code>focus:bg-accent</code>, menu and command item focus.</li><li><code>--sy-bg-selected</code> — For <code>data-[state=selected]</code>, <code>data-[state=active]</code>, <code>aria-selected</code> — persistent selection, not transient hover.</li></ul></div><div class="r direct" data-st="direct" data-q="accent-foreground text-primary">
+ <div class="c1"><code class="sc">--accent-foreground</code><span class="use">text on accent</span></div>
+ <div class="c2"><span class="pair" data-tok="accent-foreground" data-side="sc"><i style="background:#171717;"></i><em>#171717</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="text-primary" data-side="sy"><i style="background:#09090B;"></i><code>--sy-text-primary</code><em>#09090B</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div></section><section><h2>Status <span class="cnt">2 tokens · 1 ruled</span></h2><div class="r locked" data-st="locked" data-q="destructive status-danger status-danger-bg-solid">
+ <div class="c1"><code class="sc">--destructive</code><span class="use">danger — text, border AND fill</span></div>
+ <div class="c2"><span class="pair" data-tok="destructive" data-side="sc"><i style="background:#E7000B;"></i><em>#E7000B</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy rec" data-tok="status-danger" data-side="sy"><i style="background:#B23230;"></i><code>--sy-status-danger</code><em>#B23230</em></span><span class="pair sy" data-tok="status-danger-bg-solid" data-side="sy"><i style="background:#D2403E;"></i><code>--sy-status-danger-bg-solid</code><em>#D2403E</em></span></div>
+ <div class="c4"><span class="chip locked">ruled</span></div>
+</div><div class="note"><b>Decided: keep the split — both halves are required.</b> Separable by utility prefix, so it automates cleanly: <code>text-</code>/<code>border-</code> → <code>status.danger</code>, <code>bg-</code> → <code>status.danger-bg-solid</code>. <b>The fill value itself changed on 2026-07-30</b> — <code>status.danger-bg-solid</code> moved <code>red.400 #DB504D</code> → <code>red.500 #D2403E</code>, so a white label now clears AA at 4.62:1 with normal weight. That removed the only contrast regression in this whole table, and made the fill a <i>closer</i> match to shadcn's <code>#E7000B</code> (ΔE 30.5 vs 35.0) as a side effect. Its hover moved <code>red.500</code> → <code>red.600 #B23230</code>.<ul class="opts"><li class=rec><code>--sy-status-danger</code> — For <code>text-destructive</code>, <code>border-destructive</code> and danger icons. 6.19:1, up from 4.77:1.</li><li><code>--sy-status-danger-bg-solid</code> — For <code>bg-destructive</code> — solid danger buttons and badges.</li></ul></div><div class="r direct" data-st="direct" data-q="destructive-foreground action-danger-fg">
+ <div class="c1"><code class="sc">--destructive-foreground</code><span class="use">label on danger fill</span></div>
+ <div class="c2"><span class="pair" data-tok="destructive-foreground" data-side="sc"><i style="background:#FFFFFF;"></i><em>#FFFFFF</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="action-danger-fg" data-side="sy"><i style="background:#FFFFFF;"></i><code>--sy-action-danger-fg</code><em>#FFFFFF</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div></section><section><h2>Lines & focus <span class="cnt">3 tokens · 1 ruled</span></h2><div class="r split" data-st="split" data-q="border border-default border-subtle border-strong">
+ <div class="c1"><code class="sc">--border</code><span class="use">every border in the app</span></div>
+ <div class="c2"><span class="pair" data-tok="border" data-side="sc"><i style="background:#E5E5E5;"></i><em>#E5E5E5</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy rec" data-tok="border-default" data-side="sy"><i style="background:#E9E9ED;"></i><code>--sy-border-default</code><em>#E9E9ED</em></span><span class="pair sy" data-tok="border-subtle" data-side="sy"><i style="background:#ECECEF;"></i><code>--sy-border-subtle</code><em>#ECECEF</em></span><span class="pair sy" data-tok="border-strong" data-side="sy"><i style="background:#D1D1D8;"></i><code>--sy-border-strong</code><em>#D1D1D8</em></span></div>
+ <div class="c4"><span class="chip split">split</span></div>
+</div><div class="note">shadcn uses one token for structural outlines and hairline dividers alike. You separated them. The <code>&lt;Separator&gt;</code> component is a clean seam — route it to <code>border.subtle</code> and everything else to <code>border.default</code>, and you get most of the benefit with no per-site review.<ul class="opts"><li class=rec><code>--sy-border-default</code> — <b>✔ CHOSEN as the default.</b> Card outlines, table borders, panel edges.</li><li><code>--sy-border-subtle</code> — Internal dividers — map <code>&lt;Separator&gt;</code> (41 sites) here, which makes the split mechanical rather than a judgement call.</li><li><code>--sy-border-strong</code> — Emphasised outlines: outline-style buttons, selected cell borders.</li></ul></div><div class="r direct" data-st="direct" data-q="input border-default">
+ <div class="c1"><code class="sc">--input</code><span class="use">form field border at rest</span></div>
+ <div class="c2"><span class="pair" data-tok="input" data-side="sc"><i style="background:#E5E5E5;"></i><em>#E5E5E5</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="border-default" data-side="sy"><i style="background:#E9E9ED;"></i><code>--sy-border-default</code><em>#E9E9ED</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">Worth knowing: on focus your fields go to <code>border.focus-input</code> (#33333A, near-black) — <i>not</i> the indigo ring. shadcn uses <code>ring</code> for both, so field focus will change appearance.</div><div class="r direct" data-st="direct" data-q="ring border-focus">
+ <div class="c1"><code class="sc">--ring</code><span class="use">focus ring</span></div>
+ <div class="c2"><span class="pair" data-tok="ring" data-side="sc"><i style="background:#A1A1A1;"></i><em>#A1A1A1</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="border-focus" data-side="sy"><i style="background:#3D63DD;"></i><code>--sy-border-focus</code><em>#3D63DD</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note"><b>This mapping fixes a systemic accessibility failure.</b> shadcn's stock ring is grey #A1A1A1 at <b>2.58:1</b> against white — below the 3:1 that WCAG 1.4.11 requires for non-text indicators. Yours is 5.21:1. Every focusable element in the app is currently non-compliant and will visibly turn blue. Announce it before QA files it as a bug.</div></section><section><h2>Charts <span class="cnt">5 tokens · 0 ruled</span></h2><div class="r direct" data-st="direct" data-q="chart-1 viz-1">
+ <div class="c1"><code class="sc">--chart-1</code><span class="use">series 1</span></div>
+ <div class="c2"><span class="pair" data-tok="chart-1" data-side="sc"><i style="background:#F54900;"></i><em>#F54900</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="viz-1" data-side="sy"><i style="background:#016BE4;"></i><code>--sy-viz-1</code><em>#016BE4</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="r direct" data-st="direct" data-q="chart-2 viz-2">
+ <div class="c1"><code class="sc">--chart-2</code><span class="use">series 2</span></div>
+ <div class="c2"><span class="pair" data-tok="chart-2" data-side="sc"><i style="background:#009689;"></i><em>#009689</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="viz-2" data-side="sy"><i style="background:#01B75C;"></i><code>--sy-viz-2</code><em>#01B75C</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="r direct" data-st="direct" data-q="chart-3 viz-3">
+ <div class="c1"><code class="sc">--chart-3</code><span class="use">series 3</span></div>
+ <div class="c2"><span class="pair" data-tok="chart-3" data-side="sc"><i style="background:#104E64;"></i><em>#104E64</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="viz-3" data-side="sy"><i style="background:#A27201;"></i><code>--sy-viz-3</code><em>#A27201</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="r direct" data-st="direct" data-q="chart-4 viz-4">
+ <div class="c1"><code class="sc">--chart-4</code><span class="use">series 4</span></div>
+ <div class="c2"><span class="pair" data-tok="chart-4" data-side="sc"><i style="background:#FFB900;"></i><em>#FFB900</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="viz-4" data-side="sy"><i style="background:#FE5D58;"></i><code>--sy-viz-4</code><em>#FE5D58</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">shadcn's stock 4 and 5 are two near-identical oranges (#FFB900 / #FE9A00) — exactly the collision your viz rebuild removed.</div><div class="r direct" data-st="direct" data-q="chart-5 viz-5">
+ <div class="c1"><code class="sc">--chart-5</code><span class="use">series 5</span></div>
+ <div class="c2"><span class="pair" data-tok="chart-5" data-side="sc"><i style="background:#FE9A00;"></i><em>#FE9A00</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="viz-5" data-side="sy"><i style="background:#7A03E2;"></i><code>--sy-viz-5</code><em>#7A03E2</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">You have <b>8</b> CVD-tested series against shadcn's 5. Any chart running 6+ series is hand-rolling colours today → <code>viz.6–8</code>.</div></section><section><h2>Sidebar <span class="cnt">8 tokens · 2 ruled</span></h2><div class="r direct" data-st="direct" data-q="sidebar bg-surface">
+ <div class="c1"><code class="sc">--sidebar</code><span class="use">sidebar fill</span></div>
+ <div class="c2"><span class="pair" data-tok="sidebar" data-side="sc"><i style="background:#FAFAFA;"></i><em>#FAFAFA</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="bg-surface" data-side="sy"><i style="background:#FAFAFB;"></i><code>--sy-bg-surface</code><em>#FAFAFB</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="note">#FAFAFA vs #FAFAFB.</div><div class="r direct" data-st="direct" data-q="sidebar-foreground text-primary">
+ <div class="c1"><code class="sc">--sidebar-foreground</code><span class="use">sidebar text</span></div>
+ <div class="c2"><span class="pair" data-tok="sidebar-foreground" data-side="sc"><i style="background:#0A0A0A;"></i><em>#0A0A0A</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="text-primary" data-side="sy"><i style="background:#09090B;"></i><code>--sy-text-primary</code><em>#09090B</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="r locked" data-st="locked" data-q="sidebar-primary bg-selected action-primary-bg">
+ <div class="c1"><code class="sc">--sidebar-primary</code><span class="use">active nav item</span></div>
+ <div class="c2"><span class="pair" data-tok="sidebar-primary" data-side="sc"><i style="background:#171717;"></i><em>#171717</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy rec" data-tok="bg-selected" data-side="sy"><i style="background:#EFF3F7;"></i><code>--sy-bg-selected</code><em>#EFF3F7</em></span><span class="pair sy" data-tok="action-primary-bg" data-side="sy"><i style="background:#09090B;"></i><code>--sy-action-primary-bg</code><em>#09090B</em></span></div>
+ <div class="c4"><span class="chip locked">ruled</span></div>
+</div><div class="note"><b>Decided: <code>bg.selected</code>.</b> shadcn defaults the active nav item to the same fill as a primary button. Your system treats selection as a tint. These are two different design languages and you have to pick one — it changes how every page's sidebar reads.<ul class="opts"><li class=rec><code>--sy-bg-selected</code> — <b>✔ CHOSEN.</b> Nav selection in your system is a tint, not a block. Pairs with <code>text.primary</code>.</li><li><code>--sy-action-primary-bg</code> — What shadcn does by default — a near-black block. Breaks “max one primary per region” and makes the nav compete with real CTAs.</li></ul></div><div class="r locked" data-st="locked" data-q="sidebar-primary-foreground text-primary action-primary-fg">
+ <div class="c1"><code class="sc">--sidebar-primary-foreground</code><span class="use">active nav label</span></div>
+ <div class="c2"><span class="pair" data-tok="sidebar-primary-foreground" data-side="sc"><i style="background:#FAFAFA;"></i><em>#FAFAFA</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy rec" data-tok="text-primary" data-side="sy"><i style="background:#09090B;"></i><code>--sy-text-primary</code><em>#09090B</em></span><span class="pair sy" data-tok="action-primary-fg" data-side="sy"><i style="background:#FFFFFF;"></i><code>--sy-action-primary-fg</code><em>#FFFFFF</em></span></div>
+ <div class="c4"><span class="chip locked">ruled</span></div>
+</div><div class="note"><b>Decided: <code>text.primary</code>,</b> following from the row above. Not an independent decision — it falls out of the row above. Listed so the codemod doesn't get them out of sync.<ul class="opts"><li class=rec><code>--sy-text-primary</code> — Follows from choosing <code>bg.selected</code> above.</li><li><code>--sy-action-primary-fg</code> — Follows from choosing <code>action.primary-bg</code> above.</li></ul></div><div class="r direct" data-st="direct" data-q="sidebar-accent bg-hover">
+ <div class="c1"><code class="sc">--sidebar-accent</code><span class="use">nav item hover</span></div>
+ <div class="c2"><span class="pair" data-tok="sidebar-accent" data-side="sc"><i style="background:#F5F5F5;"></i><em>#F5F5F5</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="bg-hover" data-side="sy"><i style="background:rgba(9, 9, 11, 0.04);"></i><code>--sy-bg-hover</code><em>rgba(9, 9, 11, 0.04)</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="r direct" data-st="direct" data-q="sidebar-accent-foreground text-primary">
+ <div class="c1"><code class="sc">--sidebar-accent-foreground</code><span class="use">nav hover label</span></div>
+ <div class="c2"><span class="pair" data-tok="sidebar-accent-foreground" data-side="sc"><i style="background:#171717;"></i><em>#171717</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="text-primary" data-side="sy"><i style="background:#09090B;"></i><code>--sy-text-primary</code><em>#09090B</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="r direct" data-st="direct" data-q="sidebar-border border-subtle">
+ <div class="c1"><code class="sc">--sidebar-border</code><span class="use">sidebar edge</span></div>
+ <div class="c2"><span class="pair" data-tok="sidebar-border" data-side="sc"><i style="background:#E5E5E5;"></i><em>#E5E5E5</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="border-subtle" data-side="sy"><i style="background:#ECECEF;"></i><code>--sy-border-subtle</code><em>#ECECEF</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div><div class="r direct" data-st="direct" data-q="sidebar-ring border-focus">
+ <div class="c1"><code class="sc">--sidebar-ring</code><span class="use">sidebar focus ring</span></div>
+ <div class="c2"><span class="pair" data-tok="sidebar-ring" data-side="sc"><i style="background:#A1A1A1;"></i><em>#A1A1A1</em></span></div>
+ <div class="arw">→</div>
+ <div class="c3"><span class="pair sy" data-tok="border-focus" data-side="sy"><i style="background:#3D63DD;"></i><code>--sy-border-focus</code><em>#3D63DD</em></span></div>
+ <div class="c4"><span class="chip direct">direct</span></div>
+</div></section>
+<section><h2>Contrast verification <span class="cnt">shadcn today → after mapping, both modes</span></h2>
+<table><tr class="ok"><td>body text on page</td><td class="m">light</td><td class="n">19.80</td><td class="n">→ 19.90</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>body text on page</td><td class="m">dark</td><td class="n">18.97</td><td class="n">→ 18.11</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>text on card</td><td class="m">light</td><td class="n">19.80</td><td class="n">→ 19.90</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>text on card</td><td class="m">dark</td><td class="n">17.18</td><td class="n">→ 15.10</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>text on overlay</td><td class="m">light</td><td class="n">19.80</td><td class="n">→ 19.90</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>text on overlay</td><td class="m">dark</td><td class="n">14.50</td><td class="n">→ 15.10</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>primary button label</td><td class="m">light</td><td class="n">17.18</td><td class="n">→ 19.90</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>primary button label</td><td class="m">dark</td><td class="n">14.23</td><td class="n">→ 19.90</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>secondary button label</td><td class="m">light</td><td class="n">16.44</td><td class="n">→ 18.11</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>secondary button label</td><td class="m">dark</td><td class="n">14.50</td><td class="n">→ 11.41</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>muted text on page</td><td class="m">light</td><td class="n">4.74</td><td class="n">→ 6.04</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>muted text on page</td><td class="m">dark</td><td class="n">7.66</td><td class="n">→ 8.53</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>muted text on muted surface</td><td class="m">light</td><td class="n">4.35</td><td class="n">→ 5.50</td><td class="n mn">4.5</td><td><b class="fix">fixed</b></td></tr><tr class="ok"><td>muted text on muted surface</td><td class="m">dark</td><td class="n">5.86</td><td class="n">→ 7.87</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>text on accent/hover</td><td class="m">light</td><td class="n">16.44</td><td class="n">→ 18.25</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>text on accent/hover</td><td class="m">dark</td><td class="n">14.50</td><td class="n">→ 16.14</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>danger label on danger fill</td><td class="m">light</td><td class="n">4.77</td><td class="n">→ 4.62</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>danger label on danger fill</td><td class="m">dark</td><td class="n">2.89</td><td class="n">→ 4.62</td><td class="n mn">4.5</td><td><b class="fix">fixed</b></td></tr><tr class="ok"><td>danger text on page</td><td class="m">light</td><td class="n">4.77</td><td class="n">→ 6.19</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>danger text on page</td><td class="m">dark</td><td class="n">6.85</td><td class="n">→ 7.75</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>sidebar text</td><td class="m">light</td><td class="n">18.97</td><td class="n">→ 19.07</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>sidebar text</td><td class="m">dark</td><td class="n">17.18</td><td class="n">→ 16.71</td><td class="n mn">4.5</td><td></td></tr><tr class="ok"><td>focus ring vs page</td><td class="m">light</td><td class="n">2.58</td><td class="n">→ 5.21</td><td class="n mn">3.0</td><td><b class="fix">fixed</b></td></tr><tr class="ok"><td>focus ring vs page</td><td class="m">dark</td><td class="n">4.18</td><td class="n">→ 9.58</td><td class="n mn">3.0</td><td></td></tr><tr class="bad"><td>border vs page</td><td class="m">light</td><td class="n">1.26</td><td class="n">→ 1.21</td><td class="n mn">3.0</td><td></td></tr><tr class="bad"><td>border vs page</td><td class="m">dark</td><td class="n">1.24</td><td class="n">→ 2.27</td><td class="n mn">3.0</td><td></td></tr></table></section>
+<section><h2>Your tokens with no shadcn source <span class="cnt">nothing to migrate from — these are hardcoded in the app today</span></h2>
+<ul class="gap"><li><code>status-success / status-success-bg</code><span>shadcn has <b>no</b> success token. Every green in the app is hardcoded.</span></li><li><code>status-warning / status-warning-bg</code><span>No warning token either. Same story.</span></li><li><code>status-info / status-info-bg</code><span>No info token. Note this is <b>indigo</b> #3155C6, deliberately not the azure brand.</span></li><li><code>status-danger-bg</code><span>shadcn has no subtle danger <i>tint</i> — only the solid. Hand-rolled <code>bg-red-50</code> banners map here.</span></li><li><code>ai-* / action-brand-*</code><span>No equivalent concept. Azure AI emphasis is new surface area, not a migration target.</span></li><li><code>text-disabled / bg-disabled</code><span>shadcn disables with <code>opacity-50</code>. Your system forbids opacity-based disabling — every disabled state needs rewriting, not remapping.</span></li></ul></section>
+</div>
+<script>
+const SCL={"background": "#FFFFFF", "foreground": "#0A0A0A", "card": "#FFFFFF", "card-foreground": "#0A0A0A", "popover": "#FFFFFF", "popover-foreground": "#0A0A0A", "primary": "#171717", "primary-foreground": "#FAFAFA", "secondary": "#F5F5F5", "secondary-foreground": "#171717", "muted": "#F5F5F5", "muted-foreground": "#737373", "accent": "#F5F5F5", "accent-foreground": "#171717", "destructive": "#E7000B", "destructive-foreground": "#FFFFFF", "border": "#E5E5E5", "input": "#E5E5E5", "ring": "#A1A1A1", "chart-1": "#F54900", "chart-2": "#009689", "chart-3": "#104E64", "chart-4": "#FFB900", "chart-5": "#FE9A00", "sidebar": "#FAFAFA", "sidebar-foreground": "#0A0A0A", "sidebar-primary": "#171717", "sidebar-primary-foreground": "#FAFAFA", "sidebar-accent": "#F5F5F5", "sidebar-accent-foreground": "#171717", "sidebar-border": "#E5E5E5", "sidebar-ring": "#A1A1A1"},SCD={"background": "#0A0A0A", "foreground": "#FAFAFA", "card": "#171717", "card-foreground": "#FAFAFA", "popover": "#262626", "popover-foreground": "#FAFAFA", "primary": "#E5E5E5", "primary-foreground": "#171717", "secondary": "#262626", "secondary-foreground": "#FAFAFA", "muted": "#262626", "muted-foreground": "#A1A1A1", "accent": "#262626", "accent-foreground": "#FAFAFA", "destructive": "#FF6467", "destructive-foreground": "#FFFFFF", "border": "rgba(255,255,255,0.10)", "input": "rgba(255,255,255,0.15)", "ring": "#737373", "chart-1": "#1447E6", "chart-2": "#00BC7D", "chart-3": "#FE9A00", "chart-4": "#AD46FF", "chart-5": "#FF2056", "sidebar": "#171717", "sidebar-foreground": "#FAFAFA", "sidebar-primary": "#1447E6", "sidebar-primary-foreground": "#FAFAFA", "sidebar-accent": "#262626", "sidebar-accent-foreground": "#FAFAFA", "sidebar-border": "rgba(255,255,255,0.10)", "sidebar-ring": "#737373"},SYL={"bg-page": "#FFFFFF", "bg-surface": "#FAFAFB", "bg-raised": "#FFFFFF", "bg-raised-2": "#FFFFFF", "bg-sunken": "#F4F4F6", "bg-hover": "rgba(9, 9, 11, 0.04)", "bg-active": "rgba(9, 9, 11, 0.06)", "bg-selected": "#EFF3F7", "bg-selected-hover": "#DCE3EB", "bg-disabled": "#F4F4F6", "bg-scrim": "rgba(9, 9, 11, 0.40)", "glass-surface": "#F6F8FB", "glass-blur": "26px", "glass-filter": "blur(26px) saturate(1.5) brightness(1.12)", "glass-border": "#E4E9F0", "glass-rim": "#FFFFFF", "glass-accent": "#33333B", "glass-selected": "rgba(255, 255, 255, 0.10)", "shadow-glass": "0 2px 6px rgba(9, 9, 11, 0.28), 0 30px 60px rgba(9, 9, 11, 0.44), inset 0 1px 0 rgba(255, 255, 255, 0.42), inset 0 0 0 1px rgba(255, 255, 255, 0.06)", "bg-inverse": "#09090B", "bg-inverse-soft": "#33333A", "text-primary": "#09090B", "text-secondary": "#62626B", "text-tertiary": "#83838D", "text-placeholder": "#83838D", "text-disabled": "#A9A9B2", "text-on-inverse": "#FFFFFF", "text-link": "#3155C6", "icon-primary": "#1E1E24", "icon-secondary": "#62626B", "icon-tertiary": "#83838D", "icon-disabled": "#A9A9B2", "icon-on-inverse": "#FFFFFF", "icon-info": "#3155C6", "icon-success": "#0E7A42", "icon-warning": "#8C5A00", "icon-danger": "#B23230", "border-subtle": "#ECECEF", "border-default": "#E9E9ED", "border-overlay": "transparent", "border-strong": "#D1D1D8", "border-strong-hover": "#A9A9B2", "border-focus": "#3D63DD", "border-focus-input": "#33333A", "border-selected": "#09090B", "border-error": "#D2403E", "action-primary-bg": "#09090B", "action-primary-bg-hover": "#33333A", "action-primary-bg-active": "#33333A", "action-primary-fg": "#FFFFFF", "action-secondary-bg": "#F4F4F6", "action-secondary-bg-hover": "#ECECEF", "action-brand-bg": "#0073E6", "action-brand-bg-hover": "#0D61B5", "action-brand-bg-active": "#0B4F93", "brand-point": "#1A1A1F", "brand-point-fg": "#FFFFFF", "action-brand-fg": "#FFFFFF", "action-brand-fg-disabled": "#0073E6", "action-danger-fg-disabled": "#DB504D", "action-secondary-danger-bg": "#FDF1F0", "action-secondary-danger-bg-hover": "#FBE3E2", "action-secondary-brand-bg": "#F1F7FE", "action-secondary-brand-bg-hover": "#E0EEFD", "action-secondary-brand-fg": "#0B4F93", "action-brand-border": "#0073E6", "action-brand-fg-on-page": "#0D61B5", "status-info": "#3155C6", "status-info-bg": "#E4EAFB", "status-success": "#0E7A42", "status-success-bg": "#DCF2E6", "status-warning": "#8C5A00", "status-warning-bg": "#FBEED3", "status-danger": "#B23230", "status-danger-bg": "#FBE3E2", "status-danger-bg-solid": "#D2403E", "status-danger-bg-solid-hover": "#B23230", "action-danger-fg": "#FFFFFF", "text-on-solid": "#FFFFFF", "status-info-bg-solid": "#3D63DD", "status-success-bg-solid": "#1F9D5B", "status-warning-bg-solid": "#BA7C14", "text-link-on-inverse": "#9DB3EE", "status-info-on-inverse": "#9DB3EE", "status-success-on-inverse": "#3FBF7F", "status-warning-on-inverse": "#D99A27", "status-danger-on-inverse": "#EE837D", "ai-surface": "#EFF3F7", "ai-surface-hover": "#DCE3EB", "ai-border": "#DCE3EB", "emphasis-surface": "#EFF3F7", "emphasis-border": "#DCE3EB", "emphasis-fg": "#4F5D6F", "emphasis-fg-soft": "#6B7A8D", "ai-fg": "#4F5D6F", "ai-solid": "#0073E6", "viz-1": "#016BE4", "viz-2": "#01B75C", "viz-3": "#A27201", "viz-4": "#FE5D58", "viz-5": "#7A03E2", "viz-6": "#01A9CB", "viz-7": "#CB0188", "viz-8": "#215100", "meter-fill": "#83838D", "font-sans": "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, \"Segoe UI\", \"Apple SD Gothic Neo\", \"Noto Sans KR\", sans-serif", "font-display": "\"Artific\", \"Pretendard Variable\", Pretendard, sans-serif", "font-mono": "\"JetBrains Mono\", \"SF Mono\", D2Coding, Consolas, monospace", "weight-regular": "400", "weight-medium": "500", "weight-semibold": "600", "weight-bold": "700", "text-11": "11px", "text-11-lh": "16px", "text-12": "12px", "text-12-lh": "18px", "text-13": "13px", "text-13-lh": "20px", "text-14": "14px", "text-14-lh": "22px", "text-16": "16px", "text-16-lh": "24px", "text-18": "18px", "text-18-lh": "27px", "text-20": "20px", "text-20-lh": "30px", "text-24": "24px", "text-24-lh": "34px", "text-30": "30px", "text-30-lh": "40px", "text-36": "36px", "text-36-lh": "48px", "text-44": "44px", "text-44-lh": "56px", "space-0": "0px", "space-1": "4px", "space-2": "8px", "space-3": "12px", "space-4": "16px", "space-5": "20px", "space-6": "24px", "space-7": "28px", "space-8": "32px", "space-10": "40px", "space-12": "48px", "space-16": "64px", "space-20": "80px", "space-24": "96px", "space-32": "128px", "space-40": "160px", "space-48": "192px", "space-56": "224px", "space-64": "256px", "space-80": "320px", "space-96": "384px", "radius-none": "0px", "radius-xs": "4px", "radius-sm": "8px", "radius-control-md": "10px", "radius-md": "12px", "radius-lg": "16px", "radius-xl": "20px", "radius-2xl": "24px", "radius-full": "9999px", "padding-none": "0px", "padding-2xs": "var(--sy-space-1)", "padding-xs": "var(--sy-space-2)", "padding-sm": "var(--sy-space-3)", "padding-md": "var(--sy-space-4)", "padding-lg": "var(--sy-space-6)", "padding-xl": "var(--sy-space-8)", "shadow-xs": "0 1px 2px rgba(9, 9, 11, 0.05)", "shadow-sm": "0 2px 6px rgba(9, 9, 11, 0.06)", "shadow-md": "0 4px 12px rgba(9, 9, 11, 0.07)", "shadow-lg": "0 8px 24px rgba(9, 9, 11, 0.08)", "shadow-xl": "0 24px 48px rgba(9, 9, 11, 0.12)", "shadow-thumb": "0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16)", "z-sticky": "100", "z-dropdown": "200", "z-drawer": "300", "z-modal": "400", "z-toast": "500", "z-tooltip": "600", "duration-instant": "100ms", "duration-fast": "150ms", "duration-base": "200ms", "duration-slow": "300ms", "ease-standard": "cubic-bezier(0.2, 0, 0, 1)", "ease-enter": "cubic-bezier(0, 0, 0.2, 1)", "ease-exit": "cubic-bezier(0.4, 0, 1, 1)", "control-height-xs": "24px", "control-height-sm": "32px", "control-height-md": "36px", "control-height-lg": "40px", "control-padding-x": "12px", "control-gap": "12px", "body-size": "14px", "body-lh": "22px", "label-size": "13px", "label-lh": "20px", "page-padding": "32px", "section-gap": "40px", "card-padding": "28px", "stack-gap": "16px", "table-row": "36px", "table-cell-x": "12px", "content-max": "760px"},SYD={"bg-page": "#09090B", "bg-surface": "#141419", "bg-raised": "#1E1E24", "bg-raised-2": "#33333A", "bg-sunken": "#141419", "bg-hover": "rgba(255, 255, 255, 0.06)", "bg-active": "rgba(255, 255, 255, 0.10)", "bg-selected": "#2A333F", "bg-selected-hover": "#3C4756", "bg-disabled": "#1E1E24", "bg-scrim": "rgba(9, 9, 11, 0.60)", "glass-surface": "#262B33", "glass-blur": "26px", "glass-filter": "blur(26px) saturate(1.4) brightness(1.05)", "glass-border": "#363C46", "glass-rim": "#3C424C", "glass-accent": "#E4E4E7", "glass-selected": "rgba(9, 9, 11, 0.06)", "shadow-glass": "0 2px 6px rgba(0, 0, 0, 0.16), 0 26px 54px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.5)", "bg-inverse": "#FFFFFF", "bg-inverse-soft": "#E3E3E8", "text-primary": "#F4F4F6", "text-secondary": "#A9A9B2", "text-tertiary": "#83838D", "text-placeholder": "#83838D", "text-disabled": "#62626B", "text-on-inverse": "#09090B", "text-link": "#9DB3EE", "icon-primary": "#E3E3E8", "icon-secondary": "#A9A9B2", "icon-tertiary": "#83838D", "icon-disabled": "#62626B", "icon-on-inverse": "#09090B", "icon-info": "#9DB3EE", "icon-success": "#3FBF7F", "icon-warning": "#D99A27", "icon-danger": "#EE837D", "border-subtle": "#33333A", "border-default": "#4A4A52", "border-overlay": "#4A4A52", "border-strong": "#62626B", "border-strong-hover": "#83838D", "border-focus": "#9DB3EE", "border-focus-input": "#E3E3E8", "border-selected": "#F4F4F6", "border-error": "#EE837D", "action-primary-bg": "#FFFFFF", "action-primary-bg-hover": "#E3E3E8", "action-primary-bg-active": "#E3E3E8", "action-primary-fg": "#09090B", "action-secondary-bg": "#33333A", "action-secondary-bg-hover": "#4A4A52", "action-brand-bg": "#0073E6", "action-brand-bg-hover": "#0D61B5", "action-brand-bg-active": "#0B4F93", "brand-point": "#F2F2F4", "brand-point-fg": "#1A1A1F", "action-brand-fg": "#FFFFFF", "action-brand-fg-disabled": "#7BBBFC", "action-danger-fg-disabled": "#EE837D", "action-secondary-danger-bg": "#3D100F", "action-secondary-danger-bg-hover": "#571716", "action-secondary-brand-bg": "#061B30", "action-secondary-brand-bg-hover": "#082B4E", "action-secondary-brand-fg": "#7BBBFC", "action-brand-border": "#7BBBFC", "action-brand-fg-on-page": "#7BBBFC", "status-info": "#9DB3EE", "status-info-bg": "#1B2C60", "status-success": "#3FBF7F", "status-success-bg": "#123F27", "status-warning": "#D99A27", "status-warning-bg": "#4A3208", "status-danger": "#EE837D", "status-danger-bg": "#571716", "status-danger-bg-solid": "#D2403E", "status-danger-bg-solid-hover": "#B23230", "action-danger-fg": "#FFFFFF", "text-on-solid": "#FFFFFF", "status-info-bg-solid": "#3D63DD", "status-success-bg-solid": "#1F9D5B", "status-warning-bg-solid": "#BA7C14", "text-link-on-inverse": "#3155C6", "status-info-on-inverse": "#3155C6", "status-success-on-inverse": "#0E7A42", "status-warning-on-inverse": "#8C5A00", "status-danger-on-inverse": "#B23230", "ai-surface": "#2A333F", "ai-surface-hover": "#3C4756", "ai-border": "#2A333F", "emphasis-surface": "#1A212B", "emphasis-border": "#2A333F", "emphasis-fg": "#C2CCD9", "emphasis-fg-soft": "#93A1B3", "ai-fg": "#C2CCD9", "ai-solid": "#0073E6", "viz-1": "#0158BC", "viz-2": "#037D40", "viz-3": "#8E6401", "viz-4": "#FE8E8A", "viz-5": "#7D01E9", "viz-6": "#05C9F0", "viz-7": "#CD048A", "viz-8": "#49D204", "meter-fill": "#A9A9B2", "font-sans": "\"Pretendard Variable\", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, \"Segoe UI\", \"Apple SD Gothic Neo\", \"Noto Sans KR\", sans-serif", "font-display": "\"Artific\", \"Pretendard Variable\", Pretendard, sans-serif", "font-mono": "\"JetBrains Mono\", \"SF Mono\", D2Coding, Consolas, monospace", "weight-regular": "400", "weight-medium": "500", "weight-semibold": "600", "weight-bold": "700", "text-11": "11px", "text-11-lh": "16px", "text-12": "12px", "text-12-lh": "18px", "text-13": "13px", "text-13-lh": "20px", "text-14": "14px", "text-14-lh": "22px", "text-16": "16px", "text-16-lh": "24px", "text-18": "18px", "text-18-lh": "27px", "text-20": "20px", "text-20-lh": "30px", "text-24": "24px", "text-24-lh": "34px", "text-30": "30px", "text-30-lh": "40px", "text-36": "36px", "text-36-lh": "48px", "text-44": "44px", "text-44-lh": "56px", "space-0": "0px", "space-1": "4px", "space-2": "8px", "space-3": "12px", "space-4": "16px", "space-5": "20px", "space-6": "24px", "space-7": "28px", "space-8": "32px", "space-10": "40px", "space-12": "48px", "space-16": "64px", "space-20": "80px", "space-24": "96px", "space-32": "128px", "space-40": "160px", "space-48": "192px", "space-56": "224px", "space-64": "256px", "space-80": "320px", "space-96": "384px", "radius-none": "0px", "radius-xs": "4px", "radius-sm": "8px", "radius-control-md": "10px", "radius-md": "12px", "radius-lg": "16px", "radius-xl": "20px", "radius-2xl": "24px", "radius-full": "9999px", "padding-none": "0px", "padding-2xs": "var(--sy-space-1)", "padding-xs": "var(--sy-space-2)", "padding-sm": "var(--sy-space-3)", "padding-md": "var(--sy-space-4)", "padding-lg": "var(--sy-space-6)", "padding-xl": "var(--sy-space-8)", "shadow-xs": "0 1px 2px rgba(0, 0, 0, 0.4)", "shadow-sm": "0 2px 6px rgba(0, 0, 0, 0.44)", "shadow-md": "0 4px 12px rgba(0, 0, 0, 0.47)", "shadow-lg": "0 8px 24px rgba(0, 0, 0, 0.5)", "shadow-xl": "0 24px 48px rgba(0, 0, 0, 0.6)", "shadow-thumb": "0 1px 3px rgba(0, 0, 0, 0.5), 0 0 3px rgba(255, 255, 255, 0.22)", "z-sticky": "100", "z-dropdown": "200", "z-drawer": "300", "z-modal": "400", "z-toast": "500", "z-tooltip": "600", "duration-instant": "100ms", "duration-fast": "150ms", "duration-base": "200ms", "duration-slow": "300ms", "ease-standard": "cubic-bezier(0.2, 0, 0, 1)", "ease-enter": "cubic-bezier(0, 0, 0.2, 1)", "ease-exit": "cubic-bezier(0.4, 0, 1, 1)", "control-height-xs": "24px", "control-height-sm": "32px", "control-height-md": "36px", "control-height-lg": "40px", "control-padding-x": "12px", "control-gap": "12px", "body-size": "14px", "body-lh": "22px", "label-size": "13px", "label-lh": "20px", "page-padding": "32px", "section-gap": "40px", "card-padding": "28px", "stack-gap": "16px", "table-row": "36px", "table-cell-x": "12px", "content-max": "760px"};
+let mode='light';
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{
+ mode=b.dataset.mode;
+ document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('on',x===b));
+ document.querySelectorAll('.pair').forEach(p=>{
+   const t=p.dataset.tok, src = p.dataset.side==='sc' ? (mode==='light'?SCL:SCD) : (mode==='light'?SYL:SYD);
+   const v=src[t]; if(!v) return;
+   const i=p.querySelector('i'), e=p.querySelector('em');
+   if(v==='transparent'){i.style.background='repeating-conic-gradient(#E4E4E7 0 25%,#fff 0 50%) 50%/6px 6px'}else{i.style.background=v}
+   e.textContent=v;
+ });
+});
+const q=document.getElementById('q');
+let filt='all';
+function apply(){
+ const s=q.value.toLowerCase();
+ document.querySelectorAll('.r').forEach(r=>{
+  const okF = filt==='all' || (filt==='decide' ? r.dataset.st!=='direct' : r.dataset.st==='direct');
+  const okS = !s || r.dataset.q.toLowerCase().includes(s);
+  const on = okF&&okS;
+  r.classList.toggle('hide',!on);
+  const n=r.nextElementSibling; if(n&&n.classList.contains('note')) n.classList.toggle('hide',!on);
+ });
+ document.querySelectorAll('section').forEach(sec=>{
+  sec.classList.toggle('hide', !sec.querySelector('.r:not(.hide)'));
+ });
+}
+q.oninput=apply;
+document.querySelectorAll('[data-filt]').forEach(b=>b.onclick=()=>{
+ filt=b.dataset.filt;
+ document.querySelectorAll('[data-filt]').forEach(x=>x.classList.toggle('on',x===b));
+ apply();
+});
+</script></html>

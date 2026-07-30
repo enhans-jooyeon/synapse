@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synapse — visual diff</title>
+<style>
+  :root{--ink:#18181B;--ink2:#52525B;--ink3:#A1A1AA;--line:#E4E4E7;--line2:#F4F4F5;
+        --ok:#1F9D5B;--no:#B23230;--warn:#8C5A00}
+  *{box-sizing:border-box}
+  body{margin:0;background:#FAFAFA;color:var(--ink);font:13px/1.5 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:28px 24px 64px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.87em;background:var(--line2);padding:1px 4px;border-radius:3px;color:#3F3F46}
+
+  h1{font-size:19px;font-weight:670;letter-spacing:-.02em;margin:0 0 5px}
+  .mast{border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:22px}
+  .mast p{margin:0;font-size:11.5px;color:var(--ink2)}
+
+  section{background:#fff;border:1px solid var(--line);border-radius:11px;padding:20px 22px;margin-bottom:14px}
+  .st{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+  h2{font-size:16px;font-weight:650;margin:0}
+  .chip{font-size:10px;font-weight:640;padding:2px 7px;border-radius:9999px;border:1px solid}
+  .c-ok{background:#EEF9F3;color:var(--ok);border-color:#A9E3C4}
+  .c-wa{background:#FDF6E7;color:var(--warn);border-color:#F3D492}
+  .st .note{font-size:11px;color:var(--ink3);margin-left:auto}
+
+  h3{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);font-weight:700;margin:0 0 9px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .row{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .row:last-child{margin-bottom:0}
+  .lbl{font-size:9.5px;color:var(--ink3);font-weight:620;margin:0 0 7px}
+
+  .ob{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:6px;font-size:12px;font-weight:500;border:1px solid transparent;white-space:nowrap}
+  .nb{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 14px;border-radius:10px;font-size:12.5px;font-weight:500;border:1px solid transparent;white-space:nowrap}
+  .bd{display:inline-flex;align-items:center;justify-content:center;height:20px;padding:0 8px;border-radius:9999px;font-size:11px;font-weight:500;border:1px solid transparent;white-space:nowrap}
+  .bd.sq{border-radius:4px}
+  .cp{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:8px;font-size:11.5px;font-weight:500;border:1px solid transparent;white-space:nowrap}
+  .mx{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:9px 8px;align-items:center}
+  .ax{font-size:8.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);font-weight:680;text-align:center}
+  .rl{font-size:10px;color:var(--ink2);text-align:right;line-height:1.2}
+  .rl i{display:block;font-style:normal;font-size:8px;color:var(--ink3)}
+  .mx .ob,.mx .nb{width:100%}
+
+  .ramp{display:flex;align-items:center;margin-bottom:4px}
+  .rname{font-size:10px;width:66px;flex-shrink:0;color:var(--ink2);font-weight:600}
+  .sw{flex:1;height:22px}
+  .sw:first-of-type{border-radius:4px 0 0 4px}
+  .sw:last-child{border-radius:0 4px 4px 0}
+  .new{outline:2px solid var(--ok);outline-offset:2px;border-radius:5px}
+
+  .v{font-size:11.5px;line-height:1.55;color:var(--ink2);margin:14px 0 0;padding-top:11px;border-top:1px solid var(--line2)}
+  .v b{color:var(--ink)}
+  .v.warn{color:#4A3208;background:#FDF6E7;border:1px solid #F3D492;border-radius:7px;padding:9px 11px;margin-top:12px}
+
+  table{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px}
+  th{text-align:left;font-size:8.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);font-weight:680;padding:0 8px 5px 0;border-bottom:1px solid var(--line)}
+  td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line2)}
+  td.n{font-variant-numeric:tabular-nums;font-weight:620;text-align:right}
+  tr:last-child td{border-bottom:none}
+  .up{color:var(--ok);font-weight:680}
+
+  .tks{display:flex;flex-wrap:wrap;gap:5px 7px;margin-bottom:13px}
+  .tk{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;color:var(--ink2);font-family:ui-monospace,Menlo,monospace;background:var(--line2);border-radius:4px;padding:2px 6px 2px 3px}
+  .tk i{width:12px;height:12px;border-radius:2px;flex-shrink:0;display:inline-block}
+  .cell{display:inline-flex;flex-direction:column;gap:5px}
+  .tag{font-size:8.5px;font-weight:650;color:var(--ink3);text-align:center}
+  .tag.x{color:var(--no)}
+  .pend{font-size:11px;color:var(--ink3);font-style:italic;padding:14px;border:1px dashed var(--line);border-radius:8px;text-align:center;margin:0}
+  @media(max-width:740px){.two{grid-template-columns:1fr;gap:20px}}
+</style>
+</head>
+<body><div class="wrap">
+
+<div class="mast">
+  <h1>Synapse — visual diff</h1>
+  <p>Old <b>@enhans/synapse v0.13.6</b> → new <b>Synapse v1.0.2</b>. Colours resolved from source. Rationale lives in <code>CHANGELOG.md</code>; open decisions in <code>decisions.md</code>.</p>
+</div>
+
+<!-- PALETTE -->
+<section>
+  <div class="st"><h2>Colour palette</h2><span class="chip c-ok">azure added</span><span class="note">7 → 9 + alpha</span></div>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <div class="ramp"><span class="rname">gray</span><div class="sw" style="background:#fbfbfc"></div><div class="sw" style="background:#f7f7f8"></div><div class="sw" style="background:#f2f2f3"></div><div class="sw" style="background:#e5e5e6"></div><div class="sw" style="background:#cdcdcd"></div><div class="sw" style="background:#b2b2b3"></div><div class="sw" style="background:#808081"></div><div class="sw" style="background:#666667"></div><div class="sw" style="background:#4d4d4c"></div><div class="sw" style="background:#262627"></div></div>
+      <div class="ramp"><span class="rname">slate</span><div class="sw" style="background:#f8fafc"></div><div class="sw" style="background:#f1f5f9"></div><div class="sw" style="background:#e2e8f0"></div><div class="sw" style="background:#c8d5e1"></div><div class="sw" style="background:#94a3b8"></div><div class="sw" style="background:#64748b"></div><div class="sw" style="background:#475569"></div><div class="sw" style="background:#334155"></div><div class="sw" style="background:#1e293b"></div><div class="sw" style="background:#0f172a"></div></div>
+      <div class="ramp"><span class="rname">blue</span><div class="sw" style="background:#e6f2ff"></div><div class="sw" style="background:#9dceff"></div><div class="sw" style="background:#8ec6ff"></div><div class="sw" style="background:#62b0ff"></div><div class="sw" style="background:#369aff"></div><div class="sw" style="background:#0a84ff"></div><div class="sw" style="background:#006bd6"></div><div class="sw" style="background:#005dbb"></div><div class="sw" style="background:#004285"></div><div class="sw" style="background:#002e5c"></div></div>
+      <div class="ramp"><span class="rname">red</span><div class="sw" style="background:#ffeeed"></div><div class="sw" style="background:#ffcac6"></div><div class="sw" style="background:#ffa59f"></div><div class="sw" style="background:#ff8178"></div><div class="sw" style="background:#ff5c51"></div><div class="sw" style="background:#e6483d"></div><div class="sw" style="background:#c4342a"></div><div class="sw" style="background:#a2231a"></div><div class="sw" style="background:#80160e"></div><div class="sw" style="background:#5e0b06"></div></div>
+      <div class="ramp"><span class="rname">green</span><div class="sw" style="background:#ecfdf5"></div><div class="sw" style="background:#d1fae5"></div><div class="sw" style="background:#a7f3d0"></div><div class="sw" style="background:#6ee7b7"></div><div class="sw" style="background:#34d399"></div><div class="sw" style="background:#10b978"></div><div class="sw" style="background:#059669"></div><div class="sw" style="background:#047857"></div><div class="sw" style="background:#065f46"></div><div class="sw" style="background:#064e3b"></div></div>
+      <div class="ramp"><span class="rname">yellow</span><div class="sw" style="background:#fefce8"></div><div class="sw" style="background:#fef9c3"></div><div class="sw" style="background:#fef08a"></div><div class="sw" style="background:#fde047"></div><div class="sw" style="background:#facc15"></div><div class="sw" style="background:#eab308"></div><div class="sw" style="background:#ca8a04"></div><div class="sw" style="background:#a16207"></div><div class="sw" style="background:#854d0e"></div><div class="sw" style="background:#713f12"></div></div>
+      <div class="ramp"><span class="rname">purple</span><div class="sw" style="background:#f5edff"></div><div class="sw" style="background:#dfc6ff"></div><div class="sw" style="background:#c99fff"></div><div class="sw" style="background:#b378ff"></div><div class="sw" style="background:#9d51ff"></div><div class="sw" style="background:#873de6"></div><div class="sw" style="background:#6d2ac4"></div><div class="sw" style="background:#561aa2"></div><div class="sw" style="background:#400e80"></div><div class="sw" style="background:#2c065e"></div></div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <div class="ramp"><span class="rname">gray</span><div class="sw" style="background:#FAFAFB"></div><div class="sw" style="background:#F4F4F6"></div><div class="sw" style="background:#E3E3E8"></div><div class="sw" style="background:#D1D1D8"></div><div class="sw" style="background:#A9A9B2"></div><div class="sw" style="background:#83838D"></div><div class="sw" style="background:#62626B"></div><div class="sw" style="background:#4A4A52"></div><div class="sw" style="background:#33333A"></div><div class="sw" style="background:#1E1E24"></div><div class="sw" style="background:#141419"></div></div>
+      <div class="ramp"><span class="rname">slate</span><div class="sw" style="background:#F7F9FB"></div><div class="sw" style="background:#EFF3F7"></div><div class="sw" style="background:#DCE3EB"></div><div class="sw" style="background:#C2CCD9"></div><div class="sw" style="background:#93A1B3"></div><div class="sw" style="background:#6B7A8D"></div><div class="sw" style="background:#4F5D6F"></div><div class="sw" style="background:#3C4756"></div><div class="sw" style="background:#2A333F"></div><div class="sw" style="background:#1A212B"></div><div class="sw" style="background:#10151C"></div></div>
+      <div class="ramp"><span class="rname">blue</span><div class="sw" style="background:#F0F4FD"></div><div class="sw" style="background:#E4EAFB"></div><div class="sw" style="background:#C4D1F5"></div><div class="sw" style="background:#9DB3EE"></div><div class="sw" style="background:#6B89E6"></div><div class="sw" style="background:#3D63DD"></div><div class="sw" style="background:#3155C6"></div><div class="sw" style="background:#2A48A5"></div><div class="sw" style="background:#22397F"></div><div class="sw" style="background:#1B2C60"></div><div class="sw" style="background:#111A3C"></div></div>
+      <div class="ramp"><span class="rname">red</span><div class="sw" style="background:#FDF1F0"></div><div class="sw" style="background:#FBE3E2"></div><div class="sw" style="background:#F7BEBB"></div><div class="sw" style="background:#EE837D"></div><div class="sw" style="background:#DB504D"></div><div class="sw" style="background:#D2403E"></div><div class="sw" style="background:#B23230"></div><div class="sw" style="background:#8F2826"></div><div class="sw" style="background:#73201E"></div><div class="sw" style="background:#571716"></div><div class="sw" style="background:#3D100F"></div></div>
+      <div class="ramp"><span class="rname">green</span><div class="sw" style="background:#EEF9F3"></div><div class="sw" style="background:#DCF2E6"></div><div class="sw" style="background:#A9E3C4"></div><div class="sw" style="background:#3FBF7F"></div><div class="sw" style="background:#2FAF6D"></div><div class="sw" style="background:#1F9D5B"></div><div class="sw" style="background:#0E7A42"></div><div class="sw" style="background:#135933"></div><div class="sw" style="background:#124A2C"></div><div class="sw" style="background:#123F27"></div><div class="sw" style="background:#0C2A1A"></div></div>
+      <div class="ramp"><span class="rname">amber</span><div class="sw" style="background:#FDF6E7"></div><div class="sw" style="background:#FBEED3"></div><div class="sw" style="background:#F3D492"></div><div class="sw" style="background:#D99A27"></div><div class="sw" style="background:#CC8B1E"></div><div class="sw" style="background:#BA7C14"></div><div class="sw" style="background:#8C5A00"></div><div class="sw" style="background:#6B4708"></div><div class="sw" style="background:#5A3C08"></div><div class="sw" style="background:#4A3208"></div><div class="sw" style="background:#332305"></div></div>
+      <div class="ramp new" style="margin-top:8px"><span class="rname" style="color:var(--ok);font-weight:680">azure</span><div class="sw" style="background:#F1F7FE"></div><div class="sw" style="background:#E0EEFD"></div><div class="sw" style="background:#B8DAFC"></div><div class="sw" style="background:#7BBBFC"></div><div class="sw" style="background:#2994FF"></div><div class="sw" style="background:#0073E6"></div><div class="sw" style="background:#0D61B5"></div><div class="sw" style="background:#0B4F93"></div><div class="sw" style="background:#0A3D71"></div><div class="sw" style="background:#082B4E"></div><div class="sw" style="background:#061B30"></div></div>
+    </div>
+  </div>
+  <p class="v"><b>Two blues by job:</b> azure <code>#0073E6</code> = brand · indigo <code>#3155C6</code> = link/focus/info. Never mixed. Every hue desaturated vs the old palette; <code>yellow → amber</code> is a retune, not a rename.</p>
+</section>
+
+<!-- SEMANTIC -->
+<section>
+  <div class="st"><h2>Semantic colours</h2><span class="chip c-ok">restructured</span><span class="note">70 → 104 tokens · numeric steps → named roles</span></div>
+
+  <div class="two">
+    <div>
+      <h3>Old — 70 semantic colour tokens</h3>
+
+      <p class="lbl">surfaces — numeric, each with a paired hover</p>
+      <div class="tks"><span class="tk"><i style="background:#ffffff"></i>background-0</span><span class="tk"><i style="background:#fbfbfc"></i>background-0-hover</span><span class="tk"><i style="background:#fbfbfc"></i>background-50</span><span class="tk"><i style="background:#f7f7f8"></i>background-50-hover</span><span class="tk"><i style="background:#f7f7f8"></i>background-100</span><span class="tk"><i style="background:#f2f2f3"></i>background-100-hover</span><span class="tk"><i style="background:#f2f2f3"></i>background-200</span><span class="tk"><i style="background:#e5e5e6"></i>background-200-hover</span><span class="tk"><i style="background:#e5e5e6"></i>background-track</span><span class="tk"><i style="background:#262627"></i>background-inverted</span><span class="tk"><i style="background:#666667"></i>background-inverted-hover</span><span class="tk"><i style="background:#e2e8f0"></i>background-highlight</span><span class="tk"><i style="background:#f8fafc"></i>background-highlight-light</span></div>
+
+      <p class="lbl">text — 11 tokens</p>
+      <div class="tks"><span class="tk"><i style="background:#000000"></i>text-primary</span><span class="tk"><i style="background:#d9d9da"></i>text-primary-disabled</span><span class="tk"><i style="background:#808081"></i>text-secondary</span><span class="tk"><i style="background:#f2f2f3"></i>text-secondary-disabled</span><span class="tk"><i style="background:#b2b2b3"></i>text-tertiary</span><span class="tk"><i style="background:#ffffff"></i>text-inverted</span><span class="tk"><i style="background:#f7f7f8"></i>text-inverted-disabled</span><span class="tk"><i style="background:#e6483d"></i>text-error</span><span class="tk"><i style="background:#10b978"></i>text-success</span><span class="tk"><i style="background:#0a84ff"></i>text-brand</span><span class="tk"><i style="background:#64748b"></i>text-syntax</span></div>
+
+      <p class="lbl">icon — a second parallel scale, 11 more · <b>8 of 10 pairs byte-identical</b></p>
+      <div class="tks"><span class="tk"><i style="background:#262627"></i>icon-primary</span><span class="tk"><i style="background:#d9d9da"></i>icon-primary-disabled</span><span class="tk"><i style="background:#808081"></i>icon-secondary</span><span class="tk"><i style="background:#e5e5e6"></i>icon-secondary-disabled</span><span class="tk"><i style="background:#b2b2b3"></i>icon-tertiary</span><span class="tk"><i style="background:#f7f7f8"></i>icon-tertiary-disabled</span><span class="tk"><i style="background:#ffffff"></i>icon-inverted</span><span class="tk"><i style="background:#f7f7f8"></i>icon-inverted-disabled</span><span class="tk"><i style="background:#e6483d"></i>icon-error</span><span class="tk"><i style="background:#10b978"></i>icon-success</span><span class="tk"><i style="background:#0a84ff"></i>icon-brand</span></div>
+
+      <p class="lbl">border — numeric 100→900, paired hovers</p>
+      <div class="tks"><span class="tk"><i style="background:#e5e5e6"></i>border-100</span><span class="tk"><i style="background:#d9d9da"></i>border-100-hover</span><span class="tk"><i style="background:#d9d9da"></i>border-200</span><span class="tk"><i style="background:#b2b2b3"></i>border-200-hover</span><span class="tk"><i style="background:#b2b2b3"></i>border-300</span><span class="tk"><i style="background:#808081"></i>border-300-hover</span><span class="tk"><i style="background:#64748b"></i>border-500</span><span class="tk"><i style="background:#262627"></i>border-900</span><span class="tk"><i style="background:#ffffff"></i>border-inverted</span><span class="tk"><i style="background:#6ee7b7"></i>border-success</span><span class="tk"><i style="background:#10b978"></i>border-success-hover</span><span class="tk"><i style="background:#ff5c51"></i>border-error</span><span class="tk"><i style="background:#e6483d"></i>border-error-hover</span><span class="tk"><i style="background:#369aff"></i>border-brand</span><span class="tk"><i style="background:#0a84ff"></i>border-brand-hover</span></div>
+
+      <p class="lbl">status — only <b>error + success</b></p>
+      <div class="tks"><span class="tk"><i style="background:#e6483d"></i>text-error</span><span class="tk"><i style="background:#10b978"></i>text-success</span><span class="tk"><i style="background:#ff5c51"></i>border-error</span><span class="tk"><i style="background:#6ee7b7"></i>border-success</span></div>
+    </div>
+
+    <div>
+      <h3>New — 104 semantic colour tokens</h3>
+
+      <p class="lbl">surfaces — named by role; hovers are <b>alpha overlays</b></p>
+      <div class="tks"><span class="tk"><i style="background:#FFFFFF"></i>bg-page</span><span class="tk"><i style="background:#FAFAFB"></i>bg-surface</span><span class="tk"><i style="background:#FFFFFF"></i>bg-raised</span><span class="tk"><i style="background:#F4F4F6"></i>bg-sunken</span><span class="tk"><i style="background:rgba(9, 9, 11, 0.04);box-shadow:inset 0 0 0 1px #E4E4E7"></i>bg-hover</span><span class="tk"><i style="background:rgba(9, 9, 11, 0.06);box-shadow:inset 0 0 0 1px #E4E4E7"></i>bg-active</span><span class="tk"><i style="background:#EFF3F7"></i>bg-selected</span><span class="tk"><i style="background:#DCE3EB"></i>bg-selected-hover</span><span class="tk"><i style="background:#F4F4F6"></i>bg-disabled</span><span class="tk"><i style="background:rgba(9, 9, 11, 0.40);box-shadow:inset 0 0 0 1px #E4E4E7"></i>bg-scrim</span><span class="tk"><i style="background:#09090B"></i>bg-inverse</span><span class="tk"><i style="background:#33333A"></i>bg-inverse-soft</span></div>
+
+      <p class="lbl">text — renamed from <code>fg-*</code></p>
+      <div class="tks"><span class="tk"><i style="background:#09090B"></i>text-primary</span><span class="tk"><i style="background:#62626B"></i>text-secondary</span><span class="tk"><i style="background:#83838D"></i>text-tertiary</span><span class="tk"><i style="background:#83838D"></i>text-placeholder</span><span class="tk"><i style="background:#A9A9B2"></i>text-disabled</span><span class="tk"><i style="background:#FFFFFF"></i>text-on-inverse</span><span class="tk"><i style="background:#3155C6"></i>text-link</span><span class="tk"><i style="background:#FFFFFF"></i>text-on-solid</span><span class="tk"><i style="background:#9DB3EE"></i>text-link-on-inverse</span></div>
+
+      <p class="lbl">icon — dedicated family; <b>1 real value, 8 aliases</b></p>
+      <div class="tks"><span class="tk"><i style="background:#1E1E24"></i>icon-primary</span><span class="tk"><i style="background:#62626B"></i>icon-secondary</span><span class="tk"><i style="background:#83838D"></i>icon-tertiary</span><span class="tk"><i style="background:#A9A9B2"></i>icon-disabled</span><span class="tk"><i style="background:#FFFFFF;box-shadow:inset 0 0 0 1px #E4E4E7"></i>icon-on-inverse</span><span class="tk"><i style="background:#3155C6"></i>icon-info</span><span class="tk"><i style="background:#0E7A42"></i>icon-success</span><span class="tk"><i style="background:#8C5A00"></i>icon-warning</span><span class="tk"><i style="background:#B23230"></i>icon-danger</span></div>
+
+      <p class="lbl">border — named weights, no paired hovers</p>
+      <div class="tks"><span class="tk"><i style="background:#ECECEF"></i>border-subtle</span><span class="tk"><i style="background:#E9E9ED"></i>border-default</span><span class="tk"><i style="background:repeating-conic-gradient(#E4E4E7 0% 25%, #fff 0% 50%) 50%/6px 6px"></i>border-overlay</span><span class="tk"><i style="background:#D1D1D8"></i>border-strong</span><span class="tk"><i style="background:#A9A9B2"></i>border-strong-hover</span><span class="tk"><i style="background:#3D63DD"></i>border-focus</span><span class="tk"><i style="background:#33333A"></i>border-focus-input</span><span class="tk"><i style="background:#09090B"></i>border-selected</span><span class="tk"><i style="background:#D2403E"></i>border-error</span></div>
+
+      <p class="lbl">status — <b>4 roles × text / tint / solid</b></p>
+      <div class="tks"><span class="tk"><i style="background:#3155C6"></i>status-info</span><span class="tk"><i style="background:#E4EAFB"></i>status-info-bg</span><span class="tk"><i style="background:#3D63DD"></i>status-info-bg-solid</span><span class="tk"><i style="background:#0E7A42"></i>status-success</span><span class="tk"><i style="background:#DCF2E6"></i>status-success-bg</span><span class="tk"><i style="background:#1F9D5B"></i>status-success-bg-solid</span><span class="tk"><i style="background:#8C5A00"></i>status-warning</span><span class="tk"><i style="background:#FBEED3"></i>status-warning-bg</span><span class="tk"><i style="background:#BA7C14"></i>status-warning-bg-solid</span><span class="tk"><i style="background:#B23230"></i>status-danger</span><span class="tk"><i style="background:#FBE3E2"></i>status-danger-bg</span><span class="tk"><i style="background:#DB504D"></i>status-danger-bg-solid</span></div>
+
+      <p class="lbl">on-inverse variants — <code>-on-*</code> now consistently means "for use on"</p>
+      <div class="tks"><span class="tk"><i style="background:#9DB3EE"></i>status-info-on-inverse</span><span class="tk"><i style="background:#3FBF7F"></i>status-success-on-inverse</span><span class="tk"><i style="background:#D99A27"></i>status-warning-on-inverse</span><span class="tk"><i style="background:#EE837D"></i>status-danger-on-inverse</span></div>
+    </div>
+  </div>
+
+  <p class="v"><b>Three structural changes.</b> <b>Renamed in the same release:</b> <code>fg-*</code> → <code>text-*</code> (matching Atlassian/Carbon/Polaris), the five "for use on inverted" tokens → <code>-on-inverse</code>, and <code>radius-10</code> → <code>radius-control-md</code>. Compound <code>&lt;family&gt;-fg</code> tokens (<code>action-primary-fg</code>, <code>ai-fg</code>) deliberately keep <code>-fg</code>: there it means "the foreground paired with this fill", Material's <code>onPrimary</code> concept, not a position on the text scale. <b>Icons keep a dedicated family</b>, matching Atlassian, Carbon and Polaris (Material 3 is the outlier that unifies them). But only <code>icon-primary</code> carries its own value — one ramp step lighter than <code>text-primary</code>, because a stroke icon reads heavier than a glyph at equal value. The other 8 <b>alias</b> <code>fg-*</code>/<code>status-*</code>, so the API exists without the old system's hand-maintained 80% duplication. Borders drop numeric steps and paired hovers for named weights, encoding hover by <b>ladder position</b> (<code>default → strong</code>) rather than a suffix. Surface hovers became <b>alpha overlays</b> that composite over any fill, which is why the old system needed a solid hover per surface and the new one needs two overlays total.</p>
+  <p class="v"><b>The count grew 70 → 104.</b> The growth is in families the old system had no equivalent for: <code>action-*</code> (20), <code>icon-*</code> (9), <code>ai-*</code> (5), <code>glass-*</code> (7), <code>emphasis-*</code> (4), <code>viz-*</code> (8). Old button colours lived in a flat <code>button-*</code> family of 18; those became <code>action-*</code>.</p>
+  <div class="row" style="margin-top:14px;gap:22px">
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#09090B">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#09090B" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      icon + text both at <code>text-primary</code>
+    </span>
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#09090B">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E1E24" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      icon at <code>icon-primary</code>, text at <code>text-primary</code>
+    </span>
+  </div>
+  <p class="v warn"><b>Status went from 2 roles to 4.</b> Old had only error and success — no info or warning at the semantic layer. Each new role carries three renderings (deepened <b>text</b>, pale <b>tint</b>, mid <b>solid</b>), so old <code>text-error #e6483d</code> splits: the deepened <code>status-danger #B23230</code> for text, and <code>status-danger-bg-solid #DB504D</code> keeps the old brighter value for fills.</p>
+</section>
+
+<!-- DATA VIZ -->
+<section>
+  <div class="st"><h2>Data visualization</h2><span class="chip c-ok">rebuilt</span><span class="note">charts only · per-mode</span></div>
+  <div class="two">
+    <div>
+      <h3>Old — muted</h3>
+      <div class="ramp" style="margin-bottom:10px"><span class="rname">viz 1–8</span><div class="sw" style="background:#5B7CE0"></div><div class="sw" style="background:#4FAE8B"></div><div class="sw" style="background:#C9932E"></div><div class="sw" style="background:#C15D5D"></div><div class="sw" style="background:#8A6FC9"></div><div class="sw" style="background:#4FA3C4"></div><div class="sw" style="background:#B36FA3"></div><div class="sw" style="background:#7A828E"></div></div>
+      <svg viewBox="0 0 300 60" style="width:100%;height:auto">
+        <polyline fill="none" stroke="#5B7CE0" stroke-width="2" points="0,48 60,34 120,40 180,22 240,28 300,10"/>
+        <polyline fill="none" stroke="#4FAE8B" stroke-width="2" points="0,54 60,44 120,48 180,32 240,38 300,22"/>
+        <polyline fill="none" stroke="#C9932E" stroke-width="2" points="0,42 60,28 120,32 180,16 240,20 300,5"/>
+        <polyline fill="none" stroke="#C15D5D" stroke-width="2" points="0,57 60,50 120,54 180,42 240,46 300,34"/>
+        <polyline fill="none" stroke="#8A6FC9" stroke-width="2" points="0,45 60,38 120,34 180,28 240,24 300,15"/>
+        <polyline fill="none" stroke="#4FA3C4" stroke-width="2" points="0,51 60,40 120,45 180,27 240,33 300,18"/>
+        <polyline fill="none" stroke="#B36FA3" stroke-width="2" points="0,38 60,31 120,26 180,24 240,17 300,7"/>
+        <polyline fill="none" stroke="#7A828E" stroke-width="2" points="0,59 60,55 120,57 180,48 240,52 300,42"/>
+      </svg>
+    </div>
+    <div>
+      <h3>New — discriminability first</h3>
+      <div class="ramp" style="margin-bottom:10px"><span class="rname">viz 1–8</span><div class="sw" style="background:#016BE4"></div><div class="sw" style="background:#01B75C"></div><div class="sw" style="background:#A27201"></div><div class="sw" style="background:#FE5D58"></div><div class="sw" style="background:#7A03E2"></div><div class="sw" style="background:#01A9CB"></div><div class="sw" style="background:#CB0188"></div><div class="sw" style="background:#215100"></div></div>
+      <svg viewBox="0 0 300 60" style="width:100%;height:auto">
+        <polyline fill="none" stroke="#016BE4" stroke-width="2" points="0,48 60,34 120,40 180,22 240,28 300,10"/>
+        <polyline fill="none" stroke="#01B75C" stroke-width="2" points="0,54 60,44 120,48 180,32 240,38 300,22"/>
+        <polyline fill="none" stroke="#A27201" stroke-width="2" points="0,42 60,28 120,32 180,16 240,20 300,5"/>
+        <polyline fill="none" stroke="#FE5D58" stroke-width="2" points="0,57 60,50 120,54 180,42 240,46 300,34"/>
+        <polyline fill="none" stroke="#7A03E2" stroke-width="2" points="0,45 60,38 120,34 180,28 240,24 300,15"/>
+        <polyline fill="none" stroke="#01A9CB" stroke-width="2" points="0,51 60,40 120,45 180,27 240,33 300,18"/>
+        <polyline fill="none" stroke="#CB0188" stroke-width="2" points="0,38 60,31 120,26 180,24 240,17 300,7"/>
+        <polyline fill="none" stroke="#215100" stroke-width="2" points="0,59 60,55 120,57 180,48 240,52 300,42"/>
+      </svg>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th></th><th class="n">min ΔE</th><th class="n">deuter.</th><th class="n">L* spread</th><th class="n">chroma floor</th></tr></thead>
+    <tbody>
+      <tr><td>Old</td><td class="n">16.6</td><td class="n">7.6</td><td class="n">13</td><td class="n" style="color:var(--no)">7</td></tr>
+      <tr><td>New — light</td><td class="n up">45.8</td><td class="n up">11.6</td><td class="n">36</td><td class="n">37</td></tr>
+      <tr><td>New — dark</td><td class="n up">51.9</td><td class="n up">27.4</td><td class="n">37</td><td class="n">41</td></tr>
+    </tbody>
+  </table>
+  <p class="v"><b>Muting reversed.</b> It existed only because viz doubled as UI tints; separating those jobs removed the constraint. Old <code>viz-8</code> sat at chroma 7 — effectively grey.</p>
+  <p class="v warn"><b>2.5:1 contrast floor</b>, not 3:1 — a registered deviation (foundations §9). Chart labels or legends are therefore <b>required</b>; colour alone may not identify a series.</p>
+</section>
+
+<!-- IDENTITY -->
+<section>
+  <div class="st"><h2>Identity marks</h2><span class="chip c-ok">colour-coding removed</span><span class="note">was 16 category tokens</span></div>
+  <div class="two">
+    <div>
+      <h3>Was — 8 hash-assigned hues</h3>
+      <div class="row">
+        <span class="bd" style="background:#E4EAFB;color:#2A48A5">Billing</span>
+        <span class="bd" style="background:#DCF2E6;color:#135933">Infra</span>
+        <span class="bd" style="background:#E8E2F4;color:#6E59A1">Design</span>
+        <span class="bd" style="background:#F0E2ED;color:#88547C">Research</span>
+      </div>
+    </div>
+    <div>
+      <h3>Now — one neutral treatment</h3>
+      <div class="row">
+        <span class="bd" style="background:#F4F4F6;color:#62626B">Billing</span>
+        <span class="bd" style="background:#F4F4F6;color:#62626B">Infra</span>
+        <span class="bd" style="background:#F4F4F6;color:#62626B">Design</span>
+        <span class="bd" style="background:#F4F4F6;color:#62626B">Research</span>
+      </div>
+    </div>
+  </div>
+  <p class="v"><b>Retired:</b> <code>category-1…8-bg</code> / <code>-text</code> (16 tokens) plus the <code>purple</code>/<code>teal</code>/<code>magenta</code> ramps that only existed to feed them (33 primitive steps). Avatars, taxonomy Badges/Chips and calendar dots now take <code>bg-sunken</code> + <code>text-secondary</code>.</p>
+  <p class="v warn"><b>Why.</b> The hue was assigned by hashing a label, so <code>category-5</code> meant "hash slot 5" — no meaning, and an <b>undocumented stability contract</b>: changing the hash, the slot count or a label would silently recolour every existing tag. Against §1.1's rule that <i>colour is a scarce resource spent only on meaning</i>, an arbitrary hash hue is decoration. Identity reads from <b>shape</b> (squared avatar = agent, round = human) and the <b>label</b>, which were always the load-bearing channels.</p>
+</section>
+
+<!-- BUTTON -->
+<section>
+  <div class="st"><h2>Button</h2><span class="chip c-ok">shipped</span><span class="note">two axes · 4 styles × 3 targets × 4 sizes</span></div>
+  <div class="two">
+    <div>
+      <h3>Old — buttonStyle × target</h3>
+      <div class="mx">
+        <div></div><div class="ax">default</div><div class="ax">destruct.</div><div class="ax">brand</div>
+        <div class="rl">primary</div>
+        <div><span class="ob" style="background:#262627;color:#fff">Button</span></div>
+        <div><span class="ob" style="background:#e6483d;color:#fff">Button</span></div>
+        <div><span class="ob" style="background:#0a84ff;color:#fff">Button</span></div>
+        <div class="rl">secondary<i>white+border</i></div>
+        <div><span class="ob" style="background:#fff;color:#000;border-color:#d9d9da">Button</span></div>
+        <div><span class="ob" style="background:#fff;color:#e6483d;border-color:#ff5c51">Button</span></div>
+        <div><span class="ob" style="background:#fff;color:#0a84ff;border-color:#369aff">Button</span></div>
+        <div class="rl">tertiary<i>tonal</i></div>
+        <div><span class="ob" style="background:#f2f2f3;color:#000">Button</span></div>
+        <div><span class="ob" style="background:#ffeeed;color:#e6483d">Button</span></div>
+        <div><span class="ob" style="background:#e6f2ff;color:#0a84ff">Button</span></div>
+        <div class="rl">ghost</div>
+        <div><span class="ob" style="background:transparent;color:#000">Button</span></div>
+        <div><span class="ob" style="background:transparent;color:#e6483d">Button</span></div>
+        <div><span class="ob" style="background:transparent;color:#0a84ff">Button</span></div>
+      </div>
+    </div>
+    <div>
+      <h3>New — same axes, renamed</h3>
+      <div class="mx">
+        <div></div><div class="ax">default</div><div class="ax">destruct.</div><div class="ax">brand</div>
+        <div class="rl">primary</div>
+        <div><span class="nb" style="background:#09090B;color:#fff">Button</span></div>
+        <div><span class="nb" style="background:#D2403E;color:#fff">Button</span></div>
+        <div><span class="nb" style="background:#0073E6;color:#fff">Button</span></div>
+        <div class="rl">secondary<i>was tertiary</i></div>
+        <div><span class="nb" style="background:#F4F4F6;color:#09090B">Button</span></div>
+        <div><span class="nb" style="background:#FDF1F0;color:#B23230">Button</span></div>
+        <div><span class="nb" style="background:#F1F7FE;color:#0B4F93">Button</span></div>
+        <div class="rl">outline<i>was secondary</i></div>
+        <div><span class="nb" style="background:#fff;color:#09090B;border-color:#E9E9ED">Button</span></div>
+        <div><span class="nb" style="background:#fff;color:#B23230;border-color:#D2403E">Button</span></div>
+        <div><span class="nb" style="background:#fff;color:#0D61B5;border-color:#0073E6">Button</span></div>
+        <div class="rl">ghost</div>
+        <div><span class="nb" style="background:transparent;color:#62626B">Button</span></div>
+        <div><span class="nb" style="background:transparent;color:#B23230">Button</span></div>
+        <div><span class="nb" style="background:transparent;color:#0D61B5">Button</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="v warn"><b>Rename trap:</b> old <code>secondary</code> (white+border) → new <code>outline</code>; old <code>tertiary</code> (tonal) → new <code>secondary</code>. A literal <code>secondary → secondary</code> swap silently changes appearance on the FE's <b>43</b> call sites.</p>
+  <p class="v"><b>Also:</b> tonal coloured fills sit at <code>ramp.50</code> so they don't duplicate status tints · <code>xs</code> 24px added, <b>inline-only</b> per the WCAG 2.5.8 Inline exception · brand hover <b>darkens</b> (no lighter azure clears contrast).</p>
+</section>
+
+<!-- BADGE / CHIP -->
+<section>
+  <div class="st"><h2>Badge &amp; Chip</h2><span class="chip c-ok">shipped · 0 new tokens</span><span class="note">interactivity = fill, not shape</span></div>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">badge — 7 raw hues</p>
+      <div class="row">
+        <span class="bd sq" style="background:#ffeeed;color:#c4342a">red</span>
+        <span class="bd sq" style="background:#f5edff;color:#6d2ac4">purple</span>
+        <span class="bd sq" style="background:#e2e8f0;color:#475569">slate</span>
+        <span class="bd sq" style="background:#f2f2f3;color:#4d4d4c">gray</span>
+        <span class="bd sq" style="background:#e6f2ff;color:#006bd6">blue</span>
+        <span class="bd sq" style="background:#ecfdf5;color:#059669">green</span>
+        <span class="bd sq" style="background:#fefce8;color:#ca8a04">yellow</span>
+      </div>
+      <p class="lbl">chip — one look</p>
+      <div class="row">
+        <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000">rounded</span>
+        <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000;border-radius:9999px">pill</span>
+        <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000;opacity:.5">disabled</span>
+      </div>
+      <p class="lbl">shape — free on both, so it signalled nothing</p>
+      <div class="row">
+        <span class="bd" style="background:#e6f2ff;color:#006bd6;border-radius:9999px">badge pill</span>
+        <span class="bd sq" style="background:#e6f2ff;color:#006bd6">badge rounded</span>
+        <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000;border-radius:9999px">chip pill</span>
+        <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000">chip rounded</span>
+      </div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">badge — 7 semantic roles, filled</p>
+      <div class="row">
+        <span class="bd" style="background:#F4F4F6;color:#62626B">neutral</span>
+        <span class="bd" style="background:#E4EAFB;color:#3155C6">info</span>
+        <span class="bd" style="background:#DCF2E6;color:#0E7A42">success</span>
+        <span class="bd" style="background:#FBEED3;color:#8C5A00">warning</span>
+        <span class="bd" style="background:#FBE3E2;color:#B23230">danger</span>
+        <span class="bd" style="background:#EFF3F7;color:#4F5D6F">ai</span>
+      </div>
+      <p class="lbl">chip — outlined at rest, glyph always</p>
+      <div class="row">
+        <span class="cp" style="background:#fff;border-color:#E9E9ED;color:#09090B">Seoul <span style="color:#83838D">✕</span></span>
+        <span class="cp" style="background:#fff;border-color:#E9E9ED;color:#62626B">Paid</span>
+        <span class="cp" style="background:transparent;border-color:#09090B;color:#09090B">✓ multi</span>
+        <span class="cp" style="background:#33333A;color:#fff">✓ single</span>
+      </div>
+      <p class="lbl">filter chip — rest vs selected</p>
+      <div class="row">
+        <span class="cp" style="background:transparent;border-color:#E9E9ED;color:#62626B">Paid</span>
+        <span style="font-size:10px;color:var(--ink3)">→</span>
+        <span class="cp" style="background:transparent;border-color:#09090B;color:#09090B">✓ Paid</span>
+        <span style="font-size:9.5px;color:var(--ink3);margin-left:2px">multi · no fill</span>
+        <span class="cp" style="background:#33333A;color:#fff;margin-left:10px">✓ Monthly</span>
+        <span style="font-size:9.5px;color:var(--ink3)">single · filled</span>
+      </div>
+      <p class="lbl">shape — free on Badge, fixed on Chip</p>
+      <div class="row" style="align-items:flex-start">
+        <span class="cell" style="align-items:center"><span class="bd" style="background:#E4EAFB;color:#3155C6">badge pill</span><span class="tag">default</span></span>
+        <span class="cell" style="align-items:center"><span class="bd sq" style="background:#E4EAFB;color:#3155C6">badge rounded</span><span class="tag">valid</span></span>
+        <span class="cell" style="align-items:center"><span class="cp" style="background:#fff;border-color:#E9E9ED;color:#09090B">chip cornered</span><span class="tag">always <code>radius.sm</code></span></span>
+        <span class="cell" style="align-items:center"><span class="cp" style="background:#fff;border-color:#E9E9ED;color:#09090B;border-radius:9999px;opacity:.4;text-decoration:line-through">chip pill</span><span class="tag x">retired</span></span>
+      </div>
+    </div>
+  </div>
+  <p class="v"><b>Fill carries the static/interactive split</b> — filled = static, outlined = interactive. That frees <b>shape on Badge</b> (<code>pill</code> default or <code>rounded</code>, one per view) while <b>Chip is always cornered</b>. Old code could make either shape on either component, which is why shape could never be the signal. Retired: Badge <code>outline</code> + <code>neutral solid</code> (became Chip's <i>single</i>-select state), Chip <code>category</code>. <b>Multi-select selected takes no fill</b> — <code>border.selected</code> is 19.9:1 against the rest border's 1.13:1, so the near-black outline + ✓ carry it without weight. <code>purple</code>/<code>slate</code>/<code>outline</code>/<code>active</code> had <b>zero real usage</b> — squashed.</p>
+  <p class="v warn"><b>Size names invert:</b> old sm/md/lg 20/24/28 vs new md/lg 20/24. A literal <code>md → md</code> shrinks a badge; dropping the prop lands correctly.</p>
+</section>
+
+<section><div class="st"><h2>Form controls</h2><span class="chip c-wa">next</span></div><p class="pend">Input · Textarea · Checkbox · Radio · Switch · Slider · Select · Combobox</p></section>
+<section><div class="st"><h2>Feedback &amp; status</h2><span class="chip c-wa">queued</span></div><p class="pend">Alert · Toast · Progress · Spinner · Skeleton · Tooltip</p></section>
+<section><div class="st"><h2>Navigation</h2><span class="chip c-wa">queued</span></div><p class="pend">Tabs · Pagination · Breadcrumb · Stepper <i>(absent from the new system)</i></p></section>
+
+</div></body>
+</html>

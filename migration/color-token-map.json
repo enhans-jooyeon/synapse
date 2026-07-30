@@ -1,0 +1,757 @@
+{
+  "meta": {
+    "direction": "old @enhans/synapse (viralpick/synapse) -> new Synapse v1.0.x",
+    "theme": "light only",
+    "source_old": "@enhans/synapse v0.13.6 — github.com/viralpick/synapse, src/styles.css (the package the FE consumes). VERIFIED 2026-07-30: all 67 mappable old-side values match this file exactly.",
+    "source_new": "tokens/synapse.css",
+    "status_legend": {
+      "direct": "safe value swap",
+      "review": "role/appearance changed — confirm",
+      "gap": "no new token — all 7 original gaps resolved 2026-07-30; none required a new token"
+    },
+    "gaps_resolved": "2026-07-30 — all 7 gaps resolved to existing tokens (5 are deliberate omissions in the new system, 1 conditional on FE usage: border-border-500)",
+    "version_drift_warning": "Do NOT source old values from 'Copy of Synapse Design System' (the branding team's kit). It is built on v0.9.3, where the brand family was NEAR-BLACK (#262627). The brand went near-black -> azure between v0.9.3 and v0.13.6. Both files are internally correct; they are different versions. proposals/archive/2026-07-15-branding-system-comparison.md describes v0.9.3 and is stale on brand.",
+    "icon_family_note": "2026-07-30: the new system gained a DEDICATED icon family (semantic.color.icon.*), reversing the earlier 'icons draw from fg-*' rule. All 10 old icon-* rows now map to icon-* rather than fg-*.",
+    "row_count_note": "82 rows as of 2026-07-30. Two Button disabled tokens (secondary, ghost) were added after an audit of actual component token usage revealed the original 80-row map had missed them."
+  },
+  "mappings": [
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-primary",
+      "old_hex": "#000000",
+      "new_sy_token": "--sy-text-primary",
+      "new_hex_light": "#09090B",
+      "status": "direct",
+      "note": "Pure black → near-black."
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-primary-disabled",
+      "old_hex": "#d9d9da",
+      "new_sy_token": "--sy-text-disabled",
+      "new_hex_light": "#A9A9B2",
+      "status": "review",
+      "note": "New disabled fg is darker/more legible."
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-secondary",
+      "old_hex": "#808081",
+      "new_sy_token": "--sy-text-secondary",
+      "new_hex_light": "#62626B",
+      "status": "direct",
+      "note": "Slightly darker."
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-secondary-disabled",
+      "old_hex": "#f2f2f3",
+      "new_sy_token": "--sy-text-disabled",
+      "new_hex_light": "#A9A9B2",
+      "status": "review",
+      "note": "New system has ONE disabled fg; old two collapse into it."
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-tertiary",
+      "old_hex": "#b2b2b3",
+      "new_sy_token": "--sy-text-tertiary",
+      "new_hex_light": "#83838D",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-inverted",
+      "old_hex": "#ffffff",
+      "new_sy_token": "--sy-text-on-inverse",
+      "new_hex_light": "#FFFFFF",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-inverted-disabled",
+      "old_hex": "#f7f7f8",
+      "new_sy_token": "--sy-text-on-inverse",
+      "new_hex_light": "#FFFFFF",
+      "status": "review",
+      "note": "RESOLVED (no new token). The old token was never a disabled treatment: #f7f7f8 on the old inverse #262627 runs 14.12:1 vs plain white's 15.12:1 — a 1.0 delta, visually identical to enabled. Mapping to fg-inverse is behaviour-preserving. A real on-inverse disabled affordance would be a governance proposal (foundations.md §glass: an inverse-surface context requires every component to carry an on-dark variant); no bg.inverse surface in the new system renders disabled text."
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-error",
+      "old_hex": "#e6483d",
+      "new_sy_token": "--sy-status-danger",
+      "new_hex_light": "#B23230",
+      "status": "review",
+      "note": "New danger TEXT deepened for AA; #e6483d survives as the solid fill."
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-success",
+      "old_hex": "#10b978",
+      "new_sy_token": "--sy-status-success",
+      "new_hex_light": "#0E7A42",
+      "status": "review",
+      "note": "New success TEXT deepened for AA; #10b978 survives as the solid fill."
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-brand",
+      "old_hex": "#0a84ff",
+      "new_sy_token": "--sy-text-link",
+      "new_hex_light": "#3155C6",
+      "status": "review",
+      "note": "Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Brand-blue-as-link -> functional link blue. If it was an accent rather than a link, see the brand note in the README."
+    },
+    {
+      "group": "Text",
+      "old_tailwind_class": "text-text-syntax",
+      "old_hex": "#64748b",
+      "new_sy_token": "--sy-text-secondary",
+      "new_hex_light": "#62626B",
+      "status": "direct",
+      "note": "RESOLVED (no new token, by design). Code/ID/mono TEXT is text.secondary (components.md Table §id row). Syntax HIGHLIGHTING is deliberately untokenized: 'one muted theme system-wide, ≤5 colors drawn from viz + fg tokens, defined once at implementation' (components.md CodeBlock §Syntax theme)."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-0",
+      "old_hex": "#ffffff",
+      "new_sy_token": "--sy-bg-page",
+      "new_hex_light": "#FFFFFF",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-0-hover",
+      "old_hex": "#fbfbfc",
+      "new_sy_token": "--sy-bg-hover",
+      "new_hex_light": "rgba(9,9,11,0.04)",
+      "status": "review",
+      "note": "New hovers are alpha overlays; solid nearest is --sy-bg-surface."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-50",
+      "old_hex": "#fbfbfc",
+      "new_sy_token": "--sy-bg-surface",
+      "new_hex_light": "#FAFAFB",
+      "status": "direct",
+      "note": "Subtle surface."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-50-hover",
+      "old_hex": "#f7f7f8",
+      "new_sy_token": "--sy-bg-sunken",
+      "new_hex_light": "#F4F4F6",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-100",
+      "old_hex": "#f7f7f8",
+      "new_sy_token": "--sy-bg-sunken",
+      "new_hex_light": "#F4F4F6",
+      "status": "review",
+      "note": "Old card/INPUT fill. Cards → --sy-bg-surface; text inputs are now white+outlined, not filled grey."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-100-hover",
+      "old_hex": "#f2f2f3",
+      "new_sy_token": "--sy-bg-sunken",
+      "new_hex_light": "#F4F4F6",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-200",
+      "old_hex": "#f2f2f3",
+      "new_sy_token": "--sy-bg-sunken",
+      "new_hex_light": "#F4F4F6",
+      "status": "direct",
+      "note": "Elevated surface."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-200-hover",
+      "old_hex": "#e5e5e6",
+      "new_sy_token": "--sy-bg-active",
+      "new_hex_light": "rgba(9,9,11,0.06)",
+      "status": "review",
+      "note": "New uses an alpha active overlay."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-track",
+      "old_hex": "#e5e5e6",
+      "new_sy_token": "--sy-bg-sunken",
+      "new_hex_light": "#F4F4F6",
+      "status": "direct",
+      "note": "Slider/Switch track."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-inverted",
+      "old_hex": "#262627",
+      "new_sy_token": "--sy-bg-inverse",
+      "new_hex_light": "#09090B",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-inverted-hover",
+      "old_hex": "#666667",
+      "new_sy_token": "--sy-bg-inverse-soft",
+      "new_hex_light": "#33333A",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-brand",
+      "old_hex": "#0a84ff",
+      "new_sy_token": "--sy-action-brand-bg",
+      "new_hex_light": "#3155C6",
+      "status": "review",
+      "note": "Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Brand IS azure in v0.13.6, and the new brand is blue.600 -> hue-preserving. Still decide per element: AI/brand CTA -> --sy-action-brand-bg; ordinary primary -> --sy-action-primary-bg #09090B; info surface -> --sy-status-info-bg."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-brand-light",
+      "old_hex": "#e6f2ff",
+      "new_sy_token": "--sy-status-info-bg",
+      "new_hex_light": "#E4EAFB",
+      "status": "direct",
+      "note": "Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). #e6f2ff is old blue-50; new info tint E4EAFB is new blue.100. Light brand tint -> info tint, same role, near-same value."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-highlight",
+      "old_hex": "#e2e8f0",
+      "new_sy_token": "--sy-bg-selected",
+      "new_hex_light": "#EFF3F7",
+      "status": "review",
+      "note": "Selection/highlight surface."
+    },
+    {
+      "group": "Background",
+      "old_tailwind_class": "bg-background-highlight-light",
+      "old_hex": "#f8fafc",
+      "new_sy_token": "--sy-bg-selected",
+      "new_hex_light": "#EFF3F7",
+      "status": "review",
+      "note": "Subtle highlight; or --sy-bg-surface if not selection."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-100",
+      "old_hex": "#e5e5e6",
+      "new_sy_token": "--sy-border-default",
+      "new_hex_light": "#E9E9ED",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-100-hover",
+      "old_hex": "#d9d9da",
+      "new_sy_token": "--sy-border-strong",
+      "new_hex_light": "#D1D1D8",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-200",
+      "old_hex": "#d9d9da",
+      "new_sy_token": "--sy-border-strong",
+      "new_hex_light": "#D1D1D8",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-200-hover",
+      "old_hex": "#b2b2b3",
+      "new_sy_token": "--sy-border-strong",
+      "new_hex_light": "#D1D1D8",
+      "status": "review",
+      "note": "New has one 'strong' border; old 200/300 collapse in."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-300",
+      "old_hex": "#b2b2b3",
+      "new_sy_token": "--sy-border-strong",
+      "new_hex_light": "#D1D1D8",
+      "status": "review",
+      "note": ""
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-300-hover",
+      "old_hex": "#808081",
+      "new_sy_token": "--sy-border-strong-hover",
+      "new_hex_light": "#A9A9B2",
+      "status": "direct",
+      "note": "RESOLVED by adding a token (2026-07-30), superseding the earlier squash to border-strong. The border ladder was capped at border.strong; --sy-border-strong-hover (gray.400) is the hover step above it. This old token now has a true 1:1 target."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-500",
+      "old_hex": "#64748b",
+      "new_sy_token": "--sy-ai-border",
+      "new_hex_light": "#DCE3EB",
+      "status": "review",
+      "note": "RESOLVED (no new token) — CONDITIONAL, the one row needing FE-side inspection. Slate is now the AI-surface family: if this bordered an AI/slate surface → --sy-ai-border; otherwise → --sy-border-strong. NOTE this is a role reassignment, not a value swap (#64748b = 4.76:1 on white; ai-border = 1.29:1) because the new system forbids tint + saturated outline."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-900",
+      "old_hex": "#262627",
+      "new_sy_token": "--sy-border-selected",
+      "new_hex_light": "#09090B",
+      "status": "direct",
+      "note": "Darkest border → selected (near-black)."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-inverted",
+      "old_hex": "#ffffff",
+      "new_sy_token": "--sy-text-on-inverse",
+      "new_hex_light": "#FFFFFF",
+      "status": "direct",
+      "note": "Border on dark surfaces."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-success",
+      "old_hex": "#6ee7b7",
+      "new_sy_token": "--sy-status-success-bg",
+      "new_hex_light": "#DCF2E6",
+      "status": "review",
+      "note": "RESOLVED (no new token, by design). Success surfaces are borderless tints: Banner `subtle` is 'borderless status.*-bg fill, status.* text — no border, no rail' and 'tint + saturated outline remains the forbidden wireframe formula' (components.md Banner/Alert). border.error exists only as a form-field validation perimeter, and there is no success field state — principled asymmetry, not an oversight."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-success-hover",
+      "old_hex": "#10b978",
+      "new_sy_token": "--sy-status-success-bg",
+      "new_hex_light": "#DCF2E6",
+      "status": "review",
+      "note": "RESOLVED (no new token, by design). Same as border-border-success: no success outline exists to hover. If a success surface needs an interactive step, use the tint's hover on the container, not a saturated border."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-error",
+      "old_hex": "#ff5c51",
+      "new_sy_token": "--sy-border-error",
+      "new_hex_light": "#D2403E",
+      "status": "direct",
+      "note": "Dedicated error border exists."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-error-hover",
+      "old_hex": "#e6483d",
+      "new_sy_token": "--sy-border-error",
+      "new_hex_light": "#D2403E",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-brand",
+      "old_hex": "#369aff",
+      "new_sy_token": "--sy-border-focus",
+      "new_hex_light": "#3D63DD",
+      "status": "review",
+      "note": "Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Old blue-400 brand border -> functional focus blue."
+    },
+    {
+      "group": "Border",
+      "old_tailwind_class": "border-border-brand-hover",
+      "old_hex": "#0a84ff",
+      "new_sy_token": "--sy-border-focus",
+      "new_hex_light": "#3D63DD",
+      "status": "review",
+      "note": "Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Old brand border hover -> the single new focus token (new focus has no hover step)."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-primary",
+      "old_hex": "#262627",
+      "new_sy_token": "--sy-icon-primary",
+      "new_hex_light": "#1E1E24",
+      "status": "direct",
+      "note": "Verified against @enhans/synapse v0.13.6. CORRECTED 2026-07-30 — the new system now has a DEDICATED icon family, so this no longer collapses into fg-primary. Old #262627 -> new icon-primary #1E1E24: both are one ramp step lighter than their text counterpart, for the same optical reason (a stroke icon reads heavier than a glyph at equal value). Near 1:1."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-primary-disabled",
+      "old_hex": "#d9d9da",
+      "new_sy_token": "--sy-icon-disabled",
+      "new_hex_light": "#A9A9B2",
+      "status": "review",
+      "note": "Verified against @enhans/synapse v0.13.6. -> icon-disabled (aliases fg-disabled)."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-secondary",
+      "old_hex": "#808081",
+      "new_sy_token": "--sy-icon-secondary",
+      "new_hex_light": "#62626B",
+      "status": "direct",
+      "note": "Verified against @enhans/synapse v0.13.6. -> icon-secondary (aliases fg-secondary; no optical delta at mid-grey)."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-secondary-disabled",
+      "old_hex": "#e5e5e6",
+      "new_sy_token": "--sy-icon-disabled",
+      "new_hex_light": "#A9A9B2",
+      "status": "review",
+      "note": "Verified against @enhans/synapse v0.13.6. Old had three icon-disabled steps; new has one."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-tertiary",
+      "old_hex": "#b2b2b3",
+      "new_sy_token": "--sy-icon-tertiary",
+      "new_hex_light": "#83838D",
+      "status": "direct",
+      "note": "Verified against @enhans/synapse v0.13.6. -> icon-tertiary (aliases fg-tertiary)."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-tertiary-disabled",
+      "old_hex": "#f7f7f8",
+      "new_sy_token": "--sy-icon-disabled",
+      "new_hex_light": "#A9A9B2",
+      "status": "review",
+      "note": "Verified against @enhans/synapse v0.13.6. Collapses into the single icon-disabled."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-inverted",
+      "old_hex": "#ffffff",
+      "new_sy_token": "--sy-icon-on-inverse",
+      "new_hex_light": "#FFFFFF",
+      "status": "direct",
+      "note": "Verified against @enhans/synapse v0.13.6. -> icon-inverse."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-error",
+      "old_hex": "#e6483d",
+      "new_sy_token": "--sy-icon-danger",
+      "new_hex_light": "#B23230",
+      "status": "review",
+      "note": "Verified against @enhans/synapse v0.13.6. -> icon-danger (aliases status-danger; deepened for AA — #e6483d survives as the solid fill)."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-success",
+      "old_hex": "#10b978",
+      "new_sy_token": "--sy-icon-success",
+      "new_hex_light": "#0E7A42",
+      "status": "review",
+      "note": "Verified against @enhans/synapse v0.13.6. -> icon-success (aliases status-success)."
+    },
+    {
+      "group": "Icon",
+      "old_tailwind_class": "text-icon-brand",
+      "old_hex": "#0a84ff",
+      "new_sy_token": "--sy-icon-info",
+      "new_hex_light": "#3155C6",
+      "status": "review",
+      "note": "Verified against @enhans/synapse v0.13.6. Old brand-blue icon -> icon-info (functional indigo). Use --sy-action-brand-fg-on-page (azure) if it marked a brand/AI action rather than information."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-primary",
+      "old_hex": "#262627",
+      "new_sy_token": "--sy-action-primary-bg",
+      "new_hex_light": "#09090B",
+      "status": "direct",
+      "note": "Primary = black (new is truer black)."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-primary-hover",
+      "old_hex": "#4d4d4c",
+      "new_sy_token": "--sy-action-primary-bg-hover",
+      "new_hex_light": "#33333A",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-primary-disabled",
+      "old_hex": "#e5e5e6",
+      "new_sy_token": "--sy-bg-disabled",
+      "new_hex_light": "#F4F4F6",
+      "status": "review",
+      "note": "Pair text with --sy-text-disabled."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-secondary",
+      "old_hex": "#ffffff",
+      "new_sy_token": "--sy-action-secondary-bg",
+      "new_hex_light": "#F4F4F6",
+      "status": "review",
+      "note": "Secondary bg white → light grey. For outlined-white use --sy-bg-page + --sy-border-default."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-secondary-hover",
+      "old_hex": "#fbfbfc",
+      "new_sy_token": "--sy-action-secondary-bg-hover",
+      "new_hex_light": "#ECECEF",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-tertiary",
+      "old_hex": "#f2f2f3",
+      "new_sy_token": "--sy-action-secondary-bg",
+      "new_hex_light": "#F4F4F6",
+      "status": "review",
+      "note": "No tertiary button in new system — folds into secondary."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-tertiary-hover",
+      "old_hex": "#e5e5e6",
+      "new_sy_token": "--sy-action-secondary-bg-hover",
+      "new_hex_light": "#ECECEF",
+      "status": "review",
+      "note": ""
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-tertiary-disabled",
+      "old_hex": "#f7f7f8",
+      "new_sy_token": "--sy-bg-disabled",
+      "new_hex_light": "#F4F4F6",
+      "status": "review",
+      "note": ""
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-ghost",
+      "old_hex": "transparent",
+      "new_sy_token": "(transparent)",
+      "new_hex_light": "transparent",
+      "status": "direct",
+      "note": "Ghost stays transparent."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-ghost-hover",
+      "old_hex": "#fbfbfc",
+      "new_sy_token": "--sy-bg-hover",
+      "new_hex_light": "rgba(9,9,11,0.04)",
+      "status": "review",
+      "note": "Ghost hover is now an alpha overlay."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-destructive",
+      "old_hex": "#e6483d",
+      "new_sy_token": "--sy-status-danger-bg-solid",
+      "new_hex_light": "#D2403E",
+      "status": "direct",
+      "note": "Destructive solid fill. Value changed 2026-07-30: red.400 -> red.500 so a white label clears AA at 4.62:1 with normal weight; danger left the §9 solid-label deviation. Side effect: #e6483d -> #D2403E is a closer match than the old target (ΔE 30.5 vs 35.0)."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-destructive-hover",
+      "old_hex": "#c4342a",
+      "new_sy_token": "--sy-status-danger-bg-solid-hover",
+      "new_hex_light": "#B23230",
+      "status": "direct",
+      "note": "Hover moved red.500 -> red.600 with the rest-state shift; rest->hover separation improved from ΔE 5.9 to 10.1."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-destructive-disabled",
+      "old_hex": "#ffa59f",
+      "new_sy_token": "--sy-bg-disabled",
+      "new_hex_light": "#F4F4F6",
+      "status": "review",
+      "note": "RESOLVED by adding a token (2026-07-30), superseding the earlier squash. Fill -> neutral --sy-bg-disabled; the danger hue moves to the LABEL via the new --sy-action-danger-fg-disabled #DB504D (3.63:1). Old #ffa59f ran 1.89:1 with white and is not carried over. A pale-red FILL was rejected: it renders identically to the subtle danger Banner/Badge."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-brand",
+      "old_hex": "#0a84ff",
+      "new_sy_token": "--sy-action-brand-bg",
+      "new_hex_light": "#3155C6",
+      "status": "direct",
+      "note": "Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Near-mechanical swap: old azure brand button -> new brand blue. Reserved for conversational-AI CTAs (Ask agent / Composer send), max 1/screen; operational agent actions (Run/Retry/Resume) stay --sy-action-primary-bg."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-brand-hover",
+      "old_hex": "#006bd6",
+      "new_sy_token": "--sy-action-brand-bg-hover",
+      "new_hex_light": "#3D63DD",
+      "status": "review",
+      "note": "Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Direction FLIPPED: old hover darkened (#0a84ff -> #006bd6); new hover lightens in light mode (blue.600 -> blue.500) and darkens in dark mode. Use the token, never hand-derive."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-brand-disabled",
+      "old_hex": "#e2e8f0",
+      "new_sy_token": "--sy-bg-disabled",
+      "new_hex_light": "#F4F4F6",
+      "status": "review",
+      "note": "Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Old #e2e8f0 is slate-200 — a cool tinted disabled fill. New fill is neutral --sy-bg-disabled with the hue moved to the label via --sy-action-brand-fg-disabled #3D63DD (4.75:1). So v0.13.6 DID tint brand-disabled, which retroactively justifies that token."
+    },
+    {
+      "group": "Radius",
+      "old_tailwind_class": "rounded-small (4px)",
+      "old_hex": "4px",
+      "new_sy_token": "--sy-radius-xs",
+      "new_hex_light": "4px",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Radius",
+      "old_tailwind_class": "rounded-medium (6px)",
+      "old_hex": "6px",
+      "new_sy_token": "--sy-radius-sm",
+      "new_hex_light": "8px",
+      "status": "review",
+      "note": "6→8. Control radius is size-relative now: sm8/md10/lg12; buttons/inputs usually → --sy-radius-control-md."
+    },
+    {
+      "group": "Radius",
+      "old_tailwind_class": "rounded-large (8px)",
+      "old_hex": "8px",
+      "new_sy_token": "--sy-radius-sm",
+      "new_hex_light": "8px",
+      "status": "review",
+      "note": "Value matches; cards use --sy-radius-lg 16px in new system."
+    },
+    {
+      "group": "Radius",
+      "old_tailwind_class": "rounded-xlarge (12px)",
+      "old_hex": "12px",
+      "new_sy_token": "--sy-radius-md",
+      "new_hex_light": "12px",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Radius",
+      "old_tailwind_class": "rounded-round",
+      "old_hex": "9999px",
+      "new_sy_token": "--sy-radius-full",
+      "new_hex_light": "9999px",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Chart",
+      "old_tailwind_class": "chart-0 blue",
+      "old_hex": "#3b82f6",
+      "new_sy_token": "--sy-viz-1",
+      "new_hex_light": "#5B7CE0",
+      "status": "direct",
+      "note": "Categorical ramp by index."
+    },
+    {
+      "group": "Chart",
+      "old_tailwind_class": "chart-1 green",
+      "old_hex": "#10b981",
+      "new_sy_token": "--sy-viz-2",
+      "new_hex_light": "#4FAE8B",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Chart",
+      "old_tailwind_class": "chart-2 yellow",
+      "old_hex": "#eab308",
+      "new_sy_token": "--sy-viz-3",
+      "new_hex_light": "#C9932E",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Chart",
+      "old_tailwind_class": "chart-3 red",
+      "old_hex": "#ef4444",
+      "new_sy_token": "--sy-viz-4",
+      "new_hex_light": "#C15D5D",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Chart",
+      "old_tailwind_class": "chart-4 purple",
+      "old_hex": "#a855f7",
+      "new_sy_token": "--sy-viz-5",
+      "new_hex_light": "#8A6FC9",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Chart",
+      "old_tailwind_class": "chart-5 teal",
+      "old_hex": "#14b8a6",
+      "new_sy_token": "--sy-viz-6",
+      "new_hex_light": "#4FA3C4",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Chart",
+      "old_tailwind_class": "chart-6 pink",
+      "old_hex": "#ec4899",
+      "new_sy_token": "--sy-viz-7",
+      "new_hex_light": "#B36FA3",
+      "status": "direct",
+      "note": ""
+    },
+    {
+      "group": "Chart",
+      "old_tailwind_class": "chart-7 lime",
+      "old_hex": "#84cc16",
+      "new_sy_token": "--sy-viz-8",
+      "new_hex_light": "#7A828E",
+      "status": "review",
+      "note": "New viz-8 is a NEUTRAL grey, not lime — reassign if lime carried meaning."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-secondary-disabled",
+      "old_hex": "#ffffff",
+      "new_sy_token": "--sy-bg-disabled",
+      "new_hex_light": "#F4F4F6",
+      "status": "review",
+      "note": "ADDED 2026-07-30 — missing from the original map, found by auditing component token usage. Old secondary-disabled was WHITE (no visual disabled signal at all); the new system uses the neutral bg-disabled fill in every variant with the label carrying the state."
+    },
+    {
+      "group": "Button",
+      "old_tailwind_class": "bg-button-ghost-disabled",
+      "old_hex": "transparent",
+      "new_sy_token": "--sy-bg-disabled",
+      "new_hex_light": "#F4F4F6",
+      "status": "review",
+      "note": "ADDED 2026-07-30 — missing from the original map. Old ghost-disabled was TRANSPARENT. New: disabled is a fill in every variant (components.md Button §States, \"40% opacity is forbidden\"), so a disabled ghost now gains the grey fill — a deliberate appearance change."
+    }
+  ]
+}
