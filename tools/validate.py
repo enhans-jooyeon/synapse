@@ -21,7 +21,7 @@ Rules (E = error, W = warning):
   SY015 E backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §6)
   SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
   SY017 E synapse.manifest.json stale vs a fresh build — run tools/build_manifest.py (mirrors the CI gate locally)
-  SY018 E icon not in assets/icons/tabler-registry.json, off-scale size, or stroke != 1.5 — run tools/check_icons.py (icons.md)
+  SY019 E icon not in assets/icons/tabler-registry.json, off-scale size, or stroke != 1.5 — run tools/check_icons.py (icons.md)
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3

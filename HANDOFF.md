@@ -1,4 +1,4 @@
-<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-07-22, at v1.0.0 — added the design-development process layer (docs/process/) and retargeted the package scope to @enhans-jooyeon/synapse. -->
+<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-07-30 — token/icon/Button overhaul for the 0.13.x + shadcn -> v1 migration. Three commits made locally; JUNE MUST PUSH from her Mac (see Current state). -->
 
 # Synapse — session handoff
 
@@ -42,13 +42,43 @@ Every change is spec law and is versioned in lockstep. For any change:
 4. **Gate must be clean:** `python3 tools/validate.py all` → `0 error(s), 0 warning(s)`.
 5. **Verify preview JS:** extract the last `<script>` from `preview.html` and `node --check` it (localhost/Chrome are not reachable from the sandbox, so this is how preview.html is verified).
 6. **Docs are English-only.** No `.ko.md` to maintain — Korean is on-demand in the hub (client-side Google Translate). SY011/SY016 still apply to Hangul *example strings* inside the EN specs; only the KO-doc staleness check (SY018) and its `sy-source` hashes were removed.
-7. **June pushes from her Mac.** The sandbox can commit-attempt but CANNOT push (no creds) and cannot delete `.git/index.lock` (permission denied). Push flow on Mac: `rm -f .git/index.lock && git add -A && git commit -m "…" && git push`.
+7. **June pushes from her Mac.** The sandbox CAN stage, commit, and delete a stale `.git/index.lock` (corrected 2026-07-30 — it did all three), but CANNOT push: no credentials, and the host keychain is unreachable. So the sandbox should commit with a full message and then hand off `git push origin main`. If a commit fails on `index.lock`, check the age first — a 0-byte lock hours old is a crashed operation and safe to remove; a fresh one may be a live editor on the Mac.
 
-Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (spacing = {0,2,4,6,8,10,12,16,20,24,28,32,40,48,64,80,96,128,160,192,224,256,320,384}; radius adds 10), SY009 raw box-shadow (exempt: a zero-blur `0 0 0` ring — inset or outset — using a token; focus rings may wrap a token in `color-mix`), SY011 Hangul outside `lang=ko`, SY016 Hangul in Artific display element, SY017 manifest stale.
+Gate rules worth knowing: SY001 raw color, SY002 off-scale spacing/radius/font (spacing = {0,2,4,6,8,10,12,16,20,24,28,32,40,48,64,80,96,128,160,192,224,256,320,384}; radius adds 10), SY009 raw box-shadow (exempt: a zero-blur `0 0 0` ring — inset or outset — using a token; **focus rings may NO LONGER wrap a token in `color-mix` — deleted 2026-07-30**, it failed WCAG 1.4.11 in 11 of 12 Button cells), SY011 Hangul outside `lang=ko`, SY016 Hangul in Artific display element, SY017 manifest stale, **SY019 icons** (off-registry path / off-scale size / stroke != 1.5 — `tools/check_icons.py`, run it alongside validate.py). **Note SY018 is retired** (the old KO-doc staleness gate) and deliberately NOT reused.
 
 ## Current state
 
+**As of 2026-07-30: three commits sit locally on `main`, 3 ahead of `origin/main`. THE PUSH IS THE FIRST THING TO DO on the next device** — `git push origin main` from the Mac. Gate green.
+
 **Version: 1.0.0 (initial team release).** Gate is green (0/0). The prior work (AI side-surface tranche §32–35 + the team-distribution layer: README, `docs/process/`, `.github/PULL_REQUEST_TEMPLATE/ui_review.md`, `docs/DISTRIBUTION.md`, `tooling/product-gates/`, `storybook/PUBLISHING.md`) was pushed as commit `d2e8bbd` (internal 6.62.0). This session then **re-baselined the version to 1.0.0**, switched to release-based versioning (design.md §6), and added the **curated-distribution workflow** (`scripts/build-dist.mjs` + `dist.allowlist` + `.github/workflows/publish-harness.yml`) that publishes a cleaned-up bundle to a separate `synapse-harness` repo on release tags. All of that is **uncommitted; needs a push from June's Mac** (working folder is now the real clone `~/Claude/Projects/synapse-clone`). Two-repo setup steps (create `synapse-harness`, add `HARNESS_DEPLOY_TOKEN` secret) are in `docs/DISTRIBUTION.md`. Vercel deploys the docs hub + preview; after pushes that touch token values or storybook, confirm the build is green.
+
+## This session (2026-07-30) — tokens, icons, Button audit, migration deliverables
+
+Focus was the **`@enhans/synapse` 0.13.x + shadcn -> v1 migration**. Committed locally as three commits (`838c701` icons, `baff7c8` tokens/Button, `5ff4a44` migration deliverables) — **`main` is 3 ahead of `origin/main`; push from the Mac.** Gate green: `validate.py` 0/0, `check_icons.py` 0 errors / 2 warnings (both correct — a frame rect and an unread dot, which are drawn geometry, not icons).
+
+**Token renames + colour decisions**
+- `fg-*` -> `text-*` (832 refs, 239 mode-values). Rule kept: `text-*` is a SCALE, `<family>-fg` is a PAIRING.
+- Dedicated `icon-*` family; only `icon.primary` carries its own value, the rest alias.
+- Brand re-hued to bright **azure** `azure.500 #0073E6`, tuned 7% deeper than the old `#0A84FF` so a white label clears AA at 4.57:1 (was 3.65:1). Two blues now, split absolutely: azure = brand/AI emphasis, indigo = link/focus/info.
+- `status.danger-bg-solid` shifted `red.400 -> red.500`. White label was 3.99:1 on the delete-confirmation button; now 4.62:1 at NORMAL weight, so **danger LEFT the §9 solid-label deviation** and the gate tightened 3.0 -> 4.5. Dark mode had been worse and unflagged at 2.89:1.
+- `viz` rebuilt per-mode: min ΔE 16.6 -> 45.8 normal, 7.6 -> 11.6 deuteranopia.
+- Category tokens removed; identity marks are neutral `bg.sunken`.
+
+**Button — full variant matrix audit, 12 items ruled, three were defects**
+- `outline × destructive` and `outline × brand` had **no hover state at all**. Added `border.error-hover`, `action.brand-border-hover`.
+- The focus-ring rule failed 1.4.11 in 11/12 cells (above).
+- **`control-height-xs` shipped in the CSS but was never in the JSON** — the canonical source didn't describe a size the system renders. This is audit **Defect 7** (no CSS<->JSON parity gate) caught live, for the **third** time.
+- Per-target disabled labels made disabled buttons look *available*: `action.brand-fg-disabled` was `azure.500`, the same hex as the live brand fill. Both tokens deleted; all 12 cells use `text.disabled`.
+- `active`/pressed **dropped**. `bg.active` deliberately kept — it belongs to table rows and menu items, not Button.
+- `control-padding-x` now steps per size (8/10/12/16) — it was the only Button dimension that didn't.
+- Six component gaps added, each constrained: Textarea action bar, Modal header action, Drawer `bottom` (responsive below 768, NOT an author prop), Tabs `editable`, Menu Kbd slot, Button `render`/`asChild` (a functional requirement — without it `<Button asChild><NextLink>` emits a `<button>` wrapping an `<a>`).
+- Every refusal now names its replacement in its own **Forbidden** line.
+
+**Icons — all glyphs now generated**
+`icons.md` always said inventing an SVG is a contract violation, yet `preview.html` had **313 hand-written renders across 72 shapes** (Lucide approximations of concepts already in its own TICONS table), so **51 concepts each rendered with two different glyphs**. Now: `assets/icons/tabler-registry.json` (89 icons / 94 concepts, generated from `@tabler/icons@3.31.0` by `scripts/build_icons.py`), 324 renders re-pointed, agent glyph canonicalised (it had drifted into two 4-point stars), `chevron-up` deleted as a concept (collapse is `chevron-down` rotated). New **SY019** gate. Two spec defects exposed: the icon size scale contradicted itself (foundations said 16/20/24 while components.md specified 12px in Badge and SourceChip — **12 is now on the scale**), and there was **no `loading` concept** despite shipping a Spinner.
+
+**Migration deliverables — new `migration/` directory (committed)**
+`shadcn-token-map.csv` (32 shadcn tokens, role-mapped), `replacement-rules.{md,csv}` (42 rules by mode), `color-token-map.*` (82 old->new rows verified against v0.13.6), plus four visual audits (`button-matrix.html`, `shadcn-color-map.html`, `component-token-mapping.html`, `visual-diff.html`).
 
 ## This session (2026-07-22) — process layer + scope retarget
 
@@ -65,7 +95,7 @@ Focus shifted from the design system to the **harness around it**, prompted by a
 - **Point color = graphite** (achromatic, mode-inverting: `#1A1A1F` light / `#F2F2F4` dark) — retargeted from the earlier point blue `#0621C4`. The accent's foreground inverts with it (`action.brand-fg`: white in light, near-black in dark). Flows through `action.brand-*`, `brand.point`, `ai.solid`. See the point-color-graphite change in CHANGELOG.
 - **`accent` → `brand`** button-variant rename (v6.58): the point-color button is the `brand` variant (brand-identity + conversational-AI CTAs; Composer send). Operational agent actions (Run/Retry/Resume) stay `primary`/black.
 - **Functional blue stays separate:** `#3155C6` indigo for links/focus/status.info — now the system's *only* hue, since the accent went graphite (no brand-vs-functional hue collision left to watch).
-- **Focus rings** (v6.58.1): per-variant, flush, rendered as a `box-shadow` ring (hugs radius; `outline` left a corner gap) lightened via `color-mix` to a ~50% tint of the button's color. Transparent `outline` kept for forced-colors mode. SY009 was extended to permit token-based zero-blur rings.
+- **Focus rings — SUPERSEDED 2026-07-30.** The old ruling (a `color-mix` ~50% lightened tint of the button's own colour) was measured and **failed WCAG 1.4.11 in 11 of 12 Button cells** — `secondary x default` at 1.04:1, `outline x default` at 1.10:1, i.e. effectively invisible rings on the two most-used variants. A lightened tint of an already-light fill cannot reach 3:1, so the rule was unimplementable rather than underspecified. Now: **hue from `target`, strength from `buttonStyle`** — see the Button focus row in `components.md`. The box-shadow ring mechanism and the SY009 exemption both stand.
 - **`shadow.thumb` token** (v6.57.5) for the slider handle. **ChoiceCard selected state** = 1px `border.selected` + flush `border.subtle` outline halo.
 - **Detail pages**: Examples column widened (doc-grid 1 : 2.1, max-width 1440) so tables aren't cramped.
 - **NotificationCenter** upgraded (v6.59): All/Unread/Mentions filter tabs, typed items (run/approval/mention/comment/system), per-item hover controls that **overlay** (don't reflow / don't hide the timestamp), header settings gear + single full-width "View all" footer button.
@@ -87,11 +117,14 @@ Focus shifted from the design system to the **harness around it**, prompted by a
 
 ## How to resume in a new session
 
-1. `git pull` (on the device's clone).
-2. Read `design.md` (contract + current version), then this file.
-3. Run `python3 tools/validate.py all` — expect `0 error(s), 0 warning(s)`. If it complains about a stale manifest, run `python3 tools/build_manifest.py`.
-4. Check the top of `CHANGELOG.md` for the latest version and what shipped.
-5. Work in the established discipline above; June reviews and pushes.
+1. **Push first if the previous device left commits unpushed** (check `git status -sb` for `[ahead N]`). As of 2026-07-30 there are 3.
+2. `git pull` (on the device's clone). The repo IS the context — everything below is reconstructible from it.
+3. Read `design.md` (contract + current version), then this file, then the top of `CHANGELOG.md`. The CHANGELOG is kept as a decision record with the reasoning, not just a list, so it is the fastest way to recover *why* something is the way it is.
+4. Run **both** gates: `python3 tools/validate.py all` (expect 0/0) and `python3 tools/check_icons.py` (expect 0 errors, 2 warnings). If validate complains about a stale manifest, run `python3 tools/build_manifest.py`.
+5. If mid-migration, read `migration/replacement-rules.md` — it lists what is mechanical vs. needs review, and the three unknown site counts blocking the FE plan.
+6. Work in the established discipline above; June reviews and pushes.
+
+**What does NOT transfer between devices:** the Cowork conversation history. Only the repo does. That is why this file and `CHANGELOG.md` carry the reasoning — treat any decision not written down as lost.
 
 ## How June likes Claude to work
 
@@ -100,3 +133,17 @@ Critical/analytical by default on proposals and judgment calls — lead with the
 **Standing rule:** when changes land, refresh every doc that references them (this file, README, repo map, cross-references) **without asking** — proactively, as part of the same work.
 
 **Standing rule — preview-driven edits (June's primary workflow).** June visually audits the system via `preview.html` and requests changes while looking at it. But the preview is downstream (design.md §1: Reference only). So a change requested against the preview must be traced to and made in its **authoritative source** first — token value → `tokens/synapse.tokens.json` (then regen `synapse.css`); usage/structure rule → `foundations.md` / `components.md` / `recipes.md`; enforcement → `tools/validate.py` — then regenerate the manifest and bring the preview render into line last. Run the gate and tell June exactly which files changed. Two caveats: (1) some preview requests are **display-only** — the hardcoded reference stories (spacing scale, primitive palette, type scale) don't auto-track tokens and drift, so those are render-only fixes; say when a request is one of these vs. a real system change. (2) **Governance changes** (new tokens/components/gate rules) are still held for June's explicit approval, not applied silently.
+
+## Open threads as of 2026-07-30 (migration)
+
+Ordered by what blocks whom.
+
+1. **Three unknown site counts block the FE one-sprint plan.** `size="icon"`, `variant="link"`, `disabled:opacity-50` are the highest-volume rules in `migration/replacement-rules.csv` and all three need per-site judgement. Ask the FE engineer for counts before committing to a schedule; everything else in that file is mechanical or low-volume.
+2. **`muted-foreground` split** — 1,557 sites default to `text.secondary`, but the placeholder/metadata exception needs per-context counts to size. Last thing blocking the codemod from running.
+3. **Nothing gates `components.md` <-> `synapse.manifest.json` parity** (audit Defect 7). `build_manifest.py` has the component entries **hardcoded**, and SY017 compares the manifest to that same generator — so the two documents drift with a green gate. It has now produced a real contradiction **three times**, most recently `control-height-xs` existing in CSS but not JSON. Highest-value tooling fix open.
+4. **Focus-ring tokening is broken** (cosmetic only, no visual change): `border.focus-input` is read by Buttons despite its name claiming entry surfaces; `border.error-hover` and `action.brand-border-hover` each do double duty as a hover border AND a focus ring; and `-soft` sits in the same suffix position as `-hover` while meaning a weight rather than a state. A rename pass.
+5. **`storybook/src/components/*/*.css`** still carries **6 occurrences of the deleted `color-mix` focus ring** and still describes the pre-two-axis Button API. Token renames were applied there; structural changes were not.
+6. **`--sy-text-11` / `--sy-text-primary` collision** — the `fg-*` -> `text-*` rename put a font-size token and a colour token in one namespace. `font-size-*` would fix it.
+7. **"Toggle panel" has no concept in `icons.md`** — two renders borrow `table` (which means "table view"). Per icons.md an unlisted concept gets no icon, so this needs a registry entry or the chevron treatment the adjacent "Collapse inspector" already uses.
+8. **Visual-diff sections not yet built:** Form controls, Feedback & status, Navigation. Badge/Chip is the highest-value next matrix — `emphasis x color x shape x size` is 72 cells with named per-colour jobs, so unresolved combinations are far likelier than Button's 12.
+9. **Two proposals deliberately NOT applied**, kept in `migration/`: `token-naming-proposal.md` (111 renames to a category-property-modifier scheme) and `token-restructure-krds.md` (three-tier primitive/semantic/component). Both were explored, neither adopted.

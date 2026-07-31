@@ -343,9 +343,9 @@ Not everything flagged was wrong, and the distinction matters: the 36 `TICONS` e
 
 **2. There was no `loading` concept in the registry** — despite the system shipping a `Spinner` component, a Button `loading` state, and an indeterminate ProgressBar. Every spinner in the repo was therefore an off-registry glyph. Added `loading / in-progress` → `loader-2`, with the note that rotation is CSS and the glyph never swaps under reduced-motion.
 
-### New gate — SY018
+### New gate — SY019
 
-**`tools/check_icons.py`** fails the build on: an icon path not in the registry, an off-scale size, or a stroke ≠ 1.5. Illustrations and chart marks are excluded by design. It reports 2 warnings (the frame rect, the unread dot) so bare primitives get a human look rather than a silent pass. Documented in `validate.py`'s rule list. **This is the first gate in the repo that checks a generated asset against the spec that defines it** — unlike SY017, which compares the manifest to its own generator and is why the manifest drift went unnoticed twice.
+**`tools/check_icons.py`** (SY019 — *not* SY018, which was the retired KO-doc staleness gate) fails the build on: an icon path not in the registry, an off-scale size, or a stroke ≠ 1.5. Illustrations and chart marks are excluded by design. It reports 2 warnings (the frame rect, the unread dot) so bare primitives get a human look rather than a silent pass. Documented in `validate.py`'s rule list. **This is the first gate in the repo that checks a generated asset against the spec that defines it** — unlike SY017, which compares the manifest to its own generator and is why the manifest drift went unnoticed twice.
 
 ### Flagged, not fixed — needs a ruling
 
