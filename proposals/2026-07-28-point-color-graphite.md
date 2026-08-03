@@ -1,6 +1,8 @@
 # Point color → graphite (achromatic, mode-inverting accent)
 
-**Date:** 2026-07-28 · **Status:** applied (maintainer-directed) · **Scope:** the point/accent color only. **Semver: MINOR** (visual retarget; no token renamed or removed, no API break).
+**Date:** 2026-07-28 · **Status:** applied, then **SUPERSEDED IN PART on 2026-07-30** · **Scope:** the point/accent color only. **Semver: MINOR** (visual retarget; no token renamed or removed, no API break).
+
+> **Current state (read this first — 2026-07-31).** The graphite retarget below was applied, then partly superseded by the azure re-hue two days later. Settled jurisdiction, per June: **key color is black** (`action.primary`); **azure `azure.500 #0073E6` is used selectively** for brand + AI emphasis and now owns `action.brand-*` and `ai.solid`; **graphite survives on `brand.point` only**, for brand-identity objects (monogram tiles, brand marks, Artific hero). Consequences: `action.brand-fg` is **no longer mode-inverting** (white in both modes, since azure is constant), and the system deliberately carries **two blues** — azure for brand/AI-emphasis fills, indigo for links/focus/info — never mixed. The values table below is therefore historical for `action.brand-*` / `ai.solid`, and still accurate for `brand.point` / `brand-point-fg`. Authoritative: `foundations.md` §1 and `components.md` Button.
 
 ## What changed
 

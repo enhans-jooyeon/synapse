@@ -176,6 +176,9 @@
         "500": {
           "$value": "#0073E6"
         },
+        "550": {
+          "$value": "#066ACE"
+        },
         "600": {
           "$value": "#0D61B5"
         },
@@ -301,6 +304,9 @@
         },
         "500": {
           "$value": "#D2403E"
+        },
+        "550": {
+          "$value": "#C23937"
         },
         "600": {
           "$value": "#B23230"
@@ -624,10 +630,22 @@
       "sm": {
         "$value": "8px"
       },
+      "6": {
+        "$value": "6px",
+        "$description": "6px step, off the 4px scale by design — the same kind of control-optical exception as radius.10. Internal: consumed only by radius.control-xs."
+      },
+      "control-xs": {
+        "$value": "{primitive.radius.6}",
+        "$description": "The xs control radius, exposed as --sy-radius-control-xs. Added 2026-07-31: xs was the only Button size off the radius-to-height progression — 4/24 = 0.167 against a 0.250 / 0.278 / 0.300 band at sm/md/lg, so it read visibly squarer. 6px lands on 0.250, matching sm exactly. 8px (radius.sm) was rejected: at 0.333 it would have made the smallest button proportionally the roundest, overshooting lg. radius.xs (4) is unchanged — it has 29 other consumers (checkbox and small-inset corners) that must not move."
+      },
       "10": {
         "$value": "10px",
         "$description": "10px step, off the 4px scale by design: 12px (md) read too round on 32-36px controls. Default control radius; controls scale radius with size — sm size uses sm (8), default uses this 10, lg size uses md (12)."
       },
+        "control-md": {
+          "$value": "{primitive.radius.10}",
+          "$description": "The default control radius, exposed as --sy-radius-control-md. Added to the source 2026-07-31: the CSS variable already shipped with no token describing it (the same CSS-only-token shape as control-height-xs, audit Defect 7). Aliases radius.10, which stays internal."
+        },
       "md": {
         "$value": "12px"
       },
@@ -709,7 +727,16 @@
         "$description": "Deep elevation — dialogs, drawers."
       },
       "thumb": {
-        "$value": "0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16)"
+        "$value": "0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16)",
+        "$extensions": {
+          "synapse": {
+            "modes": {
+              "light": "0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16)",
+              "dark": "0 1px 3px rgba(0, 0, 0, 0.5), 0 0 3px rgba(255, 255, 255, 0.22)"
+            }
+          }
+        },
+        "$description": "Slider handle shadow. Dark mode uses a deeper drop plus a faint light rim so the handle separates from the track on a dark surface; the mode values were missing until 2026-07-31, so this entry described the light shadow for both modes while the CSS shipped a distinct dark one (CSS<->JSON parity gap, cf. audit Defect 7)."
       },
       "glass": {
         "$value": "0 2px 6px rgba(9,9,11,0.28), 0 30px 60px rgba(9,9,11,0.44), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 0 0 1px rgba(255,255,255,0.06)",
@@ -1481,7 +1508,15 @@
         "error-hover": {
           "$value": "{primitive.color.red.600}",
           "$type": "color",
-          "$description": "Hover step for the error/destructive border. Added 2026-07-30 to close a real defect: outline x destructive had NO hover state, so a coloured outline button gave no feedback that it was live. Mirrors border.strong-hover; red.500 -> red.600 measures dE 10.1, above the dE 8.6 the shipping default step already uses."
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.red.600}",
+                "dark": "{primitive.color.red.300}"
+              }
+            }
+          },
+          "$description": "Hover step for the error/destructive border. Added 2026-07-30 to close a real defect: outline x destructive had NO hover state, so a coloured outline button gave no feedback that it was live. Mirrors border.strong-hover; red.500 -> red.600 measures dE 10.1, above the dE 8.6 the shipping default step already uses. Dark mode steps LIGHTER (red.300) — the mode values were missing until 2026-07-31, so this entry claimed red.600 in both modes while the CSS correctly shipped red.300 in dark (a CSS<->JSON parity gap, cf. audit Defect 7). This 1px border hover deliberately KEEPS the full 600 step while the solid FILL hover was softened to red.550: a hairline needs a larger step than a large fill to register."
         },
         "focus-soft": {
           "$value": "{primitive.color.gray.500}",
@@ -1565,16 +1600,16 @@
           "$description": "BRAND = bright azure (2026-07-30, second re-hue). azure.500 #0073E6 in BOTH modes. White label clears AA at 4.57:1 so normal weight holds and the §9 solid-label deviation does NOT apply. Distinct from `blue` (indigo), which stays the functional info/link/focus hue: brand is saturated azure, functional is muted indigo."
         },
         "brand-bg-hover": {
-          "$value": "{primitive.color.azure.600}",
+          "$value": "{primitive.color.azure.550}",
           "$extensions": {
             "synapse": {
               "modes": {
-                "light": "{primitive.color.azure.600}",
-                "dark": "{primitive.color.azure.600}"
+                "light": "{primitive.color.azure.550}",
+                "dark": "{primitive.color.azure.550}"
               }
             }
           },
-          "$description": "Hover DARKENS in both modes (6.19:1). Every azure step lighter than 500 fails white-label contrast (400 = 2.91:1), so a bright brand physically cannot lighten on hover — unlike action.primary, which lightens in light mode."
+          "$description": "Hover DARKENS in both modes (5.30:1 with a white label, so AA holds at normal weight). Every azure step lighter than 500 fails white-label contrast (400 = 2.91:1), so a bright brand physically cannot lighten on hover — unlike action.primary, which lightens in light mode. Softened to azure.550 on 2026-07-31 (was azure.600): the 600 step ran ΔE 18.5 against the rest fill — 2.15x the ΔE 8.6 house hover step, and the largest hover jump in the system — so it read as a drastic darkening. azure.550 lands at ΔE 8.9, on the house step. The 1px outline border hover (action.brand-border-hover) deliberately stays at azure.600, because a hairline needs a larger step than a fill to register."
         },
         "brand-fg": {
           "$value": "{primitive.color.white}",
@@ -1686,7 +1721,15 @@
         "brand-border-hover": {
           "$value": "{primitive.color.azure.600}",
           "$type": "color",
-          "$description": "Hover step for the brand outline border. Same defect as border.error-hover. azure.500 -> azure.600 measures dE 18.5. Value equals action.brand-bg-hover; kept as a separate token because a border and a fill are different roles and the brand fill may be retuned without dragging the outline with it."
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.600}",
+                "dark": "{primitive.color.azure.400}"
+              }
+            }
+          },
+          "$description": "Hover step for the brand outline border. Same defect as border.error-hover. azure.500 -> azure.600 measures dE 18.5. Dark mode steps LIGHTER (azure.400) — the mode values were missing until 2026-07-31, so this entry claimed azure.600 in both modes while the CSS correctly shipped azure.400 in dark (a CSS<->JSON parity gap, cf. audit Defect 7). It no longer equals action.brand-bg-hover: the fill hover was softened to azure.550 on 2026-07-31 while this 1px border keeps the full 600 step, because a hairline needs a larger step than a large fill to register. That divergence is exactly the reason this was kept as a separate token."
         },
         "brand-border-soft": {
           "$value": "{primitive.color.azure.500}",
@@ -1788,24 +1831,24 @@
           "$extensions": {
             "synapse": {
               "modes": {
-                "light": "{primitive.color.red.400}",
-                "dark": "{primitive.color.red.400}"
+                "light": "{primitive.color.red.500}",
+                "dark": "{primitive.color.red.500}"
               }
             }
           },
           "$description": "Solid danger fill. Shifted red.400 -> red.500 on 2026-07-30: a white label now clears AA at 4.62:1 with NORMAL weight, so the §9 solid-label deviation no longer applies to danger. Chosen over red.400 because 3.99:1 sat on the delete-confirmation button, the one control where a misread has consequences."
         },
         "danger-bg-solid-hover": {
-          "$value": "{primitive.color.red.600}",
+          "$value": "{primitive.color.red.550}",
           "$extensions": {
             "synapse": {
               "modes": {
-                "light": "{primitive.color.red.500}",
-                "dark": "{primitive.color.red.500}"
+                "light": "{primitive.color.red.550}",
+                "dark": "{primitive.color.red.550}"
               }
             }
           },
-          "$description": "Hover step for the solid danger fill, red.500 -> red.600. Shares red.600 with status.danger (the danger TEXT token) — deliberate reuse; a solid fill and text on the page never touch, so there is no visual collision."
+          "$description": "Hover step for the solid danger fill, red.500 -> red.550 (softened 2026-07-31, was red.600). The 600 step ran ΔE 10.1 against the rest fill — above the ΔE 8.6 house hover step — and read as a heavy darkening on a large saturated fill. red.550 gives ΔE 5.0 with a white label at 5.34:1, so AA holds at normal weight. NOTE: the 1px outline border hover (border.error-hover) deliberately stays at red.600 — a hairline needs a larger step than a fill to register. ALSO FIXED here: the mode values previously said red.500 (identical to the rest fill, i.e. no hover), contradicting $value=red.600 that the CSS actually shipped."
         },
         "info-bg-solid": {
           "$value": "{primitive.color.blue.500}",

@@ -65,6 +65,7 @@
   --sy-radius-none: 0px;
   --sy-radius-xs: 4px;
   --sy-radius-sm: 8px;
+  --sy-radius-control-xs: 6px;
   --sy-radius-control-md: 10px;
   --sy-radius-md: 12px;
   --sy-radius-lg: 16px;
@@ -174,7 +175,7 @@
   --sy-action-secondary-bg: #F4F4F6;
   --sy-action-secondary-bg-hover: #ECECEF;
   --sy-action-brand-bg: #0073E6;
-  --sy-action-brand-bg-hover: #0D61B5;
+  --sy-action-brand-bg-hover: #066ACE;
   --sy-brand-point: #1A1A1F;
   --sy-brand-point-fg: #FFFFFF;
   --sy-action-brand-fg: #FFFFFF;
@@ -195,7 +196,7 @@
   --sy-status-danger: #B23230;
   --sy-status-danger-bg: #FBE3E2;
   --sy-status-danger-bg-solid: #D2403E;
-  --sy-status-danger-bg-solid-hover: #B23230;
+  --sy-status-danger-bg-solid-hover: #C23937;
 
   --sy-action-danger-fg: #FFFFFF;
   --sy-text-on-solid: #FFFFFF;
@@ -289,7 +290,7 @@
   --sy-action-secondary-bg: #33333A;
   --sy-action-secondary-bg-hover: #4A4A52;
   --sy-action-brand-bg: #0073E6;
-  --sy-action-brand-bg-hover: #0D61B5;
+  --sy-action-brand-bg-hover: #066ACE;
   --sy-brand-point: #F2F2F4;
   --sy-brand-point-fg: #1A1A1F;
   --sy-action-brand-fg: #FFFFFF;
@@ -310,7 +311,7 @@
   --sy-status-danger: #EE837D;
   --sy-status-danger-bg: #571716;
   --sy-status-danger-bg-solid: #D2403E;
-  --sy-status-danger-bg-solid-hover: #B23230;
+  --sy-status-danger-bg-solid-hover: #C23937;
 
   --sy-action-danger-fg: #FFFFFF;
   --sy-text-on-solid: #FFFFFF;

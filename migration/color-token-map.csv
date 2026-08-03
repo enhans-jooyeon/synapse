@@ -21,7 +21,7 @@ Background,bg-background-200-hover,#e5e5e6,--sy-bg-active,"rgba(9,9,11,0.06)",re
 Background,bg-background-track,#e5e5e6,--sy-bg-sunken,#F4F4F6,direct,Slider/Switch track.
 Background,bg-background-inverted,#262627,--sy-bg-inverse,#09090B,direct,
 Background,bg-background-inverted-hover,#666667,--sy-bg-inverse-soft,#33333A,direct,
-Background,bg-background-brand,#0a84ff,--sy-action-brand-bg,#3155C6,review,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Brand IS azure in v0.13.6, and the new brand is blue.600 -> hue-preserving. Still decide per element: AI/brand CTA -> --sy-action-brand-bg; ordinary primary -> --sy-action-primary-bg #09090B; info surface -> --sy-status-info-bg."
+Background,bg-background-brand,#0a84ff,--sy-action-brand-bg,#0073E6,review,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Brand IS azure in v0.13.6, and the new brand is blue.600 -> hue-preserving. Still decide per element: AI/brand CTA -> --sy-action-brand-bg; ordinary primary -> --sy-action-primary-bg #09090B; info surface -> --sy-status-info-bg."
 Background,bg-background-brand-light,#e6f2ff,--sy-status-info-bg,#E4EAFB,direct,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). #e6f2ff is old blue-50; new info tint E4EAFB is new blue.100. Light brand tint -> info tint, same role, near-same value."
 Background,bg-background-highlight,#e2e8f0,--sy-bg-selected,#EFF3F7,review,Selection/highlight surface.
 Background,bg-background-highlight-light,#f8fafc,--sy-bg-selected,#EFF3F7,review,Subtle highlight; or --sy-bg-surface if not selection.
@@ -61,23 +61,23 @@ Button,bg-button-tertiary-disabled,#f7f7f8,--sy-bg-disabled,#F4F4F6,review,
 Button,bg-button-ghost,transparent,(transparent),transparent,direct,Ghost stays transparent.
 Button,bg-button-ghost-hover,#fbfbfc,--sy-bg-hover,"rgba(9,9,11,0.04)",review,Ghost hover is now an alpha overlay.
 Button,bg-button-destructive,#e6483d,--sy-status-danger-bg-solid,#D2403E,direct,"Destructive solid fill. Value changed 2026-07-30: red.400 -> red.500 so a white label clears AA at 4.62:1 with normal weight. Old #e6483d -> #D2403E is now a CLOSER match than before (delta-E 30.5 vs 35.0)."
-Button,bg-button-destructive-hover,#c4342a,--sy-status-danger-bg-solid-hover,#B23230,direct,Hover moved red.500 -> red.600 with the rest-state shift. Shares red.600 with status.danger (the danger TEXT token) by design.
-Button,bg-button-destructive-disabled,#ffa59f,--sy-bg-disabled,#F4F4F6,review,"RESOLVED by adding a token (2026-07-30), superseding the earlier squash. Fill -> neutral --sy-bg-disabled; the danger hue moves to the LABEL via the new --sy-action-danger-fg-disabled #DB504D (3.63:1). Old #ffa59f ran 1.89:1 with white and is not carried over. A pale-red FILL was rejected: it renders identically to the subtle danger Banner/Badge."
-Button,bg-button-brand,#0a84ff,--sy-action-brand-bg,#3155C6,direct,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Near-mechanical swap: old azure brand button -> new brand blue. Reserved for conversational-AI CTAs (Ask agent / Composer send), max 1/screen; operational agent actions (Run/Retry/Resume) stay --sy-action-primary-bg."
-Button,bg-button-brand-hover,#006bd6,--sy-action-brand-bg-hover,#3D63DD,review,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Direction FLIPPED: old hover darkened (#0a84ff -> #006bd6); new hover lightens in light mode (blue.600 -> blue.500) and darkens in dark mode. Use the token, never hand-derive."
+Button,bg-button-destructive-hover,#c4342a,--sy-status-danger-bg-solid-hover,#C23937,direct,Hover moved red.500 -> red.600 with the rest-state shift, then SOFTENED to red.550 #C23937 on 2026-07-31 (the 600 step ran dE 10.1 vs the rest fill, above the dE 8.6 house hover step). This also retired the red.600 sharing with status.danger that the earlier step had accepted. NOTE the 1px outline border hover (border.error-hover) deliberately stays at red.600.
+Button,bg-button-destructive-disabled,#ffa59f,--sy-bg-disabled,#F4F4F6,review,"RESOLVED by adding a token (2026-07-30), superseding the earlier squash. Fill -> neutral --sy-bg-disabled; SUPERSEDED the same day: --sy-action-danger-fg-disabled was created and then DELETED on 2026-07-30 because at #DB504D it ran HIGHER contrast on the disabled fill (3.63:1) than the neutral label does (2.12:1), so a disabled destructive button read as available. All 12 Button cells now use text.disabled; no hue survives in the disabled state. Old #ffa59f ran 1.89:1 with white and is not carried over. A pale-red FILL was rejected: it renders identically to the subtle danger Banner/Badge."
+Button,bg-button-brand,#0a84ff,--sy-action-brand-bg,#0073E6,direct,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Near-mechanical swap: old azure brand button -> new brand blue. Reserved for conversational-AI CTAs (Ask agent / Composer send), max 1/screen; operational agent actions (Run/Retry/Resume) stay --sy-action-primary-bg."
+Button,bg-button-brand-hover,#006bd6,--sy-action-brand-bg-hover,#066ACE,review,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Direction FLIPPED: old hover darkened (#0a84ff -> #006bd6); new hover lightens in light mode (blue.600 -> blue.500) and darkens in dark mode. Use the token, never hand-derive."
 Button,bg-button-brand-disabled,#e2e8f0,--sy-bg-disabled,#F4F4F6,review,"Verified 2026-07-30 against the REAL source (@enhans/synapse v0.13.6 src/styles.css). Old #e2e8f0 is slate-200 — a cool tinted disabled fill. New fill is neutral --sy-bg-disabled with the hue moved to the label via --sy-action-brand-fg-disabled #3D63DD (4.75:1). So v0.13.6 DID tint brand-disabled, which retroactively justifies that token."
 Radius,rounded-small (4px),4px,--sy-radius-xs,4px,direct,
 Radius,rounded-medium (6px),6px,--sy-radius-sm,8px,review,6→8. Control radius is size-relative now: sm8/md10/lg12; buttons/inputs usually → --sy-radius-control-md.
 Radius,rounded-large (8px),8px,--sy-radius-sm,8px,review,Value matches; cards use --sy-radius-lg 16px in new system.
 Radius,rounded-xlarge (12px),12px,--sy-radius-md,12px,direct,
 Radius,rounded-round,9999px,--sy-radius-full,9999px,direct,
-Chart,chart-0 blue,#3b82f6,--sy-viz-1,#5B7CE0,direct,Categorical ramp by index.
-Chart,chart-1 green,#10b981,--sy-viz-2,#4FAE8B,direct,
-Chart,chart-2 yellow,#eab308,--sy-viz-3,#C9932E,direct,
-Chart,chart-3 red,#ef4444,--sy-viz-4,#C15D5D,direct,
-Chart,chart-4 purple,#a855f7,--sy-viz-5,#8A6FC9,direct,
-Chart,chart-5 teal,#14b8a6,--sy-viz-6,#4FA3C4,direct,
-Chart,chart-6 pink,#ec4899,--sy-viz-7,#B36FA3,direct,
-Chart,chart-7 lime,#84cc16,--sy-viz-8,#7A828E,review,"New viz-8 is a NEUTRAL grey, not lime — reassign if lime carried meaning."
+Chart,chart-0 blue,#3b82f6,--sy-viz-1,#016BE4,direct,Categorical ramp by index.
+Chart,chart-1 green,#10b981,--sy-viz-2,#01B75C,direct,
+Chart,chart-2 yellow,#eab308,--sy-viz-3,#A27201,direct,
+Chart,chart-3 red,#ef4444,--sy-viz-4,#FE5D58,direct,
+Chart,chart-4 purple,#a855f7,--sy-viz-5,#7A03E2,direct,
+Chart,chart-5 teal,#14b8a6,--sy-viz-6,#01A9CB,direct,
+Chart,chart-6 pink,#ec4899,--sy-viz-7,#CB0188,direct,
+Chart,chart-7 lime,#84cc16,--sy-viz-8,#215100,review,"New viz-8 is a NEUTRAL grey, not lime — reassign if lime carried meaning."
 Button,bg-button-secondary-disabled,#ffffff,--sy-bg-disabled,#F4F4F6,review,"ADDED 2026-07-30 — missing from the original map, found by auditing component token usage. Old secondary-disabled was WHITE (no visual disabled signal at all); the new system uses the neutral bg-disabled fill in every variant with the label carrying the state."
 Button,bg-button-ghost-disabled,transparent,--sy-bg-disabled,#F4F4F6,review,"ADDED 2026-07-30 — missing from the original map. Old ghost-disabled was TRANSPARENT. New: disabled is a fill in every variant (components.md Button §States, ""40% opacity is forbidden""), so a disabled ghost now gains the grey fill — a deliberate appearance change."

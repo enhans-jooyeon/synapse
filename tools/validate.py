@@ -22,6 +22,7 @@ Rules (E = error, W = warning):
   SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
   SY017 E synapse.manifest.json stale vs a fresh build — run tools/build_manifest.py (mirrors the CI gate locally)
   SY019 E icon not in assets/icons/tabler-registry.json, off-scale size, or stroke != 1.5 — run tools/check_icons.py (icons.md)
+  SY020 E tokens/synapse.css disagrees with tokens/synapse.tokens.json (per mode); W = a CSS var with no JSON origin — closes audit Defect 7
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
@@ -41,7 +42,7 @@ TOKENS_CSS = os.path.join(ROOT, "tokens", "synapse.css")
 SPACE_SCALE = {0, 1, 2, 4, 6, 8, 10, 12, 16, 20, 24, 28, 32, 40, 48, 64, 80, 96,
                128, 160, 192, 224, 256, 320, 384}
 FONT_SCALE = {11, 12, 13, 14, 16, 18, 20, 24, 30, 36}
-RADIUS_SCALE = {4, 8, 10, 12, 16, 20, 24, 9999}
+RADIUS_SCALE = {4, 6, 8, 10, 12, 16, 20, 24, 9999}  # 6 and 10 are control-optical exceptions to the 4px scale
 WEIGHTS = {"400", "500", "600", "700", "normal", "bold"}
 FORBIDDEN_TERMS = ["에러", "노티", "퍼미션", "컨펌", "익스포트", "워크플로우",
                    "부디", "제발", "을(를)", "(을)를", "Oops", "oops", "click here"]
@@ -151,14 +152,165 @@ CONTRAST_PAIRS = [
 ]
 
 def parse_css_modes(css):
-    """Extract {mode: {var: value}} from synapse.css light/dark blocks."""
-    modes = {"light": {}, "dark": {}}
-    blocks = re.findall(r'(:root, \[data-theme="light"\]|\[data-theme="dark"\])\s*\{([^}]*)\}', css)
-    for sel, body in blocks:
-        mode = "dark" if "dark" in sel else "light"
-        for var, val in re.findall(r'(--sy-[a-z0-9-]+)\s*:\s*([^;]+);', body):
-            modes[mode][var] = val.strip()
-    return modes
+    """Extract {mode: {var: value}} from synapse.css, modelling the real cascade.
+
+    Mode-INVARIANT declarations (space, radius, shadow, z, motion, type) live in
+    plain `:root` blocks; only colour is themed. Reading just the two theme blocks
+    made every invariant token look absent, so the base layer is merged in first.
+    """
+    base, light, dark = {}, {}, {}
+    for sel, body in re.findall(r"([^{}]*)\{([^{}]*)\}", css):
+        sel = sel.strip().splitlines()[-1].strip() if sel.strip() else ""
+        decls = {v: val.strip() for v, val in re.findall(VAR_DECL, body)}
+        if not decls:
+            continue
+        if "data-theme=\"dark\"" in sel:
+            dark.update(decls)
+        elif "data-theme=\"light\"" in sel:
+            light.update(decls)
+        elif sel == ":root":
+            base.update(decls)
+    return {"light": {**base, **light}, "dark": {**base, **dark}}
+
+# --------------------------------------------------- SY020 CSS<->JSON parity
+#
+# Token names MAY contain an underscore (the sanctioned fractional spacing steps
+# --sy-space-0_5 / 1_5 / 2_5). Every var-name pattern below therefore includes
+# `_`; omitting it silently truncated `var(--sy-space-1_5)` to `--sy-space-1`,
+# which is itself a real token, so SY008 passed on names that did not exist.
+VAR_NAME = r"--sy-[a-z0-9_-]+"
+VAR_DECL = r"(" + VAR_NAME + r")\s*:\s*([^;]+);"
+
+# JSON group -> CSS variable prefix. Explicit by design: a guessed mapping would
+# make the gate's coverage unknowable, which is the failure it exists to prevent.
+# `missing` is the severity when a JSON token has no matching CSS variable.
+PARITY_GROUPS = [
+    (("semantic", "color"),               [],           "E"),
+    (("semantic", "padding"),             ["padding"],  "E"),
+    (("density", "control"),              ["control"],  "E"),
+    (("density", "layout"),               [],           "E"),
+    (("primitive", "space"),              ["space"],    "E"),
+    (("primitive", "shadow"),             ["shadow"],   "E"),
+    (("primitive", "z"),                  ["z"],        "E"),
+    (("primitive", "motion", "duration"), ["duration"], "E"),
+    (("primitive", "motion", "easing"),   ["ease"],     "E"),
+    (("primitive", "radius"),             ["radius"],   "W"),  # a few radius primitives are internal (radius.10 backs control-md)
+]
+# Deliberately NOT covered, and why:
+#   semantic.type      composite $value (family/size/lineHeight/weight) -> .sy-type-* utility
+#                      classes, not single custom properties; a value comparison is not meaningful.
+#   primitive.color    internal ramps; only reach CSS through semantic tokens.
+#   primitive.font     surfaced as paired --sy-text-N / --sy-text-N-lh, a 1:many mapping.
+# Primitives deliberately NOT exposed as CSS variables (they exist only to back a
+# named token). Listed explicitly so "unexposed" is a decision, not an accident.
+PARITY_INTERNAL = {"--sy-radius-10", "--sy-radius-6"}
+PARITY_SKIP_PREFIXES = ("--sy-text-", "--sy-body-", "--sy-label-", "--sy-heading-",
+                        "--sy-display-", "--sy-stat-", "--sy-code-", "--sy-micro-",
+                        "--sy-caption-", "--sy-font-", "--sy-weight-")
+
+def _norm(v):
+    """Compare values ignoring hex case and whitespace inside functional notation."""
+    return re.sub(r"\s+", "", str(v)).upper()
+
+def _fmt_json_value(v):
+    """Render a DTCG value the way synapse.css writes it.
+
+    Not every token is a plain string: cubicBezier is stored as a 4-element array
+    and must be compared against `cubic-bezier(...)`, or every easing token reads
+    as drift.
+    """
+    if isinstance(v, list):
+        return "cubic-bezier(" + ", ".join(str(x) for x in v) + ")"
+    return v
+
+def _deref_css(val, table, depth=0):
+    """Follow `var(--sy-x)` aliases inside synapse.css.
+
+    Some CSS tokens alias another token instead of inlining its value (e.g.
+    --sy-padding-2xs: var(--sy-space-1)); comparing the literal text would
+    report drift where the values agree.
+    """
+    if depth > 8 or not isinstance(val, str):
+        return val
+    m = re.fullmatch(r"var\(\s*(" + VAR_NAME + r")\s*\)", val.strip())
+    if not m:
+        return val
+    nxt = table.get(m.group(1))
+    return _deref_css(nxt, table, depth + 1) if nxt is not None else val
+
+def check_token_parity(data, modes):
+    """SY020 — tokens/synapse.css must agree with tokens/synapse.tokens.json.
+
+    synapse.css is documented as generated but is hand-maintained, so the two can
+    drift with a green gate: SY017 only compares the manifest against the same
+    generator that produces it. Three drifts of this class were found by hand in a
+    single session (danger fill hover modes; border.error-hover and
+    action.brand-border-hover missing their dark modes), plus the earlier
+    control-height-xs case, which is audit Defect 7.
+    """
+    def deref(ref, mode, depth=0):
+        """Resolve a {reference} IN A MODE.
+
+        A referenced token may itself be mode-aware (the viz primitives and the
+        text.* family are), so following $value alone reports the light value in
+        dark mode and every alias looks like drift. The mode must propagate
+        through each hop of the chain.
+        """
+        if not isinstance(ref, str) or depth > 8:
+            return ref
+        m = re.fullmatch(r"\{([^}]+)\}", ref.strip())
+        if not m:
+            return ref
+        node = data
+        for k in m.group(1).split("."):
+            node = node.get(k, {}) if isinstance(node, dict) else {}
+        if not isinstance(node, dict):
+            return None
+        modes_ext = node.get("$extensions", {}).get("synapse", {}).get("modes", {}) or {}
+        val = modes_ext.get(mode, node.get("$value"))
+        return deref(val, mode, depth + 1) if val is not None else None
+
+    accounted = set()
+    for group, prefix, missing_sev in PARITY_GROUPS:
+        node = data
+        for k in group:
+            node = node.get(k, {}) if isinstance(node, dict) else {}
+        stack = [([], node)]
+        while stack:
+            path, n = stack.pop()
+            if not isinstance(n, dict):
+                continue
+            if "$value" in n:
+                var = "--sy-" + "-".join(prefix + path)
+                accounted.add(var)
+                exts = n.get("$extensions", {}).get("synapse", {}).get("modes", {}) or {}
+                for mode in ("light", "dark"):
+                    css_val = modes.get(mode, {}).get(var)
+                    if css_val is None:
+                        if mode == "light" and var not in PARITY_INTERNAL:
+                            report(missing_sev, "SY020", TOKENS_JSON, 0,
+                                   f"{'.'.join(group + tuple(path))} has no {var} in synapse.css")
+                        continue
+                    want = _fmt_json_value(deref(exts.get(mode, n.get("$value")), mode))
+                    if want is None or isinstance(want, dict):
+                        continue
+                    css_val = _deref_css(css_val, modes.get(mode, {}))
+                    if _norm(want) != _norm(css_val):
+                        report("E", "SY020", TOKENS_CSS, 0,
+                               f"[{mode}] {var}: css {css_val} != json {want} "
+                               f"({'.'.join(group + tuple(path))}"
+                               f"{'' if exts else ' — no $extensions.synapse.modes, so $value applies to both modes'})")
+            for k, v in n.items():
+                if not k.startswith("$"):
+                    stack.append((path + [k], v))
+
+    # Reverse direction: a CSS variable with no JSON origin is the control-height-xs
+    # case — the canonical source does not describe something the system renders.
+    for var in sorted(modes.get("light", {})):
+        if var in accounted or var.startswith(PARITY_SKIP_PREFIXES):
+            continue
+        report("W", "SY020", TOKENS_CSS, 0,
+               f"{var} exists in synapse.css but no token in synapse.tokens.json maps to it")
 
 def check_tokens():
     try:
@@ -186,6 +338,7 @@ def check_tokens():
     # contrast matrix per mode
     css = open(TOKENS_CSS).read()
     modes = parse_css_modes(css)
+    check_token_parity(data, modes)
     for mode, table in modes.items():
         for name, fg, bg, req in CONTRAST_PAIRS:
             fv, bv = table.get(fg), table.get(bg)
@@ -202,7 +355,7 @@ def check_tokens():
 
 def defined_vars():
     css = open(TOKENS_CSS).read()
-    return set(re.findall(r"(--sy-[a-z0-9-]+)\s*:", css))
+    return set(re.findall(r"(" + VAR_NAME + r")\s*:", css))
 
 CSS_DECL = re.compile(r"([a-z-]+)\s*:\s*([^;{}\"]+)")
 PX = re.compile(r"(-?\d+(?:\.\d+)?)px")
@@ -257,7 +410,7 @@ def lint_css_text(text, path, line_of, defined):
                 report("W", "SY010", path, ln,
                        f"line-height/font-size ratio {float(lh.group(1))/float(fs.group(1)):.2f} < 1.4 floor")
     # undefined variables
-    for vm in re.finditer(r"var\(\s*(--sy-[a-z0-9-]+)", text):
+    for vm in re.finditer(r"var\(\s*(" + VAR_NAME + r")", text):
         if vm.group(1) not in defined:
             report("E", "SY008", path, line_of(vm.start()), f"undefined variable {vm.group(1)}")
 

@@ -5,6 +5,348 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Synapse — visual diff</title>
 <style>
+/* ---- token snapshot: copied from tokens/synapse.css. Keep in sync (see HANDOFF standing rule). ---- */
+:root {
+  /* typography primitives */
+  --sy-font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --sy-font-display: "Artific", "Pretendard Variable", Pretendard, sans-serif;
+  --sy-font-mono: "JetBrains Mono", "SF Mono", D2Coding, Consolas, monospace;
+
+  --sy-weight-regular: 400;
+  --sy-weight-medium: 500;
+  --sy-weight-semibold: 600;
+  --sy-weight-bold: 700;
+
+  /* type scale: size / line-height pairs. Never tighten line-height (Hangul). */
+  --sy-text-11: 11px; --sy-text-11-lh: 16px;
+  --sy-text-12: 12px; --sy-text-12-lh: 18px;
+  --sy-text-13: 13px; --sy-text-13-lh: 20px;
+  --sy-text-14: 14px; --sy-text-14-lh: 22px;
+  --sy-text-16: 16px; --sy-text-16-lh: 24px;
+  --sy-text-18: 18px; --sy-text-18-lh: 27px;
+  --sy-text-20: 20px; --sy-text-20-lh: 30px;
+  --sy-text-24: 24px; --sy-text-24-lh: 34px;
+  --sy-text-30: 30px; --sy-text-30-lh: 40px;
+  --sy-text-36: 36px; --sy-text-36-lh: 48px;
+  --sy-text-44: 44px; --sy-text-44-lh: 56px;
+
+  /* spacing — 4px grid */
+  --sy-space-0: 0px;  --sy-space-0_5: 2px;  --sy-space-1: 4px;
+  --sy-space-1_5: 6px;  --sy-space-2: 8px;  --sy-space-2_5: 10px;  --sy-space-3: 12px;
+  --sy-space-4: 16px; --sy-space-5: 20px; --sy-space-6: 24px; --sy-space-7: 28px;
+  --sy-space-8: 32px; --sy-space-10: 40px; --sy-space-12: 48px;
+  --sy-space-16: 64px; --sy-space-20: 80px; --sy-space-24: 96px;
+  --sy-space-32: 128px; --sy-space-40: 160px; --sy-space-48: 192px; --sy-space-56: 224px;
+  --sy-space-64: 256px; --sy-space-80: 320px; --sy-space-96: 384px;
+
+  /* radius */
+  --sy-radius-none: 0px;
+  --sy-radius-xs: 4px;
+  --sy-radius-sm: 8px;
+  --sy-radius-control-xs: 6px;
+  --sy-radius-control-md: 10px;
+  --sy-radius-md: 12px;
+  --sy-radius-lg: 16px;
+  --sy-radius-xl: 20px;
+  --sy-radius-2xl: 24px;
+  --sy-radius-full: 9999px;
+  /* padding — semantic aliases of the space scale */
+  --sy-padding-none: 0px;
+  --sy-padding-2xs: var(--sy-space-1);
+  --sy-padding-xs: var(--sy-space-2);
+  --sy-padding-sm: var(--sy-space-3);
+  --sy-padding-md: var(--sy-space-4);
+  --sy-padding-lg: var(--sy-space-6);
+  --sy-padding-xl: var(--sy-space-8);
+
+  /* elevation — borders-first system; shadows only for floating layers */
+  --sy-shadow-xs: 0 1px 2px rgba(9, 9, 11, 0.05);
+  --sy-shadow-sm: 0 2px 6px rgba(9, 9, 11, 0.06);
+  --sy-shadow-md: 0 4px 12px rgba(9, 9, 11, 0.07);
+  --sy-shadow-lg: 0 8px 24px rgba(9, 9, 11, 0.08);
+  --sy-shadow-xl: 0 24px 48px rgba(9, 9, 11, 0.12);
+  --sy-shadow-thumb: 0 1px 3px rgba(9, 9, 11, 0.28), 0 0 3px rgba(9, 9, 11, 0.16);
+
+  /* stacking — every floating/pinned element takes exactly one; arbitrary z-index forbidden */
+  --sy-z-sticky: 100;
+  --sy-z-dropdown: 200;
+  --sy-z-drawer: 300;
+  --sy-z-modal: 400;
+  --sy-z-toast: 500;
+  --sy-z-tooltip: 600;
+
+  /* motion */
+  --sy-duration-instant: 100ms;
+  --sy-duration-fast: 150ms;
+  --sy-duration-base: 200ms;
+  --sy-duration-slow: 300ms;
+  --sy-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --sy-ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --sy-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+}
+:root, [data-theme="light"] {
+  --sy-bg-page: #FFFFFF;
+  --sy-bg-surface: #FAFAFB;
+  --sy-bg-raised: #FFFFFF;
+  --sy-bg-raised-2: #FFFFFF;
+  --sy-bg-sunken: #F4F4F6;
+  --sy-bg-hover: rgba(9, 9, 11, 0.04);
+  --sy-bg-active: rgba(9, 9, 11, 0.06);
+  --sy-bg-selected: #EFF3F7;
+  --sy-bg-selected-hover: #DCE3EB;
+  --sy-bg-disabled: #F4F4F6;
+  --sy-bg-scrim: rgba(9, 9, 11, 0.40);
+  --sy-glass-surface: #F6F8FB;
+  --sy-glass-blur: 26px;
+  --sy-glass-filter: blur(26px) saturate(1.5) brightness(1.12);
+  --sy-glass-border: #E4E9F0;
+  --sy-glass-rim: #FFFFFF;
+  --sy-glass-accent: #33333B;
+  --sy-glass-selected: rgba(255, 255, 255, 0.10);
+  --sy-shadow-glass: 0 2px 6px rgba(9, 9, 11, 0.28), 0 30px 60px rgba(9, 9, 11, 0.44), inset 0 1px 0 rgba(255, 255, 255, 0.42), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --sy-bg-inverse: #09090B;
+  --sy-bg-inverse-soft: #33333A;
+
+  --sy-text-primary: #09090B;
+  --sy-text-secondary: #62626B;
+  --sy-text-tertiary: #83838D;
+  --sy-text-placeholder: #83838D;
+  --sy-text-disabled: #A9A9B2;
+  --sy-text-on-inverse: #FFFFFF;
+  --sy-text-link: #3155C6;
+
+  /* icons — dedicated family; only icon-primary differs from text-*, the rest alias it */
+  --sy-icon-primary: #1E1E24;
+  --sy-icon-secondary: #62626B;
+  --sy-icon-tertiary: #83838D;
+  --sy-icon-disabled: #A9A9B2;
+  --sy-icon-on-inverse: #FFFFFF;
+  --sy-icon-info: #3155C6;
+  --sy-icon-success: #0E7A42;
+  --sy-icon-warning: #8C5A00;
+  --sy-icon-danger: #B23230;
+
+  --sy-border-subtle: #ECECEF;
+  --sy-border-default: #E9E9ED;
+  --sy-border-overlay: transparent;
+  --sy-border-strong: #D1D1D8;
+  --sy-border-strong-hover: #A9A9B2;
+  --sy-action-brand-border-hover: #0D61B5;
+  --sy-border-error-hover: #B23230;
+  --sy-border-focus-soft: #83838D;
+  --sy-border-error-soft: #D2403E;
+  --sy-action-brand-border-soft: #0073E6;
+  --sy-border-focus: #3D63DD;
+  --sy-border-focus-input: #33333A;
+  --sy-border-selected: #09090B;
+  --sy-border-error: #D2403E;
+
+  --sy-action-primary-bg: #09090B;
+  --sy-action-primary-bg-hover: #33333A;
+  --sy-action-primary-fg: #FFFFFF;
+  --sy-action-secondary-bg: #F4F4F6;
+  --sy-action-secondary-bg-hover: #ECECEF;
+  --sy-action-brand-bg: #0073E6;
+  --sy-action-brand-bg-hover: #066ACE;
+  --sy-brand-point: #1A1A1F;
+  --sy-brand-point-fg: #FFFFFF;
+  --sy-action-brand-fg: #FFFFFF;
+  --sy-action-secondary-danger-bg: #FDF1F0;
+  --sy-action-secondary-danger-bg-hover: #FBE3E2;
+  --sy-action-secondary-brand-bg: #F1F7FE;
+  --sy-action-secondary-brand-bg-hover: #E0EEFD;
+  --sy-action-secondary-brand-fg: #0B4F93;
+  --sy-action-brand-border: #0073E6;
+  --sy-action-brand-fg-on-page: #0D61B5;
+
+  --sy-status-info: #3155C6;
+  --sy-status-info-bg: #E4EAFB;
+  --sy-status-success: #0E7A42;
+  --sy-status-success-bg: #DCF2E6;
+  --sy-status-warning: #8C5A00;
+  --sy-status-warning-bg: #FBEED3;
+  --sy-status-danger: #B23230;
+  --sy-status-danger-bg: #FBE3E2;
+  --sy-status-danger-bg-solid: #D2403E;
+  --sy-status-danger-bg-solid-hover: #C23937;
+
+  --sy-action-danger-fg: #FFFFFF;
+  --sy-text-on-solid: #FFFFFF;
+  --sy-status-info-bg-solid: #3D63DD;
+  --sy-status-success-bg-solid: #1F9D5B;
+  --sy-status-warning-bg-solid: #BA7C14;
+  --sy-text-link-on-inverse: #9DB3EE;
+  --sy-status-info-on-inverse: #9DB3EE;
+  --sy-status-success-on-inverse: #3FBF7F;
+  --sy-status-warning-on-inverse: #D99A27;
+  --sy-status-danger-on-inverse: #EE837D;
+
+  --sy-ai-surface: #EFF3F7;
+  --sy-ai-surface-hover: #DCE3EB;
+  --sy-ai-border: #DCE3EB;
+  --sy-emphasis-surface: #EFF3F7;
+  --sy-emphasis-border: #DCE3EB;
+  --sy-emphasis-fg: #4F5D6F;
+  --sy-emphasis-fg-soft: #6B7A8D;
+  --sy-ai-fg: #4F5D6F;
+  --sy-ai-solid: #0073E6;
+
+  /* data visualization — chart series ONLY, never UI; fixed order, assign in sequence */
+  --sy-viz-1: #016BE4; --sy-viz-2: #01B75C; --sy-viz-3: #A27201; --sy-viz-4: #FE5D58;
+  --sy-viz-5: #7A03E2; --sy-viz-6: #01A9CB; --sy-viz-7: #CB0188; --sy-viz-8: #215100;
+  --sy-meter-fill: #83838D;
+
+  /* category-chip label text — darkened viz hues, AA-verified on the viz 20% tint (never use raw --sy-viz-* as text) */
+  /* category tint fills — SOLID (opaque) viz tints; replaces color-mix(...,transparent) alpha fills */
+}
+[data-theme="dark"] {
+  --sy-bg-page: #09090B;
+  --sy-bg-surface: #141419;
+  --sy-bg-raised: #1E1E24;
+  --sy-bg-raised-2: #33333A;
+  --sy-bg-sunken: #141419;
+  --sy-bg-hover: rgba(255, 255, 255, 0.06);
+  --sy-bg-active: rgba(255, 255, 255, 0.10);
+  --sy-bg-selected: #2A333F;
+  --sy-bg-selected-hover: #3C4756;
+  --sy-bg-disabled: #1E1E24;
+  --sy-bg-scrim: rgba(9, 9, 11, 0.60);
+  --sy-glass-surface: #262B33;
+  --sy-glass-filter: blur(26px) saturate(1.4) brightness(1.05);
+  --sy-glass-border: #363C46;
+  --sy-glass-rim: #3C424C;
+  --sy-glass-accent: #E4E4E7;
+  --sy-glass-selected: rgba(9, 9, 11, 0.06);
+  --sy-shadow-glass: 0 2px 6px rgba(0, 0, 0, 0.16), 0 26px 54px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --sy-bg-inverse: #FFFFFF;
+  --sy-bg-inverse-soft: #E3E3E8;
+
+  --sy-text-primary: #F4F4F6;
+  --sy-text-secondary: #A9A9B2;
+  --sy-text-tertiary: #83838D;
+  --sy-text-placeholder: #83838D;
+  --sy-text-disabled: #62626B;
+  --sy-text-on-inverse: #09090B;
+  --sy-text-link: #9DB3EE;
+
+  /* icons — dedicated family; only icon-primary differs from text-*, the rest alias it */
+  --sy-icon-primary: #E3E3E8;
+  --sy-icon-secondary: #A9A9B2;
+  --sy-icon-tertiary: #83838D;
+  --sy-icon-disabled: #62626B;
+  --sy-icon-on-inverse: #09090B;
+  --sy-icon-info: #9DB3EE;
+  --sy-icon-success: #3FBF7F;
+  --sy-icon-warning: #D99A27;
+  --sy-icon-danger: #EE837D;
+
+  --sy-border-subtle: #33333A;
+  --sy-border-default: #4A4A52;
+  --sy-border-overlay: #4A4A52;
+  --sy-border-strong: #62626B;
+  --sy-border-strong-hover: #83838D;
+  --sy-action-brand-border-hover: #2994FF;
+  --sy-border-error-hover: #EE837D;
+  --sy-border-focus-soft: #83838D;
+  --sy-border-error-soft: #D2403E;
+  --sy-action-brand-border-soft: #0073E6;
+  --sy-border-focus: #9DB3EE;
+  --sy-border-focus-input: #E3E3E8;
+  --sy-border-selected: #F4F4F6;
+  --sy-border-error: #EE837D;
+
+  --sy-action-primary-bg: #FFFFFF;
+  --sy-action-primary-bg-hover: #E3E3E8;
+  --sy-action-primary-fg: #09090B;
+  --sy-action-secondary-bg: #33333A;
+  --sy-action-secondary-bg-hover: #4A4A52;
+  --sy-action-brand-bg: #0073E6;
+  --sy-action-brand-bg-hover: #066ACE;
+  --sy-brand-point: #F2F2F4;
+  --sy-brand-point-fg: #1A1A1F;
+  --sy-action-brand-fg: #FFFFFF;
+  --sy-action-secondary-danger-bg: #3D100F;
+  --sy-action-secondary-danger-bg-hover: #571716;
+  --sy-action-secondary-brand-bg: #061B30;
+  --sy-action-secondary-brand-bg-hover: #082B4E;
+  --sy-action-secondary-brand-fg: #7BBBFC;
+  --sy-action-brand-border: #7BBBFC;
+  --sy-action-brand-fg-on-page: #7BBBFC;
+
+  --sy-status-info: #9DB3EE;
+  --sy-status-info-bg: #1B2C60;
+  --sy-status-success: #3FBF7F;
+  --sy-status-success-bg: #123F27;
+  --sy-status-warning: #D99A27;
+  --sy-status-warning-bg: #4A3208;
+  --sy-status-danger: #EE837D;
+  --sy-status-danger-bg: #571716;
+  --sy-status-danger-bg-solid: #D2403E;
+  --sy-status-danger-bg-solid-hover: #C23937;
+
+  --sy-action-danger-fg: #FFFFFF;
+  --sy-text-on-solid: #FFFFFF;
+  --sy-status-info-bg-solid: #3D63DD;
+  --sy-status-success-bg-solid: #1F9D5B;
+  --sy-status-warning-bg-solid: #BA7C14;
+  --sy-text-link-on-inverse: #3155C6;
+  --sy-status-info-on-inverse: #3155C6;
+  --sy-status-success-on-inverse: #0E7A42;
+  --sy-status-warning-on-inverse: #8C5A00;
+  --sy-status-danger-on-inverse: #B23230;
+
+  --sy-ai-surface: #2A333F;
+  --sy-ai-surface-hover: #3C4756;
+  --sy-ai-border: #2A333F;
+  --sy-emphasis-surface: #1A212B;
+  --sy-emphasis-border: #2A333F;
+  --sy-emphasis-fg: #C2CCD9;
+  --sy-emphasis-fg-soft: #93A1B3;
+  --sy-ai-fg: #C2CCD9;
+  --sy-ai-solid: #0073E6;
+
+  /* data visualization — chart series ONLY, never UI; fixed order, assign in sequence */
+  --sy-viz-1: #0158BC; --sy-viz-2: #037D40; --sy-viz-3: #8E6401; --sy-viz-4: #FE8E8A;
+  --sy-viz-5: #7D01E9; --sy-viz-6: #05C9F0; --sy-viz-7: #CD048A; --sy-viz-8: #49D204;
+  --sy-meter-fill: #A9A9B2;
+
+  /* category-chip label text — lightened viz hues, AA-verified on the viz 20% tint over dark surfaces */
+  /* category tint fills — SOLID viz tints on dark surfaces */
+
+  --sy-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sy-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.44);
+  --sy-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.47);
+  --sy-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --sy-shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.6);
+  --sy-shadow-thumb: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 3px rgba(255, 255, 255, 0.22);
+}
+:root {
+  --sy-control-height-xs: 24px;
+  --sy-control-height-sm: 32px;
+  --sy-control-height-md: 36px;
+  --sy-control-height-lg: 40px;
+  --sy-control-padding-x: 12px;
+  --sy-control-padding-x-xs: 8px;
+  --sy-control-padding-x-sm: 10px;
+  --sy-control-padding-x-md: 12px;
+  --sy-control-padding-x-lg: 16px;
+  --sy-control-gap: 12px;
+
+  --sy-body-size: 14px;
+  --sy-body-lh: 22px;
+  --sy-label-size: 13px;
+  --sy-label-lh: 20px;
+
+  --sy-page-padding: 32px;
+  --sy-section-gap: 40px;
+  --sy-card-padding: 28px;
+  --sy-stack-gap: 16px;
+  --sy-table-row: 36px;
+  --sy-table-cell-x: 12px;
+  --sy-content-max: 760px;
+}
+
   :root{--ink:#18181B;--ink2:#52525B;--ink3:#A1A1AA;--line:#E4E4E7;--line2:#F4F4F5;
         --ok:#1F9D5B;--no:#B23230;--warn:#8C5A00}
   *{box-sizing:border-box}
@@ -19,7 +361,7 @@
   section{background:#fff;border:1px solid var(--line);border-radius:11px;padding:20px 22px;margin-bottom:14px}
   .st{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
   h2{font-size:16px;font-weight:650;margin:0}
-  .chip{font-size:10px;font-weight:640;padding:2px 7px;border-radius:9999px;border:1px solid}
+  .chip{font-size:10px;font-weight:640;padding:2px 7px;border-radius:var(--sy-radius-full);border:1px solid}
   .c-ok{background:#EEF9F3;color:var(--ok);border-color:#A9E3C4}
   .c-wa{background:#FDF6E7;color:var(--warn);border-color:#F3D492}
   .st .note{font-size:11px;color:var(--ink3);margin-left:auto}
@@ -31,8 +373,8 @@
   .lbl{font-size:9.5px;color:var(--ink3);font-weight:620;margin:0 0 7px}
 
   .ob{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:6px;font-size:12px;font-weight:500;border:1px solid transparent;white-space:nowrap}
-  .nb{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 14px;border-radius:10px;font-size:12.5px;font-weight:500;border:1px solid transparent;white-space:nowrap}
-  .bd{display:inline-flex;align-items:center;justify-content:center;height:20px;padding:0 8px;border-radius:9999px;font-size:11px;font-weight:500;border:1px solid transparent;white-space:nowrap}
+  .nb{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 14px;border-radius:var(--sy-radius-control-md);font-size:12.5px;font-weight:500;border:1px solid transparent;white-space:nowrap}
+  .bd{display:inline-flex;align-items:center;justify-content:center;height:20px;padding:0 8px;border-radius:var(--sy-radius-full);font-size:11px;font-weight:500;border:1px solid transparent;white-space:nowrap}
   .bd.sq{border-radius:4px}
   .cp{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:8px;font-size:11.5px;font-weight:500;border:1px solid transparent;white-space:nowrap}
   .mx{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:9px 8px;align-items:center}
@@ -46,7 +388,7 @@
   .sw{flex:1;height:22px}
   .sw:first-of-type{border-radius:4px 0 0 4px}
   .sw:last-child{border-radius:0 4px 4px 0}
-  .new{outline:2px solid var(--ok);outline-offset:2px;border-radius:5px}
+  /* .new: the green outline was removed 2026-07-31 — it read as component chrome; the Old/New column headers already carry the distinction */
 
   .v{font-size:11.5px;line-height:1.55;color:var(--ink2);margin:14px 0 0;padding-top:11px;border-top:1px solid var(--line2)}
   .v b{color:var(--ink)}
@@ -98,7 +440,7 @@
       <div class="ramp"><span class="rname">red</span><div class="sw" style="background:#FDF1F0"></div><div class="sw" style="background:#FBE3E2"></div><div class="sw" style="background:#F7BEBB"></div><div class="sw" style="background:#EE837D"></div><div class="sw" style="background:#DB504D"></div><div class="sw" style="background:#D2403E"></div><div class="sw" style="background:#B23230"></div><div class="sw" style="background:#8F2826"></div><div class="sw" style="background:#73201E"></div><div class="sw" style="background:#571716"></div><div class="sw" style="background:#3D100F"></div></div>
       <div class="ramp"><span class="rname">green</span><div class="sw" style="background:#EEF9F3"></div><div class="sw" style="background:#DCF2E6"></div><div class="sw" style="background:#A9E3C4"></div><div class="sw" style="background:#3FBF7F"></div><div class="sw" style="background:#2FAF6D"></div><div class="sw" style="background:#1F9D5B"></div><div class="sw" style="background:#0E7A42"></div><div class="sw" style="background:#135933"></div><div class="sw" style="background:#124A2C"></div><div class="sw" style="background:#123F27"></div><div class="sw" style="background:#0C2A1A"></div></div>
       <div class="ramp"><span class="rname">amber</span><div class="sw" style="background:#FDF6E7"></div><div class="sw" style="background:#FBEED3"></div><div class="sw" style="background:#F3D492"></div><div class="sw" style="background:#D99A27"></div><div class="sw" style="background:#CC8B1E"></div><div class="sw" style="background:#BA7C14"></div><div class="sw" style="background:#8C5A00"></div><div class="sw" style="background:#6B4708"></div><div class="sw" style="background:#5A3C08"></div><div class="sw" style="background:#4A3208"></div><div class="sw" style="background:#332305"></div></div>
-      <div class="ramp new" style="margin-top:8px"><span class="rname" style="color:var(--ok);font-weight:680">azure</span><div class="sw" style="background:#F1F7FE"></div><div class="sw" style="background:#E0EEFD"></div><div class="sw" style="background:#B8DAFC"></div><div class="sw" style="background:#7BBBFC"></div><div class="sw" style="background:#2994FF"></div><div class="sw" style="background:#0073E6"></div><div class="sw" style="background:#0D61B5"></div><div class="sw" style="background:#0B4F93"></div><div class="sw" style="background:#0A3D71"></div><div class="sw" style="background:#082B4E"></div><div class="sw" style="background:#061B30"></div></div>
+      <div class="ramp" style="margin-top:8px"><span class="rname" style="color:var(--ok);font-weight:680">azure</span><div class="sw" style="background:#F1F7FE"></div><div class="sw" style="background:#E0EEFD"></div><div class="sw" style="background:#B8DAFC"></div><div class="sw" style="background:#7BBBFC"></div><div class="sw" style="background:#2994FF"></div><div class="sw" style="background:#0073E6"></div><div class="sw" style="background:#0D61B5"></div><div class="sw" style="background:#0B4F93"></div><div class="sw" style="background:#0A3D71"></div><div class="sw" style="background:#082B4E"></div><div class="sw" style="background:#061B30"></div></div>
     </div>
   </div>
   <p class="v"><b>Two blues by job:</b> azure <code>#0073E6</code> = brand · indigo <code>#3155C6</code> = link/focus/info. Never mixed. Every hue desaturated vs the old palette; <code>yellow → amber</code> is a retune, not a rename.</p>
@@ -269,21 +611,21 @@
       <div class="mx">
         <div></div><div class="ax">default</div><div class="ax">destruct.</div><div class="ax">brand</div>
         <div class="rl">primary</div>
-        <div><span class="nb" style="background:#09090B;color:#fff">Button</span></div>
-        <div><span class="nb" style="background:#D2403E;color:#fff">Button</span></div>
-        <div><span class="nb" style="background:#0073E6;color:#fff">Button</span></div>
+        <div><span class="nb" style="background:var(--sy-action-primary-bg);color:var(--sy-action-primary-fg)">Button</span></div>
+        <div><span class="nb" style="background:var(--sy-status-danger-bg-solid);color:var(--sy-action-danger-fg)">Button</span></div>
+        <div><span class="nb" style="background:var(--sy-action-brand-bg);color:var(--sy-action-brand-fg)">Button</span></div>
         <div class="rl">secondary<i>was tertiary</i></div>
-        <div><span class="nb" style="background:#F4F4F6;color:#09090B">Button</span></div>
-        <div><span class="nb" style="background:#FDF1F0;color:#B23230">Button</span></div>
-        <div><span class="nb" style="background:#F1F7FE;color:#0B4F93">Button</span></div>
+        <div><span class="nb" style="background:var(--sy-action-secondary-bg);color:var(--sy-text-primary)">Button</span></div>
+        <div><span class="nb" style="background:var(--sy-action-secondary-danger-bg);color:var(--sy-status-danger)">Button</span></div>
+        <div><span class="nb" style="background:var(--sy-action-secondary-brand-bg);color:var(--sy-action-secondary-brand-fg)">Button</span></div>
         <div class="rl">outline<i>was secondary</i></div>
-        <div><span class="nb" style="background:#fff;color:#09090B;border-color:#E9E9ED">Button</span></div>
-        <div><span class="nb" style="background:#fff;color:#B23230;border-color:#D2403E">Button</span></div>
-        <div><span class="nb" style="background:#fff;color:#0D61B5;border-color:#0073E6">Button</span></div>
+        <div><span class="nb" style="background:var(--sy-bg-page);color:var(--sy-text-primary);border-color:var(--sy-border-default)">Button</span></div>
+        <div><span class="nb" style="background:var(--sy-bg-page);color:var(--sy-status-danger);border-color:var(--sy-border-error)">Button</span></div>
+        <div><span class="nb" style="background:var(--sy-bg-page);color:var(--sy-action-brand-fg-on-page);border-color:var(--sy-action-brand-border)">Button</span></div>
         <div class="rl">ghost</div>
-        <div><span class="nb" style="background:transparent;color:#62626B">Button</span></div>
-        <div><span class="nb" style="background:transparent;color:#B23230">Button</span></div>
-        <div><span class="nb" style="background:transparent;color:#0D61B5">Button</span></div>
+        <div><span class="nb" style="background:transparent;color:var(--sy-text-secondary)">Button</span></div>
+        <div><span class="nb" style="background:transparent;color:var(--sy-status-danger)">Button</span></div>
+        <div><span class="nb" style="background:transparent;color:var(--sy-action-brand-fg-on-page)">Button</span></div>
       </div>
     </div>
   </div>
@@ -310,14 +652,14 @@
       <p class="lbl">chip — one look</p>
       <div class="row">
         <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000">rounded</span>
-        <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000;border-radius:9999px">pill</span>
+        <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000;border-radius:var(--sy-radius-full)">pill</span>
         <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000;opacity:.5">disabled</span>
       </div>
       <p class="lbl">shape — free on both, so it signalled nothing</p>
       <div class="row">
-        <span class="bd" style="background:#e6f2ff;color:#006bd6;border-radius:9999px">badge pill</span>
+        <span class="bd" style="background:#e6f2ff;color:#006bd6;border-radius:var(--sy-radius-full)">badge pill</span>
         <span class="bd sq" style="background:#e6f2ff;color:#006bd6">badge rounded</span>
-        <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000;border-radius:9999px">chip pill</span>
+        <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000;border-radius:var(--sy-radius-full)">chip pill</span>
         <span class="cp" style="background:#fff;border-color:#d9d9da;color:#000">chip rounded</span>
       </div>
     </div>
@@ -353,7 +695,7 @@
         <span class="cell" style="align-items:center"><span class="bd" style="background:#E4EAFB;color:#3155C6">badge pill</span><span class="tag">default</span></span>
         <span class="cell" style="align-items:center"><span class="bd sq" style="background:#E4EAFB;color:#3155C6">badge rounded</span><span class="tag">valid</span></span>
         <span class="cell" style="align-items:center"><span class="cp" style="background:#fff;border-color:#E9E9ED;color:#09090B">chip cornered</span><span class="tag">always <code>radius.sm</code></span></span>
-        <span class="cell" style="align-items:center"><span class="cp" style="background:#fff;border-color:#E9E9ED;color:#09090B;border-radius:9999px;opacity:.4;text-decoration:line-through">chip pill</span><span class="tag x">retired</span></span>
+        <span class="cell" style="align-items:center"><span class="cp" style="background:#fff;border-color:#E9E9ED;color:#09090B;border-radius:var(--sy-radius-full);opacity:.4;text-decoration:line-through">chip pill</span><span class="tag x">retired</span></span>
       </div>
     </div>
   </div>
@@ -361,9 +703,341 @@
   <p class="v warn"><b>Size names invert:</b> old sm/md/lg 20/24/28 vs new md/lg 20/24. A literal <code>md → md</code> shrinks a badge; dropping the prop lands correctly.</p>
 </section>
 
-<section><div class="st"><h2>Form controls</h2><span class="chip c-wa">next</span></div><p class="pend">Input · Textarea · Checkbox · Radio · Switch · Slider · Select · Combobox</p></section>
-<section><div class="st"><h2>Feedback &amp; status</h2><span class="chip c-wa">queued</span></div><p class="pend">Alert · Toast · Progress · Spinner · Skeleton · Tooltip</p></section>
-<section><div class="st"><h2>Navigation</h2><span class="chip c-wa">queued</span></div><p class="pend">Tabs · Pagination · Breadcrumb · Stepper <i>(absent from the new system)</i></p></section>
+<section><div class="st"><h2>Form controls</h2><span class="chip c-ok">shipped &middot; 0 new tokens</span><span class="note">filled &rarr; outlined; opacity-disabling removed</span></div>
+
+  <p class="lbl">Input &amp; Textarea &mdash; the headline change: the field is no longer a grey box</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">filled &mdash; bg-background-100 #f7f7f8, border-100 #e5e5e6</p>
+      <div class="row"><span class="ob" style="background:#f7f7f8;border-color:#e5e5e6;color:#262627;min-width:190px;justify-content:flex-start">Workspace name</span></div>
+      <div class="row"><span class="ob" style="background:#f7f7f8;border-color:#e5e5e6;color:#b2b2b3;min-width:190px;justify-content:flex-start">Placeholder text</span></div>
+      <p class="lbl">focus &mdash; brand blue border #369aff (hover #0a84ff)</p>
+      <div class="row"><span class="ob" style="background:#f7f7f8;border-color:#369aff;color:#262627;min-width:190px;justify-content:flex-start">Focused</span></div>
+      <p class="lbl">error &mdash; #ff5c51 (hover #e6483d)</p>
+      <div class="row"><span class="ob" style="background:#f7f7f8;border-color:#ff5c51;color:#262627;min-width:190px;justify-content:flex-start">Invalid</span></div>
+      <p class="lbl">disabled &mdash; <b>opacity-50</b> on the whole node</p>
+      <div class="row"><span class="ob" style="background:#f7f7f8;border-color:#e5e5e6;color:#262627;min-width:190px;justify-content:flex-start;opacity:.5">Disabled</span></div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">outlined &mdash; bg.page #FFFFFF, border.default #E9E9ED, radius md</p>
+      <div class="row"><span class="nb" style="background:var(--sy-bg-page);border-color:var(--sy-border-default);color:var(--sy-text-primary);min-width:190px;justify-content:flex-start;height:36px;border-radius:var(--sy-radius-control-md)">Workspace name</span></div>
+      <div class="row"><span class="nb" style="background:var(--sy-bg-page);border-color:var(--sy-border-default);color:var(--sy-text-placeholder);min-width:190px;justify-content:flex-start;height:36px;border-radius:var(--sy-radius-control-md)">Placeholder text</span></div>
+      <p class="lbl">focus &mdash; <b>neutral</b> border.focus-input #33333A perimeter (no blue ring)</p>
+      <div class="row"><span class="nb" style="background:var(--sy-bg-page);border-color:var(--sy-border-focus-input);color:var(--sy-text-primary);min-width:190px;justify-content:flex-start;height:36px;border-radius:var(--sy-radius-control-md)">Focused</span></div>
+      <p class="lbl">error &mdash; border.error #D2403E (single step, no hover)</p>
+      <div class="row"><span class="nb" style="background:var(--sy-bg-page);border-color:var(--sy-border-error);color:var(--sy-text-primary);min-width:190px;justify-content:flex-start;height:36px;border-radius:var(--sy-radius-control-md)">Invalid</span></div>
+      <p class="lbl">disabled &mdash; bg.disabled #F4F4F6 + text.disabled #A9A9B2 + border.subtle</p>
+      <div class="row"><span class="nb" style="background:var(--sy-bg-disabled);border-color:var(--sy-border-subtle);color:var(--sy-text-disabled);min-width:190px;justify-content:flex-start;height:36px;border-radius:var(--sy-radius-control-md)">Disabled</span></div>
+    </div>
+  </div>
+  <p class="v"><b>Why the fill went away.</b> The old field read as a filled surface (<code>bg-background-100</code>), which put it in the same visual class as a Card. Borders-first means the field is defined by its <i>perimeter</i>, so the fill is now <code>bg.page</code> and the border carries the state. <span class="up">Consequence for the codemod:</span> <code>bg-background-100</code> is a two-target row &mdash; Cards &rarr; <code>bg.surface</code>, inputs &rarr; white + outline. It cannot be a single find-replace.</p>
+  <p class="v"><b>Focus is the one place entry surfaces deviate.</b> Non-entry controls take the 2px indigo <code>border.focus</code> ring offset 2px; <b>entry surfaces do not</b> &mdash; they swap to the neutral <code>border.focus-input</code> perimeter, because a text field shows focus on every click-to-type and the caret + border swap already form a compound indicator (foundations &sect;1). So the old brand-blue focus border does <i>not</i> map to the new blue ring; it maps to a neutral. Any codemod that sends <code>border-border-brand</code> &rarr; <code>border.focus</code> is wrong on fields.</p>
+  <p class="v"><b><code>opacity-50</code> cannot be swapped for a token.</b> Opacity multiplies through every descendant &mdash; label, icon, caret, helper text &mdash; so the old disabled treatment is not expressible as a colour. Each component applies its own disabled recipe instead (<code>bg.disabled</code> + <code>text.disabled</code> + <code>border.subtle</code>). This is a rewrite, not a remap, and it is one of the <b>three unknown site counts</b> blocking the sprint estimate.</p>
+
+  <p class="lbl">Choice controls &mdash; Checkbox &middot; Radio &middot; Switch</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">radio could render a <b>check</b> (shadcn <code>indicatorType="check"</code>)</p>
+      <div class="row">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#262627"><span style="width:16px;height:16px;border-radius:50%;background:#0a84ff;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px">&check;</span>check</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#262627"><span style="width:16px;height:16px;border-radius:50%;background:#0a84ff;display:inline-flex;align-items:center;justify-content:center"><span style="width:6px;height:6px;border-radius:50%;background:#fff"></span></span>dot</span>
+      </div>
+      <p class="lbl">switch &mdash; track #e5e5e6, label could sit <b>left</b></p>
+      <div class="row">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#262627">Notifications<span style="width:32px;height:18px;border-radius:var(--sy-radius-full);background:#0a84ff;position:relative;display:inline-block"><span style="position:absolute;top:2px;left:16px;width:14px;height:14px;border-radius:50%;background:#fff"></span></span></span>
+        <span style="width:32px;height:18px;border-radius:var(--sy-radius-full);background:#e5e5e6;position:relative;display:inline-block"><span style="position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff"></span></span>
+      </div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">radio is <b>always</b> circle+dot &mdash; shape is the pre-click signal</p>
+      <div class="row">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#09090B" ><span style="width:16px;height:16px;border-radius:50%;background:#09090B;display:inline-flex;align-items:center;justify-content:center"><span style="width:6px;height:6px;border-radius:50%;background:#fff"></span></span>radio = one of</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#09090B"><span style="width:16px;height:16px;border-radius:4px;background:#09090B;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px">&check;</span>checkbox = many of</span>
+      </div>
+      <p class="lbl">switch &mdash; track bg.sunken #F4F4F6, label <b>always right</b></p>
+      <div class="row">
+        <span style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#09090B" ><span style="width:32px;height:18px;border-radius:var(--sy-radius-full);background:#09090B;position:relative;display:inline-block"><span style="position:absolute;top:2px;left:16px;width:14px;height:14px;border-radius:50%;background:#fff"></span></span>Notifications</span>
+        <span style="width:32px;height:18px;border-radius:var(--sy-radius-full);background:#F4F4F6;position:relative;display:inline-block;box-shadow:inset 0 0 0 1px #E9E9ED"><span style="position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(9,9,11,.15)"></span></span>
+      </div>
+    </div>
+  </div>
+  <p class="v"><b>Two shape rules replaced two props.</b> <code>indicatorType="check"</code> (8 sites) and <code>labelPosition="left"</code> (10 sites) both go away, because the shape and the label side now carry meaning rather than being author choices: circle+dot = exactly one, box+check = many, and the label is always right. <b>The check variant was requested again on 2026-07-31 and declined</b> &mdash; not because a circle+check loses the single-vs-multi signal (it does not; the silhouette still reads as a circle) but because it would make <b>two renderings legal for one state</b>, and because a check inside a 16px radio's ~8px interior sits below the 12px icon floor. It also expresses nothing the dot does not. Converting the 8 sites is mechanical. A far-apart settings row changes the <i>layout</i> (a DescriptionList row), not the label side. Note the key colour is <b>black</b>, not the old brand blue &mdash; selection is a neutral state, and azure is reserved for brand/AI emphasis.</p>
+
+  <p class="lbl">Pickers &mdash; Select &middot; Combobox (the structural work)</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">Select &mdash; <code>options={[...]}</code> array API</p>
+      <div class="row"><span class="ob" style="background:#f7f7f8;border-color:#e5e5e6;color:#262627;min-width:190px;justify-content:space-between">Choose agent <span style="color:#b2b2b3">&#9662;</span></span></div>
+      <p class="lbl">3 entry points: Select &middot; Autocomplete &middot; Combobox <code>trigger="search"|"input"</code></p>
+      <div class="row"><span class="ob" style="background:#f7f7f8;border-color:#e5e5e6;color:#b2b2b3;min-width:190px;justify-content:flex-start">&#9906;&nbsp; Search&hellip;</span></div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">Select &mdash; compound <code>Trigger / Value / Content / Item</code></p>
+      <div class="row"><span class="nb" style="background:var(--sy-bg-page);border-color:var(--sy-border-default);color:var(--sy-text-primary);min-width:190px;justify-content:space-between;height:36px;border-radius:var(--sy-radius-control-md)">Choose agent <span style="color:#83838D">&#9662;</span></span></div>
+      <p class="lbl">one Combobox absorbs all three (async + creatable specified)</p>
+      <div class="row"><span class="nb" style="background:var(--sy-bg-page);border-color:var(--sy-border-default);color:var(--sy-text-placeholder);min-width:190px;justify-content:flex-start;height:36px;border-radius:var(--sy-radius-control-md)">&#9906;&nbsp; Search&hellip;</span></div>
+    </div>
+  </div>
+  <p class="v"><b>The two highest-volume form rows are both here.</b> <code>Combobox trigger="search"/"input"</code> is <b>69 sites</b> &mdash; the largest single rule in the form set &mdash; but it collapses to one component, so it is mechanical. <code>Select options={[...]}</code> is <b>26 sites</b> and is <span class="up">not</span> mechanical: moving from an array prop to compound children is a per-site rewrite. Estimate these two separately; averaging them will underprice the Select work.</p>
+
+  <p class="lbl">Border ladder &mdash; 6 old steps collapse into 3</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <div class="row">
+        <span class="cell"><span class="sw" style="background:#e5e5e6;width:56px;border-radius:4px"></span><span class="tag">100</span></span>
+        <span class="cell"><span class="sw" style="background:#d9d9da;width:56px;border-radius:4px"></span><span class="tag">100-hover / 200</span></span>
+        <span class="cell"><span class="sw" style="background:#b2b2b3;width:56px;border-radius:4px"></span><span class="tag">200-hover / 300</span></span>
+        <span class="cell"><span class="sw" style="background:#808081;width:56px;border-radius:4px"></span><span class="tag">300-hover</span></span>
+      </div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <div class="row">
+        <span class="cell"><span class="sw" style="background:#E9E9ED;width:56px;border-radius:4px"></span><span class="tag">default</span></span>
+        <span class="cell"><span class="sw" style="background:#D1D1D8;width:56px;border-radius:4px"></span><span class="tag">strong</span></span>
+        <span class="cell"><span class="sw" style="background:#A9A9B2;width:56px;border-radius:4px"></span><span class="tag">strong-hover</span></span>
+      </div>
+    </div>
+  </div>
+  <p class="v"><b>Six &rarr; three, with one addition.</b> The old ladder doubled every step with a <code>-hover</code>. The new ladder is <code>default &rarr; strong &rarr; strong-hover</code>; <code>border.strong-hover</code> was <span class="up">added 2026-07-30</span> so <code>border-300-hover #808081</code> finally has a true 1:1 target instead of squashing into <code>strong</code>. The one row still needing FE inspection is <code>border-border-500 #64748b</code>: slate is now the AI-surface family, so it maps to <code>ai.border</code> on AI surfaces and <code>border.strong</code> everywhere else &mdash; a role reassignment, not a value swap.</p>
+</section>
+<section><div class="st"><h2>Feedback &amp; status</h2><span class="chip c-ok">shipped &middot; 0 new tokens</span><span class="note">status text deepened for AA; arrows dropped</span></div>
+
+  <p class="lbl">Status colours &mdash; the old values survive as FILLS, not as text</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">text-text-success #10b978 &middot; text-text-error #e6483d</p>
+      <div class="row">
+        <span style="font-size:12px;color:#10b978;font-weight:500">Completed</span>
+        <span style="font-size:12px;color:#e6483d;font-weight:500">Failed</span>
+      </div>
+      <p class="lbl">one value did double duty &mdash; text AND solid fill</p>
+      <div class="row">
+        <span class="bd sq" style="background:#10b978;color:#fff">solid</span>
+        <span class="bd sq" style="background:#e6483d;color:#fff">solid</span>
+      </div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">status.success #0E7A42 &middot; status.danger #B23230 &mdash; deepened</p>
+      <div class="row">
+        <span  style="font-size:12px;color:var(--sy-status-success);font-weight:500">Completed</span>
+        <span  style="font-size:12px;color:var(--sy-status-danger);font-weight:500">Failed</span>
+      </div>
+      <p class="lbl">text and fill are now SEPARATE tokens</p>
+      <div class="row">
+        <span class="bd sq" style="background:var(--sy-status-success);color:var(--sy-text-on-solid)">text</span>
+        <span class="bd sq" style="background:var(--sy-status-danger-bg-solid);color:var(--sy-action-danger-fg)">danger-bg-solid</span>
+      </div>
+    </div>
+  </div>
+  <p class="v"><b>One token became two, because one value cannot do both jobs.</b> The old <code>#10b978</code> / <code>#e6483d</code> were used as label colour <i>and</i> as solid fill. As text on white they run below AA, so the new system <b>deepens the text tokens</b> (<code>#0E7A42</code>, <code>#B23230</code>) and keeps a separate mid-tone for fills. <span class="up">Codemod consequence:</span> every old status colour is a <b>two-target row</b> &mdash; text usages take the deepened value, fill usages take <code>*-bg-solid</code>. A single find-replace will either break contrast on labels or wash out fills.</p>
+  <p class="v"><b>Danger also left the solid-label deviation (2026-07-30).</b> <code>status.danger-bg-solid</code> moved <code>red.400 &rarr; red.500 #D2403E</code> so a white label clears AA at <b>4.62:1</b> at normal weight &mdash; the semibold mandate on destructive Button labels is withdrawn. Old <code>#e6483d</code> &rarr; <code>#D2403E</code> is now a <i>closer</i> match than before (&Delta;E 30.5 vs 35.0). <code>success</code> and <code>warning</code> solids remain in the &sect;9 deviation at ~3.5:1 with semibold compensation.</p>
+
+  <p class="lbl">Alert / Banner &mdash; 2 states become 5 colours &times; 2 emphases</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">variant: default &middot; destructive</p>
+      <div class="row" style="flex-direction:column;align-items:stretch;gap:8px">
+        <span style="display:block;padding:9px 11px;border-radius:6px;background:#f7f7f8;border:1px solid #e5e5e6;font-size:11.5px;color:#262627">Run finished with warnings</span>
+        <span style="display:block;padding:9px 11px;border-radius:6px;background:#ffeeed;border:1px solid #ff5c51;font-size:11.5px;color:#c4342a">Connector authentication failed</span>
+      </div>
+      <p class="lbl">tint + saturated outline together</p>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">5 colours &times; subtle / solid; <b>borderless</b> tints</p>
+      <div class="row" style="flex-direction:column;align-items:stretch;gap:8px">
+        <span  style="display:block;padding:9px 12px;border-radius:var(--sy-radius-md);background:var(--sy-status-info-bg);font-size:11.5px;color:var(--sy-status-info)">Run finished with warnings</span>
+        <span style="display:block;padding:9px 12px;border-radius:var(--sy-radius-md);background:var(--sy-status-danger-bg);font-size:11.5px;color:var(--sy-status-danger)">Connector authentication failed</span>
+        <span style="display:block;padding:9px 12px;border-radius:var(--sy-radius-md);background:var(--sy-status-success-bg);font-size:11.5px;color:var(--sy-status-success)">Export complete</span>
+      </div>
+    </div>
+  </div>
+  <p class="v"><b>The new system is strictly richer here &mdash; nothing is lost.</b> Old Alert had two variants; new Banner/Alert has five colours &times; two emphases. The visible change is that <b>subtle notices are borderless</b>: a <code>status.*-bg</code> tint with <code>status.*</code> text, no border and no rail. <b>Tint plus a saturated outline is the forbidden "wireframe formula"</b> &mdash; which is exactly what the old destructive alert was. This is also why <code>border-border-success</code> has no new equivalent: success surfaces are borderless by design, and <code>border.error</code> exists only as a form-field validation perimeter. A principled asymmetry, not an oversight.</p>
+
+  <p class="lbl">Tooltip &mdash; the arrow is gone (77 sites)</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">3 sizes, and a pointing arrow</p>
+      <div class="row" style="padding-top:6px">
+        <span style="position:relative;display:inline-block;padding:5px 8px;border-radius:5px;background:#262627;color:#fff;font-size:11px">Retry the run
+          <span style="position:absolute;left:14px;bottom:-4px;width:8px;height:8px;background:#262627;transform:rotate(45deg)"></span>
+        </span>
+      </div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">one size, no arrow, <b>same-scheme surface</b> (not inverse)</p>
+      <div class="row" style="padding-top:6px">
+        <span  style="display:inline-block;padding:4px 8px;border-radius:var(--sy-radius-xs);background:var(--sy-bg-raised-2);border:1px solid var(--sy-border-default);color:var(--sy-text-primary);font-size:12px">Retry the run</span>
+      </div>
+    </div>
+  </div>
+  <p class="v"><b>Ruled 2026-07-30: no floating surface in the system has an arrow</b> &mdash; not Tooltip, not Popover, not Menu, not HoverCard. So <code>TooltipArrow</code> / <code>tip</code> / <code>tipPosition</code> are <b>dropped with no replacement across 77 sites</b>, the largest pure-deletion in the migration. Mechanical, but it needs announcing: the arrow is the thing that visually binds a tooltip to its trigger, and its absence is carried instead by proximity and the 4px offset. Tooltip <code>size</code> (sm/md/lg) also squashes to one size &mdash; listed under "squash without further thought". <b>The other change is the surface, and it is easy to miss:</b> the old tooltip was a dark inverse chip; the new one is <b>same-scheme</b> (<code>bg.raised-2</code> + 1px <code>border.default</code> + <code>text.primary</code>, radius <code>xs</code>) &mdash; light in light mode, dark in dark mode, because "inverse surfaces read too stark against the neutral field". Inverse/contrast-flipped tooltip styling is now explicitly <b>forbidden</b>, so a codemod that preserves the old dark chip is carrying over a retired treatment.</p>
+
+  <p class="lbl">Progress &middot; Spinner &middot; Skeleton</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">variant: default &middot; <b>stripped</b> &times; size</p>
+      <div class="row" style="flex-direction:column;align-items:stretch;gap:9px">
+        <span style="display:block;height:6px;border-radius:9999px;background:#e5e5e6"><span style="display:block;width:62%;height:100%;border-radius:9999px;background:#0a84ff"></span></span>
+        <span style="display:block;height:6px;border-radius:9999px;background:#e5e5e6"><span style="display:block;width:62%;height:100%;border-radius:9999px;background:repeating-linear-gradient(45deg,#0a84ff,#0a84ff 4px,#369aff 4px,#369aff 8px)"></span></span>
+      </div>
+      <p class="lbl">shadcn: <code>indicatorColor</code> free-form</p>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">variant: default &middot; ai &middot; danger &middot; success (closed) &middot; height <b>4px fixed</b></p>
+      <div class="row" style="flex-direction:column;align-items:stretch;gap:9px">
+        <span  style="display:block;height:4px;border-radius:var(--sy-radius-full);background:var(--sy-bg-sunken)"><span style="display:block;width:62%;height:100%;border-radius:var(--sy-radius-full);background:var(--sy-action-primary-bg)"></span></span>
+        <span style="display:block;height:4px;border-radius:var(--sy-radius-full);background:var(--sy-bg-sunken)"><span style="display:block;width:62%;height:100%;border-radius:var(--sy-radius-full);background:var(--sy-ai-solid)"></span></span>
+      </div>
+      <p class="lbl">no stripes &mdash; gradients/opacity ramps are forbidden</p>
+    </div>
+  </div>
+  <p class="v"><b>Two open items live here, and one is a real unknown.</b> <code>indicatorColor</code> (12 sites) is mechanical &mdash; it becomes the closed <code>variant</code> set. But the old <code>stripped</code> variant has <b>no equivalent</b>, and the inventory diff flags the question that has to be answered per site: <span class="up">was it decorative, or was it signalling <i>indeterminate</i> progress?</span> If indeterminate, dropping it loses information and those sites need the Spinner instead. Also note the new bar is a <b>fixed 4px height</b> &mdash; the old <code>size</code> prop has nowhere to go &mdash; and percent text is forbidden without a known denominator.</p>
+
+  <p class="lbl">Toast &mdash; a visual component, not a queue</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">imperative <code>toast()</code> + <code>&lt;Toaster&gt;</code></p>
+      <div class="row"><span style="display:inline-block;padding:9px 11px;border-radius:6px;background:#fff;border:1px solid #e5e5e6;font-size:11.5px;color:#262627">Filter saved</span></div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">Toast surface + <b>Undo</b> convention; queue is app-owned</p>
+      <div class="row"><span  style="display:inline-flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--sy-radius-md);background:var(--sy-bg-raised-2);border:1px solid var(--sy-border-default);font-size:11.5px;color:var(--sy-text-primary)">Filter saved <a href="#" style="color:var(--sy-text-link);text-decoration:none">Undo</a></span></div>
+    </div>
+  </div>
+  <p class="v"><b>This one is an engineering decision, not a design mapping.</b> The spec describes a Toast queue (max 3, auto-dismiss 5s, errors 8s) but the built package <b>does not export an imperative API</b> &mdash; so either the library ships <code>toast()</code> or the app owns the queue. One site today, so it is cheap to decide either way, but it should be decided rather than discovered. The design-side addition is the <b>Undo convention</b>: reversible-lite mutations confirm via Toast with an Undo action at 8s <i>instead of</i> pre-confirming, so a Popconfirm and an Undo Toast never both appear for one action.</p>
+</section>
+<section><div class="st"><h2>Navigation</h2><span class="chip c-ok">shipped &middot; 0 new tokens</span><span class="chip c-wa">1 real gap</span><span class="note">Stepper has no equivalent</span></div>
+
+  <p class="lbl">Tabs &mdash; three variants collapse to one style plus a separate component</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">variant: line &middot; segmented &middot; <b>fill</b> &nbsp;&times;&nbsp; size &times;3</p>
+      <div class="row" style="flex-direction:column;align-items:stretch;gap:11px">
+        <span style="display:flex;gap:16px;border-bottom:1px solid #e5e5e6;font-size:12px">
+          <span style="padding:0 0 7px;color:#0a84ff;border-bottom:2px solid #0a84ff;font-weight:500">Overview</span>
+          <span style="padding:0 0 7px;color:#808081">Runs</span>
+          <span style="padding:0 0 7px;color:#808081">Settings</span>
+        </span>
+        <span style="display:inline-flex;background:#f7f7f8;border-radius:6px;padding:2px;font-size:12px;align-self:flex-start">
+          <span style="padding:4px 9px;background:#fff;border-radius:4px;color:#262627;font-weight:500">Overview</span>
+          <span style="padding:4px 9px;color:#808081">Runs</span>
+        </span>
+        <span style="display:inline-flex;gap:4px;font-size:12px;align-self:flex-start">
+          <span style="padding:4px 9px;background:#0a84ff;border-radius:6px;color:#fff;font-weight:500">Overview</span>
+          <span style="padding:4px 9px;background:#f7f7f8;border-radius:6px;color:#808081">Runs</span>
+        </span>
+      </div>
+      <p class="lbl">line &middot; segmented &middot; fill &mdash; three ways to say "current view"</p>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">Tabs: one text-tab style. Height 40, 2px <code>bg.inverse</code> underline</p>
+      <div class="row" style="flex-direction:column;align-items:stretch;gap:11px">
+        <span style="display:flex;gap:16px;border-bottom:1px solid var(--sy-border-subtle);font-size:14px">
+          <span style="padding:0 0 8px;color:var(--sy-text-primary);border-bottom:2px solid var(--sy-bg-inverse);font-weight:500">Overview</span>
+          <span style="padding:0 0 8px;color:var(--sy-text-secondary)">Runs</span>
+          <span style="padding:0 0 8px;color:var(--sy-text-secondary)">Settings</span>
+        </span>
+        <span class="tk">SegmentedControl &mdash; a separate component</span>
+        <span style="display:inline-flex;background:var(--sy-bg-sunken);border-radius:var(--sy-radius-control-md);padding:2px;font-size:13px;align-self:flex-start">
+          <span style="padding:5px 10px;background:var(--sy-bg-page);border-radius:var(--sy-radius-sm);color:var(--sy-text-primary);font-weight:500">Overview</span>
+          <span style="padding:5px 10px;color:var(--sy-text-secondary)">Runs</span>
+        </span>
+      </div>
+      <p class="lbl">no <code>fill</code> equivalent</p>
+    </div>
+  </div>
+  <p class="v"><b>The split is deliberate and it resolves a real ambiguity.</b> Old <code>segmented</code> becomes the separate <b>SegmentedControl</b> component, because the two do different jobs: Tabs switch <i>peer views of one object</i> (and are navigation), SegmentedControl switches a <i>parameter</i> with immediate effect (1D/7D/30D, list/grid). Having both as "tab variants" is what let engineers pick by appearance rather than by meaning. <span class="up">Open decision:</span> old <code>fill</code> tabs have <b>no equivalent at all</b> &mdash; confirm they are not needed rather than discovering it mid-migration. Also note the active indicator moved from <b>brand blue to a neutral 2px <code>bg.inverse</code> underline</b>, consistent with "the primary action colour is black, not blue"; the old blue-underlined tab is a treatment to retire, not to remap.</p>
+  <p class="v"><b><code>DynamicTabs</code> &rarr; <code>Tabs variant="editable"</code> (16 sites, mechanical).</b> Added to v1 on 2026-07-30 specifically to close this migration gap: trailing 12px ✕ per tab, a <code>+</code> button parked outside the scroll region, double-click to rename in place, and closing the active tab activates its right neighbour. <b>The 7-tab cap is enforced differently here</b> &mdash; author-defined tabs are capped by review, but user-created tabs can't be, so the <code>+</code> <b>disables at 7</b> with a Tooltip rather than allowing an unbounded scrolling strip. A surface that genuinely needs 30 open items is a Sidebar list or a Tree, not a tab strip. Separately, shadcn's <b>icon-only triggers</b> go to icon + label: an icon alone cannot carry a user-named view.</p>
+
+  <p class="lbl">Pagination &mdash; variants squash; page-size becomes a Select</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">size &times;3 &nbsp;&times;&nbsp; variant: filled &middot; <b>ghost</b> &middot; plus a <code>pageSize</code> prop</p>
+      <div class="row">
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:12px">
+          <span style="padding:3px 8px;border:1px solid #e5e5e6;border-radius:5px;color:#808081">&lsaquo;</span>
+          <span style="padding:3px 8px;background:#0a84ff;border-radius:5px;color:#fff;font-weight:500">1</span>
+          <span style="padding:3px 8px;color:#808081">2</span>
+          <span style="padding:3px 8px;color:#808081">3</span>
+          <span style="padding:3px 8px;border:1px solid #e5e5e6;border-radius:5px;color:#808081">&rsaquo;</span>
+        </span>
+      </div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">one style; current page = <code>bg.selected</code>; "N of M" summary</p>
+      <div class="row">
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:13px">
+          <span style="padding:4px 8px;border:1px solid var(--sy-border-default);border-radius:var(--sy-radius-sm);color:var(--sy-text-secondary)">&lsaquo;</span>
+          <span style="padding:4px 9px;background:var(--sy-bg-selected);border-radius:var(--sy-radius-sm);color:var(--sy-text-primary);font-weight:500">1</span>
+          <span style="padding:4px 9px;color:var(--sy-text-secondary)">2</span>
+          <span style="padding:4px 9px;color:var(--sy-text-secondary)">3</span>
+          <span style="padding:4px 8px;border:1px solid var(--sy-border-default);border-radius:var(--sy-radius-sm);color:var(--sy-text-secondary)">&rsaquo;</span>
+          <span style="margin-left:6px;font-size:12px;color:var(--sy-text-tertiary)">1&ndash;20 of 348</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <p class="v"><b>Two squashes and one relocation.</b> <code>size</code> &times;3 and <code>variant</code> (filled / ghost) both collapse to a single style &mdash; the inventory diff flags "decide if <code>ghost</code> pagination is needed" as an open question, though pagination sits in one place per table so a second emphasis level is hard to justify. <code>pageSize</code> (13 sites, mechanical) is not lost: it becomes the <b>optional page-size Select in dense tables</b> that the Table spec already specifies. Note the current-page marker also drops from brand blue to the neutral <code>bg.selected</code>. <b>Forbidden either way:</b> infinite scroll in data tables &mdash; feeds use a cursor-style "Load more" secondary Button.</p>
+
+  <p class="lbl">Breadcrumb &mdash; unchanged in shape, newly constrained in use</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">available anywhere</p>
+      <div class="row"><span style="font-size:12px;color:#808081">Workspace <span style="color:#b2b2b3">/</span> Agents <span style="color:#b2b2b3">/</span> <span style="color:#262627">Inbox triage</span></span></div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <p class="lbl">13px, <code>text.tertiary</code> links + <code>text.primary</code> current</p>
+      <div class="row"><span style="font-size:13px;color:var(--sy-text-tertiary)">Workspace <span style="color:var(--sy-text-tertiary)">/</span> Agents <span style="color:var(--sy-text-tertiary)">/</span> <span style="color:var(--sy-text-primary);font-weight:500">Inbox triage</span></span></div>
+    </div>
+  </div>
+  <p class="v"><b>The change here is a rule, not a repaint.</b> Breadcrumb is now <b>forbidden on top-level pages</b> and is only for pages deeper than 2 levels; middle levels beyond 4 collapse into an overflow "…" menu. So the migration work is auditing <i>where</i> it appears, not restyling it &mdash; a breadcrumb on a top-level page has to be deleted, and no codemod can decide that for you.</p>
+
+  <p class="lbl">Stepper &mdash; the one genuine gap in this section</p>
+  <div class="two">
+    <div>
+      <h3>Old</h3>
+      <p class="lbl">3 axes: size &times;2 &middot; stepperType (fill / outline) &middot; shape (default / pill)</p>
+      <div class="row">
+        <span style="display:inline-flex;align-items:center;gap:0;font-size:11px">
+          <span style="width:20px;height:20px;border-radius:9999px;background:#0a84ff;color:#fff;display:inline-flex;align-items:center;justify-content:center">1</span>
+          <span style="width:34px;height:2px;background:#0a84ff"></span>
+          <span style="width:20px;height:20px;border-radius:9999px;background:#0a84ff;color:#fff;display:inline-flex;align-items:center;justify-content:center">2</span>
+          <span style="width:34px;height:2px;background:#e5e5e6"></span>
+          <span style="width:20px;height:20px;border-radius:9999px;border:1px solid #d9d9da;color:#b2b2b3;display:inline-flex;align-items:center;justify-content:center">3</span>
+        </span>
+      </div>
+    </div>
+    <div>
+      <h3>New</h3>
+      <div class="pend" style="margin-top:4px">No Stepper component.<br><span style="font-style:normal">Nearest: <code>Timeline</code> (chronological, read-only) and the <code>guided</code> archetype.</span></div>
+    </div>
+  </div>
+  <p class="v"><b>This is a real absence, not a deliberate squash &mdash; and it is the only one in this section.</b> The inventory diff states it plainly: the new system has <code>Timeline</code> and the <code>guided</code> archetype but <b>no Stepper</b>, and "a guided flow arguably needs one." The two candidates do not substitute: <code>Timeline</code> is <i>chronological and read-only</i> (audit trails, run history) whereas a stepper is <i>positional and forward-looking</i> &mdash; it says "you are on 2 of 4" before the later steps have happened. Tabs are explicitly forbidden as a stand-in ("Tabs are object facets, not sequential steps &mdash; compose a stepper"), which names a component that does not exist. <span class="up">Decision needed before any guided flow ships:</span> add a Stepper via &sect;6 governance, or rule that guided flows carry progress some other way and correct the Tabs prose that currently points at it.</p>
+</section>
 
 </div></body>
 </html>
