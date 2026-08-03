@@ -1,10 +1,10 @@
 # Publishing `@enhans-jooyeon/synapse`
 
-This workspace is **not publishable yet** and is kept `private: true` on purpose: it implements **4 of 57 components** (Button · Badge · Input · Card). Shipping it now would give consumers a near-empty design system. This is the checklist to make it a real package when the library reaches parity.
+This workspace is **not publishable yet** and is kept `private: true` on purpose: it implements **12 of 67 components** (Button · Badge · Input · Card, plus the chat set added 2026-08-03: Thread · Message · AnswerHeader · VariantPager · Reasoning · SelectionPill · FollowUpPanel · ConversationSummary). Shipping it now would give consumers a near-empty design system. This is the checklist to make it a real package when the library reaches parity.
 
 ## Blocker
 
-Build out the component library toward `synapse.manifest.json` parity — at minimum the Sample-pages dependency chain (Table, Sidebar, Chip, Avatar, SegmentedControl, Tabs, DescriptionList, AgentStep, ProposalCard, Composer), following the conventions in `README.md` here. Until then, keep `private: true`.
+Build out the component library toward `synapse.manifest.json` parity — at minimum the Sample-pages dependency chain (Table, Sidebar, Chip, Avatar, SegmentedControl, Tabs, DescriptionList, AgentStep, ProposalCard, Composer — the chat set now depends on Composer and AgentStep in particular, since Thread/Message assume them), following the conventions in `README.md` here. Until then, keep `private: true`.
 
 ## When ready — package.json additions
 

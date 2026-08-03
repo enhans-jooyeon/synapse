@@ -1,0 +1,30 @@
+/* ConversationSummary — components.md · ConversationSummary.
+   ai.surface + attribution row are both REQUIRED: it is agent output, not chrome. */
+.sy-convsum { background: var(--sy-ai-surface); border-radius: var(--sy-radius-md); }
+.sy-convsum__head { display: flex; align-items: center; gap: var(--sy-space-2);
+  padding: var(--sy-space-3); border-bottom: 1px solid var(--sy-ai-border); }
+.sy-convsum__avatar { flex: none; width: 24px; height: 24px; border-radius: var(--sy-radius-md);
+  background: var(--sy-bg-sunken); color: var(--sy-text-secondary);
+  display: inline-flex; align-items: center; justify-content: center; }
+.sy-convsum__avatar svg { width: 12px; height: 12px; fill: none; stroke: currentColor;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.sy-convsum__actor { font: var(--sy-weight-medium) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
+  color: var(--sy-ai-fg); }
+.sy-convsum__title { font: var(--sy-weight-medium) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
+  color: var(--sy-text-primary); }
+.sy-convsum__meta { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans);
+  color: var(--sy-text-tertiary); }
+.sy-convsum__trailing { margin-left: auto; display: inline-flex; align-items: center; gap: var(--sy-space-1); }
+.sy-convsum__btn { width: 24px; height: 24px; display: inline-flex; align-items: center;
+  justify-content: center; background: transparent; border: none; border-radius: var(--sy-radius-sm);
+  color: var(--sy-text-secondary); cursor: pointer; }
+.sy-convsum__btn:hover { background: var(--sy-bg-hover); color: var(--sy-text-primary); }
+.sy-convsum__btn:focus-visible { outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus); }
+.sy-convsum__btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform var(--sy-duration-fast) var(--sy-ease-standard); }
+/* Payload opens to bg.page — the tray rule (ProposalCard precedent). */
+.sy-convsum__body { padding: var(--sy-space-3); background: var(--sy-bg-page);
+  border-radius: 0 0 var(--sy-radius-md) var(--sy-radius-md);
+  font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }

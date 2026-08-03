@@ -1,0 +1,28 @@
+/* FollowUpPanel — components.md · FollowUpPanel.
+   SOLID bg.raised, never glass (foundations §6; backdrop-filter is SY015-forbidden).
+   Anchored 8px above the Composer's top edge and OVERLAYS thread text —
+   positioning is the caller's, but the offset is the spec's. */
+.sy-fup { background: var(--sy-bg-raised); border: 1px solid var(--sy-border-default);
+  border-radius: var(--sy-radius-md); box-shadow: var(--sy-shadow-lg); padding: var(--sy-space-1_5);
+  animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
+.sy-fup:focus-visible { outline: 2px solid transparent;
+  box-shadow: var(--sy-shadow-lg), 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus); }
+.sy-fup__keys { display: flex; justify-content: flex-end; gap: var(--sy-space-2);
+  margin: 0 calc(var(--sy-space-1) * -1) var(--sy-space-1);
+  padding: 0 var(--sy-space-2) var(--sy-space-1);
+  border-bottom: 1px solid var(--sy-border-subtle);
+  font: var(--sy-weight-regular) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-sans);
+  color: var(--sy-text-tertiary); }
+.sy-fup__group { padding: var(--sy-space-1) var(--sy-space-2) 0;
+  /* micro-label — matches .sy-type-micro-label; KO drops the tracking. */
+  font: var(--sy-weight-semibold) var(--sy-text-11)/var(--sy-text-11-lh) var(--sy-font-sans);
+  letter-spacing: 0.02em; color: var(--sy-text-tertiary); }
+.sy-fup__group:lang(ko) { letter-spacing: 0; }
+.sy-fup__divider { display: block; height: 1px; background: var(--sy-border-subtle);
+  margin: var(--sy-space-1) calc(var(--sy-space-1) * -1); }
+.sy-fup__row { display: flex; align-items: center; gap: var(--sy-space-2); height: 32px;
+  padding: 0 var(--sy-space-2); border-radius: var(--sy-radius-xs); cursor: pointer;
+  font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); color: var(--sy-text-primary); }
+.sy-fup__row--sel, .sy-fup__row:hover { background: var(--sy-bg-selected); }
+.sy-fup__row svg { width: 12px; height: 12px; flex: none; color: var(--sy-text-tertiary);
+  fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }

@@ -28,7 +28,7 @@ Anything a machine can check — token use, component provenance, contrast, requ
 |---|---|
 | Contract & governance | [`design.md`](design.md) — read first; authority order, hard rules, workflow |
 | Tokens (source of truth) | `tokens/synapse.tokens.json` → generated `tokens/synapse.css` |
-| Specs (English — Korean rendered on demand in the hub) | `foundations.md` · `components.md` (57) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` |
+| Specs (English — Korean rendered on demand in the hub) | `foundations.md` · `components.md` (67) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` |
 | Machine index for agents | `synapse.manifest.json` (built by `tools/build_manifest.py`; agents load this first) |
 | DS-repo gate | `tools/validate.py` — `tokens` / `ui` / `page` modes (enforces this repo's own artifacts) |
 | Harness CLI (generation-time tools) | `tools/synapse.py` — `lookup` (is a component/token/recipe/archetype real? + closest-match) · `validate` (screen-intent) · `gate` · `list` · `digest` (mine the correction ledgers) |
@@ -57,7 +57,7 @@ python3 tools/synapse.py digest                              # what LLMs keep ge
 
 ## Status (read before adopting)
 
-The **doctrine is mature** (57 components, AI patterns, tokens, gate, bilingual specs at 1.0.0). The **consumption layer is not finished**: the React library in `storybook/` is a 4-of-57 seed and is not yet published as an installable `@enhans-jooyeon/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
+The **doctrine is mature** (67 components, AI patterns, tokens, gate, bilingual specs at 1.0.0). The **consumption layer is not finished**: the React library in `storybook/` is a 12-of-67 seed (Button · Badge · Input · Card + the 2026-08-03 chat set) and is not yet published as an installable `@enhans-jooyeon/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
 
 ## Governance
 
