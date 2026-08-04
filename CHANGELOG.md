@@ -4,6 +4,12 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The composer row had three control heights where it should have one — 36 / 36 / 32.** The send button was `class="btn btn-primary"` **without `btn-icon`**, carrying an inline `width:32px; height:32px` left over from before the accent reallocation. So `.cmp-row .btn-icon { height: 36px }` never applied to it: the `+` and mic resolved to 36px and send stayed 32px, putting it off the row's common centre line and making the adjacent text read as misaligned. Three send buttons normalised to `btn-icon` with the inline sizing dropped, and the row rule widened to `.cmp-row .btn-icon, .cmp-row > .btn` so **any** control placed in the row resolves to one height rather than depending on remembering a class.
+
+  **This was residue from an earlier change**, the same pattern as the pencil's gutter and the dot's positioning context: the accent reallocation rewrote the send button's *colour class* and left its *sizing* behind. The class it lost in that rewrite — `btn-icon` — was the one carrying its height.
+
+  **Also settled a contradiction the sweep turned up.** The §26 recording-bar confirm is a circular control, which appeared to break the "closed set of three" declared earlier today. It does not: it occupies the **send position** in the tray's recording state, so it is the send bookend morphed — the same way send↔stop is one control in two states. **The set counts positions, not glyphs**, and that is now stated. Its 32px inline sizing is correct there, since the recording bar is not a `cmp-row` and has its own anatomy under §26.
+
 - **Attachments lose the tint and hairline; row alignment split from tray radius.**
 
   **The panel treatment is reversed.** Attachments, the quote bar and knowledge pickers now sit directly on the tray surface — no tint, no separating hairline. They are part of the message being composed, so the tray is **one surface** and the content simply stacks above the input row. This undoes the fused-tinted-panel treatment from earlier the same day: the tint and hairline were drawing a boundary that should not exist. `FollowUpPanel` still detaches 8px above for the unchanged reason — a suggestion is *not* part of the draft.
