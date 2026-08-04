@@ -4,6 +4,16 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The Composer's leading `+` goes circular — and declaring the rule resolved a contradiction that was already there.** From reference designs.
+
+  **The rule that looked like a blocker wasn't one.** "Icon-only buttons are always square" governs **footprint** — *"width equals the size's control height (sm 32→32, md 36→36)"* — which a circle satisfies. So the circular `+` is an exception to the **radius**, not to the aspect ratio, and that rule never stood in the way.
+
+  **The real claim was already broken.** `ResponseToolbar` said *"the Composer send button stays the **ONLY** circular control"* while `AssistantPanel` described its launcher as *"the sanctioned circular exception it **shares with** the Composer send."* One said only, the other said shared, and both shipped. Rather than adding a third claim, circular icon-buttons are now a **closed set of three**, declared once under Button: the Composer row's leading `+` and trailing send, plus the AssistantPanel launcher. Nothing else.
+
+  **Why a pair rather than one more exception.** Circularity now marks the **two ends that bracket the input** — a bookend pair — instead of singling out one control. The leading one is **tonal** (`action.secondary-bg`) so it reads as an affordance rather than a second CTA competing with the black send, and the **mic between them stays a bare ghost square**. That square in the middle is what keeps the pair legible *as* a pair rather than dissolving into a row of circles.
+
+  Applied to `components.md` (Button declares the set; ResponseToolbar and AssistantPanel now reference it instead of contradicting each other), the manifest, and the composer rows in `preview.html`. The sample-page composers still show the older layout and will pick this up in the pass that promotes arrangement B to spec.
+
 - **The AI accent is reallocated: send goes black, the capability toggle goes blue. Plus an alpha ring on the tray.** From reference designs. This one changes `design.md`, the system's highest authority, so the reasoning is recorded in full.
 
   **Send is now `primary`/black.** `design.md` §3.7 had said *"the conversational-AI entry (Ask agent / Composer send) uses the `brand` point color"*. The rationale for the reallocation: **the send button is the most predictable control on the screen and does not need an accent to be found.** The accent buys more where it marks a state that changes what the agent can do and is genuinely easy to miss. So `brand` (azure `#0073E6`) now marks **AI capability** — the CommandPalette's "Ask agent" escape hatch, and the Composer's capability toggle. A side effect worth noting: send and the operational agent actions (Run/Retry/Resume) are now both `primary`, which removes send as an exception rather than creating one.
