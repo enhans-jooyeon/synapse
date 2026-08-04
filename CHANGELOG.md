@@ -4,6 +4,14 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Shape morph fixed — it flipped on the first keystroke instead of the first wrap.** Two causes, both mine.
+
+  **The detection was measured wrong.** It compared the textarea's `scrollHeight` against a computed `line-height`, which mixes units and ignores padding. It now measures the field's **own** `scrollHeight` while empty — exactly one row — caches that as a baseline, and treats anything taller than `baseline + 1` as wrapped. Unit-agnostic, padding-agnostic, and it compares like with like.
+
+  **The actual trigger was the browser's default textarea padding.** With no padding the old comparison would have worked (22 ≤ 24); the UA's ~2px top/bottom pushed `scrollHeight` to 26 and tripped the threshold on the first character. `padding: 0` is now explicit — not only to fix this, but because a stray UA 2px breaks the one-inset rule written into the Composer spec: the text must sit at the tray's 12px inset, not 12+2.
+
+  **Verified by simulation rather than assumption.** Since the preview cannot be rendered here, the logic was extracted and run against modelled geometry — empty, one char, 59 chars on one line, 61 chars wrapped, long multi-line, cleared back to empty — across three field profiles: no padding, 8px padding, and a fractional 25.6px line-height. All pass, and the same harness reproduces the old logic's failure (`one char -> single=false`), which is what confirmed the diagnosis instead of guessing at it.
+
 - **Composer shape morph rendered as a proposal — and it turns out not to be a separate question from the footer.** Reference designs start the composer as a **pill** at one line and relax it to a rounded rectangle as text wraps. Rendered live in `s-composer-footer` (the B fields autogrow and morph as you type), **not adopted**, because of a dependency worth stating plainly:
 
   **The pill only reads as a pill when the footer sits below the container.** With the footer inside the tray — the specified anatomy — a single-line composer is still *two rows* (text row + control row, ~80px), and `radius.full` on an 80px-tall box reads as a lozenge, not a pill. So the morph and the footer placement are **one decision**. The story now shows A (footer inside, no pill available), B single-line (pill), and B wrapped (rect), so the pair can be judged together rather than in sequence.

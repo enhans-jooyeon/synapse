@@ -553,8 +553,11 @@
   .composer-tray.cmp-single { border-radius: var(--sy-radius-full); }
   .composer-tray.cmp-single .cmp-row { align-items: center; }
   .cmp-row { display: flex; gap: var(--sy-space-2); align-items: flex-end; }
+  /* padding: 0 zeroes the UA default (~2px top/bottom on a textarea). Two reasons: it was the
+     actual cause of the shape flipping on the first keystroke, and it is required by the
+     one-inset rule — a stray UA 2px means the text no longer sits at the tray's 12px inset. */
   .cmp-row textarea { flex: 1; min-width: 0; border: none; outline: none; background: transparent;
-    resize: none; overflow-y: hidden; max-height: 168px;
+    padding: 0; resize: none; overflow-y: hidden; max-height: 168px;
     font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans);
     color: var(--sy-text-primary); }
   .plus-dot { position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--sy-text-primary); } /* active-tools deviation dot */
@@ -4793,11 +4796,25 @@ team: finance</pre>
     var rows = Array.prototype.slice.call(document.querySelectorAll('.composer-tray .cmp-row textarea'));
     rows.forEach(function (ta) {
       var tray = ta.closest('.composer-tray');
+      /* Baseline = this field's OWN scrollHeight when empty, i.e. exactly one row. Measured once,
+         with the value temporarily cleared, so it is unit-agnostic and already includes whatever
+         padding the field has. Comparing scrollHeight to a computed line-height (the first attempt)
+         mixed units and ignored padding, so the shape flipped on the first keystroke instead of on
+         the first WRAP. */
+      var base = (function () {
+        var prev = ta.value; ta.value = '';
+        ta.style.height = 'auto';
+        var h = ta.scrollHeight;
+        ta.value = prev;
+        return h;
+      })();
       function sync() {
         ta.style.height = 'auto';
-        ta.style.height = ta.scrollHeight + 'px';
-        ta.style.overflowY = ta.scrollHeight > 168 ? 'auto' : 'hidden';
-        var oneRow = ta.scrollHeight <= (parseFloat(getComputedStyle(ta).lineHeight) || 24) + 2;
+        var sh = ta.scrollHeight;
+        ta.style.height = sh + 'px';
+        ta.style.overflowY = sh > 168 ? 'auto' : 'hidden';
+        /* +1 absorbs sub-pixel rounding; anything taller than one row has genuinely wrapped. */
+        var oneRow = sh <= base + 1;
         var hasPanel = !!tray.querySelector('.cmp-panel');
         tray.classList.toggle('cmp-single', oneRow && !hasPanel);
       }
