@@ -540,14 +540,11 @@
   .composer-tray { background: var(--sy-bg-page); border: 1px solid var(--sy-border-default);
     border-radius: var(--sy-radius-lg); padding: var(--sy-space-3);
     box-shadow: 0 0 0 4px var(--sy-bg-hover); }
-  /* Draft-owned content (attachments, quote, knowledge pickers) FUSES flush to the tray — it is
-     part of the message being composed, so reading as part of the input is correct. Suggestions do
-     NOT fuse: FollowUpPanel keeps its 8px detachment. Flush nesting shares the parent radius
-     exactly (foundations §5, inset 0). */
-  .cmp-panel { margin: calc(var(--sy-space-3) * -1) calc(var(--sy-space-3) * -1) var(--sy-space-3);
-    padding: var(--sy-space-3); background: var(--sy-bg-sunken);
-    border-bottom: 1px solid var(--sy-border-default);
-    border-radius: var(--sy-radius-lg) var(--sy-radius-lg) 0 0; }
+  /* Draft-owned content (attachments, quote, knowledge pickers) sits ON the tray surface —
+     NO tint, NO hairline (2026-08-03, reversing the fused-tinted-panel treatment). It is part of
+     the message being composed, so it needs no separating device; the tray is one surface and the
+     content simply stacks above the input row. Attachments still force the rect radius. */
+  .cmp-panel { margin-bottom: var(--sy-space-2); }
   .cmp-panel > *:last-child { margin-bottom: 0; }
   /* SHAPE MORPH (2026-08-03, contingent — see the Composer footer A/B story). At ONE row with no
      fused panel the tray is a pill; as it grows it relaxes to the rect radius. The pill only works
@@ -555,7 +552,12 @@
      two rows (~80px) and radius.full reads as a lozenge rather than a pill. So the morph is not
      yet spec — it is rendered to be judged alongside the footer decision it depends on. */
   .composer-tray.cmp-single { border-radius: var(--sy-radius-full); }
-  .composer-tray.cmp-single .cmp-row { align-items: center; }
+  /* Row alignment and tray radius answer DIFFERENT questions (split 2026-08-03):
+       - radius  = single text line AND no draft content   -> .cmp-single
+       - align   = single text line, panel or not          -> .cmp-oneline
+     Conflating them bottom-aligned a single line of text against 36px controls whenever an
+     attachment was present, which is what made the text sit low. */
+  .composer-tray.cmp-oneline .cmp-row { align-items: center; }
   /* The composer row uses md controls (36) rather than sm (32): the reference's buttons are
      visibly chunkier, and the extra height is what makes the single-line state read as a proper
      pill instead of a thin lozenge — without touching the 12px inset. */
@@ -4818,11 +4820,15 @@ team: finance</pre>
           var sh = ta.scrollHeight;
           ta.style.height = sh + 'px';
           ta.style.overflowY = sh > 168 ? 'auto' : 'hidden';
-          tray.classList.toggle('cmp-single', sh <= base + 1 && !hasDraft(tray));
+          var oneLine = sh <= base + 1;
+          tray.classList.toggle('cmp-oneline', oneLine);          /* alignment: text only */
+          tray.classList.toggle('cmp-single', oneLine && !hasDraft(tray));  /* radius: text + panel */
         } else {
           var lh = lineHeight(tray), content = 0;
           Array.prototype.forEach.call(tray.children, function (c) { content += c.offsetHeight; });
-          tray.classList.toggle('cmp-single', Math.round(content / lh) <= 1 && !hasDraft(tray));
+          var oneRow = Math.round(content / lh) <= 1;
+          tray.classList.toggle('cmp-oneline', oneRow);
+          tray.classList.toggle('cmp-single', oneRow && !hasDraft(tray));
         }
         busy = false;
       }
