@@ -4,7 +4,7 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
-- **Composer tray inset raised 4px → 8px, and stated in the spec for the first time.** Reported as insufficient padding. It was: the tray was the **tightest container in the system** while being the only one holding *text*.
+- **Composer tray inset raised 4px → 12px, and stated in the spec for the first time.** *(Superseded the intermediate 8px value from earlier the same day — see the correction below.)* Reported as insufficient padding. It was: the tray was the **tightest container in the system** while being the only one holding *text*.
 
   | | inset |
   |---|---|
@@ -18,11 +18,11 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
   **The 4px was never authored.** No sentence in the Composer entry stated a tray inset; the value was back-derived from a *parenthetical about a different element's radius* — ComposerQuote's "concentric: composer radius 12 − 4 padding = 8". A dimension that exists only as an inference inside someone else's clause is a dimension nobody decided.
 
-  **8px is the only compliant step up, not a taste pick.** With the tray at radius `md` (12) the concentric rule fixes the inner radius at `12 − inset`: 6px inset → 6, which is a **`control`** radius (wrong family for a container bar); 12px inset → 0, a square bar inside a rounded tray. Only 8 lands both values on the container scale (inset `space-2`, inner radius `xs`).
+  **Correction — the concentric rule never bound here, and 8px was my error.** I claimed 8 was "the only compliant step up" because a 12px inset would force an inner radius of 0. That applied `foundations.md` §5 outside its stated domain: the rule binds *"when a rounded element sits in the corner region of a rounded container — the inset is smaller than the outer radius, so the two curves visually interact"*, and it explicitly exempts **"elements inset ≥ the outer radius… the corners no longer interact."** A 12px inset on a `md` (12) tray sits exactly at that boundary, so children clear the corner region entirely and take whatever radius suits them. Final value: **12px (`space-3`)**, matching `control-padding-x-md` and the header inset of ProposalCard and ConversationSummary. ComposerQuote returns to `sm`, its nested-element tier per §5, on its own merit rather than by subtraction.
 
-  **Consequence:** ComposerQuote moves from radius `sm` to `xs`, and §18's arithmetic is corrected to match. The spec now also states the governing rule — **one inset governs every child**, so text and controls share a single left edge and children add no horizontal padding of their own.
+  **The spec now states the governing rule** — **one inset governs every child**, so text and the leading `+` button share a single left edge at 12px and children add no horizontal padding of their own (the textarea's 40px right padding to clear the refine button is the one exception).
 
-  **Still open, needs eyes on the render:** the composer's text now sits at 8px against an Input's 12px. Closing that gap means giving the textarea its own 4px, which would put text and the leading `+` button on *different* left edges. Alignment or parity — one has to give, and that is an optical call I cannot make from measurements.
+  **This also closes the alignment-vs-parity question** the 8px pass left open: at 12px the composer's text matches an Input's inset *and* shares a left edge with the footer controls, so neither had to give.
 
 - **ConversationSummary's body dissolved into the page — a spec error, not a CSS slip.** The block rendered as a small tinted header bar with loose text hanging beneath it. Cause: I had written *"Body opens to `bg.page` per the tray rule"*, borrowing ProposalCard's rule. But `bg.page` is `#FFFFFF` in light mode and so is the thread behind it, so the body — which is most of the block — had no fill at all. Only the header kept its `ai.surface` tint.
 
