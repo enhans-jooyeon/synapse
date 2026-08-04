@@ -4,6 +4,12 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The text read *high*, not low — a textarea with no `rows` attribute defaults to two rows.** Three composer textareas were missing `rows="1"`, so their intrinsic box was ~44px with the text on the first line, while the 36px controls centred in the taller row. Result: the text sat ~11px above the controls' centre line. Adding `rows="1"` makes the row `max(22, 36) = 36px`, and `align-items: center` then places the text box with 7px above and below — level with the controls.
+
+  **The diagnosis came from the report, not from inspection.** The demo shown as *correct* was the Generating one — the only composer I had rebuilt from scratch, and the only one I had given `rows="1"`. That made the hypothesis testable in one query: three of six composer textareas lacked the attribute, and they were exactly the three that looked wrong. My two previous alignment fixes (splitting alignment from radius, unifying control heights) were both real defects but neither was *this* defect, which is why the symptom survived them.
+
+  **Also added `height: auto` in CSS** so the static render is correct before autogrow runs. The morph sets an explicit height, but nothing should depend on JS having executed to look right — which matters more than usual here, given that the morph code was itself unreachable earlier today.
+
 - **The composer row had three control heights where it should have one — 36 / 36 / 32.** The send button was `class="btn btn-primary"` **without `btn-icon`**, carrying an inline `width:32px; height:32px` left over from before the accent reallocation. So `.cmp-row .btn-icon { height: 36px }` never applied to it: the `+` and mic resolved to 36px and send stayed 32px, putting it off the row's common centre line and making the adjacent text read as misaligned. Three send buttons normalised to `btn-icon` with the inline sizing dropped, and the row rule widened to `.cmp-row .btn-icon, .cmp-row > .btn` so **any** control placed in the row resolves to one height rather than depending on remembering a class.
 
   **This was residue from an earlier change**, the same pattern as the pencil's gutter and the dot's positioning context: the accent reallocation rewrote the send button's *colour class* and left its *sizing* behind. The class it lost in that rewrite — `btn-icon` — was the one carrying its height.
