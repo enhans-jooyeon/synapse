@@ -4,6 +4,18 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Composer stripped to a single row: footer, pencil and deviation dot removed; the `+` regains a resting fill.** Five changes at June's request. Three of them collide with existing rules, and those collisions are **recorded as open items rather than quietly deleted.**
+
+  **Applied.** The footer is gone entirely — the tray *is* the composer: circular `+` · textarea · mic · circular send. The refine-prompt pencil is gone. The `+` deviation dot is gone. The `+` takes a very light resting fill (`bg.sunken` + `icon.secondary`) and **hover darkens the glyph rather than the fill**, reversing the ghost treatment from earlier the same day. And **any attachment, chip or quote now counts as multi-line** — the pill requires one text row *and* no draft-owned content, since a pill-topped attachment region reads wrong at that width.
+
+  **⚠ Three rules are now homeless or contradicted:**
+
+  1. **The agent picker and model selector have no home.** Both are specified anatomy — §4 rules that the model selector sits beside the agent picker in the trailing group, and that switching agents resets it. With the footer gone, neither control exists. Either they move to another surface or §4's placement rulings need rewriting.
+  2. **§24's refine-prompt has no trigger.** The whole affordance — closed preset menu, reviewable rewrite, Undo Toast — is unreachable without the pencil.
+  3. **Capability state is now silent, which the spec forbids in those words.** The rule read *"capability state is never silent"*; a tool toggle differing from the agent default now has no marker.
+
+  **A process note, because it nearly shipped broken.** The pencil-removal pass matched `data-refine` inside the **JS selector string** as well as the HTML attribute, and deleting from the preceding `<button` to the next `</button>` mangled the script — `node --check` caught it with a `SyntaxError`. The file was reverted and the removal redone with a pattern that only matches elements carrying the attribute (`<button(?=[^>]*\sdata-refine)`), which found exactly three. I also switched to applying the five edits **independently**, each with its own assertion, so one mismatched anchor can no longer block or corrupt the others — two earlier attempts had aborted wholesale on a single bad anchor.
+
 - **Fixed the promoted composers' default state — two bugs I introduced in the B promotion.**
 
   **The row bunched to the left.** In the real composers the textarea is wrapped in a `position:relative` div (it anchors the refine button), so **the wrapper is the flex child, not the textarea**. `.cmp-row textarea { flex: 1 }` therefore did nothing, the wrapper collapsed to content width, and the controls crowded together. The A/B story never showed this because its textareas sat directly in the row with no wrapper — the story and the real component had different DOM, so testing one did not test the other. Fixed with `.cmp-row > div { flex: 1; min-width: 0 }`.
