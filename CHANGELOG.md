@@ -4,6 +4,14 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Fixed the promoted composers' default state — two bugs I introduced in the B promotion.**
+
+  **The row bunched to the left.** In the real composers the textarea is wrapped in a `position:relative` div (it anchors the refine button), so **the wrapper is the flex child, not the textarea**. `.cmp-row textarea { flex: 1 }` therefore did nothing, the wrapper collapsed to content width, and the controls crowded together. The A/B story never showed this because its textareas sat directly in the row with no wrapper — the story and the real component had different DOM, so testing one did not test the other. Fixed with `.cmp-row > div { flex: 1; min-width: 0 }`.
+
+  **The morph could not see the first wrap.** The wired composers carried an inline `min-height: 44px` (and `24px`) predating the morph. Since detection measures the field's own empty-state height as its baseline, a `min-height` of two rows' worth made the baseline *equal* the wrapped height — so wrapping was undetectable and the tray would have stayed a pill at two lines. The inline min-heights are stripped from all four composer textareas; autogrow owns the height now. The `.field textarea` min-height belongs to the Textarea component and is untouched.
+
+  Both were invisible to every gate: `validate.py` lints values, `check_icons` lints glyphs, the nesting and per-story-depth diffs check structure — none of them can see that a flex child does not grow or that a `min-height` defeats a measurement. This is the class HANDOFF thread 7 is about (the render disagreeing with intent), and it is the fourth instance today.
+
 - **Arrangement B promoted from proposal to spec, and applied to the real composers.** The `+` also loses its resting fill.
 
   **The `+` is a ghost button that happens to be circular.** It shipped with a resting `action.secondary-bg` fill, which read as a second *filled* control competing with the black send. It now has no resting fill — just `radius.full` — so the grey circle appears on hover only, inherited from `.btn-ghost`. Circularity marks the bookend pair; fill still marks emphasis, and only send carries it.
