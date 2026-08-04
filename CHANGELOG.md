@@ -4,6 +4,16 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The Default composer promised attachments and showed none — data I dropped — plus a dead 40px gutter inflating its height.**
+
+  **The attachments were lost, not hidden.** The sub-demo is headed *"Default — with attachments"* and contained **zero attachment markup**. My promotion pass rebuilt each tray from extracted pieces and preserved only `.cmp-panel`-wrapped content; in this story the attachments were loose `.row` blocks (only the Console sample had been wrapped), so they were silently discarded. A heading asserting something the markup does not contain is worse than a missing demo, because it reads as verified. Restored as a fused `.cmp-panel` — image tile plus two document chips — which also correctly forces the rect, so the story now demonstrates the attachment→rect rule rather than just the empty state.
+
+  **The height issue was a gutter for a button that no longer exists.** Three composer textareas still carried `padding-right: var(--sy-space-10)` — 40px reserved for the refine pencil, which was removed earlier today. That is 40px of dead space on every composer, and it also broke the one-inset rule the spec states: the text no longer sat at the tray's 12px inset on both sides. Removed, along with a dead `position: relative` on the `+` that had anchored the deleted deviation dot.
+
+  **Height now composes cleanly:** 12px inset ×2 + the 36px control = **60px** in the pill state; two text rows give 68px in the rect. Nothing left over from a removed element.
+
+  **The pattern across today's composer work is worth stating.** Every one of these was a *removal* that left something behind — the pencil left its gutter, the dot left its positioning context, the footer removal left the comparison story out of step, the promotion left attachments on the floor. Deleting an element is not finishing the change; the space it reserved and the claims made about it have to go too.
+
 - **The Generating demo still carried the pre-B anatomy, which made it the one genuine lozenge in the file.** It had the textarea on one row and a *separate* control row beneath it (paperclip + stop), so the tray stood two rows tall while the textarea branch correctly reported one line of text — producing `radius.full` on a two-row box. Rebuilt on the adopted single-row anatomy: circular `+` · textarea · mic · circular stop, with stop as `secondary` per the send↔stop morph.
 
   **The class of bug is worth naming:** the morph asks "is the *content* one line?", which is the right question only when the tray *is* the content row. Any tray that keeps its own internal control row breaks that assumption — the measurement is right and the conclusion is wrong. That is why the earlier lozenge reasoning ("the pill only works because the footer left the tray") had to hold for every tray, not just the main composer.
