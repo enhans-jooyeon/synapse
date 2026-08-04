@@ -4,6 +4,16 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Attachments lose the tint and hairline; row alignment split from tray radius.**
+
+  **The panel treatment is reversed.** Attachments, the quote bar and knowledge pickers now sit directly on the tray surface — no tint, no separating hairline. They are part of the message being composed, so the tray is **one surface** and the content simply stacks above the input row. This undoes the fused-tinted-panel treatment from earlier the same day: the tint and hairline were drawing a boundary that should not exist. `FollowUpPanel` still detaches 8px above for the unchanged reason — a suggestion is *not* part of the draft.
+
+  **The misalignment had a specific cause: one flag was answering two questions.** `cmp-single` drove both the tray's radius *and* the row's alignment. Since an attachment forces the rect, a composer with one line of text plus an attachment lost `cmp-single` — and with it the centred alignment — so a 22px line of text bottom-aligned against 36px controls and read as sitting low. Now separate: **alignment tracks the text alone**, **radius tracks the text and draft content**. Verified across all five combinations including the broken one.
+
+  The tint removal also retires the reasoning written for it — the flush-nesting radius argument for the panel's top corners now applies to nothing, so it is deleted rather than left as a rule with no subject.
+
+  *Process: the spec half of this change was written after the render half had already been committed, because the update script aborted on a stale end-anchor (a phrase I had rewritten in an earlier commit) while the surrounding shell chain continued and committed anyway. The chain is the bug — a failed edit should not be followed by a commit — and the two halves are reunited here.*
+
 - **The Default composer promised attachments and showed none — data I dropped — plus a dead 40px gutter inflating its height.**
 
   **The attachments were lost, not hidden.** The sub-demo is headed *"Default — with attachments"* and contained **zero attachment markup**. My promotion pass rebuilt each tray from extracted pieces and preserved only `.cmp-panel`-wrapped content; in this story the attachments were loose `.row` blocks (only the Console sample had been wrapped), so they were silently discarded. A heading asserting something the markup does not contain is worse than a missing demo, because it reads as verified. Restored as a fused `.cmp-panel` — image tile plus two document chips — which also correctly forces the rect, so the story now demonstrates the attachment→rect rule rather than just the empty state.
