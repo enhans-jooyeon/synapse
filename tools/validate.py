@@ -100,6 +100,8 @@ CONTRAST_PAIRS = [
     ("fg-link on bg-page", "--sy-text-link", "--sy-bg-page", 4.5),
     ("emphasis-fg on emphasis-surface", "--sy-emphasis-fg", "--sy-emphasis-surface", 4.5),
     ("ai-fg on ai-surface", "--sy-ai-fg", "--sy-ai-surface", 4.5),
+    # Composer capability toggle ON (2026-08-03): the reallocated AI accent. azure.600 on azure.100.
+    ("action-brand-fg-on-page on action-brand-bg-subtle", "--sy-action-brand-fg-on-page", "--sy-action-brand-bg-subtle", 4.5),
     ("action-brand-fg on ai-solid", "--sy-action-brand-fg", "--sy-ai-solid", 3.0),
     ("emphasis-fg-soft on bg-surface (non-text mark)", "--sy-emphasis-fg-soft", "--sy-bg-surface", 3.0),
     ("fg-primary on emphasis-surface", "--sy-text-primary", "--sy-emphasis-surface", 4.5),

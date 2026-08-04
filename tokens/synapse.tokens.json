@@ -1611,6 +1611,18 @@
           },
           "$description": "Hover DARKENS in both modes (5.30:1 with a white label, so AA holds at normal weight). Every azure step lighter than 500 fails white-label contrast (400 = 2.91:1), so a bright brand physically cannot lighten on hover — unlike action.primary, which lightens in light mode. Softened to azure.550 on 2026-07-31 (was azure.600): the 600 step ran ΔE 18.5 against the rest fill — 2.15x the ΔE 8.6 house hover step, and the largest hover jump in the system — so it read as a drastic darkening. azure.550 lands at ΔE 8.9, on the house step. The 1px outline border hover (action.brand-border-hover) deliberately stays at azure.600, because a hairline needs a larger step than a fill to register."
         },
+        "brand-bg-subtle": {
+          "$value": "{primitive.color.azure.100}",
+          "$description": "Subtle azure tint for a brand-marked ACTIVE STATE on the page (the Composer's capability toggle). Added 2026-08-03 when the conversational-AI accent moved off the send button onto the capability toggle: the toggle needed a filled resting surface, and the only existing azure fills were the solid CTA steps.",
+          "$extensions": {
+            "synapse": {
+              "modes": {
+                "light": "{primitive.color.azure.100}",
+                "dark": "{primitive.color.azure.900}"
+              }
+            }
+          }
+        },
         "brand-fg": {
           "$value": "{primitive.color.white}",
           "$extensions": {

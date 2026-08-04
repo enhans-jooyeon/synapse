@@ -4,6 +4,16 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The AI accent is reallocated: send goes black, the capability toggle goes blue. Plus an alpha ring on the tray.** From reference designs. This one changes `design.md`, the system's highest authority, so the reasoning is recorded in full.
+
+  **Send is now `primary`/black.** `design.md` §3.7 had said *"the conversational-AI entry (Ask agent / Composer send) uses the `brand` point color"*. The rationale for the reallocation: **the send button is the most predictable control on the screen and does not need an accent to be found.** The accent buys more where it marks a state that changes what the agent can do and is genuinely easy to miss. So `brand` (azure `#0073E6`) now marks **AI capability** — the CommandPalette's "Ask agent" escape hatch, and the Composer's capability toggle. A side effect worth noting: send and the operational agent actions (Run/Retry/Resume) are now both `primary`, which removes send as an exception rather than creating one.
+
+  **The capability toggle needed one new token.** The azure ramp had no subtle fill — only the solid CTA steps — so `action.brand-bg-subtle` was added (`azure.100` light / `azure.900` dark) and paired with the existing `action.brand-fg-on-page`. Measured **5.25:1** light and **7.06:1** dark, and gated by a new `CONTRAST_PAIRS` entry so it cannot drift. `SY020` verified the CSS↔JSON parity of the addition on the same run. The blue stays azure, so the indigo link/focus/info blue is untouched and the "two blues never mixed" rule holds.
+
+  **The alpha ring needed no token at all.** A 4px **zero-blur** ring in `bg.hover` — literally an alpha value, `rgba(9,9,11,0.04)` light and `rgba(255,255,255,0.06)` dark, so it inverts by mode with no per-mode pair. Zero-blur token rings are the sanctioned SY009 exemption, so no raw shadow was needed. It reads as a soft halo lifting the composer off the page without an elevation shadow's weight.
+
+  Swept: `design.md` §3.7, `ai-patterns.md` §1 (both the markers list and its opening line — which had read *"the conversational-AI entry is a `primary` Button (accent deprecated)"*, wrong for the entire brand era and now accidentally correct for a different reason), `components.md · Composer`, the manifest, `tokens/synapse.tokens.json` + `tokens/synapse.css`, `tools/validate.py`, and all four composer sends in `preview.html` including the send↔stop morph, which was still toggling `btn-brand` in JS.
+
 - **Composer moved closer to the reference designs, and a stale `brand` description fixed on the way.** B is the settled arrangement (footer below the container, pill ↔ rect morph). Three changes bring it nearer the references without reversing a ruling:
 
   - **Grown radius `md` (12) → `lg` (16).** `xl` (20) would be closer still, but `foundations.md` §5 reserves it for section shells — *"the outermost rounded well a page region sits in… never on cards or overlays"* — so `lg` is this container's ceiling. A fused panel follows the tray to `lg` on its top corners (flush nesting shares the parent radius exactly).

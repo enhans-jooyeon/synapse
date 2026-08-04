@@ -8,14 +8,14 @@ Applies on top of the base system: archetypes from `patterns.md`, components fro
 
 ## 1. Principles — the four properties of visible agency
 
-**Anti-collision:** the AI theme is fully slate — surfaces, borders, marks, solid fills — so color NEVER signals AI on its own. The **squared avatar is the primary agency marker**; `ai.fg` slate marks and placement support it. `emphasis.*` tokens never appear on AI surfaces (use `ai.*` — same family, distinct semantics, free to diverge later). The conversational-AI entry is a `primary` Button (accent deprecated).
+**Anti-collision:** the AI theme is fully slate — surfaces, borders, marks, solid fills — so color NEVER signals AI on its own. The **squared avatar is the primary agency marker**; `ai.fg` slate marks and placement support it. `emphasis.*` tokens never appear on AI surfaces (use `ai.*` — same family, distinct semantics, free to diverge later). The conversational-AI **send** is a `primary` Button — confirmed 2026-08-03 when the accent was reallocated off send onto AI-capability markers. *(This sentence predated the accent entirely and read "(accent deprecated)", which was wrong for the whole brand era; it is now correct for a different reason than it was written.)*
 
 Every agent surface must make agency **visible** (users always know when AI is acting vs. a human or deterministic system), **interruptible** (any generation or run can be stopped), **attributable** (AI output is marked as such, with provenance when available), and **reviewable** (consequential actions pass through human approval).
 
 **The two AI markers.** AI presence is signaled by exactly two devices, used consistently and used nowhere else:
 
 1. The **squared avatar** (radius `md` vs. round human avatars) on any actor row, message, or attribution chip.
-2. The **`ai.*` token family** (`--sy-ai-surface`, `--sy-ai-border`, `--sy-ai-fg`) on surfaces that contain agent output or agent proposals, and the **`brand` (point-color) fill** on the screen's single conversational-AI entry point only (Ask agent / Composer send; one per screen). Operational agent actions (Run/Retry/Resume) use the normal hierarchy — "executes an agent" never earns the accent.
+2. The **`ai.*` token family** (`--sy-ai-surface`, `--sy-ai-border`, `--sy-ai-fg`) on surfaces that contain agent output or agent proposals, and the **`brand` fill** (azure `#0073E6`) on the screen's single **AI-capability** marker — the CommandPalette's "Ask agent" escape hatch, or a Composer capability toggle whose state changes what the agent can do; one per screen. *Reallocated 2026-08-03: this used to name the Composer **send** button. Send is now `primary`/black — the most predictable control on the screen does not need an accent to be found, and the accent buys more where it marks a capability that is easy to miss.* Operational agent actions (Run/Retry/Resume) use the normal hierarchy — "executes an agent" never earns the accent.
 
 NEVER mark AI presence any other way — no sparkle gradients, no purple, no robot iconography beyond the standard agent glyph. NEVER use `ai.*` tokens on non-AI surfaces, and never substitute `status.info-*` for `ai.*` or vice versa, even though the families are related.
 
