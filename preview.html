@@ -753,6 +753,33 @@
   .msg-h { max-width: 75%; margin-left: auto; background: var(--sy-bg-sunken); border-radius: var(--sy-radius-xl);
     padding: var(--sy-space-2) var(--sy-space-3); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
   .msg-a { display: flex; gap: var(--sy-space-2); font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
+  /* Reasoning (components.md · Reasoning) — 24px disclosure row, subordinate to the answer:
+     never text.primary, no SourceChips, excluded from the ResponseToolbar. Collapsed by
+     default; auto-expand is forbidden. NOT an AgentStep row (which is 28px). */
+  .reasoning { display: flex; align-items: center; gap: var(--sy-space-2); height: 24px; cursor: pointer; }
+  .reasoning .icon { width: 12px; height: 12px; flex: none; color: var(--sy-text-tertiary); }
+  .reasoning .lbl { font: var(--sy-weight-medium) var(--sy-label-size)/var(--sy-label-lh) var(--sy-font-sans);
+    color: var(--sy-text-tertiary); }
+  /* ConversationSummary (components.md · ConversationSummary) — agent output, marked as such:
+     borderless ai.surface at radius md (ProposalCard's tray dialect) + the required attribution
+     row. Body opens to bg.page per the tray rule. */
+  .convsum { background: var(--sy-ai-surface); border-radius: var(--sy-radius-md); }
+  .convsum .cs-h { display: flex; align-items: center; gap: var(--sy-space-2); padding: var(--sy-space-3);
+    border-bottom: 1px solid var(--sy-ai-border); }
+  .convsum .cs-h .nm { font: var(--sy-weight-medium) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
+    color: var(--sy-ai-fg); }
+  .convsum .cs-b { padding: var(--sy-space-3); background: var(--sy-bg-page);
+    border-radius: 0 0 var(--sy-radius-md) var(--sy-radius-md); }
+  .convsum .cs-b li { margin-bottom: var(--sy-space-1); }
+  /* Thread's "Jump to latest" (components.md · Thread) — Toast surface, bottom-center of the
+     column. Appears only once the bottom lock is RELEASED; it is never re-acquired mid-stream. */
+  .jump-pill { position: absolute; left: 50%; transform: translateX(-50%); bottom: var(--sy-space-3);
+    display: inline-flex; align-items: center; gap: var(--sy-space-1); height: 28px; padding: 0 var(--sy-space-3);
+    background: var(--sy-bg-raised-2); border: 1px solid var(--sy-border-overlay);
+    border-radius: var(--sy-radius-full); box-shadow: var(--sy-shadow-lg); cursor: pointer; white-space: nowrap;
+    font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans);
+    color: var(--sy-text-primary); z-index: var(--sy-z-dropdown); }
+  .jump-pill .icon { width: 12px; height: 12px; }
 
 </style>
 </head>
@@ -2263,9 +2290,9 @@ team: finance</pre>
         <p class="desc">Subordinate disclosure of the agent's working — never answer content: a collapsed row (chevron + label + duration) expands to muted reasoning text. Never text.primary, never carries SourceChips, excluded from the ResponseToolbar.</p>
         <h3 class="sub">Collapsed · expanded</h3>
         <div class="col" style="max-width: 560px; gap: var(--sy-space-2);">
-          <div class="step"><svg class="icon" style="width:12px;height:12px; color: var(--sy-text-tertiary);" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6" /></svg><span style="color: var(--sy-text-tertiary);" lang="ko">추론 과정</span><span class="dur">6.2s</span></div>
+          <div class="reasoning"><svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6" /></svg><span class="lbl" lang="ko">추론 과정</span><span class="dur">6.2s</span></div>
           <div>
-            <div class="step"><svg class="icon" style="width:12px;height:12px; color: var(--sy-text-tertiary); transform: rotate(90deg);" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6" /></svg><span style="color: var(--sy-text-tertiary);" lang="ko">추론 과정</span><span class="dur">6.2s</span></div>
+            <div class="reasoning"><svg class="icon" style="transform: rotate(90deg);" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6" /></svg><span class="lbl" lang="ko">추론 과정</span><span class="dur">6.2s</span></div>
             <div class="sy-type-body-sm" style="background: var(--sy-bg-surface); border-radius: var(--sy-radius-lg); padding: var(--sy-space-3); color: var(--sy-text-secondary); margin-left: var(--sy-space-5);" lang="ko">문의 데이터를 주제별로 묶은 뒤 전주와 같은 기준으로 비교해야 한다. 결제 오류가 눈에 띄게 늘었으므로 원인 분석을 우선한다…</div>
           </div>
         </div>
@@ -2722,7 +2749,7 @@ team: finance</pre>
       </div>
 
       <div class="story" data-group="Sample pages" data-title="Console" data-doc="patterns.md §1E · ai-patterns" id="s-sample-console">
-        <p class="desc">The product's heart — now a full ai-patterns walkthrough: context cards, named working line (§20), steps with pre-approved tool call and failure→retry (§3/§4/§10), answer anatomy (§20), provenance + Model-knowledge + uncertainty register (§6/§7/§9), ProposalCard + resolved attribution (§5), MediaGroup + rail (§21), quote-reply (§18), follow-ups (§19), guardrail (§15), handoff (§16), long-running progress (§11), live streaming + Stop (§2/§8). Mono §-tags mark each pattern; thread scrolls. <strong>Interactive:</strong> follow-up rows &amp; chips insert into the Composer · send ↔ stop morph · quote × removes · agent picker opens · pen-line → refinement presets rewrite the draft (Undo in the toast) · bookmark → Template Library modal (rich cards: description + cloze preview) inserts a draft · topbar as in Workbench.</p>
+        <p class="desc">The product's heart — a full ai-patterns walkthrough, and since 2026-08-03 the assembled reference for the eight chat components promoted from render to contract: <strong>Thread</strong> (the scroll region, with the “Jump to latest” pill that appears only once the bottom lock is released — it is never re-acquired mid-stream), <strong>Message</strong> (right-anchored <code>bg.sunken</code> bubbles vs. full-width agent text with no fill — the asymmetry is the authorship signal), <strong>ConversationSummary</strong> (§34, top of thread), <strong>Reasoning</strong> (§14, a 24px disclosure row, collapsed — auto-expand is forbidden), <strong>AnswerHeader</strong> + <strong>VariantPager</strong> (§20/§22), <strong>SelectionPill</strong> (§18, the closed three-action set 답장 · 설명 · 재생성), and <strong>FollowUpPanel</strong> (§19, refine above pivot, max 4 rows, insert never send). Plus context cards, the named working line (§20), steps with a pre-approved tool call and failure→retry (§3/§4/§10), provenance + Model-knowledge + uncertainty (§6/§7), ProposalCard and its resolved attribution row (§5), MediaGroup + rail (§21), guardrail (§15), handoff (§16), long-running progress (§11), and live streaming + Stop (§2/§8). Mono §-tags mark each pattern; the thread scrolls. <strong>Interactive:</strong> follow-up rows &amp; chips insert into the Composer · send ↔ stop morph · quote × removes · agent picker opens · pen-line → refinement presets rewrite the draft (Undo in the toast) · bookmark → Template Library modal inserts a draft · topbar as in Workbench.</p>
         <div style="border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-xl); overflow: hidden; background: var(--sy-bg-page); min-width: 1160px; max-width: 1440px;">
           <div style="display:flex; align-items:center; gap: var(--sy-space-2); height:48px; padding: 0 var(--sy-space-4); background: var(--sy-bg-surface); border-bottom: 1px solid var(--sy-border-subtle);">
             <button class="btn btn-ghost btn-sm" type="button"><span class="ws-tile" aria-hidden="true">E</span>Enhans<svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M6 9l6 6l6 -6" /></svg></button>
@@ -2749,21 +2776,44 @@ team: finance</pre>
             <div class="nav-item" lang="ko"><span style="width:8px; height:8px; border-radius:50%; background: var(--sy-viz-5); flex:none;"></span>고객 응대</div>
           </nav>
             <div style="flex:1; min-width:0; display:flex; flex-direction:column; max-height: 820px;">
-              <div style="flex:1; overflow:auto; min-height:0;">
+              <div style="flex:1; overflow:auto; min-height:0; position:relative;">
               <div style="max-width: 760px; width:100%; margin: 0 auto; padding: var(--sy-space-6); display:flex; flex-direction:column; gap: var(--sy-space-6);">
+                <div>
+                  <div class="convsum">
+                    <div class="cs-h">
+                      <span class="avatar agent av-24" style="background: var(--sy-bg-sunken); color: var(--sy-text-secondary); flex:none;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 5l1.8 5.2L19 12l-5.2 1.8L12 19l-1.8-5.2L5 12l5.2-1.8z"/></svg></span>
+                      <span class="nm" lang="ko">주간 보고서 에이전트</span>
+                      <span class="sy-type-caption" style="color: var(--sy-text-tertiary);">14:02</span>
+                      <span class="sy-type-label-sm" lang="ko" style="color: var(--sy-text-primary);">대화 요약</span>
+                      <span style="margin-left:auto; display:inline-flex; align-items:center; gap: var(--sy-space-1);">
+                        <span class="sy-type-caption" style="color: var(--sy-text-tertiary);" lang="ko">2분 전 생성</span>
+                        <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="요약 다시 생성"><svg class="icon" viewBox="0 0 24 24"><path d="M4.05 11a8 8 0 1 1 .5 4m-.5 5v-5h5" /></svg></button>
+                        <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="접기"><svg class="icon" viewBox="0 0 24 24" style="transform:rotate(180deg)"><path d="M6 9l6 6l6 -6" /></svg></button>
+                      </span>
+                    </div>
+                    <div class="cs-b sy-type-body-sm">
+                      <ul style="margin:0; padding-left: var(--sy-space-4); color: var(--sy-text-secondary);">
+                        <li lang="ko">결정 — 주간 보고서를 워크스페이스 문서로 저장 <span class="src" data-n="1">1</span></li>
+                        <li lang="ko">후속 작업 — 결제 오류 47건 원인 분석 진행 중 <span class="src" data-n="2">2</span></li>
+                        <li lang="ko">미해결 — 개인 연락처 포함 여부는 정책상 불가</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <span class="ptag">§34 ConversationSummary — ai.surface + 귀속 행 필수, 각 항목이 원래 턴으로 연결</span>
+                </div>
                 <div style="display:flex; justify-content:flex-end; padding-top: var(--sy-space-1);"><span class="ctx-stack"><span class="under" aria-hidden="true"></span><span class="ctx"><span class="c-i"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4" /> <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /> <path d="M9 9l1 0" /> <path d="M9 13l6 0" /> <path d="M9 17l6 0" /></svg></span><span class="c-t"><div class="t" lang="ko">주간_고객문의.csv</div><div class="m" lang="ko">Zendesk · 7월 12일</div></span><span class="badge" style="flex:none;">+1</span></span></span></div>
                 <span class="msg-img" title="결제오류_스크린샷.png"><svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" fill="var(--sy-bg-page)"/><rect width="160" height="18" fill="var(--sy-bg-sunken)"/><circle cx="10" cy="9" r="3" fill="var(--sy-border-strong)"/><rect x="20" y="6" width="48" height="6" rx="2" fill="var(--sy-border-strong)"/><rect x="12" y="30" width="90" height="6" rx="2" fill="var(--sy-border-default)"/><rect x="12" y="44" width="136" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="55" width="136" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="66" width="112" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="80" width="42" height="10" rx="3" style="fill: color-mix(in srgb, var(--sy-status-danger) 22%, transparent);"/><rect x="16" y="83" width="34" height="4" rx="2" fill="var(--sy-status-danger)"/></svg></span>
                 <div class="msg-h" lang="ko">지난주 고객 문의 요약해서 보고서 초안 만들어 줘</div>
                 <div class="msg-a">
                   <span class="avatar agent av-24" style="background: var(--sy-bg-sunken); color: var(--sy-text-secondary); flex:none;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 5l1.8 5.2L19 12l-5.2 1.8L12 19l-1.8-5.2L5 12l5.2-1.8z"/></svg></span>
                   <div style="flex:1; min-width:0;">
-                    <div style="display:flex; align-items:center; gap: var(--sy-space-2);"><div class="working" lang="ko" style="font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); flex:1;">보고서 초안 생성 중…</div><span class="ptag">§20 working</span></div>
-                    <div class="step" style="height:24px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-text-tertiary);" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6" /></svg><span style="color: var(--sy-text-tertiary);" lang="ko">추론 과정</span><span class="dur">4.1s</span></div>
+                    <div style="display:flex; align-items:center; gap: var(--sy-space-2);"><div class="working" lang="ko" style="font-size: var(--sy-text-13); line-height: var(--sy-text-13-lh); flex:1;">보고서 초안 생성 중…</div><span class="ptag">§20 AnswerHeader — working line이 완료 시 제목으로 승격</span></div>
+                    <div style="display:flex; align-items:center; gap: var(--sy-space-2);"><div class="reasoning"><svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6" /></svg><span class="lbl" lang="ko">추론 과정</span><span class="dur">4.1s</span></div><span class="ptag">§14 Reasoning — 24px 행, 기본 접힘(자동 펼침 금지)</span></div>
                     <div class="step" style="height:24px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="M5 12l5 5l10 -10" /></svg><span lang="ko">Zendesk에서 문의 조회</span><span style="font-family: var(--sy-font-mono); font-size:11px; color: var(--sy-text-tertiary);">zendesk.search</span><span class="badge" lang="ko">사전 승인됨</span><span class="dur">2.3s</span></div>
                     <div class="step" style="min-height:24px; height:auto;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-danger);" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /> <path d="M12 8v4" /> <path d="M12 16h.01" /></svg><span lang="ko">주제 분류 — 시간 초과</span><button class="btn btn-ghost btn-sm" type="button" lang="ko">다시 시도</button><span class="dur">30s</span></div>
                     <div class="step" style="height:24px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-status-success);" viewBox="0 0 24 24"><path d="M5 12l5 5l10 -10" /></svg><span lang="ko">재시도 1/2 — 주제 분류 완료</span><span class="dur">6.1s</span></div>
                     <div class="step" style="height:24px;"><svg class="icon" style="width:12px;height:12px; color: var(--sy-text-tertiary);" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6" /></svg><span style="color: var(--sy-text-tertiary);" lang="ko">5단계 · 12초 — 문의 328건 조회, 주제 분류, 초안 생성</span><span class="ptag" style="margin-left:auto;">§3/§4/§10 steps</span></div>
-                    <div class="ans-h"><span class="sy-type-heading-sm" lang="ko">주간 고객 문의 요약</span><span class="badge" style="font-variant-numeric: tabular-nums;">12.4s</span><span style="margin-left:auto; display:inline-flex; align-items:center; gap: var(--sy-space-0_5);"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="이전 버전"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M15 6l-6 6l6 6" /></svg></button><span class="sy-type-caption" style="color: var(--sy-text-tertiary); font-variant-numeric: tabular-nums;">2/2</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="다음 버전"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6" /></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="접기"><svg class="icon" viewBox="0 0 24 24" style="transform:rotate(180deg)"><path d="M6 9l6 6l6 -6" /></svg></button><span class="ptag">§22</span></span></div>
+                    <div class="ans-h"><span class="sy-type-heading-sm" lang="ko">주간 고객 문의 요약</span><span class="badge" style="font-variant-numeric: tabular-nums;">12.4s</span><span style="margin-left:auto; display:inline-flex; align-items:center; gap: var(--sy-space-0_5);"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="이전 버전"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M15 6l-6 6l6 6" /></svg></button><span class="sy-type-caption" style="color: var(--sy-text-tertiary); font-variant-numeric: tabular-nums;">2/2</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="다음 버전"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6" /></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="접기"><svg class="icon" viewBox="0 0 24 24" style="transform:rotate(180deg)"><path d="M6 9l6 6l6 -6" /></svg></button><span class="ptag">§22 VariantPager</span></span></div>
                     <p style="margin-top: var(--sy-space-2);" lang="ko">지난주 문의는 총 328건으로 전주 대비 12% 증가했습니다 <span class="src" data-n="1">1</span> <span style="position:relative; display:inline;"><span class="reply-pill"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M9 14l-4 -4l4 -4" /> <path d="M5 10h11a4 4 0 1 1 0 8h-1" /></svg>답장<span style="width:1px; height:12px; background: var(--sy-border-default); margin: 0 var(--sy-space-1);"></span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /> <path d="M12 16v.01" /> <path d="M12 13a2 2 0 0 0 .914 -3.782a1.98 1.98 0 0 0 -2.414 .483" /></svg>설명<span style="width:1px; height:12px; background: var(--sy-border-default); margin: 0 var(--sy-space-1);"></span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M4.05 11a8 8 0 1 1 .5 4m-.5 5v-5h5" /></svg>재생성</span><span class="quote-hl">상위 주제는 결제 오류(47건)와 로그인 문제(31건)입니다</span></span> <span class="src" data-n="2">2</span> 초안을 만들었습니다 — 검토 후 공유할 수 있습니다.</p>
                     <p style="margin-top: var(--sy-space-2);" lang="ko">로그인 문제 증가는 <strong style="font-weight: var(--sy-weight-semibold);">추정으로는</strong> 지난주 SSO 설정 변경과 관련이 있을 수 있습니다 <span class="badge" lang="ko">모델 지식</span> — 확인하려면 감사 로그 조회가 필요합니다. <span class="ptag">§6/§7</span></p>
                     <div class="sy-type-micro-label" style="color: var(--sy-text-tertiary); margin-top: var(--sy-space-2);" lang="ko">출처</div>
@@ -2820,9 +2870,11 @@ team: finance</pre>
                   </div>
                 </div>
               </div>
+                <span class="jump-pill"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6l6 -6" /></svg><span lang="ko">최신으로 이동</span></span>
+                <span class="ptag" style="position:absolute; right: var(--sy-space-4); bottom: var(--sy-space-3);">Thread — 아래 고정 해제 시에만 표시</span>
               </div>
               <div style="max-width: 760px; width:100%; margin: 0 auto; padding: 0 var(--sy-space-6) var(--sy-space-6); position: relative;">
-                <div class="followups" style="position: absolute; left: var(--sy-space-6); right: var(--sy-space-6); bottom: 100%; margin-bottom: var(--sy-space-2);">
+                <span class="ptag">§19 FollowUpPanel — refine 위, pivot 아래 · 최대 4행 · 삽입만, 자동 전송 없음</span><div class="followups" style="position: absolute; left: var(--sy-space-6); right: var(--sy-space-6); bottom: 100%; margin-bottom: var(--sy-space-2);">
                   <div class="fu-hint"><span><span class="sy-kbd">↑</span> <span class="sy-kbd">↓</span> <span lang="ko">이동</span></span><span><span class="sy-kbd">↵</span> <span lang="ko">선택</span></span><span style="margin-left:auto;"><span class="sy-kbd">esc</span> <span lang="ko">닫기</span></span></div>
                   <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l14 0" /> <path d="M13 18l6 -6" /> <path d="M13 6l6 6" /></svg>지난달과 비교해 줘</div>
                   <div class="fu-row sel" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l14 0" /> <path d="M13 18l6 -6" /> <path d="M13 6l6 6" /></svg>결제 오류 47건의 원인을 분석해 줘</div>
