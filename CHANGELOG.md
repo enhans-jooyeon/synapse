@@ -4,6 +4,14 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **ConversationSummary's body dissolved into the page — a spec error, not a CSS slip.** The block rendered as a small tinted header bar with loose text hanging beneath it. Cause: I had written *"Body opens to `bg.page` per the tray rule"*, borrowing ProposalCard's rule. But `bg.page` is `#FFFFFF` in light mode and so is the thread behind it, so the body — which is most of the block — had no fill at all. Only the header kept its `ai.surface` tint.
+
+  **The rule was misapplied.** ProposalCard opens its **payload** to `bg.page` — a diff, a message preview, an affected-record list — because a bounded object inside a tray gains internal depth that way. A summary's body **is the content, not a payload**. Corrected: the body keeps `ai.surface`.
+
+  **Recorded as a general rule, because this will recur:** *"opens to `bg.page`" only means anything when the container is not already sitting on `bg.page`.* This is the second instance today of the same family — FloatingPill's light-mode surface failed because `bg.raised-2` *is* `#FFFFFF` — and both were invisible in light mode while looking correct in dark.
+
+  Also removed the title I had wedged into the header between the timestamp and the trailing cluster. The anatomy is avatar + name + timestamp + last-generated + refresh; a title among them reads as a fourth metadata item rather than a heading. The `title` prop is deleted from the storybook component rather than merely unused, so it cannot come back.
+
 - **ResponseToolbar's `media` rail retired — one feedback surface, one place, always.** A media-only reply used to carry a vertical rail beside the MediaGroup; it now takes the standard horizontal toolbar **below** the fan, exactly as a text reply places it below the prose (the Console sample already did this for text+media replies).
 
   **Why, beyond preference.** The rule it replaced was conditional: rail *only* when media was the sole content, message-level toolbar the moment any text appeared. Two problems. It made the feedback surface **move depending on the reply's content type**, so a user who learned "actions live at the bottom-left" found them rotated onto the right edge in some replies and not others — a learned position is worth more than a tidier anchor. And it required the renderer to know whether text accompanied the media before picking a treatment; a conditional that depends on sibling content is the kind that drifts. The original rationale — "two feedback surfaces on one message is redundant" — is better served now: there is one surface, in one place.

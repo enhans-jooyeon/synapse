@@ -9,7 +9,6 @@ export interface ConversationSummaryProps extends Omit<React.HTMLAttributes<HTML
   lastGenerated: string;
   onRefresh?: () => void;
   refreshLabel?: string;
-  title?: string;
   children?: React.ReactNode;
 }
 
@@ -19,13 +18,17 @@ export interface ConversationSummaryProps extends Omit<React.HTMLAttributes<HTML
  * It is agent output, marked as such: `ai.surface` fill plus the squared-avatar
  * attribution row, both required. Never system chrome, never the user's notes.
  *
+ * There is deliberately NO `title` prop: the header anatomy is avatar + name + timestamp +
+ * last-generated + refresh, and a title wedged among them reads as a fourth metadata item
+ * rather than a heading (removed 2026-08-03).
+ *
  * Refreshable, not authoritative — it never replaces or rewrites the transcript.
  * Each point should link back to the turns it summarizes; a point that cannot
  * point at its source turns violates §10 honesty.
  */
 export const ConversationSummary = forwardRef<HTMLDivElement, ConversationSummaryProps>(
   function ConversationSummary(
-    { agentName, timestamp, lastGenerated, onRefresh, refreshLabel = "Regenerate summary", title, className, children, ...rest },
+    { agentName, timestamp, lastGenerated, onRefresh, refreshLabel = "Regenerate summary", className, children, ...rest },
     ref
   ) {
     const [expanded, setExpanded] = useState(true);
@@ -37,7 +40,6 @@ export const ConversationSummary = forwardRef<HTMLDivElement, ConversationSummar
           </span>
           <span className="sy-convsum__actor">{agentName}</span>
           <span className="sy-convsum__meta">{timestamp}</span>
-          {title && <span className="sy-convsum__title">{title}</span>}
           <span className="sy-convsum__trailing">
             <span className="sy-convsum__meta">{lastGenerated}</span>
             {onRefresh && (

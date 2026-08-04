@@ -795,8 +795,10 @@
     border-bottom: 1px solid var(--sy-ai-border); }
   .convsum .cs-h .nm { font: var(--sy-weight-medium) var(--sy-text-13)/var(--sy-text-13-lh) var(--sy-font-sans);
     color: var(--sy-ai-fg); }
-  .convsum .cs-b { padding: var(--sy-space-3); background: var(--sy-bg-page);
-    border-radius: 0 0 var(--sy-radius-md) var(--sy-radius-md); }
+  /* Body keeps the ai.surface tint. It must NOT open to bg.page: that is the tray rule for a
+     PAYLOAD inside a tray, and a summary body IS the content — on a white page a bg.page body
+     dissolves, leaving a tinted header bar with loose text under it (fixed 2026-08-03). */
+  .convsum .cs-b { padding: var(--sy-space-3); }
   .convsum .cs-b li { margin-bottom: var(--sy-space-1); }
 
 </style>
@@ -2807,7 +2809,6 @@ team: finance</pre>
                       <span class="avatar agent av-24" style="background: var(--sy-bg-sunken); color: var(--sy-text-secondary); flex:none;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 5l1.8 5.2L19 12l-5.2 1.8L12 19l-1.8-5.2L5 12l5.2-1.8z"/></svg></span>
                       <span class="nm" lang="ko">주간 보고서 에이전트</span>
                       <span class="sy-type-caption" style="color: var(--sy-text-tertiary);">14:02</span>
-                      <span class="sy-type-label-sm" lang="ko" style="color: var(--sy-text-primary);">대화 요약</span>
                       <span style="margin-left:auto; display:inline-flex; align-items:center; gap: var(--sy-space-1);">
                         <span class="sy-type-caption" style="color: var(--sy-text-tertiary);" lang="ko">2분 전 생성</span>
                         <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="요약 다시 생성"><svg class="icon" viewBox="0 0 24 24"><path d="M4.05 11a8 8 0 1 1 .5 4m-.5 5v-5h5" /></svg></button>

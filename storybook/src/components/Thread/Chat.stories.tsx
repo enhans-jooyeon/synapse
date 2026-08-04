@@ -36,7 +36,6 @@ export const AssembledThread: Story = {
             timestamp="14:02"
             lastGenerated="2분 전 생성"
             onRefresh={() => {}}
-            title="대화 요약"
           >
             <span lang="ko">결정 2건 · 후속 작업 1건 · 미해결 질문 1건</span>
           </ConversationSummary>
