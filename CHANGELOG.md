@@ -4,6 +4,18 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The footer is restored, and the real composers now match the reference arrangement. Two renderings of one component had silently diverged.**
+
+  **Why the changes "weren't being applied".** The footer-removal pass matched only the **`.cmp-footer` class**. The comparison story's footer was a plain `.row` — built before that class existed — so **it kept its footer while all three real composers lost theirs.** The story and the component then drifted apart for several commits, and every subsequent tweak landed on the one that looked right rather than the one in use. Restoring the footer on `s-composer`, the Home start surface and the Console sample brings them back into line.
+
+  **The picker and model selector had to be rebuilt, not un-hidden** — they were deleted with the footer. Both are back with their JS hooks intact (`data-model` for the model menu, `.avatar.agent` for the picker), verified by enumerating all three footers rather than assuming the insert worked.
+
+  **The A/B story is retired as a comparison** and retitled **"Composer shape morph"**. Keeping a story called "A/B" implying an open decision, next to a real Composer that already implements B, is exactly the kind of stale claim that caused this. It now demonstrates the morph in two states and says outright that B was adopted.
+
+  **This closes one of the three open conflicts** from the removal: the agent picker and model selector have a home again. **Two remain open** — §24's refine-prompt still has no trigger, and capability state is still silent with the `+` deviation dot gone. (The footer's capability toggle is a different thing: it shows one named capability, not deviation from the agent's defaults.)
+
+  **Two of my own errors caught mid-change, both by tooling rather than by eye.** Slicing a story from `id="…"` put the `data-title` attribute *outside* the slice, so the retitle silently did nothing until the verification printed the old title back — the same slicing mistake that broke a story earlier today. And my `components.md` rewrite swallowed the sentence stating `radius.full`, which **SY021 caught immediately** as a manifest claim with no prose support; the sentence was restored. That is the third time today SY021 has flagged a regression I introduced within minutes of introducing it.
+
 - **Shape morph corrected: pill only at a genuinely single line, and the static demos are now measured rather than assumed.** My previous pass marked four textarea-less demos as single-row "by construction". That was wrong — the **slot-chip demo is genuinely two lines** (prompt + slot caption), so it was being forced into a pill while standing two lines tall. Assuming beat measuring, and it produced exactly the artefact reported.
 
   **The morph now has two branches, because the two cases genuinely differ:**
