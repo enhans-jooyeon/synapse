@@ -15,16 +15,15 @@
 [data-theme="dark"] .sy-fpill { background: var(--sy-bg-raised-2);
   border-color: var(--sy-border-overlay); }
 
+/* Single form. The `rail` variant was declared and removed on 2026-08-03 with its only
+   consumer (ResponseToolbar media) — a variant with no consumer is dead spec. */
 .sy-fpill--horizontal { height: 28px; padding: 0 var(--sy-space-3); box-shadow: var(--sy-shadow-lg);
   /* label-sm — matches .sy-type-label-sm; never a raw font-size (foundations §2.2) */
   font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); }
 
-/* rail sits ON content rather than floating above a scroll region, so it earns less lift. */
-.sy-fpill--rail { flex-direction: column; padding: var(--sy-space-1); box-shadow: var(--sy-shadow-xs); }
 
 .sy-fpill__sep { width: 1px; height: 12px; background: var(--sy-border-default); flex: none;
   margin: 0 var(--sy-space-1); }
-.sy-fpill--rail .sy-fpill__sep { width: 12px; height: 1px; margin: var(--sy-space-1) 0; }
 
 /* Children are real controls — the shell only strips their default chrome. */
 .sy-fpill button { display: inline-flex; align-items: center; gap: var(--sy-space-1);

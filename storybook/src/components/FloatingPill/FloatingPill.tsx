@@ -2,8 +2,12 @@ import React, { forwardRef } from "react";
 import "./FloatingPill.css";
 
 export interface FloatingPillProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** `rail` is vertical + icon-only + shadow.xs; it sits ON content rather than above a scroll region. */
-  variant?: "horizontal" | "rail";
+  /**
+   * Single form. `rail` was declared and removed on 2026-08-03 with its only consumer
+   * (ResponseToolbar's media rail) — kept as a one-member union so the class contract
+   * stays explicit rather than implicit.
+   */
+  variant?: "horizontal";
   children?: React.ReactNode;
 }
 
@@ -15,7 +19,8 @@ export interface FloatingPillProps extends React.HTMLAttributes<HTMLDivElement> 
  * consumers own the behaviour.
  *
  * Declared 2026-08-03 after this exact anatomy turned up implemented three
- * times (SelectionPill, Thread's jump-to-latest, ResponseToolbar's media rail)
+ * times (SelectionPill, Thread's jump-to-latest, and ResponseToolbar's media rail —
+ * the last since retired)
  * and specified nowhere — one of the three citing Toast, which shares the
  * tokens and none of the behaviour.
  *

@@ -433,7 +433,7 @@
     "regenerate on latest message only — creates variant N+1, never destroys; answer header carries the ‹n/N› pager ( §22)",
     "thumbs selected = stroke + bg.selected circle, never filled icons",
     "no destructive actions",
-    "media variant: a FloatingPill rail (that entry owns the vertical shell) beside a MediaGroup ONLY when media is the sole message content — text+media replies use the message toolbar alone, never both"
+    "media variant RETIRED 2026-08-03: a media-only reply now takes the STANDARD toolbar in its standard place, a horizontal row below the MediaGroup — same as a text reply places it below the prose. The old rule was conditional (rail only when media was the sole content) which moved the feedback surface depending on the reply's content type and made the renderer inspect sibling content to choose a treatment. One surface, one place, always"
    ]
   },
   "AgentStep": {
@@ -528,18 +528,16 @@
   "FloatingPill": {
    "purpose": "Shared surface for a small transient action affordance that floats over content — raised by a condition, gone when it ends. A surface primitive: it owns the shell, consumers own the behaviour.",
    "variants": [
-    "horizontal (default)",
-    "rail (vertical, icon-only)"
+    "none — a single form; rail was declared and removed 2026-08-03 with its only consumer"
    ],
    "key_rules": [
-    "WHY IT EXISTS: this anatomy was implemented three times identically (SelectionPill, Thread's jump-to-latest, ResponseToolbar's media rail) and declared nowhere — one of them citing Toast, which shares the tokens and none of the behaviour. Consumers now reference this entry and never restate it",
+    "WHY IT EXISTS: this anatomy was implemented three times identically (SelectionPill, Thread's jump-to-latest, and ResponseToolbar's media rail — the last since retired) and declared nowhere — one of them citing Toast, which shares the tokens and none of the behaviour. Consumers now reference this entry and never restate it",
     "horizontal: 28px height, padding 0 space-3, radius full, shadow.lg, z.dropdown, label-sm type (never a raw font-size), standard entrance; multiple actions split by a 1px border.default hairline 12px tall; 12px registry icons",
     "SURFACE IS PER-MODE (2026-08-03): dark takes bg.raised-2 (#33333A) + 1px border.overlay (#4A4A52); LIGHT takes glass.surface (#F6F8FB) + 1px glass.border (#E4E9F0) — the OPAQUE faux-frost family, no backdrop-filter, SY015 still holds. Why: in light mode bg.raised-2 IS #FFFFFF (same as bg.page) and border.overlay is TRANSPARENT, so the pill was 1.00:1 on the page with no hairline — separated only by an 8% shadow, while dark had three separation channels. A missing channel, not a taste gap, and unfixable by a darker fill because the light ramp jumps #FFFFFF -> #F4F4F6 (1.10:1) -> #33333A (12.53:1). Per-mode divergence with a reason is established practice (cf. ProposalCard secondary). REJECTED: an inverse bg.inverse-soft fill — too heavy for a catch-up hint at 12.53:1, and it is the system emphasis fill",
-    "rail: same fill/hairline/radius rotated vertical, shadow.xs (it sits ON content rather than floating above a scroll region, so it earns less lift), 4px padding, icon-only, hover-reveal, one per anchor",
     "EVERY CHILD IS A REAL CONTROL — a <button>, or a Link where it navigates. A pill rendered as a <span> is a DEFECT: these affordances are often the only path to the action they carry, so a non-interactive element makes it keyboard-unreachable",
     "anchored to whatever raised it, NEVER to the viewport; overlays content and never displaces it (no layout shift on appear — the §19 rule generalised)",
     "dismissed by its raising condition ending (deselect, Esc, reaching the bottom, pointer-out) — never an x, never persists as chrome",
-    "consumers are a CLOSED set: SelectionPill (§18), Thread's jump-to-latest, ResponseToolbar media (§21/§35)",
+    "consumers are a CLOSED set: SelectionPill (§18) and Thread's jump-to-latest. ResponseToolbar media was the third and was RETIRED 2026-08-03, which also removed the rail variant — a variant with no consumer is dead spec",
     "FORBIDDEN: destructive actions (too easy to hit by accident — use Popconfirm or a Modal); more than 3 actions (past that it is a Menu); primary/brand/danger fill on the pill or its children; a status icon (Toast's vocabulary, and it invites the confusion this entry ends); more than one pill per raising condition"
    ]
   },

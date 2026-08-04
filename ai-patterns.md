@@ -218,7 +218,7 @@ Anatomy: `components.md · AnswerHeader` (and `Message` for the agent content co
 
 ## 21. Generated media
 
-Agent-generated media renders as a MediaGroup fan (see components.md). Media-only replies carry the `media` ResponseToolbar rail beside the fan; replies that mix text and media use the message-level ResponseToolbar alone — never both. The governing principle: **playfulness lives in the agent's output, never in the chrome** — rotation, the one playful device in the system, is confined to media the agent made. Provenance still applies: generated media carries the standard attribution row, and image content follows the same honesty rules as text (no fake photographic "evidence" of claims).
+Agent-generated media renders as a MediaGroup fan (see components.md). **Every** reply carries the standard ResponseToolbar below the fan, in its standard place — media-only replies included. *Amended 2026-08-03: media-only replies used to take a vertical `media` rail beside the fan instead. That moved the feedback surface depending on the reply's content type, and required the renderer to inspect sibling content to pick a treatment. One surface, one place, always.* The governing principle: **playfulness lives in the agent's output, never in the chrome** — rotation, the one playful device in the system, is confined to media the agent made. Provenance still applies: generated media carries the standard attribution row, and image content follows the same honesty rules as text (no fake photographic "evidence" of claims).
 
 ## 22. Result variants & partial regeneration
 
