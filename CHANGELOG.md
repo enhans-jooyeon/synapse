@@ -4,6 +4,16 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The single-line example composers are pills now — two separate causes, one visible symptom.** Reported as the case examples at the bottom not taking the pill shape even though they are single-line.
+
+  **Cause 1 — the morph could not reach them.** The detector selected `.composer-tray .cmp-row textarea`, but the §2 queue/interrupt demo has a textarea with **no `.cmp-row`** (it predates the bookend layout), so it was skipped entirely and stayed a rect. Broadened to `.composer-tray textarea`, which reaches every composer field including any added later.
+
+  **Cause 2 — four demos have no textarea at all.** The ghost-text prediction (§30), the recording bar (§26), the slot-chip highlight (§23) and the slash-command completion demos are all built from static divs, so a runtime measurement was never going to classify them. They are single-row **by construction** — nothing can grow them — so they carry `cmp-single` in the markup rather than waiting for JS that will never fire.
+
+  **Why the split is correct rather than lazy:** the morph is a *measurement* of content that changes. Where content cannot change, the state is a fact about the markup, and asserting it statically is more honest than pretending to measure it. All six textarea-bearing trays are now JS-driven, and all four static ones are marked, so every composer in the file is accounted for — verified by enumerating them rather than spot-checking.
+
+  Also confirmed while here: **no composer textarea retains an inline `min-height`**, which would silently mask the first wrap by making the measured baseline equal the two-row height. That was the bug fixed earlier today, and it would have reappeared on the newly-reached tray had one survived.
+
 - **Composer stripped to a single row: footer, pencil and deviation dot removed; the `+` regains a resting fill.** Five changes at June's request. Three of them collide with existing rules, and those collisions are **recorded as open items rather than quietly deleted.**
 
   **Applied.** The footer is gone entirely — the tray *is* the composer: circular `+` · textarea · mic · circular send. The refine-prompt pencil is gone. The `+` deviation dot is gone. The `+` takes a very light resting fill (`bg.sunken` + `icon.secondary`) and **hover darkens the glyph rather than the fill**, reversing the ghost treatment from earlier the same day. And **any attachment, chip or quote now counts as multi-line** — the pill requires one text row *and* no draft-owned content, since a pill-topped attachment region reads wrong at that width.
