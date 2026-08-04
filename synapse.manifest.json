@@ -439,8 +439,9 @@
   "AgentStep": {
    "purpose": "One row of visible agent work (step/tool call).",
    "key_rules": [
-    "closed states: pending/running/success/failed(+Retry)/skipped",
-    "collapses to '5 steps · 12s' summary on completion",
+    "closed states are the NINE-STATE SUPERSET in ai-patterns §3 (single source since 2026-08-03): pending, queued, running, awaiting-input, partial, success, failed(+Retry), cancelled, skipped. §3 also carries a REACHABILITY column — a thread step is never queued, a batch item never skipped. Added 2026-08-03 to close real defects, not to add features: awaiting-input (a blocked step rendered as running forever), cancelled (specified for runs in §8 and in RunLog but not for steps, so Stop left the in-flight step stateless), partial (§10 REQUIRES partial reporting and the five-state set could not express it), queued (already in RunLog and §29). retrying was REJECTED: a retry emits a NEW step, keeping the record append-only",
+    "collapses to '5 steps · 12s' summary on completion (the summary counts LEAVES, not groups)",
+    "CONCURRENT fan-out (2026-08-03): when >1 step runs at once the list switches to a concurrent group — one parent row with the shared goal + a live tally, children indented one level (the single nesting level §3 allows). Children order by START TIME and NEVER reorder as they finish. The parent state is DERIVED not authored: running while any child runs, partial if some failed and some succeeded, failed only if all failed, success if all succeeded, cancelled if stopped — this is why partial had to exist. The 3-row cap applies to GROUPS, not children. Forbidden: a progress bar on the parent instead of the tally (§11 needs a real denominator per run), nesting a group inside a group, or rendering concurrent children as separate top-level steps",
     "tool ids in mono; payloads collapsed; max 1 nesting level",
     "role=log aria-live=polite",
     "named working line above steps while generating (pulse, no shimmer); long replies open with title + duration badge + collapse"
@@ -732,7 +733,7 @@
   "RunLog": {
    "purpose": "Hierarchical execution log (run → step → line) for Workflow Run mode, Pipeline runs, and CUA run review.",
    "key_rules": [
-    "expandable steps (AgentStep vocabulary pending/running/success/failed/skipped) → mono log lines in a bg.sunken block",
+    "expandable steps using the ai-patterns §3 state superset (SHARED with AgentStep — this entry previously claimed the two vocabularies matched while the two prose specs listed different five-state sets) → mono log lines in a bg.sunken block",
     "header: title + status Badge + tabular duration; success collapses to 'N steps · 12s'",
     "failed steps auto-expand + surface the error + optional Retry",
     "live-append aria-live polite; running step pulses (no shimmer); pin-to-bottom is a toggle, never forced",

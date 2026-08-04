@@ -4,6 +4,25 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **AgentStep's "closed set" wasn't closed — four vocabularies consolidated into one nine-state superset, and four states added.** Prompted by asking what step variants leading services use. The more useful answer was internal.
+
+  **The contradiction.** §3 listed `pending · running · success · failed · skipped`. `components.md · RunLog` listed `queued · running · success · failed · cancelled` — two states §3 never had, missing two §3 required. The manifest asserted RunLog used "AgentStep vocabulary pending/running/success/failed/skipped", which matched neither prose spec. §29's batch rows were a fourth variant (`완료 / n% / 대기 / 실패`). **SY021 did not catch it** because it compares tokens, radii, and never-list vocabulary — not state-name sets.
+
+  **§3 is now the single source**, a nine-state table with a **reachability column** rather than one flat list: a thread step is never `queued` (a conversational turn has no slot to wait for), a batch item is never `skipped` (§29 items are independent). Every state draws identically wherever it appears; reachability narrows *which* appear, never *how*. RunLog and §29 reference the table and keep only their own behaviours — RunLog's auto-expand on `failed`, §29's unchanged Korean labels.
+
+  **Four states added, each closing a defect rather than adding a feature:**
+
+  - **`awaiting-input`** (`user`, `status.warning`) — a step blocked on a person. §16 covered handoff as a *conversation event* and "Needs review" marks the *run*, but nothing let a **step** say "I'm waiting on you", so a paused agent rendered as `running` indefinitely. That is the system's worst honesty failure: motion shown where there is none. Carries the unblocking action inline.
+  - **`cancelled`** (`player-stop`, `border.strong`) — §8 already gave cancelled *runs* a Badge "distinct from `failed`" and RunLog already listed it; AgentStep did not, so Stop mid-run left the in-flight step with **no state to render**. Neutral, not `status.danger` — the user chose it, and choice is not error. Its glyph is the Stop control's own mark.
+  - **`partial`** (`alert-triangle`, `status.warning`) — §10 *requires* that partial success "never be rounded up to success", but with five states a half-succeeded step had to render as `success` (forbidden by §10) or `failed` (wrong). **The vocabulary could not express what the doc demanded.**
+  - **`queued`** (`clock`) — waiting for a slot, distinct from `pending` (not yet started). Already in RunLog and §29; absent only from the table claiming to be authoritative.
+
+  **`retrying` was rejected.** A retry emits a **new** step ("Retry 1/2 — classification complete") rather than mutating the failed one, which keeps the record append-only and preserves the fact that a first attempt failed. A mutating state would erase it.
+
+  **Concurrent fan-out — the collapse rule assumed sequential execution.** "Show at most the last 3 steps" is meaningless when six run at once, and fan-out is now ordinary: research agents build a task list then work it in parallel, multi-agent runs delegate per sub-task. When more than one step is `running`, the list switches to a **concurrent group** — one parent row carrying the shared goal and a live tally, children indented one level (the single nesting level §3 already permits, spent here rather than on arbitrary hierarchy). Children **order by start time and never reorder as they finish**; a list that resorts under the reader is unreadable. The parent's state is **derived, not authored** — `running` while any child runs, `partial` if some failed and some succeeded, `failed` only if all failed — which is the second reason `partial` had to exist. The 3-row cap applies to groups, not children, and the completion summary counts leaves ("12 steps · 40s", not "1 step"). Forbidden: a progress bar on the parent in place of the tally (§11 needs a real denominator per *run*), a group inside a group, and rendering concurrent children as separate top-level steps — which is what makes a fan-out read as chaos.
+
+  Four new concepts registered in `icons.md` (`clock`, `user`, `alert-triangle`, `player-stop`), all already in the Tabler registry, so no new glyphs and `check_icons.py` stays at 0 errors.
+
 - **`FloatingPill` gains a per-mode surface — light mode was missing a separation channel, not a colour.** Raised as "the light-mode jump pill needs editing; dark is fine." Measurement showed why the two modes felt so different:
 
   | | fill vs page | hairline | shadow |

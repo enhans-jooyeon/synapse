@@ -34,18 +34,40 @@ Anatomy: `components.md · Message` (the streaming state) and `Thread` (the scro
 
 ## 3. Working states — AgentStep
 
-All agent activity between "request" and "answer" renders as **AgentStep** rows (see `components.md`). The closed state set:
+All agent activity between "request" and "answer" renders as **AgentStep** rows (see `components.md`).
 
-| State | Indicator | Text color |
-|---|---|---|
-| `pending` | 12px `border.strong` hollow circle | `text.tertiary` |
-| `running` | 12px Spinner | `text.secondary` |
-| `success` | 12px `status.success` check | `text.tertiary` |
-| `failed` | 12px `status.danger` ✕ | `text.secondary` + trailing Retry ghost button |
-| `skipped` | 12px `border.strong` dash | `text.disabled` |
+**This table is the single source for step state across the whole system** (consolidated 2026-08-03). It previously existed in three incompatible copies: §3 listed five states, `components.md · RunLog` listed `queued · running · success · failed · cancelled` — two of them absent from §3, two of §3's absent from it — and the manifest asserted the two sets were identical. §29's batch rows were a fourth variant. A closed set with four definitions is not closed.
+
+| State | Indicator (12px) | Text color | Reachable in |
+|---|---|---|---|
+| `pending` | `border.strong` hollow circle | `text.tertiary` | thread · run |
+| `queued` | `clock`, `text.tertiary` | `text.tertiary` | run · batch |
+| `running` | Spinner (`loader-2`) | `text.secondary` | thread · run · batch |
+| `awaiting-input` | `user`, `status.warning` | `text.secondary` + trailing action | thread · run |
+| `partial` | `alert-triangle`, `status.warning` | `text.secondary` + count link | thread · run · batch |
+| `success` | `check`, `status.success` | `text.tertiary` | thread · run · batch |
+| `failed` | `x`, `status.danger` | `text.secondary` + trailing Retry ghost button | thread · run · batch |
+| `cancelled` | `player-stop`, `border.strong` | `text.tertiary` | thread · run · batch |
+| `skipped` | `border.strong` dash | `text.disabled` | thread · run |
+
+**Reachability is a constraint, not a suggestion.** A surface renders only the states its execution model can produce — a thread step is never `queued` (a conversational turn has no slot to wait for), and a batch item is never `skipped` (§29 items are independent, so nothing skips). Every state is still drawn identically wherever it appears; the column narrows *which* appear, never *how*.
+
+**The four states added 2026-08-03, and why each closes a defect rather than adding a feature:**
+
+- **`awaiting-input`** — the step is blocked on a person. §16 covers handoff as a *conversation event* and the `warning` "Needs review" Badge marks the *run*, but nothing let a **step** say "I am waiting on you." This is a first-class state in current agent runtimes, and without it a paused agent renders as `running` forever — the system's worst honesty failure, since it shows motion where there is none. Carries the action that unblocks it (Answer / Approve / Resume) inline.
+- **`cancelled`** — §8 already gives a cancelled *run* a `warning` Badge "distinct from `failed`", and RunLog already listed it. AgentStep did not, so pressing Stop mid-run left the in-flight step with **no state to render**. Neutral `border.strong`, not `status.danger`: the user chose this, and it is not an error. Its glyph is `player-stop` — the same mark as the control that produced it.
+- **`partial`** — §10 requires that "partial success is reported as partial… never rounded up to success." With five states a half-succeeded step had to render as `success` (which §10 forbids) or `failed` (which is wrong). **The vocabulary could not express what the doc demanded.** Carries the count and a link to the failures ("312 of 328").
+- **`queued`** — waiting for a slot, distinct from `pending` (not yet started). Already present in RunLog and as §29's `대기`; absent only from the one table that claimed to be authoritative.
+
+**`retrying` was considered and rejected.** A retry emits a **new** step rather than mutating the failed one ("Retry 1/2 — classification complete"), which keeps the record append-only and consistent with the provenance law. A mutating `retrying` state would erase the fact that a first attempt failed.
 
 - Steps are 13px rows, one line each: verb-first summary ("Fetched 328 tickets" / "문의 데이터 328건 조회됨") + optional duration (`text.tertiary`, tabular-nums).
-- **Collapse rule:** while running, show at most the last 3 steps; on completion, collapse to a single summary row — "5 steps · 12s" / "5단계 · 12초" — expandable. Expanded step detail (tool payloads) renders as `.sy-code-block`, collapsed by default.
+- **Collapse rule (sequential):** while running, show at most the last 3 steps; on completion, collapse to a single summary row — "5 steps · 12s" / "5단계 · 12초" — expandable. Expanded step detail (tool payloads) renders as `.sy-code-block`, collapsed by default.
+- **Collapse rule (concurrent) — added 2026-08-03.** "The last 3 steps" is meaningless when six run at once, and fan-out is now normal: research agents create a task list then work it in parallel, and multi-agent runs delegate per sub-task. When **more than one step is `running` simultaneously**, the list switches to a **concurrent group**: a single parent row states the shared goal and the live tally ("소스 12개 조회 중 · 4개 진행" / "Searching 12 sources · 4 running"), with the concurrent children indented one level beneath it — the one nesting level §3 already permits, spent here rather than on arbitrary hierarchy.
+  - Children are ordered by **start time and never reordered** as they finish; a list that resorts under the reader is unreadable. A finished child keeps its position and changes only its indicator.
+  - The parent's state is **derived, not authored**: `running` while any child runs · `partial` if any child failed and any succeeded · `failed` only if all failed · `success` if all succeeded · `cancelled` if the group was stopped. This is the one place a step state is computed rather than reported, and it is why `partial` had to exist.
+  - The 3-row cap applies to **concurrent groups, not to children** — at most 3 groups visible while running. Children collapse with their parent into the completion summary, which counts leaves: "12 steps · 40s", not "1 step".
+  - **Forbidden:** a progress bar on the parent in place of the tally (§11 governs determinate progress and needs a real denominator per *run*, not per fan-out); nesting a concurrent group inside another (that is the second level §3 bars); rendering concurrent children as separate top-level steps, which is what makes a fan-out read as chaos.
 - Step hierarchy is flat or one level deep. NEVER nest deeper — restructure the agent's reporting instead.
 
 ## 4. Tool calls
@@ -253,7 +275,7 @@ After attach, the chip/tile MAY gain an advisory caption: extracted shape, not c
 
 Multiple homogeneous inputs (files, records, queries) submitted at once run as a **queue**, not a mega-prompt:
 
-- Per-item row: mono filename + progress bar (R-progress anatomy) + status (완료 / n% / 대기 / 실패).
+- Per-item row: mono filename + progress bar (R-progress anatomy) + status **from the §3 superset** — a batch item reaches `queued` (대기) · `running` (n%) · `partial` · `success` (완료) · `failed` (실패) · `cancelled`, never `pending` or `skipped` (items are independent, so nothing skips). *These were a fourth, ad-hoc vocabulary before 2026-08-03; the Korean labels are unchanged, only their backing state names are now shared.*
 - Individual control: pause and cancel per row (compact 20px icon buttons, family); 실패 rows retry individually — one failure NEVER aborts the batch.
 - Batch footer: aggregate line ("2/4 완료 · 예상 3분") + 결과 내보내기; results land in a Table (recipe R15), one row per item.
 - External side effects inside a batch still pass ProposalCard (§5) — batching never bypasses approval; pre-approved tool budgets apply per item.

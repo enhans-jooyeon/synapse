@@ -617,7 +617,7 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Purpose:** one row of visible agent work (a reasoning step or tool call). Full behavior: `ai-patterns.md` §3–4.
 
 **Anatomy:** 12px state indicator · 13px verb-first summary · optional mono tool identifier · optional duration (`text.tertiary`, tabular-nums) · optional trailing Retry ghost button (failed only). Row height 28px; expanded detail renders `.sy-code-block` below the row, indented to the text edge.
-**States (closed):** `pending`, `running`, `success`, `failed`, `skipped` — exactly as specified in `ai-patterns.md` §3. A step list collapses to a summary row on completion ("5 steps · 12s", expandable).
+**States (closed):** the **nine-state superset in `ai-patterns.md` §3** is the single source — `pending`, `queued`, `running`, `awaiting-input`, `partial`, `success`, `failed`, `cancelled`, `skipped`. That table also carries the *reachability* column: a thread step is never `queued`, a batch item never `skipped`. Consolidated 2026-08-03 from three incompatible copies (this entry's five, RunLog's five different ones, and the manifest's false claim that they matched). A step list collapses to a summary row on completion ("5 steps · 12s", expandable).
 **Forbidden:** nesting beyond one level; paragraph-length summaries; using AgentStep outside agent activity (it is not a generic checklist — compose Checkbox lists for that); animating state transitions beyond the indicator swap.
 **A11y:** the list is `role="log"` with `aria-live="polite"` **when it is the announcing surface — i.e. standalone (RunLog, Workbench run views). Inside a Thread the step list does NOT declare its own live region** (clarified 2026-08-03): the Thread already owns one, and a nested live region double-announces every step. State changes announce as text, not sound.
 
@@ -978,7 +978,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **Anatomy:** a bordered panel or Drawer content (`bg.surface`, radius `lg`). Header: run title + status `Badge` + duration (tabular). Body: an expandable list of **steps** (each row = status dot + step name + `caption` duration), each expanding to its **log lines** in a mono `CodeBlock`-style block on `bg.sunken`.
 
-**States:** queued · running (live-append with a named working line, `aria-live=polite`; the running step pulses, no shimmer) · success (collapses to "N steps · 12s") · failed (auto-expands, surfaces the error line + optional Retry ghost action) · cancelled (`border.strong`).
+**States:** from the **`ai-patterns.md` §3 superset** (single source since 2026-08-03) — a run reaches `pending`, `queued`, `running`, `awaiting-input`, `partial`, `success`, `failed`, `cancelled`, `skipped`. RunLog's own behaviours on top of the shared indicators: `running` live-appends with a named working line (`aria-live=polite`) and pulses, no shimmer; `success` collapses to "N steps · 12s"; `failed` auto-expands and surfaces the error line + an optional Retry ghost action; `awaiting-input` surfaces the unblocking action and does **not** auto-expand (a blocked run is not an error). *This line previously listed five states that differed from AgentStep's five while the manifest claimed they were identical.*
 
 **Behavior:** reuses AgentStep's closed state vocabulary; machine text in mono; timestamps absolute on hover; virtualize long logs; **pin-to-bottom is a toggle**, never forced. Display only.
 

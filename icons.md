@@ -102,6 +102,10 @@
 | warning status | `alert-triangle` | |
 | error/danger status | `alert-circle` | |
 | success status | `circle-check` | |
+| step: queued | `clock` | AgentStep/RunLog `queued` — waiting for a slot. **Added 2026-08-03** |
+| step: awaiting input | `user` | AgentStep/RunLog `awaiting-input` — blocked on a person. **Added 2026-08-03** |
+| step: partial | `alert-triangle` | AgentStep `partial` — shares the warning-status glyph; the count carries the specifics. **Added 2026-08-03** |
+| step: cancelled | `player-stop` | AgentStep `cancelled` — deliberately the same mark as the Stop control that produces it. **Added 2026-08-03** |
 | report | `report` | |
 | email | `mail` | |
 | chat / console | `message` | |
