@@ -33,6 +33,11 @@
 .sy-btn--brand { background: var(--sy-action-brand-bg); color: var(--sy-action-brand-fg); }
 .sy-btn--brand:hover, .sy-btn--brand:active { background: var(--sy-action-brand-bg-hover); }
 .sy-btn:disabled { background: var(--sy-bg-disabled); color: var(--sy-text-disabled); cursor: not-allowed; }
+/* GHOST CARVE-OUT (2026-08-03, components.md · Button). ghost is the one variant whose hover is a
+   page-tint rather than its own fill: bg.hover over white computes to #F5F5F5 against bg.disabled
+   #F4F4F6 — one step per channel, so the disabled fill read as hover. ghost mutes the label/glyph
+   instead (not opacity, which stays forbidden). */
+.sy-btn--ghost:disabled { background: transparent; }
 .sy-btn--pill { border-radius: var(--sy-radius-full); padding: 0 var(--sy-space-5); }
 .sy-btn__spinner {
   width: 16px; height: 16px; border-radius: var(--sy-radius-full); flex: none;

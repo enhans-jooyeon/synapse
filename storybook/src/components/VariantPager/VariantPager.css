@@ -4,6 +4,10 @@
   justify-content: center; background: transparent; border: none; border-radius: var(--sy-radius-sm);
   color: var(--sy-text-secondary); cursor: pointer; }
 .sy-vpager__arrow:hover:not(:disabled) { background: var(--sy-bg-hover); color: var(--sy-text-primary); }
+/* Disabled: muted glyph, NO fill — matches the ghost carve-out in components.md · Button
+   (amended 2026-08-03). The end-of-range state is redundantly carried by the n/N counter, which
+   matters because text.disabled on bg.page is 2.33:1 in light mode — a deliberately receding
+   signal that must never be the only channel. */
 .sy-vpager__arrow:disabled { color: var(--sy-text-disabled); cursor: default; }
 .sy-vpager__arrow:focus-visible { outline: 2px solid transparent; outline-offset: 2px;
   box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus); }
