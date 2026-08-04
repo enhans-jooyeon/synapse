@@ -4,6 +4,14 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The §18 quote highlight was built like a Badge — outline removed, it is a marker now.** Raised as "the highlight looks like some sort of badge." It read that way because it *was* one: `ai.surface` fill **plus an inset 1px `ai.border`** at radius `sm` (8px) is tint + outline at chip radius, which is Badge anatomy.
+
+  **The system already forbids that formula.** `components.md · ProposalCard` states it outright — *"The forbidden formula remains tint + outline (the wireframe callout); borderless tint with page-filled internals is its opposite"* — and the Banner guidance repeats it as an anti-pattern. Meanwhile every other highlight in the system is a **bare tint with no outline**: §22's regeneration flash, §23's template slots, §24's rewrite mark, §31's field/cell highlight. The quote highlight was the single place that broke its own house language, which is why it looked foreign.
+
+  **Now:** bare `ai.surface` fill, radius `xs`, no outline. It stays `ai.*` rather than `emphasis.*` — §1 bars emphasis tokens from AI surfaces, and this tint sits on agent output. `box-decoration-break: clone` is kept and is load-bearing: it gives each wrapped line its own tint box instead of one stretched shape spanning the wrap, which is what makes a multi-line highlight read as marker pen rather than as a container.
+
+  Amended in all five places rather than the render alone: `ai-patterns.md` §18, `components.md · SelectionPill`, the manifest `key_rules`, `preview.html`, and `storybook/SelectionPill.css`.
+
 - **Button `ghost` is carved out of the disabled-fill rule — the fill was indistinguishable from its own hover.** Raised from the VariantPager story, where the disabled next-chevron read as *hovered* rather than *deactivated*. It is not a pager quirk and not a matter of taste: `ghost`'s hover is `bg.hover` `rgba(9,9,11,0.04)`, which over `bg.page` white computes to **#F5F5F5**, against `bg.disabled` **#F4F4F6** — **one step per channel out of 255.** In light mode a disabled ghost and a hovered ghost are the same colour. Dark mode is better but still close (delta 6–10).
 
   **So the 2026-07-30 ruling defeated its own purpose on this one variant.** That ruling applied `bg.disabled` to *every* variant on the stated grounds that "the grey fill is the single unambiguous disabled signal," and explicitly accepted that a disabled `ghost` would gain a grey box it never had. The intent was unambiguity; the measurement shows ghost got ambiguity instead. `ghost` now takes **no fill** and carries disabled on the muted label/glyph (`text.disabled`). **Opacity remains forbidden** — this is a token, not a 40% dim.

@@ -507,7 +507,15 @@
     border-radius: var(--sy-radius-full); box-shadow: var(--sy-shadow-lg); cursor: pointer; white-space: nowrap;
     font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); color: var(--sy-text-primary);
     animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); z-index: var(--sy-z-dropdown); }
-  .quote-hl { background: var(--sy-ai-surface); box-shadow: inset 0 0 0 1px var(--sy-ai-border); border-radius: var(--sy-radius-sm); padding: 0 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  /* Quote highlight (§18) — a MARKER, not a badge. Amended 2026-08-03: this carried an inset 1px
+     ai.border at radius sm, i.e. tint + outline at chip radius, which is the anatomy of a Badge and
+     is the formula ProposalCard's entry names as forbidden ("tint + outline, the wireframe
+     callout"). Every other highlight in the system is a bare tint (§22 flash, §23 slots, §24
+     rewrite mark, §31 field highlight), so the outline went and the radius dropped to xs. Stays
+     ai.* not emphasis.* — §1 bars emphasis tokens from AI surfaces. box-decoration-break: clone is
+     load-bearing: it gives each wrapped line its own tint box instead of one stretched shape. */
+  .quote-hl { background: var(--sy-ai-surface); border-radius: var(--sy-radius-xs); padding: 0 2px;
+    box-decoration-break: clone; -webkit-box-decoration-break: clone; }
   .composer-tray { background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-1); }
   .plus-dot { position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--sy-text-primary); } /* active-tools deviation dot */
   /* compact picker padding: labeled ghost controls in the tray (agent/model pickers) — avatar/chevron carry the mass, 12px sides read detached */
