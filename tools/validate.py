@@ -22,7 +22,8 @@ Rules (E = error, W = warning):
   SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
   SY017 E synapse.manifest.json stale vs a fresh build — run tools/build_manifest.py (mirrors the CI gate locally)
   SY019 E icon not in assets/icons/tabler-registry.json, off-scale size, or stroke != 1.5 — run tools/check_icons.py (icons.md)
-  SY020 E tokens/synapse.css disagrees with tokens/synapse.tokens.json (per mode); W = a CSS var with no JSON origin — closes audit Defect 7
+  SY020 E tokens/synapse.css disagrees with tokens/synapse.tokens.json (per mode); W = a CSS var with no JSON origin — closes the TOKEN half of audit Defect 7
+  SY021 E synapse.manifest.json key_rules contradict components.md prose (never-list vocabulary, token names, radius names) — closes the PROSE half of audit Defect 7
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
@@ -562,6 +563,122 @@ def check_manifest():
         report("E", "SY017", bm.MANIFEST_PATH, 0,
                "synapse.manifest.json is stale — run: python3 tools/build_manifest.py && commit the result")
 
+# ------------------------------------------- SY021 prose <-> manifest parity
+
+COMPONENTS_MD = os.path.join(ROOT, "components.md")
+
+# Vocabulary the never-list forbids (design.md §8, foundations §6). A manifest
+# entry may only name these to NEGATE them; an unqualified assertion is an error.
+FORBIDDEN_SURFACE_TERMS = {
+    "glass": "glass / glassmorphism (overlays are opaque — foundations §6, SY015)",
+    "scrimless": "a scrimless overlay where the spec places a bg.scrim backdrop",
+    "backdrop-filter": "backdrop-filter (SY015)",
+    "glassmorphism": "glassmorphism",
+    "gradient": "gradients",
+    "glow": "glow",
+}
+# Negation/qualification within the same clause makes the mention legitimate:
+# "NOT glass", "glass retired", "faux-glass … opaque", "reduced-transparency → opaque".
+NEGATORS = ("opaque", "retired", "faux", "forbidden", "corrected", "reversed",
+            "without any translucency", "no backdrop-filter", "frosted")
+# A prohibition is not an assertion: "no gradient/glow", "never glass".
+PROHIBITION_RE = re.compile(r"\b(?:no|not|never|without|zero)\s+[\w/ .-]{0,24}$")
+
+# Dot-notation token families that appear in both documents and are precise
+# enough to compare as strings (ai.surface, bg.raised-2, border.overlay, …).
+TOKEN_FAMILIES = ("ai", "bg", "border", "text", "action", "status", "emphasis",
+                  "shadow", "meter", "icon", "glass", "brand")
+TOKEN_RE = re.compile(r"\b(" + "|".join(TOKEN_FAMILIES) + r")\.([a-z0-9-]+)\b")
+RADIUS_NAMES = {"none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "full", "pill"}
+RADIUS_RE = re.compile(r"\bradius[ :`.-]+([a-z0-9]+)\b", re.I)
+
+def _clauses(text):
+    """Split a key_rule into clauses so negation is judged locally, not per rule."""
+    return [c.strip().lower() for c in re.split(r"[;·—()]|\. ", text) if c.strip()]
+
+def _md_sections(md):
+    """components.md '## Name' -> that entry's body text (lowercased)."""
+    out, cur, buf = {}, None, []
+    for line in md.splitlines():
+        m = re.match(r"^## (.+)$", line)
+        if m:
+            if cur:
+                out[cur] = "\n".join(buf).lower()
+            cur, buf = m.group(1).strip(), []
+        elif cur:
+            buf.append(line)
+    if cur:
+        out[cur] = "\n".join(buf).lower()
+    return out
+
+def check_prose_manifest_parity():
+    """SY021 — synapse.manifest.json key_rules must not contradict components.md.
+
+    The prose half of audit Defect 7. build_manifest.py HARDCODES each entry's
+    key_rules, and SY017 compares the manifest against that same generator, so a
+    hardcoded string can drift from the spec it summarises indefinitely with a
+    green gate. That produced six real contradictions before this rule existed —
+    control-height-xs, and (2026-08-03) three manifest entries still describing
+    glass/scrimless overlays after the glass->opaque reversal, in the very file
+    design.md §7 tells agents to load FIRST.
+
+    Deliberately narrow. Only claims precise enough to compare mechanically are
+    checked, because a noisy gate gets switched off, which is worse than no gate:
+      1. never-list surface vocabulary asserted without negation  -> E
+      2. a dot-notation token named in the manifest but absent from that
+         component's prose section                                -> E
+      3. a `radius <name>` claim whose name never appears in the prose -> E
+    Numeric dimensions are NOT compared: the manifest abbreviates them freely
+    ("760", "28px height") and matching them produced false positives.
+    """
+    if not os.path.exists(COMPONENTS_MD):
+        return
+    try:
+        manifest = json.load(open(os.path.join(ROOT, "synapse.manifest.json"), encoding="utf-8"))
+    except Exception as e:
+        report("E", "SY021", COMPONENTS_MD, 0, f"cannot read synapse.manifest.json — {e}")
+        return
+    sections = _md_sections(open(COMPONENTS_MD, encoding="utf-8").read())
+    mpath = os.path.join(ROOT, "synapse.manifest.json")
+
+    for name, entry in (manifest.get("components") or {}).items():
+        prose = sections.get(name)
+        if prose is None:
+            report("E", "SY021", mpath, 0,
+                   f"manifest component '{name}' has no '## {name}' entry in components.md")
+            continue
+        rules = list(entry.get("key_rules") or []) + [entry.get("purpose") or ""]
+        for rule in rules:
+            for clause in _clauses(rule):
+                # 1 — forbidden surface vocabulary, unless negated in the same clause
+                for term, label in FORBIDDEN_SURFACE_TERMS.items():
+                    hits = [mm.start() for mm in re.finditer(re.escape(term), clause)]
+                    # glass.surface / glass.rim / glass.border are LIVE tokens (the
+                    # opaque faux-frost family) — a token name is not a surface claim.
+                    hits = [h for h in hits if not re.match(r"[a-z-]*\.", clause[h + len(term):])]
+                    # a prohibition immediately before the term is legitimate
+                    hits = [h for h in hits if not PROHIBITION_RE.search(clause[:h])]
+                    if hits and not any(n in clause for n in NEGATORS):
+                        report("E", "SY021", mpath, 0,
+                               f"{name}: manifest asserts {label} — the never-list forbids it "
+                               f"(design.md §8); prose is authoritative. Clause: '{clause[:70]}'")
+                # 2 — token claims must be supported by the prose entry
+                for fam, leaf in TOKEN_RE.findall(clause):
+                    tok = f"{fam}.{leaf}"
+                    if tok not in prose and tok.replace(".", "-") not in prose:
+                        report("E", "SY021", mpath, 0,
+                               f"{name}: manifest names token '{tok}' which does not appear in "
+                               f"its components.md entry — one of the two is stale")
+                # 3 — radius names must agree
+                for rad in RADIUS_RE.findall(clause):
+                    if rad.lower() not in RADIUS_NAMES:
+                        continue  # not a radius name (e.g. "pill radius: primary + lg")
+                    if f"radius `{rad}`" not in prose and f"radius {rad}" not in prose \
+                       and f"radius.{rad}" not in prose and f"radius-{rad}" not in prose:
+                        report("E", "SY021", mpath, 0,
+                               f"{name}: manifest claims radius '{rad}' which its components.md "
+                               f"entry never states — one of the two is stale")
+
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ("tokens", "ui", "page", "all"):
         print(__doc__)
@@ -577,6 +694,7 @@ def main():
     if mode == "all":
         check_ui([os.path.join(ROOT, f) for f in os.listdir(ROOT) if f.endswith(".html")])
         check_manifest()
+        check_prose_manifest_parity()
     errors = [i for i in issues if i[0] == "E"]
     warnings = [i for i in issues if i[0] == "W"]
     for sev, rule, path, line, msg in issues:

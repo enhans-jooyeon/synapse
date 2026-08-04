@@ -232,7 +232,7 @@
    "purpose": "Exclusive 2–5-way switch, immediate effect (not Tabs, not Radio).",
    "key_rules": [
     "content-based widths; disabled whole-control only",
-    "concentric geometry: radius-sm container, 4px padding, radius-xs segments — inner = outer − inset; assembled control = 36"
+    "concentric geometry: radius-md container, 4px padding, radius-sm segments (prose states the arithmetic: 12 - 4 = 8; corrected 2026-08-03 by SY021, both were one step low) — inner = outer − inset; assembled control = 36"
    ]
   },
   "Accordion": {
@@ -247,14 +247,14 @@
    "key_rules": [
     "constraints visible before selection; violations named per file",
     "no combined progress bar",
-    "dropzone: dashed border.strong + radius lg + medallion; drag-over = border.focus-input + emphasis.surface; dashed = drop targets only"
+    "dropzone: dashed border.strong + radius xl + medallion (corrected 2026-08-03 by SY021, was lg); drag-over = border.focus-input + emphasis.surface; dashed = drop targets only"
    ]
   },
   "SplitPanel": {
    "purpose": "Resizable workbench panes with a draggable divider.",
    "key_rules": [
     "≤3 panes; min widths 280/200; ratio persists; not in fixed-layout archetypes (Settings/Guided)",
-    "container = section shell: radius xl + hairline, flush panes"
+    "container = section shell: radius 2xl + hairline, flush panes (corrected 2026-08-03 by SY021, was xl)"
    ]
   },
   "Chart": {
@@ -412,7 +412,7 @@
     "send↔stop morph in place",
     "ComposerQuote bar: ai.surface radius-xs, max 1/send; the follow-up panel anchors above the tray — see the FollowUpPanel entry, which owns its anatomy (relocated 2026-08-03)",
     "slash commands: / scopes palette to agent actions; ghost completion accepted with →, never Tab; closed glossary only",
-    "templates: / = expert quick-insert; bookmark opens the Template Library Modal (OPAQUE bg.raised, 760 — the browse-library width tier, a named Modal exception between the 640 form cap and the 800 wide Drawer; two-pane: 260 list column + preview pane; corrected 2026-08-03 from 'glass 640', which was stale after the glass→opaque reversal and named a forbidden surface at the wrong width); slot chips = emphasis.surface, → moves slots, unfilled slot blocks send (§23)",
+    "templates: / = expert quick-insert; bookmark opens the Template Library Modal — anatomy is in ai-patterns.md §23 and is NOT restated here. KNOWN DEBT (2026-08-03): §23 carries ~1,900 words of pure component anatomy (pane widths, padding, star-toggle states) that belongs in components.md; until it is relocated, the manifest cannot source it, and SY021 will flag any attempt to restate it in this entry. Slot chips and the unfilled-slot send block are also §23",
     "authoring coach: max one non-blocking quality hint; the `edit` icon opens the CLOSED refinement-preset menu (다듬기/자세히/간결/범위/형식 ), rewrite replaces draft w/ Undo, disabled on empty",
     "voice = dictation only ( §26): tray morphs to recording bar (cancel / pulsing danger dot + timer / pause / primary check confirm); transcript inserts at caret, NEVER auto-sends; no audio in thread",
     "agent-picker menu: search + grouped rows + one submenu + mandatory request-footer escape (no model rows — reversed)",
@@ -449,7 +449,7 @@
   "ProposalCard": {
    "purpose": "Human-in-the-loop approval of a consequential agent action.",
    "key_rules": [
-    "tray anatomy: borderless ai.surface fill, radius lg, no shadow; header row + ai.border hairline (single-tone; two-tone reversed); payload surfaces open to bg.page; squared avatar FIRST in header (the agency marker); forbidden formula = tint + outline",
+    "tray anatomy: borderless ai.surface fill, radius md, no shadow (corrected 2026-08-03 by SY021, was lg); header row + ai.border hairline (single-tone; two-tone reversed); payload surfaces open to bg.page; squared avatar FIRST in header (the agency marker); forbidden formula = tint + outline",
     "Approve=primary (danger if destructive; approving is a human decision, not an AI CTA), Reject=secondary (light mode: bg.page fill on the tray — tonal gray dissolves on slate; dark keeps standard fill)",
     "no auto-approve, no countdowns",
     "resolved collapses to attribution row, never deleted",
@@ -588,7 +588,7 @@
   "ContextCard": {
    "purpose": "Referenced object (doc/meeting/table) as a physical card in threads and Composer.",
    "key_rules": [
-    "outlined radius-sm card: icon tile + title + one caption meta line; no thumbnails",
+    "outlined radius-md card: icon tile + title + one caption meta line (corrected 2026-08-03 by SY021, was sm); no thumbnails",
     "stack: flat -4px underlay + page-colored ring + '+N', max 3, never rotated",
     "compact inline variant for Composer @-mentions"
    ]

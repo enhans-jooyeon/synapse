@@ -21,7 +21,7 @@ Synapse is the design system for AgentOS, Enhans' enterprise AI work platform. I
 | `icons.md` | closed concept→icon registry — unlisted concepts get no icon | Governs all iconography |
 | `synapse.manifest.json` | machine-readable index of the entire system (built by `tools/build_manifest.py`, never hand-edited) | Agents load this first; prose specs remain authoritative |
 | `tools/screen-intent.schema.json` | the declaration an agent completes before generating a screen | Gate input |
-| `tools/validate.py` | mechanized contract checks: `tokens`, `ui` (SY001–014), `page` (SY100–109 intent validation) | Enforcement gate |
+| `tools/validate.py` | mechanized contract checks: `tokens` (incl. SY020 CSS↔JSON parity), `ui` (SY001–014), `page` (SY100–109 intent validation), and SY021 prose↔manifest parity under `all` | Enforcement gate |
 
 Figma and any other design-tool representation of Synapse are **generated views** of these files, never sources of truth. If Figma and this repo disagree, the repo wins and Figma must be resynced.
 
