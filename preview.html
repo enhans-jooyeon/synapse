@@ -528,18 +528,28 @@
                 bottom: var(--sy-space-3); }                  /* Thread — bottom-centre of the column */
   .quote-hl { background: var(--sy-ai-surface); border-radius: var(--sy-radius-xs); padding: 0 2px;
     box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-  /* Tray inset is 12px (space-3), matching Input's control-padding-x and the header inset of
-     every other text container (ProposalCard, ConversationSummary). The concentric-corner rule
-     does NOT bind here: foundations §5 exempts elements "inset >= the outer radius", and 12 == the
-     tray's md radius, so children clear the corner region entirely and take the radius that suits
-     them. (Corrected 2026-08-03: an earlier pass set 8 on the mistaken reading that 12 would force
-     an inner radius of 0.) One inset governs every child, so text and the leading + button share
-     one left edge at 12px. */
-  .composer-tray { background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-3); }
+  /* SURFACE MODEL (inverted 2026-08-03): the tray is the LIGHT outlined container and the
+     draft-owned panel above the input carries the tint — not the reverse. Tinting the whole tray
+     put the tint under the text, which is what made the input read cramped at any padding.
+     Inset 12px (space-3) matches Input's control-padding-x and every other text container's;
+     foundations §5 exempts children inset >= the outer radius from the concentric rule, so they
+     take the radius that suits them. One inset governs every child. */
+  .composer-tray { background: var(--sy-bg-page); border: 1px solid var(--sy-border-default);
+    border-radius: var(--sy-radius-md); padding: var(--sy-space-3); }
+  /* Draft-owned content (attachments, quote, knowledge pickers) FUSES flush to the tray — it is
+     part of the message being composed, so reading as part of the input is correct. Suggestions do
+     NOT fuse: FollowUpPanel keeps its 8px detachment. Flush nesting shares the parent radius
+     exactly (foundations §5, inset 0). */
+  .cmp-panel { margin: calc(var(--sy-space-3) * -1) calc(var(--sy-space-3) * -1) var(--sy-space-3);
+    padding: var(--sy-space-3); background: var(--sy-bg-sunken);
+    border-bottom: 1px solid var(--sy-border-default);
+    border-radius: var(--sy-radius-md) var(--sy-radius-md) 0 0; }
+  .cmp-panel > *:last-child { margin-bottom: 0; }
   .plus-dot { position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--sy-text-primary); } /* active-tools deviation dot */
   /* compact picker padding: labeled ghost controls in the tray (agent/model pickers) — avatar/chevron carry the mass, 12px sides read detached */
   .composer-tray .btn-ghost.btn-sm:not(.btn-icon) { padding: 0 var(--sy-space-2); }
-  .composer-tray .tag { background: var(--sy-bg-page); }
+  /* the bg.page chip override is retired — the tray is light now, so Chip's own
+     outlined-at-rest treatment reads correctly without help. */
   .att-img { position: relative; width: 48px; height: 48px; border-radius: var(--sy-radius-xs); border: 1px solid var(--sy-border-default);
     overflow: hidden; flex: none; background: var(--sy-bg-page); }
   .att-img svg { display: block; width: 100%; height: 100%; }
@@ -2301,6 +2311,26 @@ team: finance</pre>
         </div>
       </div>
 
+      <div class="story" data-group="AI patterns" data-title="Composer footer — A/B" data-doc="components.md · Composer (undecided)" id="s-composer-footer">
+        <p class="desc"><strong>Undecided — this story exists to be judged, not copied.</strong> The reference images place the composer's controls <em>below</em> the input container; the spec places them <em>inside</em> the tray. A is the specified anatomy. B is the reference's. Both use the same controls and the same 12px inset, so only the architecture differs. Nothing else in the system renders B yet, and adopting it would touch the Composer anatomy, the one-inset rule, and the focus ring's scope (the ring is on the container, and in B the container no longer holds the controls).</p>
+        <div style="display:flex; flex-direction:column; gap: var(--sy-space-6); max-width: 620px;">
+          <div>
+            <div class="region-tag">A · footer inside the tray (specified)</div>
+            <div class="composer-tray">
+              <div style="position:relative;"><textarea rows="1" placeholder="에이전트에게 요청하세요… · / 명령" lang="ko" style="width:100%; border:none; outline:none; background:transparent; resize:none; font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); color: var(--sy-text-primary);"></textarea></div>
+              <div class="row" style="gap: var(--sy-space-2); margin-top: var(--sy-space-2); align-items:center;"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="추가"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l0 14" /> <path d="M5 12l14 0" /></svg></button><button class="btn btn-ghost btn-sm" type="button"><span class="avatar agent av-20" style="background: var(--sy-bg-sunken); color: var(--sy-text-secondary);"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 5l1.8 5.2L19 12l-5.2 1.8L12 19l-1.8-5.2L5 12l5.2-1.8z"/></svg></span><span lang="ko">주간 보고서</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M6 9l6 6l6 -6" /></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="도구"><svg class="icon" viewBox="0 0 24 24"><path d="M9.785 6l8.215 8.215l-2.054 2.054a5.81 5.81 0 1 1 -8.215 -8.215l2.054 -2.054z" /> <path d="M4 20l3.5 -3.5" /> <path d="M15 4l-3.5 3.5" /> <path d="M20 9l-3.5 3.5" /></svg></button><span style="margin-left:auto; display:inline-flex; align-items:center; gap: var(--sy-space-2);"><span class="sy-type-code-sm" style="color: var(--sy-text-secondary);">claude-opus-4</span><button class="btn btn-brand btn-icon btn-sm" type="button" aria-label="보내기" style="border-radius: var(--sy-radius-full);"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l0 14" /> <path d="M18 11l-6 -6" /> <path d="M6 11l6 -6" /></svg></button></span></div>
+            </div>
+          </div>
+          <div>
+            <div class="region-tag">B · footer below the container (reference)</div>
+            <div class="composer-tray">
+              <div style="position:relative;"><textarea rows="1" placeholder="에이전트에게 요청하세요… · / 명령" lang="ko" style="width:100%; border:none; outline:none; background:transparent; resize:none; font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); color: var(--sy-text-primary);"></textarea></div>
+            </div>
+            <div class="row" style="gap: var(--sy-space-2); margin-top: var(--sy-space-2); padding: 0 var(--sy-space-1); align-items:center;"><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="추가"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l0 14" /> <path d="M5 12l14 0" /></svg></button><button class="btn btn-ghost btn-sm" type="button"><span class="avatar agent av-20" style="background: var(--sy-bg-sunken); color: var(--sy-text-secondary);"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M12 5l1.8 5.2L19 12l-5.2 1.8L12 19l-1.8-5.2L5 12l5.2-1.8z"/></svg></span><span lang="ko">주간 보고서</span><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M6 9l6 6l6 -6" /></svg></button><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="도구"><svg class="icon" viewBox="0 0 24 24"><path d="M9.785 6l8.215 8.215l-2.054 2.054a5.81 5.81 0 1 1 -8.215 -8.215l2.054 -2.054z" /> <path d="M4 20l3.5 -3.5" /> <path d="M15 4l-3.5 3.5" /> <path d="M20 9l-3.5 3.5" /></svg></button><span style="margin-left:auto; display:inline-flex; align-items:center; gap: var(--sy-space-2);"><span class="sy-type-code-sm" style="color: var(--sy-text-secondary);">claude-opus-4</span><button class="btn btn-brand btn-icon btn-sm" type="button" aria-label="보내기" style="border-radius: var(--sy-radius-full);"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l0 14" /> <path d="M18 11l-6 -6" /> <path d="M6 11l6 -6" /></svg></button></span></div>
+          </div>
+        </div>
+      </div>
+
       <div class="story" data-group="AI patterns" data-title="ResponseToolbar" data-doc="components.md · ResponseToolbar" id="s-response-toolbar">
         <p class="desc">Copy · regenerate · thumbs · overflow on agent messages only. Fixed order; thumbs selection = bg.selected square + primary-ink stroke (was a blue circle; selection language is fill + ink, and the send button is the only circle); never a filled icon; regenerate only on the latest message.</p>
         <div class="card" style="max-width: 560px;">
@@ -2914,6 +2944,7 @@ team: finance</pre>
                   <div class="fu-row" lang="ko"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12l14 0" /> <path d="M13 18l6 -6" /> <path d="M13 6l6 6" /></svg>#ops에 공유하기</div>
                 </div>
                 <div class="composer-tray">
+                  <div class="cmp-panel">
                   <div class="row" style="gap: var(--sy-space-2); margin-bottom: var(--sy-space-2);">
                     <span class="att-img" title="결제오류_스크린샷.png"><svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" fill="var(--sy-bg-page)"/><rect width="160" height="18" fill="var(--sy-bg-sunken)"/><circle cx="10" cy="9" r="3" fill="var(--sy-border-strong)"/><rect x="20" y="6" width="48" height="6" rx="2" fill="var(--sy-border-strong)"/><rect x="12" y="30" width="90" height="6" rx="2" fill="var(--sy-border-default)"/><rect x="12" y="44" width="136" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="55" width="136" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="66" width="112" height="5" rx="2" fill="var(--sy-border-subtle)"/><rect x="12" y="80" width="42" height="10" rx="3" style="fill: color-mix(in srgb, var(--sy-status-danger) 22%, transparent);"/><rect x="16" y="83" width="34" height="4" rx="2" fill="var(--sy-status-danger)"/></svg><span class="x" role="button" aria-label="결제오류_스크린샷.png 제거"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 6l-12 12" /> <path d="M6 6l12 12" /></svg></span></span>
                   </div>
@@ -2922,6 +2953,7 @@ team: finance</pre>
                     <span class="tag" lang="ko">지난주_보고서.pdf <span class="x" role="button" aria-label="제거">✕</span></span>
                   </div>
                   <div class="composer-quote"><svg class="icon" style="width:12px;height:12px; flex:none; color: var(--sy-text-tertiary);" viewBox="0 0 24 24"><path d="M9 14l-4 -4l4 -4" /> <path d="M5 10h11a4 4 0 1 1 0 8h-1" /></svg><span class="q-t" lang="ko">상위 주제는 결제 오류(47건)와 로그인 문제(31건)입니다</span><button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="인용 제거" style="height:20px; width:20px; color: inherit;"><svg class="icon" style="width:12px;height:12px" viewBox="0 0 24 24"><path d="M18 6l-12 12" /> <path d="M6 6l12 12" /></svg></button></div>
+                  </div>
                   <div style="position:relative;"><textarea placeholder="에이전트에게 요청하세요… · / 명령" lang="ko" style="width:100%; border:none; outline:none; background:transparent; resize:none; font: var(--sy-weight-regular) var(--sy-body-size)/var(--sy-body-lh) var(--sy-font-sans); color: var(--sy-text-primary); padding-right: var(--sy-space-10); min-height: 24px;">결제 오류 정리해줘</textarea><button class="btn btn-ghost btn-icon btn-sm" type="button" data-refine aria-label="프롬프트 다듬기" style="position:absolute; top:0; right:0; display:none;"><svg class="icon" viewBox="0 0 24 24"><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /> <path d="M13.5 6.5l4 4" /></svg></button></div>
                   <div class="row" style="gap: var(--sy-space-2); margin-top: var(--sy-space-1);">
                     <button class="btn btn-ghost btn-icon btn-sm" type="button" aria-label="추가"><svg class="icon" viewBox="0 0 24 24"><path d="M12 5l0 14" /> <path d="M5 12l14 0" /></svg></button>

@@ -4,6 +4,16 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Composer surface model inverted — the tint was under the text, which is why no padding value fixed it.** From reference images. The tray was `bg.sunken` across its whole area; it is now the **light** container (`bg.page` + 1px `border.default`) with the draft-owned panel above the input carrying the tint. Two padding passes today (4→8→12px) each improved it and none solved it, because the problem was never the inset — a tinted surface directly under body text reads cramped at any inset. Knock-on: the override forcing attachment Chips to `bg.page` is retired, since Chip's own outlined-at-rest treatment reads correctly against a light tray.
+
+  **Draft-owned content fuses; suggestions do not.** Attachments, the ComposerQuote bar and knowledge/source pickers now render **flush** to the tray's inner edges — one tinted region with a hairline against the input row, sharing the tray's radius on its top corners (flush nesting, `foundations.md` §5, inset 0). This looks like a reversal of this morning's §19 ruling (*"a floating layer detaches from its anchor, and flush contact would read as part of the input"*) and is not: fusing is correct here **precisely because** this content *is* part of the message being composed. `FollowUpPanel` keeps its 8px detachment for the opposite reason — a suggestion is not part of the draft, so reading as part of the input would misrepresent it. The two rules encode one question: does the content belong to the message?
+
+  **Held back for a decision, rendered as `s-composer-footer`:** the references put the composer's controls *below* the input container; the spec keeps them inside the tray. Both are now rendered side by side with identical controls and inset so only the architecture differs. Not adopted either way — B would touch the anatomy, the one-inset rule, and the focus ring's scope, since the ring is on the container and in B the container no longer holds the controls.
+
+  **Not adopted from the references, deliberately:** the blue "Recommended" badge and blue active-toggle pill (Badge rules retire `info` for markers because *"blue is already link + focus + info + brand"*, and selection in this system is `bg.selected` neutral — *"selection reads as fill + ink, not shape"*), and the vendor logo beside the model name (*"brand logos stay in connector contexts"*). The references' circular `brand` send button needed no change — it already matches.
+
+  **Process note:** the first attempt at the markup wrap targeted the wrong composer — a regex matched the *first* `.composer-tray`, which lives in the Home sample, so the wrapper spanned from Home's tray into the Console's quote block. The per-story depth check caught it before commit (`s-sample-home +1`, `s-sample-console -1`); the file was reverted and both edits redone with the Console located explicitly inside its own story bounds. That check has now caught three distinct breakages in this file today.
+
 - **Composer tray inset raised 4px → 12px, and stated in the spec for the first time.** *(Superseded the intermediate 8px value from earlier the same day — see the correction below.)* Reported as insufficient padding. It was: the tray was the **tightest container in the system** while being the only one holding *text*.
 
   | | inset |
