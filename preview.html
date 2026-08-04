@@ -544,7 +544,10 @@
      NO tint, NO hairline (2026-08-03, reversing the fused-tinted-panel treatment). It is part of
      the message being composed, so it needs no separating device; the tray is one surface and the
      content simply stacks above the input row. Attachments still force the rect radius. */
-  .cmp-panel { margin-bottom: var(--sy-space-2); }
+  /* 12px between draft-owned content and the input row (raised from 8px 2026-08-03): with no tint
+     or hairline separating them, spacing is the only device distinguishing the two regions, so it
+     has to carry more than it did when a boundary was drawn. Matches the tray inset. */
+  .cmp-panel { margin-bottom: var(--sy-space-3); }
   .cmp-panel > *:last-child { margin-bottom: 0; }
   /* SHAPE MORPH (2026-08-03, contingent — see the Composer footer A/B story). At ONE row with no
      fused panel the tray is a pill; as it grows it relaxes to the rect radius. The pill only works
@@ -571,7 +574,13 @@
      so its 44px box left the text sitting on the first line while the 36px controls centred in
      the taller row — reading as text too high. rows="1" fixes the intrinsic height; this keeps
      the static render correct even before autogrow runs (fixed 2026-08-03). */
-  .cmp-row > div > textarea { width: 100%; height: auto; }
+  .cmp-row > div > textarea { width: 100%; height: auto;
+    /* Optical nudge, numeral-nudge family (ResponseToolbar thumbs use translateX(∓1px), Badge md
+       takes a 1px top nudge). Geometrically the 22px line box centres in the 36px row, but
+       Pretendard's cap-height centre sits above the line-box centre, so the text reads ~1px high.
+       transform is deliberate over padding/margin: it shifts the glyphs without touching
+       scrollHeight, so the morph baseline and the wrap detection are unaffected. */
+    transform: translateY(1px); }
   /* One control height across the row. The send button previously carried an inline 32px while
      + and mic resolved to 36px through this rule, because send lacked .btn-icon — a 4px mismatch
      that threw the row off its common centre line (fixed 2026-08-03). */

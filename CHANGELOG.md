@@ -4,6 +4,14 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **A 1px optical nudge on the input text, and 12px between the attachment area and the input row.**
+
+  **The remaining "too high" was optical, not geometric.** With `rows="1"` the 22px line box centres exactly in the 36px row — the arithmetic is right. But Pretendard's cap-height centre sits above its line-box centre, so text still reads about a pixel high. The textarea takes `transform: translateY(1px)`, which is the **numeral-nudge family the system already uses**: ResponseToolbar's thumbs take `translateX(∓1px)` for asymmetric ink, and Badge `md` takes a 1px top nudge for the same reason at 11px.
+
+  **`transform` rather than padding or margin, deliberately.** It moves the glyphs without changing `scrollHeight`, so the morph's one-row baseline and its wrap detection are untouched. Padding would have shifted the text *and* grown the box, re-centring it for a net half-pixel and quietly moving the wrap threshold. That reasoning is in the spec with a "do not replace it with padding" note, because a stray `transform` on a text field is exactly what a later tidy-up removes.
+
+  **The panel gap goes 8px → 12px.** Now that the attachment area has no tint and no hairline, **spacing is the only device distinguishing it from the input row** — so it has to carry more than it did when a boundary was drawn. 12px matches the tray inset, keeping the composer on one spacing rhythm.
+
 - **The text read *high*, not low — a textarea with no `rows` attribute defaults to two rows.** Three composer textareas were missing `rows="1"`, so their intrinsic box was ~44px with the text on the first line, while the 36px controls centred in the taller row. Result: the text sat ~11px above the controls' centre line. Adding `rows="1"` makes the row `max(22, 36) = 36px`, and `align-items: center` then places the text box with 7px above and below — level with the controls.
 
   **The diagnosis came from the report, not from inspection.** The demo shown as *correct* was the Generating one — the only composer I had rebuilt from scratch, and the only one I had given `rows="1"`. That made the hypothesis testable in one query: three of six composer textareas lacked the attribute, and they were exactly the three that looked wrong. My two previous alignment fixes (splitting alignment from radius, unifying control heights) were both real defects but neither was *this* defect, which is why the symptom survived them.
