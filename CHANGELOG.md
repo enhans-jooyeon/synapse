@@ -4,6 +4,26 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Composer tray inset raised 4px → 8px, and stated in the spec for the first time.** Reported as insufficient padding. It was: the tray was the **tightest container in the system** while being the only one holding *text*.
+
+  | | inset |
+  |---|---|
+  | `.composer-tray` | **4px** |
+  | `.followups` | 6px |
+  | `.ctx` (ContextCard) | 8×12 |
+  | `.convsum` header | 12px |
+  | `.proposal` header / body | 12 / 12×16 |
+
+  The textarea adds no inset of its own — only a 40px right padding to clear the refine button — so the placeholder sat **4px** from the tray edge where an Input gives its own text 12px.
+
+  **The 4px was never authored.** No sentence in the Composer entry stated a tray inset; the value was back-derived from a *parenthetical about a different element's radius* — ComposerQuote's "concentric: composer radius 12 − 4 padding = 8". A dimension that exists only as an inference inside someone else's clause is a dimension nobody decided.
+
+  **8px is the only compliant step up, not a taste pick.** With the tray at radius `md` (12) the concentric rule fixes the inner radius at `12 − inset`: 6px inset → 6, which is a **`control`** radius (wrong family for a container bar); 12px inset → 0, a square bar inside a rounded tray. Only 8 lands both values on the container scale (inset `space-2`, inner radius `xs`).
+
+  **Consequence:** ComposerQuote moves from radius `sm` to `xs`, and §18's arithmetic is corrected to match. The spec now also states the governing rule — **one inset governs every child**, so text and controls share a single left edge and children add no horizontal padding of their own.
+
+  **Still open, needs eyes on the render:** the composer's text now sits at 8px against an Input's 12px. Closing that gap means giving the textarea its own 4px, which would put text and the leading `+` button on *different* left edges. Alignment or parity — one has to give, and that is an optical call I cannot make from measurements.
+
 - **ConversationSummary's body dissolved into the page — a spec error, not a CSS slip.** The block rendered as a small tinted header bar with loose text hanging beneath it. Cause: I had written *"Body opens to `bg.page` per the tray rule"*, borrowing ProposalCard's rule. But `bg.page` is `#FFFFFF` in light mode and so is the thread behind it, so the body — which is most of the block — had no fill at all. Only the header kept its `ai.surface` tint.
 
   **The rule was misapplied.** ProposalCard opens its **payload** to `bg.page` — a diff, a message preview, an affected-record list — because a bounded object inside a tray gains internal depth that way. A summary's body **is the content, not a payload**. Corrected: the body keeps `ai.surface`.

@@ -528,7 +528,13 @@
                 bottom: var(--sy-space-3); }                  /* Thread — bottom-centre of the column */
   .quote-hl { background: var(--sy-ai-surface); border-radius: var(--sy-radius-xs); padding: 0 2px;
     box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-  .composer-tray { background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-1); }
+  /* Tray inset is 8px (space-2), raised from 4px on 2026-08-03. The 4px was never authored —
+     it was back-derived from ComposerQuote's concentric parenthetical — and it made the tray the
+     tightest container in the system while being the only one holding TEXT. 8 is the only
+     compliant step up: 6 lands on a CONTROL radius (wrong family for a container bar) and 12
+     forces the inner radius to 0, a square bar inside a rounded tray. One inset governs every
+     child, so text and controls share a single left edge. Concentric: 12 - 8 = 4 (radius xs). */
+  .composer-tray { background: var(--sy-bg-sunken); border-radius: var(--sy-radius-md); padding: var(--sy-space-2); }
   .plus-dot { position: absolute; top: -2px; right: -2px; width: 6px; height: 6px; border-radius: 50%; background: var(--sy-text-primary); } /* active-tools deviation dot */
   /* compact picker padding: labeled ghost controls in the tray (agent/model pickers) — avatar/chevron carry the mass, 12px sides read detached */
   .composer-tray .btn-ghost.btn-sm:not(.btn-icon) { padding: 0 var(--sy-space-2); }
@@ -559,6 +565,7 @@
   .row-pin[aria-pressed="true"] svg { fill: currentColor; } /* fill-on-active: sanctioned for the favorite star ONLY */
   .row-pin:hover { background: var(--sy-bg-hover); }
   .row-pin svg { width: 12px; height: 12px; }
+  /* radius xs, not sm — concentric with the 8px tray inset (12 - 8 = 4). */
   .composer-quote { display: flex; align-items: center; gap: var(--sy-space-2); color: var(--sy-text-secondary);
     border-left: 2px solid var(--sy-border-strong); padding: var(--sy-space-0_5) var(--sy-space-1) var(--sy-space-0_5) var(--sy-space-2); margin-bottom: var(--sy-space-2);
     font-size: var(--sy-text-12); line-height: var(--sy-text-12-lh); }

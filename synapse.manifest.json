@@ -409,6 +409,7 @@
    "purpose": "The message/instruction input for Console and ask-agent surfaces.",
    "key_rules": [
     "never disabled during generation (empty-send is the one sanctioned disable)",
+    "tray inset is a UNIFORM 8px (space-2), stated 2026-08-03 — it had never been authored, only inferrable from ComposerQuote's concentric note, and the 4px that produced made this the tightest container in the system while being the only one holding text. 8 is the only compliant step up (6 is a control radius, 12 forces inner radius 0). ONE inset governs every child; children add no horizontal padding of their own. Concentric: 12 - 8 = 4, so ComposerQuote is radius xs",
     "send↔stop morph in place",
     "ComposerQuote bar: ai.surface radius-xs, max 1/send; the follow-up panel anchors above the tray — see the FollowUpPanel entry, which owns its anatomy (relocated 2026-08-03)",
     "slash commands: / scopes palette to agent actions; ghost completion accepted with →, never Tab; closed glossary only",
