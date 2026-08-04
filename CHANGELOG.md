@@ -4,6 +4,19 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Shape morph corrected: pill only at a genuinely single line, and the static demos are now measured rather than assumed.** My previous pass marked four textarea-less demos as single-row "by construction". That was wrong — the **slot-chip demo is genuinely two lines** (prompt + slot caption), so it was being forced into a pill while standing two lines tall. Assuming beat measuring, and it produced exactly the artefact reported.
+
+  **The morph now has two branches, because the two cases genuinely differ:**
+
+  - **Tray holds a textarea** → the *text* decides. The field's own empty-state height is the one-row baseline, so the flip lands on the first **wrap**. Control height is deliberately excluded: a 36px button beside an empty field is still one line of text, and counting it would have forced every empty composer into a rect.
+  - **Tray holds static content** → its content height is measured in **line units**, summing the children. The recording bar's single 32px control row rounds to one line and stays a pill; the slot-chip demo's 24px + 18px stack rounds to two and becomes a rect.
+
+  Draft-owned content (panel, attachment, chip, quote) still forces the rect regardless of line count.
+
+  **The rect keeps a uniform radius on all four corners** — now stated explicitly in the spec, since a morph between two shapes is exactly where someone would be tempted to round only the top.
+
+  **Verified by simulating both branches** against the real tray geometry — 14 cases including the wrap boundary itself (60 chars pill, 61 chars rect), one-character input, draft content on both branches, and each of the four static demos at its actual measured heights. All pass. The preview cannot be rendered here, so a simulation that encodes the real numbers is the only honest check; the same harness is what caught the slot-chip case being two lines.
+
 - **The single-line example composers are pills now — two separate causes, one visible symptom.** Reported as the case examples at the bottom not taking the pill shape even though they are single-line.
 
   **Cause 1 — the morph could not reach them.** The detector selected `.composer-tray .cmp-row textarea`, but the §2 queue/interrupt demo has a textarea with **no `.cmp-row`** (it predates the bookend layout), so it was skipped entirely and stayed a rect. Broadened to `.composer-tray textarea`, which reaches every composer field including any added later.
