@@ -4,6 +4,12 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The Generating demo still carried the pre-B anatomy, which made it the one genuine lozenge in the file.** It had the textarea on one row and a *separate* control row beneath it (paperclip + stop), so the tray stood two rows tall while the textarea branch correctly reported one line of text — producing `radius.full` on a two-row box. Rebuilt on the adopted single-row anatomy: circular `+` · textarea · mic · circular stop, with stop as `secondary` per the send↔stop morph.
+
+  **The class of bug is worth naming:** the morph asks "is the *content* one line?", which is the right question only when the tray *is* the content row. Any tray that keeps its own internal control row breaks that assumption — the measurement is right and the conclusion is wrong. That is why the earlier lozenge reasoning ("the pill only works because the footer left the tray") had to hold for every tray, not just the main composer.
+
+  **Swept for the same trap rather than fixing only the reported one.** Every tray containing a textarea was checked for whether the textarea sits inside a `.cmp-row` and whether sibling `.row` blocks exist. Six trays: five clean, and the Console sample flagged with two sibling rows — verified to be the attachment rows *inside* `.cmp-panel`, which forces the rect through `hasDraft` anyway, so it was never at risk. That check is the one I should have run when the anatomy was first promoted.
+
 - **Found the reason a run of composer changes "were not being applied": the morph code was unreachable, and every measurement it took was on a hidden element.** Two compounding bugs, both mine, both invisible to every gate.
 
   **1. The code was nested inside other functions.** The morph block sat inside the per-frame wiring rather than at the script's top level, so it ran unpredictably — or not at all — depending on which enclosing function happened to execute. It is now the script's last **top-level** IIFE, matching the file's own convention (7 top-level IIFEs at 2-space indent; mine closes at line 1673 of 1674).
