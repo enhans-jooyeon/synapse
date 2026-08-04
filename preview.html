@@ -4778,20 +4778,22 @@ team: finance</pre>
     var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(presize, 150); });
   })();
 
-  /* Composer autogrow + shape morph (rewritten 2026-08-03).
-     The tray is a PILL only while its content occupies a single line; past that it is a rounded
-     rect with a UNIFORM radius on all four corners. Two branches, because the cases differ:
 
-       - Tray HAS a textarea -> the TEXT decides. Baseline is the field's own empty-state height
-         (one row), so the flip happens on the first WRAP, not the first keystroke. Control height
-         is deliberately ignored: a 36px button beside an empty field is still one line of text.
-       - Tray has NO textarea (static demos: ghost text, recording bar, slot chips, slash
-         completion) -> measure the tray's CONTENT height in line units. These were previously
-         marked single-row BY HAND, which was wrong: the slot-chip demo is genuinely two lines
-         (prompt + caption) and was being forced into a pill.
+  /* ---------------------------------------------------------------------------------------
+     Composer autogrow + shape morph.  TOP LEVEL on purpose (2026-08-03): an earlier version
+     sat nested six braces deep inside the per-frame wiring, so it ran unpredictably or not at
+     all — which is why several composer changes appeared not to apply.
 
-     Draft-owned content (panel, attachment, chip, quote) forces the rect regardless of lines. */
+     It also measured at load, but `.story { display: none }` means only the ACTIVE story is
+     rendered: scrollHeight and offsetHeight are 0 on a hidden element, so every measurement
+     was garbage and never revisited. Trays are therefore evaluated LAZILY — on input, and via
+     a ResizeObserver that fires when a story becomes visible and the tray first gains size.
+
+     Rule: pill (radius.full) only while content occupies a single line; otherwise the rect,
+     uniform on all four corners. Draft-owned content forces the rect regardless of lines.
+     --------------------------------------------------------------------------------------- */
   (function () {
+    function visible(el) { return !!el.offsetParent && el.offsetHeight > 0; }
     function lineHeight(el) {
       var lh = parseFloat(getComputedStyle(el).lineHeight);
       return (lh && !isNaN(lh)) ? lh : 22;
@@ -4801,25 +4803,34 @@ team: finance</pre>
     }
     Array.prototype.forEach.call(document.querySelectorAll('.composer-tray'), function (tray) {
       var ta = tray.querySelector('textarea');
-      if (ta) {
-        var prev = ta.value;
-        ta.value = ''; ta.style.height = 'auto';
-        var base = ta.scrollHeight;
-        ta.value = prev;
-        var sync = function () {
+      var base = null, busy = false;
+      function evaluate() {
+        if (busy || !visible(tray)) return;
+        busy = true;
+        if (ta) {
+          if (base === null) {                 /* baseline must be taken while visible */
+            var prev = ta.value;
+            ta.value = ''; ta.style.height = 'auto';
+            base = ta.scrollHeight;
+            ta.value = prev;
+          }
           ta.style.height = 'auto';
           var sh = ta.scrollHeight;
           ta.style.height = sh + 'px';
           ta.style.overflowY = sh > 168 ? 'auto' : 'hidden';
           tray.classList.toggle('cmp-single', sh <= base + 1 && !hasDraft(tray));
-        };
-        ta.addEventListener('input', sync);
-        sync();
-      } else {
-        var lh = lineHeight(tray), content = 0;
-        Array.prototype.forEach.call(tray.children, function (c) { content += c.offsetHeight; });
-        tray.classList.toggle('cmp-single', Math.round(content / lh) <= 1 && !hasDraft(tray));
+        } else {
+          var lh = lineHeight(tray), content = 0;
+          Array.prototype.forEach.call(tray.children, function (c) { content += c.offsetHeight; });
+          tray.classList.toggle('cmp-single', Math.round(content / lh) <= 1 && !hasDraft(tray));
+        }
+        busy = false;
       }
+      if (ta) ta.addEventListener('input', evaluate);
+      if (window.ResizeObserver) {
+        new ResizeObserver(function () { evaluate(); }).observe(tray);
+      }
+      evaluate();
     });
   })();
 </script>

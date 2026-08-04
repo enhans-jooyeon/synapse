@@ -4,6 +4,18 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Found the reason a run of composer changes "were not being applied": the morph code was unreachable, and every measurement it took was on a hidden element.** Two compounding bugs, both mine, both invisible to every gate.
+
+  **1. The code was nested inside other functions.** The morph block sat inside the per-frame wiring rather than at the script's top level, so it ran unpredictably — or not at all — depending on which enclosing function happened to execute. It is now the script's last **top-level** IIFE, matching the file's own convention (7 top-level IIFEs at 2-space indent; mine closes at line 1673 of 1674).
+
+  **2. It measured hidden elements.** `preview.html` uses `.story { display: none }` / `.story.on { display: block }` — **only the active story is rendered.** On a hidden element `scrollHeight` and `offsetHeight` are `0`, so a measurement taken at load is meaningless, and it was taken exactly once and never revisited. Trays are now evaluated **lazily**: gated on real visibility (`offsetParent` and non-zero height), re-run on `input`, and re-run by a **ResizeObserver** that fires when a story becomes visible and the tray first gains size. A re-entrancy guard prevents the height-sync from re-triggering its own observer.
+
+  **Why no gate caught this.** `validate.py` lints values, `check_icons` lints glyphs, `node --check` proves the script *parses*, and the nesting/depth diffs prove the HTML is *well-formed*. None of them can tell whether a statement is reachable, whether it runs, or whether a runtime measurement is meaningful. This is the sharpest instance yet of HANDOFF thread 7 — the render disagreeing with intent — and the honest lesson is that "gates green" said nothing at all about the thing being reported.
+
+  **Verified by simulating the visibility gate**, not just the geometry: a hidden tray must *skip* and write no class at all (rather than defaulting to pill, which is what the old code did with its zero measurements), then classify correctly once shown. Eight cases pass, including the hidden→visible transition on both the textarea and static branches.
+
+  **My brace-depth check was also wrong twice** while diagnosing this — it miscounted braces inside comments and regex literals, reporting depth 6 and then −9 for the same correctly-placed block. The reliable check turned out to be the file's own convention (top-level IIFEs at 2-space indent), which is a reminder to verify against something the file actually asserts rather than a heuristic I invented on the spot.
+
 - **The footer is restored, and the real composers now match the reference arrangement. Two renderings of one component had silently diverged.**
 
   **Why the changes "weren't being applied".** The footer-removal pass matched only the **`.cmp-footer` class**. The comparison story's footer was a plain `.row` — built before that class existed — so **it kept its footer while all three real composers lost theirs.** The story and the component then drifted apart for several commits, and every subsequent tweak landed on the one that looked right rather than the one in use. Restoring the footer on `s-composer`, the Home start surface and the Console sample brings them back into line.
