@@ -1,10 +1,19 @@
 /* FloatingPill — components.md · FloatingPill. The shared shell for a transient
    floating action affordance. Consumers carry only their deltas (anchoring). */
+/* Surface is PER-MODE (components.md · FloatingPill, 2026-08-03).
+   LIGHT: glass.surface + glass.border — the OPAQUE faux-frost family (no backdrop-filter; SY015
+   holds). Light-mode bg.raised-2 IS #FFFFFF, the same value as bg.page, and border.overlay is
+   TRANSPARENT — so the pill was 1.00:1 on the page with no hairline, separated only by an 8%
+   shadow, while dark mode had three separation channels. A missing channel, not a taste gap, and
+   unfixable by a darker fill: the light ramp jumps #FFFFFF -> #F4F4F6 (1.10:1) -> #33333A (12.53:1).
+   DARK: unchanged. */
 .sy-fpill { display: inline-flex; align-items: center; gap: var(--sy-space-1);
-  background: var(--sy-bg-raised-2); border: 1px solid var(--sy-border-overlay);
+  background: var(--sy-glass-surface); border: 1px solid var(--sy-glass-border);
   border-radius: var(--sy-radius-full); white-space: nowrap;
   color: var(--sy-text-primary); z-index: var(--sy-z-dropdown);
   animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
+[data-theme="dark"] .sy-fpill { background: var(--sy-bg-raised-2);
+  border-color: var(--sy-border-overlay); }
 
 .sy-fpill--horizontal { height: 28px; padding: 0 var(--sy-space-3); box-shadow: var(--sy-shadow-lg);
   /* label-sm — matches .sy-type-label-sm; never a raw font-size (foundations §2.2) */
@@ -22,6 +31,8 @@
   background: transparent; border: none; padding: 0; font: inherit; color: inherit;
   cursor: pointer; border-radius: var(--sy-radius-xs); }
 .sy-fpill button:focus-visible { outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-glass-surface), 0 0 0 4px var(--sy-border-focus); }
+[data-theme="dark"] .sy-fpill button:focus-visible {
   box-shadow: 0 0 0 2px var(--sy-bg-raised-2), 0 0 0 4px var(--sy-border-focus); }
 .sy-fpill button svg { width: 12px; height: 12px; fill: none; stroke: currentColor;
   stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }

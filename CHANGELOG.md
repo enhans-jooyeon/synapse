@@ -4,6 +4,25 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **`FloatingPill` gains a per-mode surface — light mode was missing a separation channel, not a colour.** Raised as "the light-mode jump pill needs editing; dark is fine." Measurement showed why the two modes felt so different:
+
+  | | fill vs page | hairline | shadow |
+  |---|---|---|---|
+  | **Dark** | `#33333A` on `#09090B` — strong | `#4A4A52`, real | 50% |
+  | **Light** | `#FFFFFF` on `#FFFFFF` — **1.00:1** | **`transparent`** | 8% |
+
+  In light mode `bg.raised-2` *is* `#FFFFFF`, the same value as `bg.page`, and `border.overlay` is **`transparent`** — so the pill had no fill contrast and no hairline, separated from the thread by an 8% shadow alone. Dark mode had three channels doing the work; light had one weak one.
+
+  **It could not be fixed by picking a darker fill, because there isn't one.** The light surface ramp runs `#FFFFFF` → `#F4F4F6` (1.10:1) → `#33333A` (12.53:1), with nothing between near-white and near-black. That hole is why every inverse candidate read as far too heavy.
+
+  **So light mode gains the channel it never had:** `glass.surface` (`#F6F8FB`) + a 1px `glass.border` (`#E4E9F0`) hairline — the **opaque** faux-frost family AppLauncher already uses, extended to `FloatingPill`. No `backdrop-filter`, so SY015 still holds; the frost is baked into the tokens rather than inherited from behind. **Dark mode is untouched.**
+
+  **Per-mode divergence is deliberate and precedented** — cf. ProposalCard's `secondary`, which opens to `bg.page` in light and keeps the standard fill in dark, for the same reason: a token that works in one mode can collapse in the other.
+
+  **Applied to the shell, not the affordance.** SelectionPill and the `media` rail sat on the same white page with the same transparent light-mode border, so they had the identical defect. Fixing `FloatingPill` fixes all three; fixing only Thread's pill would have put a per-consumer exception on a shell declared the same day. The focus-ring knockout colour follows the fill per mode, or the ring would punch a white hole in a frosted pill.
+
+  **Rejected on the way, recorded so it isn't re-proposed:** real glassmorphism (SY015 + the §8 never-list; §19 already rejected it for the follow-up panel on this exact substrate — small, dense, over thread text), and an inverse `bg.inverse-soft` fill (12.53:1 is far too heavy for a catch-up hint, and that token is the system's *emphasis* fill — emphasis inside a floating layer competes with the region's real primary).
+
 - **`FloatingPill` declared (67 → 68 components) — one shell that was already implemented three times and specified nowhere.** Raised by the question "what component is the 최신으로 이동 button?" The answer was **none**: it was ad-hoc markup in a bespoke class, which `design.md` §3.4 forbids outright ("NEVER invent a component… unmet needs → §6 escalation"). Three defects sat behind it.
 
   **1. "Toast surface" was a false citation.** `Thread` described the affordance as borrowing Toast's surface. A Toast is a *transient notification* — bottom-right, max 3, auto-dismiss 5s, status icon. The jump affordance is persistent, bottom-centre, dismissed by scrolling, and it is an **action**. It shared Toast's tokens and none of its contract, so the citation looked like a component reference while conferring nothing. Removed, and the note left on Toast's own entry (from this morning's hairline fix) claiming Thread and SelectionPill borrow it is superseded.

@@ -506,14 +506,19 @@
      affordance raised by a condition and gone when it ends. Declared 2026-08-03 after this exact
      anatomy turned up implemented three times (selection pill, jump-to-latest, media rail) and
      specified nowhere. Consumers below carry ONLY their deltas. */
+  /* Surface is PER-MODE. Light: glass.surface + glass.border (opaque faux-frost, no backdrop-filter —
+     SY015 holds). Light-mode bg.raised-2 IS #FFFFFF and border.overlay is TRANSPARENT, so the pill was
+     1.00:1 on the page with no hairline, separated only by an 8% shadow while dark had three channels.
+     Dark keeps its current treatment untouched. */
   .fpill { display: inline-flex; align-items: center; gap: var(--sy-space-1); height: 28px;
-    padding: 0 var(--sy-space-3); background: var(--sy-bg-raised-2);
-    border: 1px solid var(--sy-border-overlay); border-radius: var(--sy-radius-full);
+    padding: 0 var(--sy-space-3); background: var(--sy-glass-surface);
+    border: 1px solid var(--sy-glass-border); border-radius: var(--sy-radius-full);
     box-shadow: var(--sy-shadow-lg); cursor: pointer; white-space: nowrap;
     font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans);
     color: var(--sy-text-primary); z-index: var(--sy-z-dropdown);
     animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
   .fpill .icon { width: 12px; height: 12px; }
+  [data-theme="dark"] .fpill { background: var(--sy-bg-raised-2); border-color: var(--sy-border-overlay); }
   /* separator between actions (FloatingPill: 1px border.default, 12px tall) */
   .fpill .fp-sep { width: 1px; height: 12px; background: var(--sy-border-default); flex: none;
     margin: 0 var(--sy-space-1); }
