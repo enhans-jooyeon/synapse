@@ -4,6 +4,18 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Arrangement B promoted from proposal to spec, and applied to the real composers.** The `+` also loses its resting fill.
+
+  **The `+` is a ghost button that happens to be circular.** It shipped with a resting `action.secondary-bg` fill, which read as a second *filled* control competing with the black send. It now has no resting fill — just `radius.full` — so the grey circle appears on hover only, inherited from `.btn-ghost`. Circularity marks the bookend pair; fill still marks emphasis, and only send carries it.
+
+  **B is now the anatomy, not a story.** The tray holds the input row only — circular `+` · textarea · mic · circular send — and the agent picker, capability toggle and model selector sit in a footer row **below** the container. The tray is a **pill at one row** and relaxes to **`lg` (16)** once the text wraps. Applied to all three real composers: the `s-composer` story's wired instance, the Home start surface, and the Console sample. The other five trays in `s-composer` are sub-state demos (the recording bar and similar) with no footer, so they keep their own anatomy.
+
+  **This amends `foundations.md` §5**, which had assigned the Composer tray a flat `md`. The tray is now **the only container in the system whose radius depends on its content** — `full` at one text row with no fused panel, `lg` otherwise. That is a genuine exception and is written as one rather than smuggled in as a component detail.
+
+  **One JS selector had to be freed from the layout.** The agent picker was found via `.composer-tray button .avatar.agent` — which requires the picker to be *inside* the tray. Moving the footer out would have silently broken it, so the selector is now layout-independent. Every other hook was already frame-scoped (`button[aria-label="추가"]`, `button[data-refine]`, `button[data-model]`, `button[aria-label="Send"]`) and survived relocation untouched.
+
+  **Restructuring three wired composers was the risky part**, so each piece — panel, textarea wrapper, `+`, picker, model, mic, send — was extracted with a depth-aware walk and asserted to be a complete element before reassembly, then checked with the HTMLParser nesting diff and the per-story depth diff against a known-good commit. Both match; all nine JS hooks confirmed present afterwards.
+
 - **The Composer's leading `+` goes circular — and declaring the rule resolved a contradiction that was already there.** From reference designs.
 
   **The rule that looked like a blocker wasn't one.** "Icon-only buttons are always square" governs **footprint** — *"width equals the size's control height (sm 32→32, md 36→36)"* — which a circle satisfies. So the circular `+` is an exception to the **radius**, not to the aspect ratio, and that rule never stood in the way.
