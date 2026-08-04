@@ -23,6 +23,8 @@ NEVER mark AI presence any other way — no sparkle gradients, no purple, no rob
 
 ## 2. Streaming output
 
+Anatomy: `components.md · Message` (the streaming state) and `Thread` (the scroll contract and the "Jump to latest" pill).
+
 - Streamed text is **append-only**: rendered markdown may progressively enhance (a heading completes, a list item closes) but existing lines never reflow or jump. Reserve block height where possible.
 - The **streaming cursor** is a 2px × 1em `ai.fg` vertical bar after the last character, blinking at 1s intervals. It is the only blinking element permitted in the system.
 - While streaming: a **Stop** control (`secondary` tonal Button, square-stop icon + "Stop" / "중지": ghost floated as bare text; the tonal fill gives the one interruption affordance a body, and matches the Composer's send→stop morph, which is also `secondary`) MUST be visible and reachable without scrolling. Stopping keeps partial output and appends a `text.tertiary` caption: "Stopped by you" / "사용자가 중지함".
@@ -112,7 +114,7 @@ The agent never performs a consequential action silently. It proposes; the human
 
 ## 12. Agent-markdown rendering
 
-Agent output is markdown; without fixed rendering rules every message improvises its own typography. The mapping is closed:
+Anatomy: `components.md · Message`. Agent output is markdown; without fixed rendering rules every message improvises its own typography. The mapping is closed:
 
 - **Headings demote:** agent `#` renders as `heading-md`, `##` as `heading-sm`, deeper levels as semibold `body`. Agent text NEVER produces `heading-xl/lg` — page hierarchy belongs to the page, not the message.
 - **Body** = `body` style; lists get `space-1` item gaps, one level of nesting rendered, deeper flattened.
@@ -130,7 +132,7 @@ The palette (⌘K / Ctrl+K, see `components.md`) is the universal entry surface:
 
 ## 14. Reasoning disclosure
 
-When the product exposes an agent's working/reasoning text, it renders as a **disclosure row**, never as answer content:
+Anatomy: `components.md · Reasoning`. When the product exposes an agent's working/reasoning text, it renders as a **disclosure row**, never as answer content:
 
 - Collapsed by default: chevron + "Reasoning" / "추론 과정" (`label`, `text.tertiary`) + duration. Expanding reveals the text in `body-sm` `text.secondary` on `bg.surface`, rendered with the agent-markdown rules (§12) but capped: no headings, no images.
 - Reasoning is visually subordinate to the answer — it never uses `text.primary`, never carries SourceChips (citations belong to claims in the *answer*), and is excluded from copy/regenerate (the ResponseToolbar acts on the answer only).
@@ -163,23 +165,29 @@ When an agent escalates to a person (or a person takes over):
 
 ## 18. Selection & reply
 
-Selected text inside an agent message is a first-class conversational object.
+Anatomy: `components.md · SelectionPill`. Selected text inside an agent message is a first-class conversational object.
 
-**Reply pill:** selecting text in an agent message raises a single floating pill ("Reply" / "답장", reply icon) — `bg.raised-2`, `border.overlay`, `shadow.lg`, pill radius, `z.dropdown`, standard entrance. One pill, no toolbar of options; it disappears on deselect or esc.
+**Reply pill:** selecting text in an agent message raises a **single** floating pill carrying the three-action set below — **anatomy in `components.md · SelectionPill`** (relocated 2026-08-03, same reasoning as §19: anatomy outside `components.md` is anatomy the manifest and the gate cannot see). Behavior: one pill, never a toolbar of options; it disappears on deselect or esc. *The earlier text here described the pill as carrying a single "Reply" / "답장" label, which predated the three-action ruling.*
 **Quote highlight:** the selected passage takes `ai.surface` fill + inset `ai.border` hairline while quoted.
 **ComposerQuote:** choosing Reply inserts a quote bar into the Composer above the textarea — `ai.surface` fill, `ai.fg` text, reply icon, single-line ellipsis, × remove. Radius `sm` (concentric: composer radius 12 − 4 padding = 8). Max one quote per send; quoting replaces any existing quote. The sent message renders the quote above the user text.
 
-**Selection actions (closed set):** the floating pill carries 답장 · 설명 · 재생성 — and nothing else without governance (actions come from the action glossary). 설명 composes a quoted follow-up ("이 부분을 설명해 줘" + ComposerQuote of the selection); the explanation arrives as a NORMAL agent turn in the thread. Selection actions NEVER mutate the original message in place — thread history is append-only (provenance law). Rewrite-type actions apply only to the user's OWN draft (§24), never to agent output.
+**Selection actions (closed set):** the floating pill carries 답장 · 설명 · 재생성 — and nothing else without governance (actions come from the action glossary). 설명 composes a quoted follow-up ("이 부분을 설명해 줘" + ComposerQuote of the selection); the explanation arrives as a NORMAL agent turn in the thread. **답장 and 설명 NEVER mutate the original message — both compose new turns; thread history is append-only (provenance law).** Rewrite-type actions apply only to the user's OWN draft (§24), never to agent output.
+
+> **UNRESOLVED (2026-08-03).** This clause previously read "Selection actions NEVER mutate the original message in place" without qualification, which §22's *partial* regeneration (an in-place passage rewrite with an Undo Toast) directly contradicts. The blanket prohibition was written when the pill carried only 답장 and 설명. **Held for a maintainer ruling:** either partial regeneration is a named carve-out from append-only, or it must produce a variant instead of an in-place write. Same missed-propagation pattern as the action-count defect (`proposals/2026-08-03-chat-interface-component-gaps.md` §4.1). Do not implement 재생성 until ruled.
 
 ## 19. Follow-up panel
 
-Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it: a **solid `bg.raised` panel** (NOT glass — it's small, dense, and sits over thread text where glass reads muddy; foundations §6) with a `border.default` hairline, `shadow.lg`, radius `md`, 6px padding, 32px rows at radius `xs`; rows lead with the 12px follow-up arrow, full-bleed keyboard header row in keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). **Placement:** the panel is absolutely anchored **8px above the Composer's top edge** (a floating layer detaches from its anchor — flush contact reads as part of the input; anchored menus use 4px, the panel's larger mass earns 8) and OVERLAYS the last thread messages — it never pushes content down (layout shift on open is forbidden). Max 4 rows; selecting inserts the text into the Composer (never auto-sends). Chips and panel never show simultaneously.
+Suggestion chips (Chip `suggestion`, max 3) stay the passive default. When the Composer is focused and follow-ups exist, an anchored panel MAY open above it — **FollowUpPanel; anatomy in `components.md`** (relocated there 2026-08-03: pane fill, border, shadow, radius, padding, row metrics, and anchor offset are component anatomy, and anatomy outside `components.md` is anatomy the manifest and the gate cannot see — see `proposals/2026-08-03-chat-interface-component-gaps.md` §3).
+
+The behavior rules that govern it: max 4 rows; selecting inserts the text into the Composer (**never auto-sends**); the panel OVERLAYS the last thread messages and never pushes content down (layout shift on open is forbidden); chips and panel never show simultaneously; the panel never renders in the zero state (§27 starters own the empty conversation and hand off at the first turn).
 
 **Chip honesty (adopted law):** a suggestion chip's visible label IS the query it sends — never a longer or different hidden prompt. If the real query needs more words than the chip can show, the chip inserts into the Composer for editing instead of sending.
 
 **Refine vs pivot:** follow-up rows carry intent, and the panel orders them by it — **refine** rows (zoom in on the current answer — "결제 오류 47건의 원인을 분석해 줘") sit above **pivot** rows (zoom out to a related next step — "보고서로 만들기", "#ops에 공유하기"), split by the standard full-bleed divider. When both kinds are present each group MAY carry a `micro-label` header ("더 자세히" / "다음 단계") — that grouping is how the panel signals *why* a row is offered; it never adds a per-row rationale line, which would break chip honesty (the label is still the query). Rows stay ranked within a group and capped at 4 total.
 
 ## 20. Answer anatomy & named working states
+
+Anatomy: `components.md · AnswerHeader` (and `Message` for the agent content column's fixed element order).
 
 **Titled answer sections:** agent replies longer than ~4 paragraphs or produced by a multi-step run MAY open with an answer header: title (`heading-sm`, from the run's stated goal) + total duration Badge (`neutral` subtle, tabular numerals) + collapse chevron (ghost icon-button). Collapsed keeps title + duration; expansion state persists in the transcript. One header per reply — never per paragraph.
 **Named working line:** during multi-step generation, a status line above the steps names the current activity from the step plan ("보고서 초안 생성 중…" / "Drafting the report…"), `body-sm` `text.secondary` with the `pulse` opacity animation (skeleton precedent — gradients/shimmer remain forbidden). Replaces a bare spinner whenever step names exist; the stop control stays adjacent per §2. The line resolves into the answer header's title on completion.
@@ -192,8 +200,12 @@ Agent-generated media renders as a MediaGroup fan (see components.md). Media-onl
 
 ## 22. Result variants & partial regeneration
 
+Anatomy: `components.md · VariantPager`.
+
 **Variant pager:** an agent reply MAY hold multiple variants of itself. The answer header (§20) gains a right-aligned pager: ‹ › ghost icon-buttons (sm) around a `caption` tabular "2/2". Regenerate on the latest reply creates variant N+1 — it never destroys; switching is non-destructive; each variant keeps its own provenance and attribution. Max 5 variants, then regenerate replaces the oldest unpinned.
-**Partial regeneration:** the §18 selection pill carries TWO actions — "답장" and "재생성" — separated by a hairline. 재생성 regenerates only the selected passage in place: the new text lands with a temporary `emphasis.surface` flash and an Undo Toast (reversible-lite convention). Never a third pill action; scope is the selection, never the paragraph around it.
+**Partial regeneration:** the §18 selection pill carries **재생성** as one of its three actions (the closed set is 답장 · 설명 · 재생성 — see §18; anatomy in `components.md · SelectionPill`). 재생성 regenerates only the selected passage in place: the new text lands with a temporary `emphasis.surface` flash and an Undo Toast (reversible-lite convention). **Scope is the selection, never the paragraph around it.**
+
+*Correction 2026-08-03:* this clause previously read "carries TWO actions — 답장 and 재생성 … Never a third pill action", contradicting §18's three-action closed set and the shipped render. 설명 was added to §18 without propagating here. **Ruling: three is law**; the "never a third" sentence is struck. A closed set with two definitions is not closed (`proposals/2026-08-03-chat-interface-component-gaps.md` §4.1).
 
 ## 23. Prompt templates & placeholders
 
@@ -289,7 +301,7 @@ When an answer draws on retrievable sources, the user can open the **sources bes
 
 ## 34. Conversation summary
 
-A long thread MAY offer an agent-generated **summary** (decisions, action items, open questions) so a user can catch up without rereading.
+Anatomy: `components.md · ConversationSummary`. A long thread MAY offer an agent-generated **summary** (decisions, action items, open questions) so a user can catch up without rereading.
 
 - **It is agent output, marked as such.** Rendered on `ai.surface` with the squared avatar + attribution row (§9), as a collapsible block at the top of the thread or in the thread's detail Drawer — never presented as system chrome or as the user's own notes.
 - **Refreshable, not authoritative.** Regenerated on demand (a refresh `ghost` action) with a `last-generated` caption; it NEVER replaces or rewrites the transcript — the thread stays append-only (provenance law). After the conversation continues, a stale summary shows its age, never a false "current."

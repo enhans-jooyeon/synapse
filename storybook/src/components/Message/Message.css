@@ -1,0 +1,27 @@
+/* Message — components.md · Message.
+   human = right-anchored bubble; agent = full-width plain text, no fill.
+   The asymmetry is the authorship signal — do not equalize the two. */
+.sy-msg { font-size: var(--sy-body-size); line-height: var(--sy-body-lh); }
+
+/* ---- human ---- */
+.sy-msg--human { display: flex; flex-direction: column; align-items: flex-end; }
+.sy-msg--human .sy-msg__bubble { max-width: 75%; background: var(--sy-bg-sunken);
+  border-radius: var(--sy-radius-xl); padding: var(--sy-space-2) var(--sy-space-3); }
+.sy-msg__docs, .sy-msg__images { display: flex; flex-wrap: wrap; justify-content: flex-end;
+  gap: var(--sy-space-2); margin-bottom: var(--sy-space-1); max-width: 75%; }
+.sy-msg__images > * { max-height: 240px; border-radius: var(--sy-radius-lg);
+  border: 1px solid var(--sy-border-default); overflow: hidden; }
+
+/* ---- agent ---- */
+.sy-msg--agent { display: flex; gap: var(--sy-space-2); }
+.sy-msg__avatar { flex: none; width: 24px; height: 24px; border-radius: var(--sy-radius-md);
+  background: var(--sy-bg-sunken); color: var(--sy-text-secondary);
+  display: inline-flex; align-items: center; justify-content: center; }
+.sy-msg__avatar svg { width: 12px; height: 12px; fill: none; stroke: currentColor;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.sy-msg__content { flex: 1; min-width: 0; }
+
+.sy-msg__caption { margin-top: var(--sy-space-1);
+  font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans);
+  color: var(--sy-text-tertiary); }
+.sy-msg--send-failed .sy-msg__caption { color: var(--sy-status-danger); }

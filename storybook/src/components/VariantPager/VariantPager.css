@@ -1,0 +1,13 @@
+/* VariantPager — components.md · VariantPager. Ghost arrows + tabular counter. */
+.sy-vpager { display: inline-flex; align-items: center; gap: var(--sy-space-0_5); }
+.sy-vpager__arrow { width: 24px; height: 24px; display: inline-flex; align-items: center;
+  justify-content: center; background: transparent; border: none; border-radius: var(--sy-radius-sm);
+  color: var(--sy-text-secondary); cursor: pointer; }
+.sy-vpager__arrow:hover:not(:disabled) { background: var(--sy-bg-hover); color: var(--sy-text-primary); }
+.sy-vpager__arrow:disabled { color: var(--sy-text-disabled); cursor: default; }
+.sy-vpager__arrow:focus-visible { outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus); }
+.sy-vpager__arrow svg { width: 12px; height: 12px; fill: none; stroke: currentColor;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.sy-vpager__count { font: var(--sy-weight-regular) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans);
+  color: var(--sy-text-tertiary); font-variant-numeric: tabular-nums; }

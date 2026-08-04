@@ -1,6 +1,6 @@
 # Synapse components
 
-**This is a closed set.** The 50 component entries below (a `##` heading each; some entries group sibling controls, e.g. Checkbox · Radio · Switch) are the only building blocks permitted in generated UI. Common multi-component assemblies are specified in `recipes.md` — check there before composing from scratch. If a need cannot be met by these components or their documented composition (`patterns.md`), the correct action is to escalate per `design.md` §6 — never to invent a variant, add a prop, or restyle an existing component.
+**This is a closed set.** The 67 component entries below (a `##` heading each; some entries group sibling controls, e.g. Checkbox · Radio · Switch) are the only building blocks permitted in generated UI. Common multi-component assemblies are specified in `recipes.md` — check there before composing from scratch. If a need cannot be met by these components or their documented composition (`patterns.md`), the correct action is to escalate per `design.md` §6 — never to invent a variant, add a prop, or restyle an existing component.
 
 Every spec follows the same schema. `variants` and `sizes` are exhaustive enumerations. `forbidden` lists the modifications agents most commonly attempt and must not. Components use the single system size scale; Table runs compact by default (foundations §4).
 
@@ -617,7 +617,7 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Anatomy:** 12px state indicator · 13px verb-first summary · optional mono tool identifier · optional duration (`text.tertiary`, tabular-nums) · optional trailing Retry ghost button (failed only). Row height 28px; expanded detail renders `.sy-code-block` below the row, indented to the text edge.
 **States (closed):** `pending`, `running`, `success`, `failed`, `skipped` — exactly as specified in `ai-patterns.md` §3. A step list collapses to a summary row on completion ("5 steps · 12s", expandable).
 **Forbidden:** nesting beyond one level; paragraph-length summaries; using AgentStep outside agent activity (it is not a generic checklist — compose Checkbox lists for that); animating state transitions beyond the indicator swap.
-**A11y:** the list is `role="log"` with `aria-live="polite"`; state changes announce as text, not sound.
+**A11y:** the list is `role="log"` with `aria-live="polite"` **when it is the announcing surface — i.e. standalone (RunLog, Workbench run views). Inside a Thread the step list does NOT declare its own live region** (clarified 2026-08-03): the Thread already owns one, and a nested live region double-announces every step. State changes announce as text, not sound.
 
 ---
 
@@ -629,6 +629,115 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **States:** open, resolved-approved / resolved-rejected (collapses to attribution row: icon + "Approved by {user} · {time}"), expired (agent withdrew or context changed — `text.tertiary` note, actions removed).
 **Forbidden:** auto-approval, approval countdowns, default-focused Approve-all in batches; more than 3 footer actions; ProposalCards for non-consequential acts (answering a question needs no approval); removing resolved proposals from the transcript.
 **Bilingual:** consequence statements name count + noun in both locales; button labels never truncate.
+
+---
+
+## Thread
+
+**Purpose:** the transcript container — the scrolling conversation region that holds Messages in order and owns scroll position, the bottom-stick contract, and catch-up affordances. Full behavior: `ai-patterns.md` §2 (the scroll and streaming contract). Conversation *history* in the Sidebar, new-thread, and temporary chat are §25 — a different surface, not this container. (Added 2026-08-03 — chat-interface gap audit: the region was specified only as `patterns.md` §1E layout bullets and rendered only in `preview.html`.)
+
+**Anatomy:** the scroll container spans the full Console region (Console law: no mid-canvas scrollbar beside the message column) with a **max-width 760 message column centered inside it**, padding 24, and `space-6` between turns. Turns stack in strict chronological order; there is no grouping chrome between consecutive messages from the same actor — the avatar and bubble shape carry authorship, so a "message group" wrapper would add a third redundant signal.
+**Scroll contract (§2):** stick to bottom while the user is at the bottom; the instant the user scrolls up, release the lock — never re-acquire it automatically while output streams. A released lock raises the **"Jump to latest"** pill: Toast surface (`bg.raised-2` + `border.overlay` + `shadow.lg`), pill radius, bottom-center of the column, standard entrance; it dismisses on reaching the bottom.
+**Append-only (provenance law):** Messages are never edited, reordered, or removed once rendered — not by a 답장 or 설명 selection action (§18), not by a whole-reply regeneration (§22's variant model adds a variant, it does not replace a turn), not by a summary (§34 renders beside the transcript, never over it). A resolved ProposalCard collapses in place; it does not leave.
+
+> **UNRESOLVED (2026-08-03) — partial regeneration vs. append-only.** §22's *partial* regeneration rewrites a selected passage **in place** with an Undo Toast, which is an edit of a rendered Message. §18 states selection actions "NEVER mutate the original message in place — thread history is append-only". These cannot both hold. This is the same missed-propagation pattern as the §18/§22 action-count defect (`proposals/2026-08-03-chat-interface-component-gaps.md` §4.1): §18's blanket prohibition was written when the pill carried only 답장 and 설명, both non-mutating, and was not revisited when 재생성 was added. **Held for a maintainer ruling** — either partial regeneration is a named carve-out from the append-only law, or it must produce a variant rather than an in-place rewrite. Do not implement partial regeneration until this is ruled.
+**States:** empty (zero turns — prompt starters per §27 render above the Composer, and the Thread region itself carries no EmptyState: the Composer is the affordance), populated, streaming (the last Message is live per §2), loading-history (Skeleton lines at the top edge while older turns page in).
+**Forbidden:** more than one Thread per screen; a second scroll container nested inside it; re-acquiring the bottom lock while the user is reading above it; infinite-scroll paging of history (older turns page in via an explicit affordance — the feed cursor case, `patterns.md` §4); date/actor group headers between turns; rendering the human and agent columns as two separate scroll regions.
+**A11y:** the container is `role="log"` `aria-live="polite"`, **declared once here and nowhere inside it** — not per Message, and not on the AgentStep list, which drops its own live region when nested in a Thread (see AgentStep A11y). A nested live region double-announces every step. "Jump to latest" is a real button in the tab order, not a scroll-position artifact.
+
+---
+
+## Message
+
+**Purpose:** one turn in a Thread — the single most-rendered object in AgentOS. Two actor forms, closed. Content rendering: `ai-patterns.md` §12; attribution: §9. (Added 2026-08-03 — chat-interface gap audit; anatomy previously existed only as `preview.html` CSS.)
+
+**Anatomy — `human`:** right-anchored bubble, `margin-left: auto`, **max-width 75% of the message column**, `bg.sunken` fill, radius `xl`, padding 8×12, `body` type. No avatar (position and fill identify the author — a right-anchored bubble in a two-actor thread needs no third marker), no timestamp at rest, no toolbar (ResponseToolbar is agent-only jurisdiction).
+**Anatomy — `agent`:** full-width, **no bubble and no fill** — plain `body` text on `bg.page`, laid out as a flex row: squared agent Avatar (24, `flex:none`, the agency marker per §1) + content column (`flex:1`, `min-width:0`). Agents speak as the product; humans speak in bubbles. The asymmetry is deliberate and load-bearing: **it is the shape channel that makes authorship scannable without reading**, and it is why the human bubble's radius `xl` sits beside an agent reply with no radius at all. Do not "tidy" this into matching containers.
+**Attachment order (`human`, §12):** attachments stack **above** the bubble text in fixed order — document ContextCards first, then images (bubble-aligned, radius `lg` + hairline, max-height 240; two side by side, 3+ as a 2-wide grid), then the text. Never a MediaGroup fan — rotation is generated-media only (§21).
+**Content column (`agent`) — order is fixed:** working line (§20) → AgentStep list (§3) → Reasoning disclosure (§14) → AnswerHeader (§20, optional) → answer body (§12) → sources row (§6) → ProposalCard (§5) → MediaGroup (§21) → ResponseToolbar (§35) → follow-up Chips (§19). A renderer MAY omit any element; it MAY NOT reorder them. Fixed order is what lets a user learn one scan path and reuse it on every reply.
+**States:** `human` — sent, send-failed (inline `caption` `status.danger` + retry, draft preserved). `agent` — streaming (§2 cursor + Stop reachable), settled, stopped (partial output + `text.tertiary` "Stopped by you" caption), failed (§10 inline error flavor + Retry), guardrail-blocked (§15 neutral notice in place of the answer body — never `status.danger`).
+**Forbidden:** avatars on human messages; bubbles, fills, or borders on agent messages; ResponseToolbar or feedback affordances on human messages; timestamps on every message at rest (they belong to attribution rows and handoff events, not to the bubble); editing a sent message in place (append a new turn — Thread is append-only); a third actor form (system notices are Banners, handoffs are §16 events, neither is a Message); italics or ALL-CAPS in message content (`foundations.md` §2.3.2).
+**A11y:** each Message is an `<article>` with an accessible name naming its actor ("June", "{agent name}") so a screen reader can traverse turns; the Thread owns the live region, the Message does not declare its own.
+**Bilingual:** the 75% cap is proportional, so KO and EN wrap differently at the same content — verified at +25% string width per `foundations.md` §2.3. Nothing inside a Message is fixed-width.
+
+---
+
+## AnswerHeader
+
+**Purpose:** the titled opening of a substantial agent reply — names what the run produced, states how long it took, and carries the variant pager. Full behavior: `ai-patterns.md` §20, §22. (Added 2026-08-03 — chat-interface gap audit.)
+
+**Anatomy:** a flex row, `space-2` gaps, `space-2` top margin, inside the agent Message content column: title (`heading-sm`, taken from the run's stated goal) + total-duration Badge (`neutral` subtle, tabular numerals) + right-aligned trailing cluster (VariantPager when variants exist, then a collapse chevron as a `ghost` `sm` icon-button).
+**When:** replies longer than ~4 paragraphs, or any reply produced by a multi-step run. **One header per reply** — never one per section or paragraph. A short conversational answer with a title on it reads as a document, which is the §32 artifact case, not a chat reply.
+**Behavior:** the §20 named working line resolves *into* this title on completion — the same string, promoted from `body-sm` `text.secondary` pulse to `heading-sm` — so the user watches the label they were given become the heading they keep. Collapsed keeps title + duration and hides the answer body; expansion state persists in the transcript per user.
+**Forbidden:** more than one header per reply; a header on a reply with no title-worthy goal (an untitled answer is correct, not unfinished); `heading-md` or larger (agent text never produces page-level hierarchy, §12); a duration Badge with an invented or estimated number — actuals only (§11); auto-collapsing a reply the user has not collapsed.
+**A11y:** the chevron is a real toggle with `aria-expanded` and an accessible name naming the section; the duration Badge is not a live region — it settles once.
+
+---
+
+## VariantPager
+
+**Purpose:** non-destructive navigation between regenerations of one agent reply. Full behavior: `ai-patterns.md` §22. (Added 2026-08-03 — chat-interface gap audit.)
+
+**Anatomy:** right-aligned in the AnswerHeader — ‹ and › as `ghost` `sm` icon-buttons around a `caption` tabular-nums counter ("2/2"). Nothing else; no dots, no dropdown of versions, no labels.
+**Behavior:** regenerate on the latest reply creates variant N+1 and never destroys the prior one; switching is non-destructive and instant. **Each variant keeps its own provenance and attribution** — its own SourceChips, its own uncertainty Badges, its own AgentStep record. Max 5 variants; the next regeneration replaces the **oldest unpinned** variant.
+**Jurisdiction:** the latest agent reply only — the same rule that governs ResponseToolbar's regenerate. Earlier replies show no pager, because they cannot be regenerated.
+**Forbidden:** destructive regeneration (overwriting the current variant); a pager on a human message or on an earlier agent reply; carrying one variant's citations onto another (a provenance break — §6 never fake a citation); more than 5 retained variants; exposing variants as a Tabs or Select control (the pager is the closed form).
+**A11y:** each arrow carries an accessible name stating the destination ("Previous version, 1 of 2"); the counter is `aria-live="polite"` so switching announces; arrows disable at the ends rather than wrapping.
+
+---
+
+## Reasoning
+
+**Purpose:** disclosure of an agent's working text, rendered subordinate to the answer and never as answer content. Full behavior: `ai-patterns.md` §14. (Added 2026-08-03 — chat-interface gap audit; previously specified only in `ai-patterns.md` §14 with a `preview.html` story.)
+
+**Anatomy:** collapsed by default — a 24px disclosure row: chevron (12px) + "Reasoning" / "추론 과정" (`label`, `text.tertiary`) + duration (`text.tertiary`, tabular-nums). Expanded reveals the text in `body-sm` `text.secondary` on `bg.surface`, rendered with the agent-markdown rules (§12) but **capped: no headings, no images**.
+**Subordination rules (all three are structural, not stylistic):** it never uses `text.primary`; it never carries SourceChips (citations belong to claims in the *answer*); and it is excluded from copy and regenerate — the ResponseToolbar acts on the answer only.
+**States:** collapsed, expanded (persists per user per conversation), running (the row renders while reasoning streams, duration counting), redacted (policy-suppressed — says so plainly: "Reasoning not available for this response" / "이 응답의 추론 과정은 제공되지 않습니다").
+**Forbidden:** auto-expanding (absolutely — the answer is the deliverable, the reasoning is an offer); rendering empty when redacted; `text.primary` or any emphasis that competes with the answer; SourceChips inside it; including it in copy/regenerate scope; presenting reasoning as the answer when no answer was produced (that is a §10 failure state).
+**A11y:** `aria-expanded` on the row; the expanded region is *not* a live region even while streaming — announcing working text over the answer inverts the subordination the component exists to enforce.
+
+---
+
+## SelectionPill
+
+**Purpose:** the floating action pill raised by selecting text inside an agent Message — the affordance that makes a passage a conversational object. Full behavior: `ai-patterns.md` §18, §22. (Added 2026-08-03 — chat-interface gap audit.)
+
+**Anatomy:** a single floating pill, 28px height, padding 0×12, `bg.raised-2` fill, `border.overlay` hairline, radius `full`, `shadow.lg`, `z.dropdown`, `label-sm` type (sans 12/18 medium — never a raw font-size, foundations §2.2), standard entrance; anchored above the selection. Actions are separated by a 1px `border.default` vertical hairline, 12px tall.
+**Actions (closed set — three):** **답장** (reply) · **설명** (explain) · **재생성** (regenerate). *Ruling 2026-08-03: three is law; `ai-patterns.md` §22's earlier "never a third pill action" sentence was stale and is struck (`proposals/2026-08-03-chat-interface-component-gaps.md` §4.1).* Extending the set requires governance — actions come from the action glossary.
+**Behavior:** 답장 inserts a ComposerQuote of the selection into the Composer (max one quote per send; quoting replaces any existing quote). 설명 composes a quoted follow-up and the explanation arrives as a **normal agent turn** in the thread. 재생성 regenerates **only the selected passage in place**, landing with a one-shot `emphasis.surface` flash and an Undo Toast (reversible-lite). While a selection is quoted, the passage takes `ai.surface` fill + inset `ai.border` hairline.
+**Scope law:** 재생성's scope is *the selection*, never the paragraph around it. Rewrite-type actions apply only to the user's own draft (§24), never to agent output.
+**Jurisdiction:** agent Messages only. Selecting text in a human bubble raises nothing — a user's own words need no reply affordance.
+**Forbidden:** a toolbar of options instead of one pill; more than one pill visible; a fourth action without governance; mutating the original Message in place for **답장 or 설명** — both compose new turns and never touch the source passage; the pill on human messages, on ProposalCards, or on Reasoning text; persisting after deselect or Esc.
+**⚠ 재생성 is blocked pending a ruling.** Its "in place" write conflicts with the append-only law — see the UNRESOLVED note under `Thread`. The action stays in the closed set (that was ruled 2026-08-03); its *write semantics* are what is open.
+**A11y:** the pill is keyboard-reachable from the selection, each action independently focusable and labeled; Esc dismisses and returns focus to the selection anchor.
+
+---
+
+## FollowUpPanel
+
+**Purpose:** the anchored panel of suggested next turns that MAY open above a focused Composer — the active counterpart to passive suggestion Chips. Full behavior and ordering law: `ai-patterns.md` §19. (Added 2026-08-03 — chat-interface gap audit; **anatomy relocated here from `ai-patterns.md` §19**, which retains the behavior rules.)
+
+**Anatomy:** a **solid `bg.raised` panel** — explicitly NOT glass: it is small, dense, and sits over thread text where translucency reads muddy (`foundations.md` §6) — with a `border.default` hairline, `shadow.lg`, radius `md`, 6px padding. Rows are 32px at radius `xs`, leading with the 12px follow-up arrow; a full-bleed keyboard header row carries keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). Row hover/selected = `bg.selected`.
+**Placement:** absolutely anchored **8px above the Composer's top edge** — a floating layer detaches from its anchor, and flush contact would read as part of the input; anchored menus use 4px, the panel's larger mass earns 8. It **overlays** the last thread messages and never pushes content down (layout shift on open is forbidden).
+**Grouping (§19 refine vs pivot):** **refine** rows (zoom in on the current answer) sit above **pivot** rows (zoom out to a related next step), split by the standard full-bleed divider. When both kinds are present each group MAY carry a `micro-label` header ("더 자세히" / "다음 단계"). Rows stay ranked within a group; **max 4 rows total**.
+**Chip honesty (adopted law):** a row's visible label **is** the query it sends. If the real query needs more words than the row can show, it inserts into the Composer for editing instead of sending. Selecting a row inserts into the Composer — **never auto-sends**.
+**Mutual exclusion:** suggestion Chips and the panel never render simultaneously; the panel never renders in the zero state (prompt starters own the empty conversation, §27, and hand off at the first turn).
+**Forbidden:** glass or `backdrop-filter` (SY015); more than 4 rows; auto-sending on selection; pushing thread content down; a per-row rationale line (it would break chip honesty — the label is the query, and grouping is how the panel signals *why* a row is offered); rendering alongside Chips or in the zero state.
+**A11y:** `role="listbox"` with ↑↓ traversal and ↵ selection; the keycap header is decorative (`aria-hidden`) — the shortcuts are real key handlers, not a rendered legend doing the work.
+
+---
+
+## ConversationSummary
+
+**Purpose:** an agent-generated recap of a long thread — decisions, action items, open questions — so a user can catch up without rereading. Full behavior: `ai-patterns.md` §34. (Added 2026-08-03 — chat-interface gap audit.)
+
+**Anatomy:** a collapsible block, **borderless `ai.surface` fill, radius `md`, no shadow — deliberately identical to ProposalCard's tray, since the Console's agent-output objects speak one dialect** (added explicitly 2026-08-03: the entry originally named no radius or border, and the two renders had drifted to `xl` and `md`). Body opens to `bg.page` per the tray rule. It carries the standard agent attribution row (squared Avatar + agent name + timestamp, §9), placed at the top of the Thread or inside the thread's detail Drawer. Header carries a refresh `ghost` action and a `last-generated` caption. Body follows agent-markdown rules (§12).
+**It is agent output, marked as such** — never presented as system chrome, never as the user's own notes. The `ai.surface` fill and the attribution row are both required; a summary that reads as chrome is a provenance failure.
+**Grounded:** each point links back to the turns it summarizes (SourceChip-style jump, §6). A summary that cannot point at its source turns, or that states a decision not present in the thread, violates §10 honesty.
+**Refreshable, not authoritative:** regenerated on demand; it **never** replaces or rewrites the transcript (Thread is append-only). After the conversation continues, a stale summary shows its age — never a false "current".
+**When not:** short threads (a summary longer than the thread is noise); never summarize into a surface that widens who can see the underlying content.
+**Forbidden:** replacing or editing transcript turns; a point with no jump-back link; stating a decision absent from the thread; presenting it as chrome or as the user's notes; auto-generating on every thread regardless of length; a summary with no visible generation age.
+**A11y:** the collapse toggle carries `aria-expanded`; jump-back links are real links that move focus to the target turn.
 
 ---
 
