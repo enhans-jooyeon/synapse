@@ -4,6 +4,16 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **Composer moved closer to the reference designs, and a stale `brand` description fixed on the way.** B is the settled arrangement (footer below the container, pill ↔ rect morph). Three changes bring it nearer the references without reversing a ruling:
+
+  - **Grown radius `md` (12) → `lg` (16).** `xl` (20) would be closer still, but `foundations.md` §5 reserves it for section shells — *"the outermost rounded well a page region sits in… never on cards or overlays"* — so `lg` is this container's ceiling. A fused panel follows the tray to `lg` on its top corners (flush nesting shares the parent radius exactly).
+  - **Composer row controls `sm` (32) → `md` (36).** The references' buttons are visibly chunkier, and the extra height is what makes the single-line state read as a proper pill rather than a thin lozenge — reached without disturbing the 12px inset, which two earlier passes established.
+  - **The active toggle takes the sanctioned single-active-chip dark fill** (`bg.inverse-soft` + `text.on-inverse`) instead of the reference's coloured pill. It keeps the prominence the reference gets from colour without spending a hue the system rations.
+
+  **Defect found while checking the send button.** The Composer entry described send as *"the graphite point color as a conversational-AI CTA"* — stale since the 2026-07-30 re-hue. `brand` resolves to **azure `#0073E6`** while `brand.point` stayed **graphite `#1A1A1F`**, so the prose named one token and described another. Corrected. This also settles what the references' near-black send is: that is `primary`, reserved for operational agent actions, so it is not adoptable without reversing the brand ruling.
+
+  **Two reference details deliberately not copied,** each recorded in the story so the reasoning is visible next to the render: the **circular `+`** (icon-only buttons are square, and Composer send is specified as the only circular control) and the **near-black send** (see above).
+
 - **Shape morph fixed — it flipped on the first keystroke instead of the first wrap.** Two causes, both mine.
 
   **The detection was measured wrong.** It compared the textarea's `scrollHeight` against a computed `line-height`, which mixes units and ignores padding. It now measures the field's **own** `scrollHeight` while empty — exactly one row — caches that as a baseline, and treats anything taller than `baseline + 1` as wrapped. Unit-agnostic, padding-agnostic, and it compares like with like.
