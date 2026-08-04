@@ -4,6 +4,22 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **`FloatingPill` declared (67 → 68 components) — one shell that was already implemented three times and specified nowhere.** Raised by the question "what component is the 최신으로 이동 button?" The answer was **none**: it was ad-hoc markup in a bespoke class, which `design.md` §3.4 forbids outright ("NEVER invent a component… unmet needs → §6 escalation"). Three defects sat behind it.
+
+  **1. "Toast surface" was a false citation.** `Thread` described the affordance as borrowing Toast's surface. A Toast is a *transient notification* — bottom-right, max 3, auto-dismiss 5s, status icon. The jump affordance is persistent, bottom-centre, dismissed by scrolling, and it is an **action**. It shared Toast's tokens and none of its contract, so the citation looked like a component reference while conferring nothing. Removed, and the note left on Toast's own entry (from this morning's hairline fix) claiming Thread and SelectionPill borrow it is superseded.
+
+  **2. It was a `<span>` in the preview and a `<button>` in storybook** — while `Thread`'s own A11y clause said *"'Jump to latest' is a real button in the tab order, not a scroll-position artifact."* The render contradicted the spec sitting six lines above it. Both preview instances are now real buttons.
+
+  **3. It was the second undeclared instance of one object.** `.jump-pill` and `.reply-pill` were byte-identical on every structural property — 28px, `bg.raised-2`, 1px `border.overlay`, radius `full`, `shadow.lg`, `z.dropdown`, `0 space-3` padding — and `ResponseToolbar`'s `media` rail is a third instance of the same family. SelectionPill got a component entry earlier today only because it happened to fall inside the tranche's scope; the identical shell next to it did not.
+
+  **Resolution — declare the shell, not the affordance.** `FloatingPill` owns the surface (fill, hairline, radius, shadow, z, entrance, the separator, and the real-control requirement) with closed variants `horizontal` | `rail`. Its three consumers are a **closed set** and now *reference* it rather than restate it — the same DRY structure applied to §19 earlier today. Neither `Button` nor `Chip` could host it: Button's pill radius is restricted to `primary` + `lg` in Guided heroes and empty-state first-use, and Chip is outlined at rest with select/refine/remove jurisdiction.
+
+  **The rules worth having written down**, none of which existed while this was three copies: destructive actions are forbidden (a floating affordance is too easy to hit by accident — that goes through Popconfirm or a Modal); more than three actions makes it a Menu; no `primary`/`brand`/`danger` fill, since emphasis inside a floating layer competes with the region's real primary; no status icon, because that is Toast's vocabulary and invites exactly the confusion this entry ends; anchored to whatever raised it and never to the viewport; and it never displaces content on appear (§19's no-layout-shift rule, generalised).
+
+  **SY021 caught my own regression mid-change** — once `Thread`'s prose stopped naming `bg.raised-2` / `border.overlay` / `shadow.lg`, the gate flagged the manifest for still asserting them. Exactly the drift class it was built for, one commit after it was built.
+
+  Applied across `components.md`, the manifest, `preview.html` (shared `.fpill` base, consumers reduced to anchoring deltas, plus a new story under Overlays), and `storybook/` (a real `FloatingPill` component that `SelectionPill` and `Thread` now compose, so the React layer matches the declared relationship rather than duplicating it).
+
 - **The §18 quote highlight was built like a Badge — outline removed, it is a marker now.** Raised as "the highlight looks like some sort of badge." It read that way because it *was* one: `ai.surface` fill **plus an inset 1px `ai.border`** at radius `sm` (8px) is tint + outline at chip radius, which is Badge anatomy.
 
   **The system already forbids that formula.** `components.md · ProposalCard` states it outright — *"The forbidden formula remains tint + outline (the wireframe callout); borderless tint with page-filled internals is its opposite"* — and the Banner guidance repeats it as an anti-pattern. Meanwhile every other highlight in the system is a **bare tint with no outline**: §22's regeneration flash, §23's template slots, §24's rewrite mark, §31's field/cell highlight. The quote highlight was the single place that broke its own house language, which is why it looked foreign.

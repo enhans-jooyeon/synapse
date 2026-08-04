@@ -1,0 +1,27 @@
+/* FloatingPill — components.md · FloatingPill. The shared shell for a transient
+   floating action affordance. Consumers carry only their deltas (anchoring). */
+.sy-fpill { display: inline-flex; align-items: center; gap: var(--sy-space-1);
+  background: var(--sy-bg-raised-2); border: 1px solid var(--sy-border-overlay);
+  border-radius: var(--sy-radius-full); white-space: nowrap;
+  color: var(--sy-text-primary); z-index: var(--sy-z-dropdown);
+  animation: sy-enter var(--sy-duration-base) var(--sy-ease-standard); }
+
+.sy-fpill--horizontal { height: 28px; padding: 0 var(--sy-space-3); box-shadow: var(--sy-shadow-lg);
+  /* label-sm — matches .sy-type-label-sm; never a raw font-size (foundations §2.2) */
+  font: var(--sy-weight-medium) var(--sy-text-12)/var(--sy-text-12-lh) var(--sy-font-sans); }
+
+/* rail sits ON content rather than floating above a scroll region, so it earns less lift. */
+.sy-fpill--rail { flex-direction: column; padding: var(--sy-space-1); box-shadow: var(--sy-shadow-xs); }
+
+.sy-fpill__sep { width: 1px; height: 12px; background: var(--sy-border-default); flex: none;
+  margin: 0 var(--sy-space-1); }
+.sy-fpill--rail .sy-fpill__sep { width: 12px; height: 1px; margin: var(--sy-space-1) 0; }
+
+/* Children are real controls — the shell only strips their default chrome. */
+.sy-fpill button { display: inline-flex; align-items: center; gap: var(--sy-space-1);
+  background: transparent; border: none; padding: 0; font: inherit; color: inherit;
+  cursor: pointer; border-radius: var(--sy-radius-xs); }
+.sy-fpill button:focus-visible { outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-raised-2), 0 0 0 4px var(--sy-border-focus); }
+.sy-fpill button svg { width: 12px; height: 12px; fill: none; stroke: currentColor;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }

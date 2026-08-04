@@ -11,6 +11,10 @@ export type { CardProps } from "./components/Card/Card";
    Specs: components.md · Thread / Message / AnswerHeader / VariantPager /
    Reasoning / SelectionPill / FollowUpPanel / ConversationSummary.
    Behavior: ai-patterns.md §2, §12, §14, §18–20, §22, §34. */
+/* FloatingPill is the shared shell for SelectionPill, Thread's jump affordance, and
+   ResponseToolbar's media rail (components.md · FloatingPill, declared 2026-08-03). */
+export { FloatingPill, FloatingPillSeparator } from "./components/FloatingPill/FloatingPill";
+export type { FloatingPillProps } from "./components/FloatingPill/FloatingPill";
 export { Thread } from "./components/Thread/Thread";
 export type { ThreadProps } from "./components/Thread/Thread";
 export { Message } from "./components/Message/Message";

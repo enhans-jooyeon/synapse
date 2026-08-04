@@ -1,4 +1,5 @@
 import React, { forwardRef } from "react";
+import { FloatingPill, FloatingPillSeparator } from "../FloatingPill/FloatingPill";
 import "./SelectionPill.css";
 
 /**
@@ -25,7 +26,8 @@ export interface SelectionPillProps extends React.HTMLAttributes<HTMLDivElement>
 /**
  * SelectionPill — components.md · SelectionPill · ai-patterns.md §18, §22.
  *
- * ONE pill, never a toolbar of options. The action set is closed and is not a
+ * Composes FloatingPill (components.md · FloatingPill) for the shell — this component owns
+ * only WHICH actions exist and where they apply. ONE pill, never a toolbar of options. The action set is closed and is not a
  * prop — a caller cannot add a fourth action or drop one, because both would
  * change a closed set without governance.
  *
@@ -37,7 +39,7 @@ export const SelectionPill = forwardRef<HTMLDivElement, SelectionPillProps>(func
   ref
 ) {
   return (
-    <div
+    <FloatingPill
       ref={ref}
       className={["sy-selpill", className].filter(Boolean).join(" ")}
       onKeyDown={(e) => { if (e.key === "Escape") onDismiss?.(); }}
@@ -45,13 +47,13 @@ export const SelectionPill = forwardRef<HTMLDivElement, SelectionPillProps>(func
     >
       {SELECTION_ACTIONS.map((action, i) => (
         <React.Fragment key={action}>
-          {i > 0 && <span className="sy-selpill__sep" aria-hidden="true" />}
-          <button type="button" className="sy-selpill__action" onClick={() => onAction(action)}>
+          {i > 0 && <FloatingPillSeparator />}
+          <button type="button" onClick={() => onAction(action)}>
             <svg viewBox="0 0 24 24" aria-hidden="true">{ICONS[action]}</svg>
             {labels[action]}
           </button>
         </React.Fragment>
       ))}
-    </div>
+    </FloatingPill>
   );
 });

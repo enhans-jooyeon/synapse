@@ -1,4 +1,5 @@
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { FloatingPill } from "../FloatingPill/FloatingPill";
 import "./Thread.css";
 
 export interface ThreadProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -53,13 +54,15 @@ export const Thread = forwardRef<HTMLDivElement, ThreadProps>(function Thread(
           {children}
         </div>
       </div>
+      {/* A FloatingPill, not a Toast — see components.md · Thread. Rendered only while the bottom
+          lock is RELEASED, and the child is a real <button> per the FloatingPill contract. */}
       {!atBottom && (
-        <button type="button" className="sy-thread__jump" onClick={jump}>
-          <svg className="sy-thread__jump-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 9l6 6l6 -6" />
-          </svg>
-          {jumpLabel}
-        </button>
+        <FloatingPill className="sy-thread__jump">
+          <button type="button" onClick={jump}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6l6 -6" /></svg>
+            {jumpLabel}
+          </button>
+        </FloatingPill>
       )}
     </div>
   );
