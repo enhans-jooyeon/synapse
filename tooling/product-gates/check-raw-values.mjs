@@ -6,17 +6,21 @@
  *
  * Usage: node tooling/synapse-gates/check-raw-values.mjs  (argv[2] = a glob of ts/tsx/css files)
  */
-import { readFileSync } from 'node:fs';
-import { globSync } from 'node:fs';
+import { readFileSync, globSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 import process from 'node:process';
 
-const pattern = process.argv[2] ?? 'src/**/*.{ts,tsx,css}';
+// A directory argument auto-expands to its source files; zero matches is a
+// loud failure (exit 2), never a silent green. (2026-08-05, migration-test feedback)
+let pattern = process.argv[2] ?? 'src/**/*.{ts,tsx,css}';
+try { if (statSync(pattern).isDirectory()) pattern = join(pattern, '**/*.{ts,tsx,css}'); } catch {}
 const files = globSync(pattern);
+if (files.length === 0) { console.error(`No files matched: ${pattern}`); process.exit(2); }
 
 const RAW_HEX = /#[0-9a-fA-F]{3,8}\b/;
 const RAW_RGB = /\b(rgb|rgba|hsl|hsla)\(/;
 const RAW_PX = /\b\d+(\.\d+)?px\b/;            // bare px literal
-const TW_ARBITRARY = /\b[\w-]+\[[^\]]+\]/;      // e.g. p-[13px], text-[#abc]
+const TW_ARBITRARY = /-\[[^\]]+\]/;             // e.g. p-[13px], text-[#abc] — Tailwind arbitrary values always have a dash before the bracket; plain JS indexing (acc[key]) must not match (2026-08-05, migration-test feedback)
 const ALLOW = /synapse-allow/;                  // opt-out marker requires a harness ticket ref
 
 let violations = 0;

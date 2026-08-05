@@ -71,6 +71,15 @@ for (const line of head) {
 writeFileSync(join(DIST, 'CHANGELOG.md'), out.join('\n').replace(/\n{3,}/g, '\n\n').trimEnd() + '\n');
 
 // 4. generate the consumer README
+// Dense never-list (adoption ruling #6a): the harness entrypoint dual-encodes the
+// manifest's `never` array so an agent that reads only the README still sees the
+// hard prohibitions. Read from the freshly copied bundle manifest, so README and
+// manifest are two renderings of one source and cannot drift.
+const never = JSON.parse(readFileSync(join(DIST, 'synapse.manifest.json'), 'utf8')).never;
+const neverSection = `## Never (dense index — full list with rationale in design.md §8)
+
+${never.map(n => `- ${n}`).join('\n')}
+`;
 writeFileSync(join(DIST, 'README.md'), `# Synapse — AgentOS design harness (v${version})
 
 > **Provenance:** built from source \`${SOURCE_SHA}\` on ${SOURCE_DATE}. If the source repo has newer release tags than v${version}, this bundle is stale — \`git pull\` before generating.
@@ -93,6 +102,7 @@ The machine-enforceable contract for generating AgentOS UI. This is the **curate
 
 Stdlib-only Python 3 — no installs.
 
+${neverSection}
 ## Enforce it
 
 Wire **\`tooling/product-gates/\`** into your product repo's CI — the gate is green *before* design review (the harness owns compliance; humans review only judgment).

@@ -19,6 +19,12 @@ Stdlib only. Exit code is non-zero on validation failure or a not-found lookup, 
 import json, os, sys, subprocess, difflib, re
 from collections import Counter
 
+# Piped output (lookup | head) must not traceback: restore default SIGPIPE
+# handling on platforms that have it. (2026-08-05, migration-test feedback era)
+import signal as _signal
+if hasattr(_signal, "SIGPIPE"):
+    _signal.signal(_signal.SIGPIPE, _signal.SIG_DFL)
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MANIFEST_PATH = os.path.join(ROOT, "synapse.manifest.json")
 VALIDATE = os.path.join(ROOT, "tools", "validate.py")
@@ -116,6 +122,26 @@ def lookup(query):
     nt = norm_token(query)
     if nt in tokens:
         print(f"TOKEN  {nt}  — defined (use var({nt}))")
+        return 0
+
+    # keywords index (manifest `keywords` — cross-system names and synonyms,
+    # parsed from components.md's **Keywords:** slots). An exact keyword match
+    # beats the fuzzy fallback; shared keywords list every carrier.
+    # Matching is separator-insensitive (2026-08-05, migration-test feedback):
+    # old shadcn/Radix names arrive joined ("dropdownmenu", "togglegroup") while
+    # the slots spell them with spaces — both sides normalize to bare letters,
+    # so no second alias table is needed (the keywords slot stays the single source).
+    squash = lambda s: "".join(c for c in s.lower() if c.isalnum())
+    qs = squash(ql)
+    kw_hits = [k for k, e in comps.items() if qs in {squash(w) for w in (e.get("keywords") or [])}]
+    if len(kw_hits) == 1:
+        print(f"KEYWORD '{ql}' → {kw_hits[0]}")
+        _print_component(kw_hits[0], comps[kw_hits[0]])
+        return 0
+    if kw_hits:
+        print(f"KEYWORD '{ql}' matches {len(kw_hits)} components:")
+        for k in kw_hits:
+            print(f"  COMPONENT  {k} — {comps[k].get('purpose','')}")
         return 0
 
     # not found → closest across categories

@@ -3,6 +3,7 @@
 **This is a closed set.** The 68 component entries below (a `##` heading each; some entries group sibling controls, e.g. Checkbox · Radio · Switch) are the only building blocks permitted in generated UI. Common multi-component assemblies are specified in `recipes.md` — check there before composing from scratch. If a need cannot be met by these components or their documented composition (`patterns.md`), the correct action is to escalate per `design.md` §6 — never to invent a variant, add a prop, or restyle an existing component.
 
 Every spec follows the same schema. `variants` and `sizes` are exhaustive enumerations. `forbidden` lists the modifications agents most commonly attempt and must not. Components use the single system size scale; Table runs compact by default (foundations §4).
+`Keywords:` slots are discovery aliases — cross-system names (shadcn / Radix / MUI / Ant) and synonyms an agent might search — not contract vocabulary: a keyword never adds a variant, prop, or jurisdiction.
 
 Conventions: heights refer to `--sy-control-height-*` (`tokens/synapse.css`). "Focus ring" = a 2px ring in `--sy-border-focus`, **offset 2px from the element** — a `bg.page` gap ring drawn inside the colored ring (box-shadow, so it follows the corner radius) — so the ring reads detached. Except Buttons, whose focus ring is a lightened ~50% `color-mix` tint of the button’s own color (same 2px gap + 2px ring).
 
@@ -11,6 +12,7 @@ Conventions: heights refer to `--sy-control-height-*` (`tokens/synapse.css`). "F
 ## Button
 
 **Purpose:** trigger an action. Not for navigation (use Link) — a button never changes the URL.
+**Keywords:** action, cta, submit, icon button, loading button, press
 
 **Variants (closed) — TWO AXES as of 2026-07-30.** Reversal of the flat single-axis list, adopting the old `@enhans/synapse` API shape so the migration is a 1:1 prop mapping. The axes are orthogonal by design: `buttonStyle` says *how loud*, `target` says *what kind*. Conflating them into one flat list (the `btn-danger` pattern) is the weaker design; separating them is what Chakra (`variant` × `colorScheme`) and Ant (`type` × `danger`) do.
 
@@ -112,6 +114,7 @@ The three soft rings are **mode-invariant** — each is the `500` step of its fa
 ## Link
 
 **Purpose:** navigation. `text.link` color, no underline at rest, underline on hover/focus. Inline links inside body text are always underlined. External links append a 16px external icon.
+**Keywords:** anchor, hyperlink, href, navigation link, text link
 
 **Deciding between Link and Button (the migration's most common question).** Ask what the element *does*, not what it looks like:
 
@@ -135,6 +138,7 @@ shadcn's `variant="link"` Button conflates the first and fourth rows, which is w
 ## Input (text)
 
 **Purpose:** single-line text entry. Covers text, email, password, number, search (search adds leading 16px icon + clear button when filled).
+**Keywords:** text field, textbox, form field, search input, password, input group, addon
 
 **Anatomy (outlined):** label (required, `--sy-label-size` medium, above) · field (height-md, `bg.page` fill, 1px `border.default` perimeter, radius `10`; the `sm`/`lg` field sizes step to `sm`/`md` per foundations §5) · optional helper text (caption, `text.secondary`) · error text (caption, `status.danger`, replaces helper). *(Maintainer reversal of the earlier borderless-filled anatomy: the `bg.sunken` field fill was tonally identical to the `bg.disabled` fill, so at-rest fields read as disabled. Fields are now white and outlined; a grey fill (`bg.disabled`) is reserved as the single unambiguous disabled signal.)*
 **States:** default (white `bg.page`, 1px `border.default`), hover (border steps to `border.strong` — fill stays white), focus (border swaps to `border.focus-input` — neutral 1px perimeter, no offset ring: entry surfaces focus in the neutral key tone because click-to-type shows focus constantly and a blue offset ring overexposed the accent; non-entry controls keep the blue `border.focus` flush ring), disabled (`bg.disabled` grey fill — the one filled state — `text.disabled`), error (1px `border.error` + error text; error text MUST name the fix, not just "invalid"; error border holds while focused), read-only (`bg.surface` faint fill, no hover response). Select, Combobox, and DatePicker triggers inherit this outlined anatomy.
@@ -169,6 +173,7 @@ Add-ons are for genuine input enhancement — a dropdown that changes the value'
 ## Textarea
 
 **Purpose:** Multi-line Input. Min-height 3 rows, vertical resize only, otherwise inherits all Input rules. Character counter (caption, `text.tertiary`, bottom-right) when a limit exists — count characters, not bytes (Hangul). **`autogrow` variant:** grows with content from 1 row to a declared max (default 8), then scrolls internally; resize handle removed — Composer's behavior, now available to inline forms (comments, descriptions).
+**Keywords:** multiline, text area, autosize, autogrow, comment box, long text
 
 **Action bar (added 2026-07-30 — migration gap).** A Textarea MAY carry a trailing action row fused to the bottom of the field, sharing its outer shape: 1px `border.subtle` seam above the row (edge to edge, per the divider rule), row height 40px, `bg.page` fill, `control-padding-x` side padding matching the field body. Contents, left to right: optional metadata (character counter or hint, `caption`, `text.tertiary`) then right-aligned Buttons — `sm` size, at most two, `secondary` and/or `ghost`. The counter moves into this row when it exists rather than floating below the field. This is the generalized form of the Composer's send row and the replacement for the old library's `Textarea.Actions` compound.
 **Forbidden:** `primary`, `brand` or `danger` Buttons in the action row (a text field is not the place to site a page's main action — put it in the form footer); more than two buttons; an action row on an `autogrow` Textarea inside the Composer (the Composer owns its own send row and must not nest a second one); icon-only buttons in the row outside the approved icon list.
@@ -189,6 +194,7 @@ Trigger renders as Input anatomy with trailing chevron (16px). Menu is a Popover
 **Forbidden:** native `<select>` styling mixed with custom menus; multi-select without chip rendering (use input Chips inside the trigger); menus wider than 480px or narrower than trigger.
 **A11y:** listbox pattern; full keyboard (arrows, Home/End, type-ahead); Esc closes.
 **Bilingual:** menu width fits longest option of the active locale; no fixed trigger widths.
+**Keywords:** dropdown, picker, single select, listbox, options
 
 **Key rules (machine index):**
 - trigger inherits outlined Input anatomy
@@ -199,6 +205,7 @@ Trigger renders as Input anatomy with trailing chevron (16px). Menu is a Popover
 ## Checkbox · Radio · Switch
 
 **Purpose:** Form on/off · one-of-2–5 · instant-effect toggle.
+**Keywords:** toggle, radio group, checkbox group, boolean, indeterminate, on off, form control
 
 | Control | Semantic | Never |
 |---|---|---|
@@ -231,6 +238,7 @@ Checked state: `action.primary-bg` fill (black/white — key color, not blue). L
 ## Badge
 
 **Purpose:** compact static annotation — status, counts, categories. Never interactive (interaction = Chip). **Default rendering:** a Badge with no declared color renders as `neutral` — a badge never appears as unfilled floating text.
+**Keywords:** tag, label, pill, status, count, dot, annotation
 
 **Sizes:**
 
@@ -283,6 +291,7 @@ One size per view, as with shape.
 ## Chip
 
 **Purpose:** compact **interactive** element — select, refine, remove, or accept a suggestion. The static counterpart is Badge; the split is absolute: if it can be clicked, it's a Chip; if it only informs, it's a Badge. Height 24px, radius `sm`.
+**Keywords:** tag, token, filter chip, removable, selectable, suggestion
 
 **Interactivity is encoded by FILL, not shape (2026-07-30).** A Chip is **outlined at rest**; a Badge is filled or tinted. Shape is no longer the signal — it is a free density/tone choice on Badge. Two consequences that are NOT optional:
 
@@ -326,6 +335,7 @@ One size per view, as with shape.
 ## Card
 
 **Purpose:** bounded group of related content. Radius `md`, padding `--sy-card-padding`. Optional header (`heading-lg` or `heading-md` + optional actions) and footer separated by full-bleed `border.subtle`.
+**Keywords:** panel, container, tile, surface, box, stat, kpi
 
 **Variants:**
 
@@ -350,6 +360,7 @@ One size per view, as with shape.
 ## Table
 
 **Purpose:** the workhorse for data-heavy screens. Structured records with aligned columns.
+**Keywords:** data table, datagrid, grid, rows, columns, list view, spreadsheet
 
 **Selection column:** 40px fixed, zero cell padding, contents centered both axes (`vertical-align: middle` on the checkbox) — the selection cell holds a control, not text, so it never inherits text-cell padding/alignment. Header checkbox = select-all with the mixed state per the Checkbox rules.
 
@@ -411,6 +422,7 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 ## Combobox
 
 **Purpose:** choose one or many values from large (>15), async-loaded, or user-known option sets. This is Select's big sibling — Select stays for 5–15 static options.
+**Keywords:** autocomplete, typeahead, multiselect, search select, async options, creatable
 
 **Anatomy:** Input-style trigger (label above, height-md, chevron trailing). Typing filters instantly; matched substrings are highlighted (600 weight, no color change). Menu = Popover surface, options as Select's; async results show 3 Skeleton rows while loading.
 **Multi-select:** selected values render as removable input Chips inside the trigger, wrapping to max 2 rows, then a "+N" overflow Chip (click → popover listing all). Menu options get leading Checkboxes; the menu stays open between picks; trigger placeholder becomes the selection count when collapsed.
@@ -439,6 +451,7 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 ## DatePicker
 
 **Purpose:** date, date-range, and time selection. Formatted Input trigger + calendar Popover.
+**Keywords:** calendar, date input, date range, time picker, datetime, date field
 
 **Variants (closed):** `date` (default) · `range` · `datetime` · `time`.
 
@@ -460,6 +473,7 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 ## SegmentedControl
 
 **Purpose:** exclusive switch between 2–5 peer views or parameters with immediate effect — chart periods (1D/7D/30D), layout toggles (list/grid). Not Tabs (object facets), not Radio (form data, deferred effect).
+**Keywords:** segmented button, toggle group, view switcher, exclusive choice, mode switch
 
 **Anatomy:** container `bg.sunken`, radius `md`, **4px inner padding** (concentric-corner rule, foundations §5: inner radius = outer − inset; 12 − 4 = 8 keeps both radii on-scale, and the assembled control lands exactly on the control height (32). Segments: height 24, radius `sm`, padding-x 12, 13 medium, `text.secondary`; selected segment `bg.page` fill + 1px `border.default` + `text.primary`. Equal-content-based widths; the control sizes to its content.
 **States:** default, hover (`text.primary`), selected, disabled (whole control only — never individual segments), focus-visible ring on the active segment.
@@ -476,6 +490,7 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 ## Accordion
 
 **Purpose:** progressive disclosure of secondary content — advanced settings, FAQ-style detail, raw payloads.
+**Keywords:** collapsible, disclosure, expander, expand collapse, details
 
 **Anatomy:** items separated by `border.subtle`. Header row: 40px, chevron (16px, rotates 90°→ down at `fast`), 14 medium title, optional right-aligned meta (`text.tertiary`, 13). Panel: body text, padding 0 0 16px, indented to the title edge. Height animates at `base` — the sanctioned height-animation exception.
 **Behavior:** multiple items may be open simultaneously (default); single-open mode allowed for step-like content. State persists within the session.
@@ -492,6 +507,7 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 ## FileUpload
 
 **Purpose:** file input with visible progress and recoverable errors.
+**Keywords:** uploader, dropzone, file input, drag and drop, attachment
 
 **Variants:** `dropzone` (dashed 1px `border.strong`, radius `xl`, padding 32×24, centered: 20px upload icon in a 48px `bg.sunken` medallion (single `border.default` hairline ring — the dropzone keeps this icon medallion; it no longer references EmptyState, which now uses line illustrations) + "Drop files here or **browse**" (13 medium, browse as Link) + constraints caption — "PDF, CSV up to 20MB" / "PDF, CSV · 최대 20MB") and `button` (a `secondary` Button "Attach file" / "파일 첨부" for compact contexts). Drag-over state: `border.focus-input` border + `emphasis.surface` fill. Dashed borders remain sanctioned for drop targets ONLY.
 **File rows:** 40px each below the input — 16px file-type icon, filename (middle-out truncation with full name in Tooltip), size (`text.tertiary`, tabular-nums), then per state: uploading = 4px determinate ProgressBar spanning the row bottom + percent; success = `status.success` check; error = `status.danger` icon + one-line cause + Retry ghost button; all rows get a remove ✕ icon-button (`aria-label` required).
@@ -508,6 +524,7 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 ## SplitPanel
 
 **Purpose:** resizable adjacent regions in Workbench archetypes — list + detail, editor + preview, table + inspector. Container is a section shell: radius `2xl`, 1px `border.default`, flush panes.
+**Keywords:** resizable, splitter, panes, split view, resize handle, resizable panel
 
 **Anatomy:** 2 panes (max 3) separated by a 1px `border.default` divider with an invisible 8px drag hit-area. Divider on hover/drag: `border.strong`, cursor `col-resize`. Optional collapse chevron centered on the divider (collapses the secondary pane to nothing; a re-open affordance stays at the edge).
 **Behavior:** drag resizes within min widths (content pane ≥ 280px, rail/inspector ≥ 200px); double-click the divider resets the default ratio; the ratio persists per user per view. Panes scroll independently.
@@ -523,6 +540,7 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 ## Chart
 
 **Purpose:** standardized data visualization. Charts live inside Cards with a 16-semibold header; one chart per Card.
+**Keywords:** graph, plot, visualization, sparkline, line chart, bar chart, donut
 
 **Types (closed):** `line` (trends; ≤8 series), `area` (single series only), `bar` vertical/horizontal (comparisons), `stacked-bar` (composition over categories), `donut` (composition, ≤3 slices — otherwise bar), `sparkline` (inline 24px, no axes, single series).
 **Anatomy:** plot area · x/y axes (labels 12 `text.tertiary`, axis line `border.default`) · horizontal gridlines only (`border.subtle`) · legend only when >1 series (12px, 8px square swatches, above the plot right-aligned; prefer direct series labeling when space allows) · hover tooltip (Tooltip surface: shows the hovered x-value and all series values, tabular-nums, swatch-keyed).
@@ -543,6 +561,7 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 
 **Purpose:** switch between peer views of the same object. 2–7 tabs.
 Style: text tabs (`--sy-body-size` medium), `text.secondary` at rest, active tab `text.primary` + 2px `bg.inverse` underline; container has `border.subtle` bottom rule. Height 40px. Optional count Badge after label.
+**Keywords:** tab bar, tab strip, tab panel, dynamic tabs, views
 
 **`editable` variant — user-created tabs (added 2026-07-30 — migration gap).** For surfaces where the *user* owns the tab set rather than the product: open query/document/run workspaces. Each tab gains a trailing 12px ✕ (appears on hover or when active; always present on touch, `aria-label` "Close {name}"), and a trailing `+` icon-button sits after the last tab, outside the scroll region so it never scrolls away. Double-click a tab label to rename in place (inline Input inheriting the tab's type scale, Enter commits, Esc reverts). Closing the active tab activates its right neighbour, or its left if it was last. Replaces the old library's `DynamicTabs`.
 **The 7-tab cap still holds, and is enforced differently here.** Author-defined tabs are capped by review — 8 tabs means restructure the page. User-created tabs cannot be capped that way, so the `+` button **disables at 7** with a Tooltip ("Close a tab to open another" / "탭을 닫고 새로 여세요"), rather than allowing an unbounded scrolling strip. A workspace that genuinely needs more open items is not a tab strip: use a Sidebar list or a Tree, where 30 items is a normal quantity.
@@ -567,6 +586,7 @@ Style: text tabs (`--sy-body-size` medium), `text.secondary` at rest, active tab
 Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, right `border.subtle`, **container padding 12px** (previously unspecified). Items: height 32px, radius `md`, padding-x 8, 20px icon + label (13 medium), `text.secondary`, 4px vertical gap between items (2px proved sub-perceptual; adjacent hover/active tints need visible separation); hover `bg.hover`; active item `bg.selected` + `text.primary` + medium weight — no leading bar or edge indicator (maintainer reversal of the bar: dated; tint + weight carry the state). Sections separated by 16px gap + optional `micro-label` `text.tertiary` group label (16px top padding above the label; sentence case — caps forbidden). **Collection rows:** nav items representing user-created collections MAY carry an 8px neutral dot (`icon.tertiary`) before the label — the one place color enters the sidebar; never on system destinations. Max 2 nesting levels.
 **Forbidden:** third nesting level; badges on more than 3 items simultaneously; per-item custom icons outside the icon family.
 **Bilingual:** labels never truncate when expanded — the 240px width is sized for KO labels; if a label exceeds it, shorten the label, not the type size.
+**Keywords:** navigation, nav, side nav, rail, menu, app shell
 
 **Key rules (machine index):**
 - 240px expanded/64 rail
@@ -580,6 +600,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 ## Breadcrumb
 
 **Purpose:** Path context for pages deeper than 2 levels. 13px, `text.tertiary` links with `text.primary` current page, `/` separators. Collapse middle levels beyond 4 into an overflow menu ("…"). Forbidden on top-level pages.
+**Keywords:** path, trail, navigation path, hierarchy, location
 
 ---
 
@@ -589,6 +610,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 **Header action slot (added 2026-07-30 — migration gap).** The header MAY carry ONE action between the title and the close button, right-aligned against the close icon-button with a 12px gap: a `ghost` `sm` Button, a `ghost` icon-button from the approved list, or a Link. It is for *ancillary* affordances that are not the modal's decision — "Learn more", "Open in full page", a HoverCard help trigger, a view toggle. Replaces the old library's `DialogHeaderWithAction`.
 **Why it does not break the two-button footer rule.** The footer cap counts *decisions* — the ways of resolving the modal. A header action never resolves the modal: it opens a secondary surface, navigates away, or changes presentation. If the affordance you want in the header would close the modal or commit its content, it is a decision and belongs in the footer, which means you have three decisions and the real fix is to simplify the modal.
 **Forbidden:** modals opening modals; scrollable full-page content inside a modal (use Drawer or a page); more than 2 footer buttons; modals for non-blocking info (use Toast/Banner); more than one header action; `primary`, `brand` or `danger` styling on a header action (emphasis in the header competes with the footer's primary — if it deserves that weight it is a decision, see above); a header action on a `confirm` (400px) modal — confirms carry no ancillary affordances.
+**Keywords:** dialog, popup, overlay, confirm, alertdialog, lightbox
 
 **Key rules (machine index):**
 - widths 400(confirm)/480/640 max
@@ -605,6 +627,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 
 **Purpose:** Side panel for detail/edit without leaving context. Slides from right, width 480px (max 640px; **`wide` variant 800px** for data-review surfaces — DiffView, run inspection — where 640 forces unusable wrapping), full height, `shadow.xl`, opaque `bg.raised` panel (glass retired from scrimmed layers, foundations §6), same header pattern as Modal. Non-blocking variant (no scrim) allowed in data workspaces.
 **AI side surfaces:** the `wide` variant is also the home for agent **artifacts** (a generated doc/code/diagram/table opened for viewing and editing) and the **source browser** (retrieved sources shown beside the answer) — see `ai-patterns.md` §32–33. These are Drawer *content*, not new components; in the workbench archetype the same content MAY occupy a SplitPanel pane instead.
+**Keywords:** sheet, side panel, slide over, slideout, bottom sheet, artifact panel
 
 **`bottom` side — narrow viewports only (added 2026-07-30 — migration gap).** Below the 768px breakpoint (`patterns.md`) a 480px right-hand panel is wider than the viewport, so at `<768` a Drawer MUST render from the bottom instead: full width, height capped at 85vh, radius `xl` on the top two corners only, a 32×4px `border.strong` grab handle centered 8px below the top edge, same opaque `bg.raised` panel and header pattern. This is a **responsive rendering of the same Drawer**, not a `side` prop the author chooses — `side` stays unset and the component switches on viewport. Swipe-down dismiss is expected where the platform supports it; Esc and scrim-click still apply.
 **Why `side` is not author-controlled.** Letting authors pick a side reintroduces the inconsistency the closed-variant policy exists to prevent — two teams would place the same detail panel differently. Edge is a function of available space, so the system decides it.
@@ -623,6 +646,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 ## Popover / Menu
 
 **Purpose:** Anchored floating panel: `bg.raised` (`bg.raised-2` when opened from an L2 surface such as a modal), `border.overlay`, radius `md`, **4px container padding** (concentric-corner rule: 12 − 4 = 8 = item radius `sm`), `shadow.lg`, `fast` fade+4px-shift enter. Menu items: height 32px, radius `sm`, 13px, 16px optional leading icon, **4px vertical gap between items** (without it, adjacent hover and selected tints fuse; 2px proved sub-perceptual). Destructive items `status.danger` text, always last. Max ~8 visible items, then scroll.
+**Keywords:** dropdown, dropdown menu, popup menu, flyout, overflow menu, kebab, actions
 
 **Kbd slot (added 2026-07-30 — migration gap).** A menu item MAY carry its keyboard shortcut right-aligned in the row as a `.sy-kbd` hint, `text.tertiary`, with a minimum 24px gap from the label (the label truncates before the hint does — the shortcut is fixed-width, the label is not). This completes the shortcut vocabulary already established in Tooltip's Kbd slot and CommandPalette's trailing `.sy-kbd`: **the same affordance renders identically in all three**, which is the point — a user who learns `⌘K` in the palette recognises it in a menu. Replaces shadcn's `DropdownMenuShortcut`.
 **Forbidden:** invented shortcuts (the hint documents a binding that exists, it never implies one); hints on items without a global or surface-level binding; a Kbd slot on a `danger` item (destructive actions are not keyboard-accelerated).
@@ -645,6 +669,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 **Purpose:** 10-word max clarification of an icon or truncated string. `bg.raised-2`, 1px `border.default`, `text.primary`, `caption` type, radius `xs`, padding 4/8, `shadow.lg`, appears after 300ms hover/focus. **Kbd slot:** MAY append the action's shortcut as a trailing `.sy-kbd` hint ("Copy ⌘C") — the sanctioned way to teach shortcuts in place. Same-scheme surface: light in light mode, dark in dark mode (changed — inverse surfaces read too stark against the neutral field).
 **No arrow / tail — deliberate (ruled 2026-07-30).** Tooltips are plain rectangles. `Popover / Menu`, `HoverCard` and `Popconfirm` carry no arrow either, and one floating surface growing a tail while the others do not is the kind of drift the closed-variant policy exists to prevent. Proximity plus the 4px enter-shift already establish what the surface is anchored to; an arrow adds a rendering edge case at every viewport boundary for no comprehension gain. shadcn's `TooltipArrow` and the old library's `tip` / `tipPosition` props therefore have **no replacement — drop them.** If an anchor is ever genuinely ambiguous, the fix is to move the tooltip closer, not to point at the target.
 **Forbidden — with their replacements:** interactive content (**→ `HoverCard`** for rich hoverable content, `Popover` if it needs a click); tooltips as error surfaces (**→ the field's error text**, `caption` / `status.danger` below the field — an error the user must read cannot live behind a hover); tooltips on plainly labeled elements (**→ nothing**; delete it, a tooltip repeating a visible label is noise); inverse/contrast-flipped styling (**→ the same-scheme surface** described above); arrows/tails (**→ nothing**, see above).
+**Keywords:** hint, hover label, info bubble, title, shortcut hint
 
 **Key rules (machine index):**
 - never interactive; never an error surface
@@ -654,6 +679,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 ## Toast
 
 **Purpose:** Transient outcome notification, bottom-right stack, max 3. `bg.raised-2` panel, 1px `border.overlay`, `shadow.lg`, `text.primary` `body-sm` text, radius `md`, leading status icon (`status.*` color), optional single action (`text.link` text button), auto-dismiss 5s (errors: 8s + manual dismiss), `slow` slide+fade. *Hairline corrected 2026-08-03 (SY021): this read `border.default`, but `foundations.md` §6 explicitly lists **toasts** among the floating layers that take `border.overlay` — transparent in light mode, where the shadow carries the edge, visible in dark mode where shadows die against black. Token usage is foundations' jurisdiction (design.md §1), so the component entry was the stale side. **Superseded 2026-08-03:** the phrase "Toast surface" no longer resolves anywhere else — Thread's "Jump to latest" and SelectionPill were re-pointed at `FloatingPill`, which owns that shell. They shared Toast's tokens and none of its contract, so the citation was false. Toast's hairline is still `border.overlay` on its own merits (foundations §6 lists toasts among the floating layers).*
+**Keywords:** notification, snackbar, flash message, undo, transient alert
 
 **Undo convention:** reversible-lite mutations (archive, remove-from-view, single delete with soft-delete backing) confirm via Toast with an Undo action at 8s instead of pre-confirming — prefer undo over Popconfirm when the operation is safely reversible; the pair never both appear for one action. Same-scheme surface: light in light mode, dark in dark mode (changed). **First-line alignment:** contents top-align to the first text line — icon at +2px, action link on the text line-height, and the dismiss × as a compact 20px box (inline dismiss affordances in Toasts and quote bars are not form controls; the control-height scale does not apply to them). Trailing controls never center against a wrapped block.
 **Forbidden:** toasts for validation errors (inline at the field); toasts requiring a decision (Modal); stacking >3 (queue instead); inverse/contrast-flipped styling.
@@ -669,6 +695,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 ## Banner / Alert
 
 **Purpose:** Persistent inline notice for a page or section. Full-width of container, radius `md`, padding 12/16: 16px icon + `body-sm` text + optional action link + optional dismiss.
+**Keywords:** callout, notice, inline message, announcement, system strip
 
 **Color variants:** `neutral` (non-status notices: scheduled maintenance windows, informational context — `bg.sunken`, `text.secondary`), `info`, `success`, `warning`, `danger`.
 **Emphasis variants:**
@@ -688,6 +715,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 ## Avatar
 
 **Purpose:** User/agent identity. Sizes 20/24/32/40/56px (20 = dense table cells and inline mentions; 56 = profile surfaces). `full` radius for humans; squared (`sm` radius) for agents — mandatory product language, shape alone must scan authorship. Image, or initials (2 Latin letters / 1 Hangul syllable) on deterministic `viz` palette background at 20% opacity with matching 600-weight text.
+**Keywords:** profile picture, user image, initials, presence, identity
 
 **Sizes:** `20` (dense table cells and inline mentions; never carries a status dot) · `24` · `32` · `40` · `56` (profile surfaces).
 **Status indicator:** optional dot, bottom-right, 2px `bg.page` ring. Sized per avatar: 24→8px, 32→10px, 40→12px, 56→14px; the 20px avatar NEVER carries a dot (illegible at that scale — surface the state elsewhere in the row). Humans: presence (`status.success-bg-solid` = active, `border.strong` = away). Agents: run state (`status.info-bg-solid` pulse = running, `status.danger-bg-solid` = failed, none = idle). Dots use the mid `-bg-solid` values, never the darker text tokens. One vocabulary per product surface — never both meanings in one view.
@@ -704,6 +732,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 ## Skeleton · Spinner
 
 **Purpose:** Skeleton (preferred): `bg.sunken` blocks, radius `xs`, subtle 1.5s opacity pulse, mirroring the true layout — for any load >300ms with known shape. **Preset shapes:** `line` (one text row at the local type style's height), `block` (rect at the target's dimensions), `circle` (avatar placeholder at avatar sizes) — compose these three; free-form skeleton shapes are forbidden. Spinner (16/20px, `text.tertiary` stroke): inside controls and unknown-shape loads only. **Forbidden:** full-page spinners when layout is known; skeletons that don't match the loaded layout; more than one spinner visible per region.
+**Keywords:** loading, loader, placeholder, shimmer, busy indicator
 
 **Key rules (machine index):**
 - skeleton mirrors true layout via line/block/circle presets only
@@ -714,6 +743,7 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 ## EmptyState
 
 **Purpose:** Every list, table, and search MUST have one. Centered in the content area: a **line illustration** (~112×80, see below) · one-line title (16 semibold) · one-line explanation (body, `text.secondary`) · optional single action (primary if creating the first object, secondary otherwise). The illustration reserves its own vertical box with `space-4` clear beneath it to the title — it never crowds the text (the retired medallion's concentric rings overran their box and collided with the title; the illustration must not repeat that).
+**Keywords:** no data, no results, zero state, blank slate, first use
 
 **Illustration.** Follows the shared illustration language (foundations §8.1): single **1.5px-stroke** line art at scene scale, **achromatic** — **ink** `text.primary` for outlines and content lines, `border.default` grey for depth/stacked layers only, no status or brand color (including the error spot) — carrying **at least one visible neutral fill, used sparingly** (typically one element) from the light-fill tier (`bg.page`/`bg.surface` faces over `bg.sunken` recesses). A stacked/back layer may sit at a slight angle (~5–8°) for layered depth; the foreground object stays upright. ~112×84, `space-4` clear beneath. Motifs are a **closed set, one per flavor** — a new motif (for a new empty context) is added by governance, never improvised:
 - **first-use** — **depicts the object being created** (per surface; new object types are added by governance, not improvised). A generic tray/box is wrong — the spot names the object. The agent-list first-use is a **new agent tile**: the registered agent glyph on a squared agent card, with a create badge (`plus` in a `bg.inverse` circle) and an empty agent slot angled behind; the glyph is the real brand path, never a substitute star.
@@ -735,12 +765,14 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## Pagination
 
 **Purpose:** Table/list navigation: 13px, previous/next icon-buttons + page numbers (current: `bg.selected`), plus "N of M" summary (`text.tertiary`) and optional page-size Select in dense tables. Use cursor-style "Load more" (secondary Button) for feeds. **Forbidden:** infinite scroll in data tables.
+**Keywords:** pager, page numbers, load more, paging, next previous
 
 ---
 
 ## CommandPalette
 
 **Purpose:** universal keyboard-first entry point for navigation, actions, and asking the agent. Opened with ⌘K / Ctrl+K from anywhere; also via the topbar search affordance.
+**Keywords:** command, cmdk, omnibox, quick switcher, global search, shortcut palette
 
 **Anatomy:** centered overlay, 560px wide, offset 15vh from top, **opaque `bg.raised` over a `bg.scrim` backdrop** (foundations §6: overlays are opaque, not glass; the scrim gives separation on the light app; esc / scrim-click / click-away dismiss), radius `lg`, `border.default` hairline, `shadow.xl`. Search input (borderless, 16px, full-width, leading search icon) · result list (max 8 visible, then scroll) · footer strip (11px `text.tertiary` keyboard hints using `.sy-kbd`).
 **Results:** grouped under 11px medium `text.tertiary` group labels (Recent / Navigation / Actions / Agents). Rows: height 40px, 16px leading icon, 13px label, trailing `.sy-kbd` shortcut or `text.tertiary` context; selected row `bg.selected`. Actions that invoke AI carry the squared agent glyph.
@@ -761,6 +793,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## ProgressBar
 
 **Purpose:** progress of long-running work (agent runs, imports, batch jobs). See `ai-patterns.md` §11 for when it is mandatory.
+**Keywords:** progress, meter, loading bar, percent, determinate, usage
 
 **Anatomy:** 4px track (`bg.sunken`, radius `full`) + fill (radius `full`). Optional label row above: 13px description left, "N of M" or percent right (`text.tertiary`, tabular-nums).
 **Variants:** `default` (fill `meter.fill` — neutral mid-gray, user-initiated work; changed from key-black), `ai` (fill `ai.solid` — agent runs;, was accent-bg). **Determinate** fill animates width at `base` duration; **indeterminate** shows a 30%-width segment sweeping at 1.2s intervals.
@@ -778,6 +811,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## Composer
 
 **Purpose:** the message/instruction input for Console and inline ask-agent surfaces — the single most-used control in AgentOS. (Added.)
+**Keywords:** message input, chat input, prompt, send box, chat box, instruction input
 
 **Anatomy:** container (**`bg.page` fill + 1px `border.default`** — a light outlined tray, radius `md`, **uniform 12px inset — `space-3`**, focus ring on the container). **Alpha ring (2026-08-03).** The tray carries a **4px zero-blur ring in `bg.hover`** outside its hairline — literally an alpha value (`rgba(9,9,11,0.04)` light, `rgba(255,255,255,0.06)` dark), so it inverts by mode without a per-mode pair. Zero-blur token rings are the sanctioned SY009 exemption, so this needs no raw shadow and no new token. It reads as a soft halo lifting the composer off the page without the weight of an elevation shadow.
 
@@ -862,6 +896,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## ResponseToolbar
 
 **Purpose:** actions on an agent message: copy · regenerate · feedback (thumbs) · overflow. (Added.)
+**Keywords:** message actions, feedback, thumbs, copy, regenerate toolbar
 
 **Anatomy:** row of `ghost` icon-buttons (16px icons), bottom-left of the agent message, `text.tertiary` at rest. Order fixed: copy, regenerate, thumbs-up, thumbs-down, ⋯ overflow.
 **`media` variant — RETIRED 2026-08-03.** A media-only reply used to carry a vertical rail beside the fan. It now uses the **standard toolbar in its standard place**: a horizontal row of `ghost` icon-buttons below the MediaGroup, exactly as a text reply places it below the prose (see the Console sample).
@@ -887,6 +922,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## AgentStep
 
 **Purpose:** one row of visible agent work (a reasoning step or tool call). Full behavior: `ai-patterns.md` §3–4.
+**Keywords:** tool call, step, run step, activity row, working log
 
 **Anatomy:** 12px state indicator · 13px verb-first summary · optional mono tool identifier · optional duration (`text.tertiary`, tabular-nums) · optional trailing Retry ghost button (failed only). Row height 28px; expanded detail renders `.sy-code-block` below the row, indented to the text edge.
 **States (closed):** the **nine-state superset in `ai-patterns.md` §3** is the single source — `pending`, `queued`, `running`, `awaiting-input`, `partial`, `success`, `failed`, `cancelled`, `skipped`. That table also carries the *reachability* column: a thread step is never `queued`, a batch item never `skipped`. Consolidated 2026-08-03 from three incompatible copies (this entry's five, RunLog's five different ones, and the manifest's false claim that they matched). A step list collapses to a summary row on completion ("5 steps · 12s", expandable).
@@ -906,6 +942,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## ProposalCard
 
 **Purpose:** human-in-the-loop approval of a consequential agent action. Full behavior: `ai-patterns.md` §5.
+**Keywords:** approval, human in the loop, review, consent, action request, permission
 
 **Anatomy (tray):** borderless `ai.surface` fill, radius `md`, no shadow — the same borderless-filled language as the Composer tray; the Console's two anchor objects speak one dialect. Header row (**uniform 12px padding**: the icon reads the spacing; `ai.border` bottom hairline on the single-tone tray — maintainer reversal of the two-tone band): squared agent Avatar (24, **first in the row — with color no longer signaling AI, the avatar is the agency marker**) + agent name (13 medium) + "proposes" (`ai.fg`). Body (padding 12×16, on the tint): one-sentence action summary + payload (diff block, message preview, or affected-record list — max one payload type per card); **payload surfaces open to `bg.page`** (tray rule — this is what gives the object internal depth). Footer (padding 0 16 16): Approve (`primary`; `danger` if destructive) + Reject (`secondary` — **on-tint rendering:** in light mode the tonal gray fill is near-identical to the slate tray, so secondary opens to `bg.page` here, the tray rule applied to controls; dark mode keeps the standard fill, whose contrast holds) + optional Edit (`ghost`), directly on the tint. The forbidden formula remains tint + outline (the wireframe callout); borderless tint with page-filled internals is its opposite.
 **States:** open, resolved-approved / resolved-rejected (collapses to attribution row: icon + "Approved by {user} · {time}"), expired (agent withdrew or context changed — `text.tertiary` note, actions removed).
@@ -924,6 +961,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## Thread
 
 **Purpose:** the transcript container — the scrolling conversation region that holds Messages in order and owns scroll position, the bottom-stick contract, and catch-up affordances. Full behavior: `ai-patterns.md` §2 (the scroll and streaming contract). Conversation *history* in the Sidebar, new-thread, and temporary chat are §25 — a different surface, not this container. (Added 2026-08-03 — chat-interface gap audit: the region was specified only as `patterns.md` §1E layout bullets and rendered only in `preview.html`.)
+**Keywords:** transcript, conversation, chat history, message list, scrollback
 
 **Variants:** `default` — a single form.
 **Anatomy:** the scroll container spans the full Console region (Console law: no mid-canvas scrollbar beside the message column) with a **max-width 760 message column centered inside it**, padding 24, and `space-6` between turns. Turns stack in strict chronological order; there is no grouping chrome between consecutive messages from the same actor — the avatar and bubble shape carry authorship, so a "message group" wrapper would add a third redundant signal.
@@ -950,6 +988,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## Message
 
 **Purpose:** one turn in a Thread — the single most-rendered object in AgentOS. Two actor forms, closed. Content rendering: `ai-patterns.md` §12; attribution: §9. (Added 2026-08-03 — chat-interface gap audit; anatomy previously existed only as `preview.html` CSS.)
+**Keywords:** chat bubble, turn, reply, chat message, utterance
 
 **Variants:** `human` · `agent` — the two actor forms, closed (anatomy below).
 **Anatomy — `human`:** right-anchored bubble, `margin-left: auto`, **max-width 75% of the message column**, `bg.sunken` fill, radius `xl`, padding 8×12, `body` type. No avatar (position and fill identify the author — a right-anchored bubble in a two-actor thread needs no third marker), no timestamp at rest, no toolbar (ResponseToolbar is agent-only jurisdiction).
@@ -976,6 +1015,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## AnswerHeader
 
 **Purpose:** the titled opening of a substantial agent reply — names what the run produced, states how long it took, and carries the variant pager. Full behavior: `ai-patterns.md` §20, §22. (Added 2026-08-03 — chat-interface gap audit.)
+**Keywords:** reply title, response header, run title, duration, collapse header
 
 **Anatomy:** a flex row, `space-2` gaps, `space-2` top margin, inside the agent Message content column: title (`heading-sm`, taken from the run's stated goal) + total-duration Badge (`neutral` subtle, tabular numerals) + right-aligned trailing cluster (VariantPager when variants exist, then a collapse chevron as a `ghost` `sm` icon-button).
 **When:** replies longer than ~4 paragraphs, or any reply produced by a multi-step run. **One header per reply** — never one per section or paragraph. A short conversational answer with a title on it reads as a document, which is the §32 artifact case, not a chat reply.
@@ -997,6 +1037,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## VariantPager
 
 **Purpose:** non-destructive navigation between regenerations of one agent reply. Full behavior: `ai-patterns.md` §22. (Added 2026-08-03 — chat-interface gap audit.)
+**Keywords:** regeneration, version switcher, alternatives, variant counter
 
 **Anatomy:** right-aligned in the AnswerHeader — ‹ and › as `ghost` `sm` icon-buttons around a `caption` tabular-nums counter ("2/2"). Nothing else; no dots, no dropdown of versions, no labels.
 **Behavior:** regenerate on the latest reply creates variant N+1 and never destroys the prior one; switching is non-destructive and instant. **Each variant keeps its own provenance and attribution** — its own SourceChips, its own uncertainty Badges, its own AgentStep record. Max 5 variants; the next regeneration replaces the **oldest unpinned** variant.
@@ -1018,6 +1059,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## Reasoning
 
 **Purpose:** disclosure of an agent's working text, rendered subordinate to the answer and never as answer content. Full behavior: `ai-patterns.md` §14. (Added 2026-08-03 — chat-interface gap audit; previously specified only in `ai-patterns.md` §14 with a `preview.html` story.)
+**Keywords:** thinking, chain of thought, working text, scratchpad, thoughts
 
 **Anatomy:** collapsed by default — a 24px disclosure row: chevron (12px) + "Reasoning" / "추론 과정" (`label`, `text.tertiary`) + duration (`text.tertiary`, tabular-nums). Expanded reveals the text in `body-sm` `text.secondary` on `bg.surface`, rendered with the agent-markdown rules (§12) but **capped: no headings, no images**.
 **Subordination rules (all three are structural, not stylistic):** it never uses `text.primary`; it never carries SourceChips (citations belong to claims in the *answer*); and it is excluded from copy and regenerate — the ResponseToolbar acts on the answer only.
@@ -1038,6 +1080,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## FloatingPill
 
 **Purpose:** the shared surface for a small, transient action affordance that floats over content — raised by a condition (a selection, a released scroll lock, a hovered media group) and gone when that condition ends. It is a **surface primitive, not a standalone affordance**: it owns the shell, and its consumers own the behaviour. (Added 2026-08-03 — the anatomy below was already implemented three times, identically, and declared nowhere.)
+**Keywords:** floating action, transient affordance, overlay pill, jump to latest
 
 **Why it exists.** `SelectionPill`, the `Thread` "Jump to latest" affordance, and `ResponseToolbar`'s `media` rail were byte-identical on every structural property (28px, `bg.raised-2`, 1px `border.overlay`, radius `full`, `shadow.lg`, `z.dropdown`, `0 12` padding) while being described in three places — one of them by a **false citation to Toast**, which shares the tokens and none of the behaviour (a Toast is a transient *notification*: bottom-right, max 3, auto-dismiss, status icon). Three copies of one shell is how the shell drifts. This entry is the single source; consumers reference it and never restate it.
 
@@ -1077,6 +1120,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## SelectionPill
 
 **Purpose:** the floating action pill raised by selecting text inside an agent Message — the affordance that makes a passage a conversational object. Full behavior: `ai-patterns.md` §18, §22. (Added 2026-08-03 — chat-interface gap audit.)
+**Keywords:** text selection, highlight menu, quote, reply actions, selection toolbar
 
 **Anatomy:** a **`FloatingPill`** (`horizontal`) anchored above the selection — that entry owns the shell (28px, `bg.raised-2`, `border.overlay`, radius `full`, `shadow.lg`, `z.dropdown`, `label-sm`, the 1px `border.default` separators, and the real-`<button>` requirement). Restated here 2026-08-03 → referenced, so the shell has one source. SelectionPill adds only what is its own: **which** actions, and where they apply.
 **Actions (closed set — three):** **답장** (reply) · **설명** (explain) · **재생성** (regenerate). *Ruling 2026-08-03: three is law; `ai-patterns.md` §22's earlier "never a third pill action" sentence was stale and is struck (`proposals/2026-08-03-chat-interface-component-gaps.md` §4.1).* Extending the set requires governance — actions come from the action glossary.
@@ -1101,6 +1145,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## FollowUpPanel
 
 **Purpose:** the anchored panel of suggested next turns that MAY open above a focused Composer — the active counterpart to passive suggestion Chips. Full behavior and ordering law: `ai-patterns.md` §19. (Added 2026-08-03 — chat-interface gap audit; **anatomy relocated here from `ai-patterns.md` §19**, which retains the behavior rules.)
+**Keywords:** suggestions, follow ups, next steps, prompt suggestions, suggestion panel
 
 **Anatomy:** a **solid `bg.raised` panel** — explicitly NOT glass: it is small, dense, and sits over thread text where translucency reads muddy (`foundations.md` §6) — with a `border.default` hairline, `shadow.lg`, radius `md`, 6px padding. Rows are 32px at radius `xs`, leading with the 12px follow-up arrow; a full-bleed keyboard header row carries keycaps (↑↓ 이동 · ↵ 선택 · esc 닫기). Row hover/selected = `bg.selected`.
 **Placement — and why this panel does NOT fuse.** The Composer fuses *draft-owned* content flush to its tray (attachments, quote, knowledge pickers) because that content is part of the message. A suggestion is not part of the draft yet, so it must not read as part of the input — hence this panel is absolutely anchored **8px above the Composer's top edge** — a floating layer detaches from its anchor, and flush contact would read as part of the input; anchored menus use 4px, the panel's larger mass earns 8. It **overlays** the last thread messages and never pushes content down (layout shift on open is forbidden).
@@ -1126,6 +1171,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## ConversationSummary
 
 **Purpose:** an agent-generated recap of a long thread — decisions, action items, open questions — so a user can catch up without rereading. Full behavior: `ai-patterns.md` §34. (Added 2026-08-03 — chat-interface gap audit.)
+**Keywords:** recap, tldr, catch up, digest, thread summary
 
 **Anatomy:** a collapsible block, **borderless `ai.surface` fill, radius `md`, no shadow — deliberately identical to ProposalCard's tray, since the Console's agent-output objects speak one dialect** (added explicitly 2026-08-03: the entry originally named no radius or border, and the two renders had drifted to `xl` and `md`). **The body stays on `ai.surface` — it does NOT open to `bg.page`** (corrected 2026-08-03). ProposalCard's tray rule opens its *payload* to `bg.page` — a diff, a message preview, an affected-record list — because a bounded object inside a tray gains internal depth that way. A summary's body **is the content, not a payload**, so applying the same rule dissolved the object: `bg.page` is `#FFFFFF` in light mode and so is the thread behind it, leaving a tinted header bar with loose text hanging below it. The rule generalises: **"opens to `bg.page`" only means anything when the container is not already sitting on `bg.page`.** It carries the standard agent attribution row (squared Avatar + agent name + timestamp, §9), placed at the top of the Thread or inside the thread's detail Drawer. Header carries a refresh `ghost` action and a `last-generated` caption. Body follows agent-markdown rules (§12).
 **It is agent output, marked as such** — never presented as system chrome, never as the user's own notes. The `ai.surface` fill and the attribution row are both required; a summary that reads as chrome is a provenance failure.
@@ -1148,6 +1194,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## DescriptionList
 
 **Purpose:** key–value display — the backbone of Object detail views, drawers, and expanded table rows. (Added gap audit: previously improvised with ad-hoc label/value stacks.)
+**Keywords:** key value, definition list, dl, property list, details, metadata
 
 **Anatomy:** rows of term + description. Two layouts: `side-by-side` (term `label` `text.secondary` left column, min-width 120px sized to the widest term of the active locale, max 200px; description `body` right) and `stacked` (term above description; use in narrow panes <360px). Rows separated by `--sy-space-2`; optional full-bleed `border.subtle` row dividers.
 **Description content:** plain text, or exactly one inline component: Badge, Chip list, user/agent (Avatar 20 + name), `code-sm` ID, Link, or timestamp. Empty value = "—" (`text.tertiary`).
@@ -1166,6 +1213,7 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 ## ButtonGroup
 
 **Purpose:** visually attached group of related actions. (Added gap audit.)
+**Keywords:** split button, attached buttons, action group, fused buttons
 
 **Variants:**
 
@@ -1187,6 +1235,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## SourceChip
 
 **Purpose:** inline provenance marker for agent claims. Full behavior: `ai-patterns.md` §6. **Marker anatomy (maintainer reference: circular superscript style):** an 18px round chip (`radius.full`, **neutral `bg.sunken` fill, `text.secondary` bare numeral** — no brackets, 11px semibold tabular, sans not mono, **1px top-padding optical nudge — the Badge md-nudge precedent: Pretendard's 11px digits sit high at line-height 1 in small containers; applies to the pill's numeral circle too,**) at the end of the supported sentence, `text-bottom` aligned; hover/link-highlight steps to `ai.surface-hover`. The bracketed mono `[n]` form is retired.
+**Keywords:** citation, footnote, reference, provenance, source marker
 
 **Anatomy:** 18px height, `bg.sunken`, radius `xs`, mono 11 numeral (`[1]`), placed after the supported sentence, 2px baseline offset. Hover/click → Popover with source title, origin icon, timestamp, open link. Message footer lists all sources (13px `text.secondary`).
 **States:** default, hover (`bg.selected`), broken (source no longer retrievable — chip gets `status.warning` numeral and the popover says so).
@@ -1204,6 +1253,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## ContextCard
 
 **Purpose:** a referenced object (document, meeting, table, page) rendered as a physical card in Console threads and the Composer — the visible form of "what the agent is looking at". (Added.)
+**Keywords:** attachment card, document card, reference card, mention, file card
 
 **Anatomy:** outlined `bg.raised` card, radius `md`, padding 8×12, max-width 240: object-type icon (14px) on a 24px `bg.sunken` tile (radius `xs`, concentric-exempt: flowing content) · title (13 medium, single line, ellipsis) · `caption` meta (source · date), one line max. Hover: `border.strong`; click opens the object.
 **Stack:** 2+ referenced objects stack flat — a single offset underlay card at −4px with the top card separated by a 2px page-colored outline ring (count-overlay precedent), plus a `+N` Badge on the top card. Max 3 visible objects; expand lists vertically. **No rotation** — precision, not playfulness.
@@ -1220,6 +1270,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## Timeline
 
 **Purpose:** chronological activity — audit trails, run history feeds. (P3,.)
+**Keywords:** activity feed, audit log, history, event stream, changelog
 
 **Anatomy:** rows of actor Avatar 20 (shape = actor type — the round/squared system carries authorship) · verb-first sentence (`body-sm`; actor name and object at weight 500, object is a Link) · timestamp (`caption` `text.tertiary`, relative with absolute on hover). Day dividers: full-bleed hairline + `label-sm` `text.tertiary` date. Filterable via the R6 filter bar.
 **Behavior:** consecutive same-actor events MAY collapse ("edited 3 fields" / "필드 3개 수정") expandable; handoffs render as first-class events (ai-patterns §16); load older via "Load more" (never infinite table rules — feeds are the sanctioned cursor case).
@@ -1237,6 +1288,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## Tree
 
 **Purpose:** hierarchy display and selection — folders, org units, nested resources. (P3.)
+**Keywords:** tree view, hierarchy, folder tree, file explorer, nested list
 
 **Anatomy:** rows 28px: disclosure chevron (rotates, `fast`) · optional registry icon 16 · label (`body-sm`) · optional trailing count Badge. Indent 20px per level; max 4 rendered levels — deeper hierarchies drill in, never scroll horizontally (labels truncate middle-out + Tooltip).
 **Selection:** single (row `bg.selected`) or checkbox mode with mixed-state parents (the cross-component mixed convention).
@@ -1255,6 +1307,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## CodeBlock
 
 **Purpose:** code, logs, config display — promotion of `.sy-code-block`. (P3.)
+**Keywords:** code snippet, syntax, log viewer, pre, monospace, code display
 
 **Anatomy:** `bg.sunken` container, radius `lg`; header row: language chip (`micro` mono `text.tertiary`) + copy icon-button (ghost, Toast confirms); body `code` style, optional non-selectable line numbers (`text.tertiary`); wrap off by default with horizontal scroll; max-height 400px + "Show all" expander.
 **Syntax theme:** one muted theme system-wide, ≤5 colors drawn from `viz` + `fg` tokens, defined once at implementation — never bright/rainbow themes, never per-surface themes.
@@ -1272,6 +1325,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## DiffView
 
 **Purpose:** standalone change comparison — run configs, policy edits; promotion of the ProposalCard diff rules. (P3.)
+**Keywords:** diff, comparison, side by side, unified diff, changes
 
 **Anatomy:** unified layout default; side-by-side variant permitted ≥960px for config comparisons. Line rows: gutter (+/− marker + optional line number) + mono 12 content. Added = `status.success-bg`, removed = `status.danger-bg`, word-level changes darker tint within the line — NEVER color alone (gutter markers are the colorblind-safe channel). Unchanged runs collapse to an expandable "⋯ 24 unchanged lines" row. Header: object name + change counts (+12 −4, tabular).
 **Forbidden:** three-way diffs (out of scope v1); syntax highlighting inside diffs (one signal at a time); scroll-linked panes that can desynchronize.
@@ -1287,6 +1341,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## MediaGroup
 
 **Purpose:** agent-**generated** media (images, chart renders, previews) presented as a casual fan in Console replies — the system's one sanctioned playful moment. (Added.)
+**Keywords:** gallery, image group, media fan, thumbnails, generated images
 
 **Anatomy:** cards `bg.page`, 1px `border.default`, radius `lg`, 2px page-colored outline ring for separation, overflow hidden; media area object-fit cover on top + **caption strip** below (`bg.surface`, hairline top rule, `micro` label; the `+N` Badge sits right-aligned in the strip). 2–3 cards fan with **±2.5° alternating rotation** and ~20% overlap; a single item renders flat. Max 3 visible + `+N` Badge on the last card; click opens the media viewer.
 **Behavior:** hover/focus straightens the card (rotate → 0) and raises it (`shadow.xs`) at `fast`; `prefers-reduced-motion` renders the whole group flat and static.
@@ -1305,6 +1360,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## Slider · NumberInput
 
 **Purpose:** bounded continuous values (Slider) and precise numeric entry (NumberInput). They pair; neither replaces the other. (P3.)
+**Keywords:** range, numeric field, spinbox, number field, range slider
 
 **Slider:** 4px track (`bg.sunken`) + `action.primary-bg` fill + 16px thumb (focus ring); value label appears above the thumb while dragging (Tooltip surface); optional tick marks at enumerated stops; arrows step, Shift = 10×; `range` variant = two thumbs, `bg.selected`… no — fill between thumbs uses the standard fill. Jurisdiction: values where *position is meaning* (thresholds, sampling %, volume). NEVER without a visible numeric value; NEVER for unbounded or precision-critical values.
 **NumberInput:** filled Input + stacked stepper (chevrons, 24px hit each) + optional unit suffix (`text.tertiary`); typed entry free, clamps to min/max on blur with a `caption` note; arrows step. Tabular numerals.
@@ -1319,6 +1375,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## ChoiceCard
 
 **Purpose:** one-of or many-of selection where options deserve descriptions — plan pickers, agent-type choice, onboarding decisions. (P3.)
+**Keywords:** selectable card, option card, radio card, plan picker, pricing options
 
 **Anatomy:** grid of `outlined` Cards (2–3 columns, equal height), padding 16: optional 20px registry icon · title (`heading-sm`) · description (`caption` `text.secondary`, ≤2 lines). Selected = 1px `border.selected` border + a 4px lighter `border.subtle` outline flush against it (offset 0 — no gap, so the thin selected line and the wider gray band read as one continuous two-tone halo, not a thickened single border) + 16px check top-right. Radio semantics by default; `multi` variant uses checkbox semantics and shows Checkboxes.
 **Jurisdiction:** 2–6 options that need explanation. >6 or bare labels → Radio/Select.
@@ -1335,6 +1392,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## HoverCard
 
 **Purpose:** rich preview of an entity reference (user, agent, run) on hover/focus. (P3.)
+**Keywords:** preview, profile preview, peek, entity preview, hover popover
 
 **Anatomy:** popover ≤320px, `bg.raised-2`, `border.overlay`, `shadow.lg`, `z.dropdown`: Avatar header (name + `caption` role/state) + 2–4 DescriptionList rows + optional single ghost action. Opens after 500ms hover or on focus; closes on leave/Esc.
 **Rule:** hover is enhancement, never requirement — everything in a HoverCard must also exist on the entity's click-through page (keyboard and assistive access must not depend on hover).
@@ -1350,6 +1408,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## Popconfirm
 
 **Purpose:** inline confirmation for low-stakes reversible-ish actions — the step between no-confirm and Modal. (P3.)
+**Keywords:** inline confirm, confirm popover, quick confirm, are you sure, delete confirm
 
 **Anatomy:** popover anchored to the trigger (`z.dropdown`): one consequence-naming question (`body-sm`) + Cancel (`ghost` sm) + confirm (`danger`/`primary` sm). Esc/outside-click cancels.
 **Jurisdiction:** single-object actions whose result is easily recreatable (unpin, clear a saved filter, remove one attachment). Permanent data loss, bulk operations, or anything with named counts → Modal (R5 rules).
@@ -1365,6 +1424,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## ContextMenu
 
 **Purpose:** right-click menu on dense data surfaces. (P3.)
+**Keywords:** right click, right click menu, contextual actions, secondary menu
 
 **Anatomy & behavior:** the Menu component, opened at pointer position (`z.dropdown`); same item rules (registry icons, destructive last, full-bleed dividers, 4px gaps).
 **The duplication rule:** every context-menu action MUST also exist in visible UI (row actions, toolbar, ⋯ menu) — context menus are an accelerator, never the only path (discoverability — pointer-hidden affordances must not gate any action).
@@ -1381,6 +1441,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## CalendarView
 
 **Purpose:** schedule visualization — when agents run, what ran. Not a booking system. (P3.)
+**Keywords:** schedule, month view, week view, events, agenda
 
 **Month grid:** DatePicker cell anatomy scaled up — day cells ≥96px tall, day number `label-sm` (today = outlined pill), events as dot + `body-sm` text rows (event dot is neutral `icon.tertiary` — category colour-coding was removed 2026-07-30), max 3 per cell then "+N" → popover listing all.
 **Week variant:** hour rows (48px) with event blocks; block = viz tint fill + `label-sm`; overlaps split width.
@@ -1398,6 +1459,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## NotificationCenter
 
 **Purpose:** the bell's panel — what happened while you were away. (P3.)
+**Keywords:** inbox, bell, notification, activity center, unread
 
 **Anatomy:** popover panel 360px (`z.dropdown`): header ("Notifications" / "알림" + settings and mark-all-read ghost icon-buttons) · a **filter SegmentedControl** (All / Unread / Mentions, full-width, immediate filter) · a scrolling list grouped Today / Earlier (`label-sm`; a group header hides when its filter leaves it empty) · items: a **leading marker** — the actor's Avatar 20 for actor events (round human / squared agent) or a neutral 20px type medallion for system events — plus a templated sentence (content.md verbs), a `caption` timestamp, and an optional single inline action; unread = `bg.surface` fill + 8px `status.info-bg-solid` dot on the left edge · footer: a single full-width "View all" ghost button to the full page (after 30 items).
 **Item types:** `run` (agent run finished), `approval` (a proposal awaiting review — its one inline action only *opens* the ProposalCard), `mention` (what the Mentions filter selects), `comment`, and `system`. Type is carried by the leading marker and the verb — never by tint alone.
@@ -1414,6 +1476,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## GraphCanvas · FlowNode · Edge
 
 **Purpose:** the node-graph editor behind the `workbench` builders — Workflow Builder, Pipeline Builder, and the Ontology Link / Lineage graph. A pannable, zoomable canvas of node cards connected by typed edges, with a node palette and canvas controls. One family, grouped because the parts only exist together.
+**Keywords:** node editor, flow, workflow canvas, dag, node graph, pipeline builder, minimap
 
 **Variants:** modes: `build` (edit) · `run` (read-only + per-node run status); edge: default · Condition branch (If / Else `label-sm` tag).
 **Canvas:** a full-bleed workbench surface on `bg.sunken` with a subtle dot grid (dots `border.subtle`) — the one sanctioned background texture, never a decorative pattern. Pan (space-drag) + zoom (wheel/controls). Every graph has one fixed **Start** anchor and one or more **End** nodes.
@@ -1444,6 +1507,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## RunLog
 
 **Purpose:** the execution record of a run — Workflow Run mode, Pipeline runs, and the CUA run review. A hierarchical, append-capable log: run → step → line.
+**Keywords:** execution log, run history, step log, job output, console log
 
 **Anatomy:** a bordered panel or Drawer content (`bg.surface`, radius `lg`). Header: run title + status `Badge` + duration (tabular). Body: an expandable list of **steps** (each row = status dot + step name + `caption` duration), each expanding to its **log lines** in a mono `CodeBlock`-style block on `bg.sunken`.
 
@@ -1463,6 +1527,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## PivotTable
 
 **Purpose:** cross-tabulated aggregation (dimensions × measures) of ontology/dataset rows for the Application/dashboard surface. Extends `Table` but is a distinct component — it has row- and column-header dimensions and aggregated cells, not flat records.
+**Keywords:** pivot, crosstab, aggregation, cube, summary table, measures
 
 **Anatomy:** a framed Table-family grid with a sticky **row-dimension gutter** (leftmost, `bg.surface`, nested dimensions indent with expand/collapse) and grouped, sticky **column-dimension headers** (hairline rules only, per Table). Cells are aggregated measures using Table's numeric renderers (right-aligned, tabular; empty = em dash). Subtotal/total bands take the `emphasis.surface` fill (the Table emphasis rule — totals only). A field bar (rows / columns / measures pickers) sits above as a filter-bar recipe.
 
@@ -1483,6 +1548,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## AssistantPanel
 
 **Purpose:** the persistent docked/floating global agent — a compact chat available across the app that maximizes into the full Console. A composite (like `CommandPalette` and `NotificationCenter`), assembled from existing parts, never a re-implemented chat.
+**Keywords:** copilot, chat widget, docked chat, chatbot, floating assistant
 
 **Anatomy:** a floating launcher — a `brand` circular icon-button bottom-right (one of the three circular controls named under Button) — opening a docked panel: `bg.raised`, radius `xl`, 1px `border.default`, `shadow.lg`, `z.dropdown` tier. Panel = header (squared agent `Avatar` 24 + name + maximize + close ghost icon-buttons) · a scrolling message stream (agent turns on `ai.surface`, human turns plain; `AgentStep` / `ProposalCard` / `SourceChip` as usual) · one docked `Composer` at the bottom. Maximize navigates to the Console and carries state over.
 
@@ -1502,6 +1568,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## AppLauncher
 
 **Purpose:** a browsable overlay grid of system apps + user-published apps — the entry to the Application surface. Distinct from `CommandPalette` (which is ⌘K search); this is a tile grid.
+**Keywords:** app grid, waffle, app switcher, tile grid, applications
 
 **Anatomy:** a centered overlay with a **faux-glass surface** over a `bg.scrim` backdrop — opaque frosted `glass.surface` + top inner-rim highlight (`glass.rim`, `inset 0 1px 0`) + `glass.border` hairline, reading as macOS-Launchpad frosted glass with **no `backdrop-filter`** (foundations §6; SY015 holds — the frost is baked into opaque tokens, not inherited from content behind). Radius `2xl`, `shadow.xl`, `z.modal`. **Header row:** `heading-lg` title + a right-aligned pill search (`bg.sunken`, `radius.md`, search icon + placeholder). Below, sections under `micro-label` headers (**system apps**, **your apps**), each a fixed-column grid of **icon-forward tiles** — a tile is a 56px squircle **image well** (`radius.lg`, `shadow.xs`) with the app **name** (`body-sm`) centered beneath, **no bordered card**. Whole tile opens the app; hover lifts the icon.
 
@@ -1523,6 +1590,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## Divider
 
 **Purpose:** separate content with a 1px rule — the standalone, documented form of the borders-first divider (foundations §6). Most separation is already carried by whitespace or a component's own border; reach for Divider only when a visible line genuinely aids grouping.
+**Keywords:** separator, hr, horizontal rule, hairline, section break
 
 **Variants:**
 
@@ -1550,6 +1618,7 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ## ToggleButton
 
 **Purpose:** a button that toggles a single on/off state — pin, favorite, mute, show/hide a panel, a display or formatting option. Distinct from **Switch** (an instant-effect *setting*, in forms and settings rows) and **SegmentedControl** (an *exclusive* choice among peers).
+**Keywords:** toggle, pressed button, pin, favorite, mute, icon toggle, toggle group
 
 **Variants:**
 

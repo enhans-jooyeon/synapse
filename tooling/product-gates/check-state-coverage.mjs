@@ -17,7 +17,11 @@ const pattern = process.argv[2] ?? 'src/**/*.states.json';
 let missing = 0;
 
 for (const decl of globSync(pattern)) {
-  const { component, states } = JSON.parse(readFileSync(decl, 'utf8'));
+  if (!decl.endsWith('.states.json')) continue;   // a loose glob may catch code files — only declarations are parsed
+  let parsed;
+  try { parsed = JSON.parse(readFileSync(decl, 'utf8')); }
+  catch (e) { console.error(`ERROR ${decl} — expected a .states.json declaration, invalid JSON: ${e.message}`); missing++; continue; }
+  const { component, states } = parsed;
   const dir = dirname(decl);
   const storyFile = globSync(join(dir, `${component}.stories.@(tsx|ts|jsx|js)`))[0];
   if (!storyFile) {

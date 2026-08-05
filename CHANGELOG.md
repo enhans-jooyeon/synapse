@@ -4,6 +4,23 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+*(nothing yet)*
+
+## 2.1.0 — 2026-08-05 — Lucide icons, generated manifest + keywords, migration-test fixes
+
+**Minor release, with one documented §6 exception:** the icon-family revert renamed 35 registry icon names (Tabler → Lucide canonical, e.g. `home`→`house`, `logout`→`log-out`, `dots`→`ellipsis`; full mechanics below). By the letter of §6 renames are major; this was ruled a deliberate exception (2026-08-05) because v2.0.0 shipped hours earlier, no consumer generated UI against its Tabler names, and the revert re-aligns the spec with the icon set the product actually runs (Lucide). Do not cite this as precedent without a ruling.
+
+- **Migration-test feedback applied (product gates + lookup), from the first engineer run against the v2.0.0 harness.**
+  - `tooling/product-gates/check-raw-values.mjs`: the Tailwind-arbitrary regex matched plain JS indexing (`acc[key]`) — now requires the dash Tailwind always puts before the bracket (`-\[…]`); a directory argument auto-expands to `**/*.{ts,tsx,css}`; zero matched files is a loud exit-2 failure, never a silent green.
+  - `tooling/product-gates/check-state-coverage.mjs`: a loose glob catching non-declaration files crashed JSON parsing — non-`.states.json` paths are skipped and invalid JSON is a counted, named error instead of a crash.
+  - `tools/synapse.py lookup`: keyword matching is now separator-insensitive (`dropdownmenu`/`togglegroup`/`resizablepanel` resolve against the spaced keyword slots), SplitPanel gained the `resizable panel` alias, and piped output (`lookup | head`) no longer tracebacks (SIGPIPE restored to default). The engineer's proposed hardcoded old-name→new-name alias table was deliberately NOT adopted — it would be a second hand-maintained mapping outside the keywords slot, the exact drift class the generated manifest removed; all 12 of her alias cases resolve through keywords + normalization instead.
+
+- **`keywords` per component — cross-system discovery names, authored in the spec and parsed into the manifest** (adoption ruling #2, `proposals/2026-08-05-astryx-adoption-rulings.md`). Every one of the 68 `components.md` entries gains a single-line `**Keywords:**` slot directly after its Purpose paragraph: 4–7 lowercase comma-separated aliases (369 total) — shadcn/Radix/MUI/Ant and old-`@enhans/synapse` names seeded from `migration/component-inventory-diff.md` and `migration/replacement-rules.md` (`dialog`→Modal, `sheet`→Drawer, `autocomplete`→Combobox, `command`→CommandPalette, `separator`→Divider, `notification`→Toast/NotificationCenter, `uploader`→FileUpload, `collapsible`→Accordion, …), plus the concept nouns an agent would search. Keywords are **discovery aliases, not contract vocabulary** — a keyword never adds a variant, prop, or jurisdiction (stated in the components.md preamble). Mechanics:
+  - The parser emits a `keywords` field (lowercased, trimmed list; field order purpose · keywords · variants · sizes · states · a11y · forbidden · key_rules); the slot is single-line by format, so an adjacent paragraph is never swallowed. **An empty `**Keywords:**` slot is build-fatal**, like an empty Key rules slot.
+  - `synapse lookup` consults the keywords index before the difflib fallback: an exact keyword match prints the component (`lookup dialog` → Modal); a keyword shared by several components lists every carrier with its purpose line (`lookup dropdown` → Select + Popover / Menu) — the fuzzy suggester remains the last resort. Off-vocabulary queries (`sheet`, `snackbar`, `cmdk`, `datagrid`) now resolve instead of guessing.
+
+- **Harness README dual-encodes the never-list** (adoption ruling #6a). `scripts/build-dist.mjs` now generates a `## Never (dense index — full list with rationale in design.md §8)` section — one bullet per entry of the manifest's `never` array, read from the freshly built bundle's own `synapse.manifest.json` — placed after "Run the gate". Both the README section and the manifest are renderings of one generated source, so the entrypoint's prohibitions can never drift from the machine index; an agent that reads only the README still sees every hard prohibition.
+
 - **Manifest single-sourcing — `synapse.manifest.json`'s components section is now a pure projection of `components.md`** (adoption ruling #1, `proposals/2026-08-05-astryx-adoption-rulings.md`). `tools/build_manifest.py`'s ~60KB hand-maintained component dict — a second authored copy of the spec, and the drift surface behind audit Defect 7 — is deleted; the generator now parses each `##` entry's labelled bold slots. Mechanics:
   - Every entry's `key_rules` moved into the prose as a new **Key rules (machine index):** bullet slot at the end of its section, verbatim from the old dict — the machine index is now authored in the spec itself. The 11 entries that stated their purpose as an unlabelled lead paragraph got the `**Purpose:**` label prefixed (no rewording); Checkbox · Radio · Switch, which opens with a table, got its purpose sentence inserted verbatim from the shipping manifest.
   - Manifest entries now carry structured `variants` / `sizes` / `states` / `a11y` / `forbidden` wherever the prose has that slot, in fixed order (purpose · variants · sizes · states · a11y · forbidden · key_rules); single-paragraph slots are strings, bullet-list/table slots are lists of strings. `synapse lookup` prints the new fields (and no longer breaks when `variants`/`sizes` is a string).
@@ -16,7 +33,6 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
   - `assets/icons/lucide-registry.json` replaces `tabler-registry.json`, generated from pinned `lucide-static@1.28.0` via the rewritten `scripts/build_icons.py`, which now builds from `icon-nodes.json` and **rejects deprecated Lucide alias names at build time** (this check caught three the same hour it was written).
   - `tools/check_icons.py` updated for Lucide anatomy: registry bodies may contain primitives (`search` = path + circle), so an exact-body match now precedes the Tabler-era "primitive ⇒ hand-drawn" heuristic.
   - `preview.html` (317 renders), `migration/button-matrix.html` (136), and the `app-generation` catalog chevron re-pathed from the registry; one pre-existing hand-drawn clock that had escaped the 2026-07-30 cleanup was caught and fixed. `check_icons` baseline: 0 errors / 2 expected warnings.
-
 
 ## 2.0.0 — 2026-08-05 — token vocabulary v2: text/icon split, multiplier spacing, azure brand, chat-interface contract
 
@@ -58,7 +74,6 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 - **`build-dist.mjs` self-consistency gate**: no shipped doc may reference a path outside the bundle (documented exceptions only) — the 1.0.2 harness shipped instructions to run a validator it didn't contain; that class of defect is now build-fatal.
 - Stale artifacts corrected: `app-generation/` reconciliation status recorded honestly (brand + blue ramp orphaned at 2.0.0, md radius drifted — resolution is a pending governance ruling), `examples/screen-intent.example.json` (density removed, real role vocabulary), component-count claims aligned to the actual 68 everywhere.
 
-
 ## 1.0.2 — 2026-07-24 — harness anatomy: tools, memory + twin components
 
 Fills out the missing harness-anatomy elements (tools, memory) and adds the components the AgentOS digital twin surfaced. No breaking changes; existing tokens/rules unchanged.
@@ -97,7 +112,6 @@ Also added in 1.0.0: **`app-generation/`** — the App Generation feature's ECha
 *Maintainer-facing working logs. Everything below this heading is stripped from the published harness CHANGELOG by `scripts/build-dist.mjs` — including the dated sections, which previously slipped through the release-only cut.*
 
 ### 2.0.0 working log (2026-07-24 → 2026-08-05, formerly `## Unreleased`)
-
 
 - **The text sat high because a textarea is inline-level — the wrapper was measuring a phantom descender gap.** `display: block` on the composer textarea is the fix; the 1px optical nudge added in the previous commit is removed with it.
 
@@ -660,7 +674,6 @@ Token-value retune from the visual-benchmark pilot (`proposals/2026-07-24-radius
 - **Leading/trailing icon trim generalized.** The Button-only rule (a 16px stroke icon's internal whitespace makes symmetric padding read icon-heavy → trim that side −2px) is now a sanctioned optical exception in `foundations §3`, applying to Select/Combobox/DatePicker triggers, Menu items, nav items, Chips, Tabs, Banner, Toast. Reference impl trims nav/menu rows (left 8→6).
 - **Chip side padding evened** (`.rel-chip` 4×12 → 4×8) — the 3× side-heavy ratio brought in line.
 - These join the existing optical corrections (badge 1px nudge, SourceChip numeral, thumbs ±1px translate), which were untouched.
-
 
 ## 2026-07-30 — shadcn → v1 colour mapping locked; danger solid fill shifted a step deeper
 

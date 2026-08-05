@@ -2,19 +2,20 @@
 """Build synapse.manifest.json — the machine-readable component index for generation agents.
 
 The components section is a PURE PROJECTION of components.md: every entry is parsed from
-that file's labelled bold slots (**Purpose:**, **Variants:**, **Sizes:**, **States:**,
-**A11y:**, **Forbidden:**, **Key rules (machine index):** — plus their accepted wording
-variants). Nothing component-shaped is hardcoded here, so prose and manifest can no
-longer drift apart: there is one authored copy (adoption ruling #1,
+that file's labelled bold slots (**Purpose:**, **Keywords:**, **Variants:**, **Sizes:**,
+**States:**, **A11y:**, **Forbidden:**, **Key rules (machine index):** — plus their
+accepted wording variants). Nothing component-shaped is hardcoded here, so prose and
+manifest can no longer drift apart: there is one authored copy (adoption rulings #1/#2,
 proposals/2026-08-05-astryx-adoption-rulings.md).
 
 Run after any components.md change (governance: the manifest is a build artifact, never
 hand-edited). Exits 1, listing every offence, when the spec's slots are unparseable:
-an entry without a **Purpose:** slot, a **Key rules** slot without bullets, or a bold
-`**Label:**` that matches no registered label (catches typos like `**Purpos:**` —
-a genuinely new label is taught to LABELS / KNOWN_UNMAPPED, deliberately).
+an entry without a **Purpose:** slot, a **Key rules** or **Keywords** slot without
+content, or a bold `**Label:**` that matches no registered label (catches typos like
+`**Purpos:**` — a genuinely new label is taught to LABELS / KNOWN_UNMAPPED, deliberately).
 
-Entry fields, in order: purpose (always) · variants/sizes/states/a11y/forbidden (present
+Entry fields, in order: purpose (always) · keywords (discovery aliases — lowercased,
+comma-split; never contract vocabulary) · variants/sizes/states/a11y/forbidden (present
 wherever the prose has the slot; a single-paragraph slot is a string; bullet-list, table
 and multi-block slots are a list of strings) · key_rules (the rules an agent most often
 needs without opening the spec — the **Key rules (machine index):** bullets, verbatim).
@@ -31,6 +32,7 @@ COMPONENTS_MD = os.path.join(ROOT, "components.md")
 # WARNING for each entry using one, so wording converges without blocking).
 LABELS = {
     "purpose":   ["Purpose"],
+    "keywords":  ["Keywords"],
     "variants":  ["Variants", "Variants (closed)", "Color variants",
                   "Emphasis variants", "Types (closed)"],
     "sizes":     ["Sizes"],
@@ -39,7 +41,7 @@ LABELS = {
     "forbidden": ["Forbidden", "Forbidden — with their replacements"],
     "key_rules": ["Key rules (machine index)"],
 }
-FIELD_ORDER = ["purpose", "variants", "sizes", "states", "a11y", "forbidden", "key_rules"]
+FIELD_ORDER = ["purpose", "keywords", "variants", "sizes", "states", "a11y", "forbidden", "key_rules"]
 LABEL_TO_FIELD = {l: f for f, ls in LABELS.items() for l in ls}
 CANONICAL = {f: ls[0] for f, ls in LABELS.items()}
 
@@ -228,6 +230,18 @@ def _parse_entry(name, lines, errors, warnings):
                 errors.append(f"{name}: **Key rules (machine index):** slot has no '- ' bullets")
                 continue
             entry[field] = rules
+            continue
+        if field == "keywords":
+            # SINGLE-LINE slot by format: comma-separated discovery aliases on the
+            # label line itself -> lowercased, trimmed list. Content on later lines
+            # is deliberately ignored so an adjacent paragraph is never swallowed.
+            terms = [t.strip().lower().rstrip(".")
+                     for seg in segs for t in _clean(seg[0] if seg else "").split(",")]
+            terms = [t for t in terms if t]
+            if not terms:
+                errors.append(f"{name}: **Keywords:** slot is empty — list 3–8 discovery aliases")
+                continue
+            entry[field] = terms
             continue
         blocks = [b for seg in segs for b in _blocks(seg)]
         if not blocks:
