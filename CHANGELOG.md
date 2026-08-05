@@ -4,7 +4,12 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
-*(nothing yet)*
+- **Icon family reverted Tabler → Lucide** (ruling: `proposals/2026-08-05-astryx-adoption-rulings.md`). The 2026-07-30 Tabler switch was never completed — the product frontend and the `app-generation/` catalog stayed on Lucide — so the spec re-aligns with what actually ships and the product-side migration cost is cancelled; a future family swap, if ruled, enters as a planned migration with a codemod. Mechanics:
+  - `icons.md` remapped to **Lucide canonical names** (35 renames, e.g. `home`→`house`, `logout`→`log-out`, `dots`→`ellipsis`, `loader-2`→`loader-circle`, `help-circle`→`circle-question-mark`, `history`→`rotate-ccw-clock`); Tabler-era **concept rulings preserved** (unified run/play glyph, reply/undo fix) — reverting the family does not covertly revert rulings. Lucide offers `circle-play` if run's circled form is ever wanted back (proposal path).
+  - `assets/icons/lucide-registry.json` replaces `tabler-registry.json`, generated from pinned `lucide-static@1.28.0` via the rewritten `scripts/build_icons.py`, which now builds from `icon-nodes.json` and **rejects deprecated Lucide alias names at build time** (this check caught three the same hour it was written).
+  - `tools/check_icons.py` updated for Lucide anatomy: registry bodies may contain primitives (`search` = path + circle), so an exact-body match now precedes the Tabler-era "primitive ⇒ hand-drawn" heuristic.
+  - `preview.html` (317 renders), `migration/button-matrix.html` (136), and the `app-generation` catalog chevron re-pathed from the registry; one pre-existing hand-drawn clock that had escaped the 2026-07-30 cleanup was caught and fixed. `check_icons` baseline: 0 errors / 2 expected warnings.
+
 
 ## 2.0.0 — 2026-08-05 — token vocabulary v2: text/icon split, multiplier spacing, azure brand, chat-interface contract
 

@@ -5,8 +5,14 @@ Excludes illustrations (foundations §8.1) and chart marks, which have their own
 """
 import re, os, json, sys, collections
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REG = json.load(open(os.path.join(ROOT, "assets/icons/tabler-registry.json")))
+REG = json.load(open(os.path.join(ROOT, "assets/icons/lucide-registry.json")))
 KNOWN = {re.sub(r"\s", "", d) for v in REG["icons"].values() for d in re.findall(r'd="([^"]*)"', v["paths"])}
+# Lucide bodies legitimately contain primitives (<circle>, <rect>, ...) — search is a
+# path + circle. So unlike the Tabler era (path-only glyphs), "contains a primitive"
+# no longer implies hand-drawn: a render passes when its WHOLE normalized body equals
+# a registry body. The per-d check remains for path-only composites.
+KNOWN_BODIES = {re.sub(r"\s+", "", v["paths"]).replace("/>", ">") for v in REG["icons"].values()}
+def norm_body(b): return re.sub(r"\s+", "", b).replace("/>", ">")
 SIZES = set(REG["$sizes"])
 FILES = ["preview.html", "migration/button-matrix.html", "app-generation/component-catalog.html"]
 
@@ -22,6 +28,7 @@ def main():
             if not b or "' +" in b or "${" in b: continue          # JS templates
             ds = re.findall(r'd="([^"]*)"', b)
             prim = re.search(r"<(circle|rect|ellipse|polyline|polygon)", b)
+            if norm_body(b) in KNOWN_BODIES: continue              # exact registry render (Lucide bodies may include primitives)
             if ds and all(re.sub(r"\s", "", d) in KNOWN for d in ds) and not prim: continue
             if prim and not ds: warns.append((rel, "SY019 W bare primitive in a 24-grid svg (dot/frame?) — verify it is not an icon", b[:70])); continue
             errs.append((rel, "SY019 E icon path not in the registry — hand-drawn or off-registry concept", b[:70]))

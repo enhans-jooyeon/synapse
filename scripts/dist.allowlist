@@ -30,9 +30,9 @@ tools/build_manifest.py
 tools/check_icons.py
 tools/screen-intent.schema.json
 examples/screen-intent.example.json
-# check_icons.py hard-requires the Tabler registry at import; the registry is generated
-# from the pinned MIT-licensed @tabler/icons package, so unlike assets/fonts/ it may ship.
-assets/icons/tabler-registry.json
+# check_icons.py hard-requires the icon registry at import; the registry is generated
+# from the pinned ISC-licensed lucide-static package, so unlike assets/fonts/ it may ship.
+assets/icons/lucide-registry.json
 
 # --- Generation prompt + team workflow ---
 docs/process/prd-template.md

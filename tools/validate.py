@@ -21,7 +21,7 @@ Rules (E = error, W = warning):
   SY015 E backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §6)
   SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
   SY017 E synapse.manifest.json stale vs a fresh build — run tools/build_manifest.py (mirrors the CI gate locally)
-  SY019 E icon not in assets/icons/tabler-registry.json, off-scale size, or stroke != 1.5 — run tools/check_icons.py (icons.md)
+  SY019 E icon not in assets/icons/lucide-registry.json, off-scale size, or stroke != 1.5 — run tools/check_icons.py (icons.md)
   SY020 E tokens/synapse.css disagrees with tokens/synapse.tokens.json (per mode); W = a CSS var with no JSON origin — closes the TOKEN half of audit Defect 7
   SY021 E synapse.manifest.json key_rules contradict components.md prose (never-list vocabulary, token names, radius names) — closes the PROSE half of audit Defect 7
   SY008 E reference to undefined --sy-* variable — tokens
