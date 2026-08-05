@@ -4,6 +4,89 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+*(nothing yet)*
+
+## 2.0.0 — 2026-08-05 — token vocabulary v2: text/icon split, multiplier spacing, azure brand, chat-interface contract
+
+**Major release — breaking renames and re-points, per §6 semver.** Everything below shipped incrementally under Unreleased since 1.0.2; the full working log is preserved under *Internal pre-release history*.
+
+### Breaking — renamed tokens (migrate old → new)
+
+| 1.0.2 name | 2.0.0 name | Note |
+|---|---|---|
+| `--sy-space-<N>` (name = px: `space-4` = 4px) | `--sy-space-<N/4>` (name × 4px: `space-1` = 4px) | Tailwind-style multiplier scale. Divide the old px value by 4: old `space-4` → `space-1`, old `space-8` → `space-2`, old `space-16` → `space-4`, old `space-28` → `space-7`. **An un-migrated old name now resolves to 4× the intended spacing — migrate before generating.** |
+| `--sy-fg-{primary,secondary,tertiary,disabled,placeholder}` | `--sy-text-{…}` | `fg-*` split into a text scale + a dedicated icon family. |
+| `--sy-fg-on-solid` / `--sy-fg-inverse` | `--sy-text-on-solid` / `--sy-text-on-inverse` | |
+| `--sy-fg-link` / `--sy-fg-link-inverse` | `--sy-text-link` / `--sy-text-link-on-inverse` | |
+| *(icons formerly on `fg-*`)* | `--sy-icon-{primary,secondary,tertiary,disabled,on-inverse,info,success,warning,danger}` | Icons never take `--sy-text-*` (hard rule; `icon.primary` carries the one optical override). |
+| `--sy-status-{success,warning,danger,info}-inverse` | `--sy-status-{…}-on-inverse` | |
+| `--sy-shadow-raised` / `-overlay` / `-modal` | `--sy-shadow-xs` / `-lg` / `-xl` | Shadows moved to a size scale (`xs·sm·md·lg·xl`). |
+
+### Breaking — removed tokens
+
+- `--sy-action-primary-bg-active`, `--sy-action-brand-bg-active` — Button's pressed state dropped (2026-07-30); pressed feedback comes from the click. `bg.active` belongs to table rows and menu items, not Button.
+- Density modes removed — single scale (`density.*` dimensions remain as plain control/layout dimensions; screen-intents no longer declare `density`).
+
+### Breaking — re-pointed values (names unchanged, meaning changed)
+
+- **`--sy-brand-point`**: `#0621C4` indigo → **achromatic graphite, mode-inverting** (`#1A1A1F` light / `#F2F2F4` dark). Jurisdiction narrowed to brand-identity objects only (monogram tile, docs-hub mark, Artific hero).
+- **`--sy-action-brand-bg`**: `#0621C4` → **bright azure `#0073E6`** (hover `#051AA0` → `#066ACE`). New `azure` primitive family; **two-blues law**: azure = brand/AI-capability markers, indigo `blue` = functional link/focus/info — never mixed.
+- **`--sy-viz-1…8`** rebuilt per-mode for perceptual separation (min ΔE 16.6 → 45.8 normal, 7.6 → 11.6 deuteranopia).
+
+### Added
+
+- **Chat interface promoted from render to contract** — 11 new component entries (Thread · Message · AnswerHeader · Reasoning · VariantPager · SelectionPill · FollowUpPanel · ConversationSummary · FloatingPill · Divider · ToggleButton): **68 components** total (was 57 in the shipped 1.0.2 harness).
+- **Button rewritten as a two-axis API** — `buttonStyle` (primary·secondary·outline·ghost) × `target` (default·brand·destructive), 12-cell matrix, all cells AA at normal weight; `xs` size (inline-only, WCAG 2.5.8-scoped); per-size `--sy-control-padding-x-*` ladder + `--sy-control-height-xs`.
+- Semantic `--sy-padding-*` layer (7), faux-glass family (opaque — no backdrop-filter), `--sy-radius-{none,control-xs,control-md,2xl}`, two-axis Button action tokens (`action-secondary-brand-*`, `action-secondary-danger-*`, `action-brand-border*`), `border-{error-hover,error-soft,focus-soft,strong-hover}`.
+
+### Distribution / process (this release)
+
+- **The gate now ships with the harness**: `tools/validate.py`, `tools/synapse.py`, `tools/build_manifest.py`, `tools/check_icons.py`, `tools/screen-intent.schema.json`, the Tabler icon registry, the worked screen-intent example, the fill-in PR template + correction-ledger doc.
+- **Publish pipeline hardened**: the tag must match the source `$version` (tokens JSON *and* `design.md` header) or the publish fails; the manifest must regenerate clean; the harness README is stamped with source SHA + build date and carries a staleness warning.
+- **`build-dist.mjs` self-consistency gate**: no shipped doc may reference a path outside the bundle (documented exceptions only) — the 1.0.2 harness shipped instructions to run a validator it didn't contain; that class of defect is now build-fatal.
+- Stale artifacts corrected: `app-generation/` reconciliation status recorded honestly (brand + blue ramp orphaned at 2.0.0, md radius drifted — resolution is a pending governance ruling), `examples/screen-intent.example.json` (density removed, real role vocabulary), component-count claims aligned to the actual 68 everywhere.
+
+
+## 1.0.2 — 2026-07-24 — harness anatomy: tools, memory + twin components
+
+Fills out the missing harness-anatomy elements (tools, memory) and adds the components the AgentOS digital twin surfaced. No breaking changes; existing tokens/rules unchanged.
+
+- **Memory element — the correction ledger** (`docs/process/correction-ledger.md` + `feedback/` + `synapse digest`): the harness's memory, pointed at the **maintainers**, not the generator (a generator-facing memory would be a shadow contract — durable lessons belong promoted into `design.md`/the gate). Each reviewed screen gets a `synapse-corrections` block captured **in the PR** (embedded in `.github/PULL_REQUEST_TEMPLATE/ui_review.md`): one `category | attribution | severity | source | note` line per fix needed to reach shippable, with closed field sets so entries aggregate. `synapse digest` rolls the collected blocks up into a pattern report — separating the harness-actionable signal (`llm-generation`/`contract-gap`/`gate-gap`) from taste and requirement churn, and flagging categories that recur (≥2) as **DS-gap candidates** to take to the refinement register. Auto-detectable fixes (token/state/provenance) come from the diff+gate; only the un-lintable ones are hand-tagged. Wired into `design-cycle.md` (Review captures, Refine consumes). GitHub-PR auto-harvest lands once the connector is authorized; interim, blocks are dropped into `feedback/`.
+
+- **Five component types added (52 → 57)**, extracted from the AOS digital twin (`proposals/2026-07-23-twin-component-candidates.md`) and specified to the Synapse contract — spec-only, not yet implemented in `storybook/`:
+  - **GraphCanvas · FlowNode · Edge** — the node-graph editor for the Workflow / Pipeline / Ontology-Link builders (the biggest prior `workbench` coverage gap).
+  - **RunLog** — hierarchical execution log (run → step → line).
+  - **PivotTable** — cross-tab aggregation for dashboards.
+  - **AssistantPanel** — the docked/floating global agent (composite).
+  - **AppLauncher** — the app tile-grid overlay.
+  - Manifest rebuilt; `build_manifest.py` `C` set extended in lockstep.
+  - Added `preview.html` component-browser stories (token-only demos + When/Avoid/Anti/Where guidance) for all five, so they show in the browser.
+- **New recipe R16 · Builder workbench shell** — the reusable `workbench` layout the Workflow, Pipeline, and dev-stage Replay/CUA builders share (generalizes the twin's replay-shell screens, which are too app-specific to be components). Also **reconciled the recipe cap**: the screen-intent schema and manifest recipe set were stuck at R1–R12 while `recipes.md` already defined R13–R15 — extended both to **R1–R16** (and the intake skill) so all recipes are actually declarable. Also filled the **preview.html Recipes group**: it demoed only 4 recipes (R1/R4/R6/R9); added token-only stories for the other 12 (R2/R3/R5/R7/R8/R10–R16) so all 16 show in the browser.
+- **New harness CLI — `tools/synapse.py`** (the "tools" harness element): `lookup <name>` verifies a component/token/recipe/archetype is real and prints its rules — or the closest matches if not (prevents off-manifest components (RC6) and off-token values (RC3) *at generation time*, not just at the gate); `validate <intent.json>` and `gate` wrap `validate.py`; `list` prints a closed set. Wired into `screen-intake-skill.md` and `design-cycle.md` so the generating agent calls it. Stdlib-only; wrap-able as an MCP server later.
+- **External-tools stance** documented in `design-cycle.md` (§Tools): the process is **strictly code-based** — no Figma/Canva or design-inspiration boards. The one sanctioned external tool is **bounded web reference research** — a *capability* (web search + viewing a live UI reference), tool-agnostic: fulfilled by whatever the generation tool provides or, at the floor, a human-supplied URL/screenshot, so it's not Claude-bound. The only hard tool dependency is bash (for `tools/synapse.py`). It may inform *structure/interaction* in Frame and maintainer refinement only — never visual style, never Generate directly, never Intake's data — and must clear the refinement rubric's Tier B (so it can't smuggle in consumer-app polish).
+
+## 1.0.1 — 2026-07-23 — v1 cleanup release
+
+Housekeeping and consumption-layer fixes; no new components, tokens, or rules.
+
+- **Package scope → `@enhans-jooyeon/synapse`** across the harness (was `@enhans/synapse`) — consumers and the product-gates now point at this repo's system, not the superseded one.
+- **Docs are English-only.** Removed the 8 `.ko.md` translations and the SY018 staleness gate; the docs hub renders Korean on demand (client-side). The generated product UI stays bilingual.
+- **Stripped `v2`–`v6` provenance tags** from the specs, tokens, and manifest — rationale kept, version stamps gone.
+- Archived resolved pre-1.0 proposals to `proposals/archive/`; removed a superseded token snapshot; fixed `scripts/dist.allowlist` after the `.ko.md` removal.
+
+## 1.0.0 — 2026-07-21 — Initial team release
+
+The first public/team release. Re-baselined from the internal 6.x pre-release line to **1.0.0** and adopted release-based versioning (the number now marks a team release, not each internal edit). **No spec or token changes in this bump** — it renumbers the system; everything shipped through internal 6.62.0 is the content of 1.0.0. The internal 6.x pre-release history — and the per-rule `(vX.Y)` provenance tags that used to annotate the specs — are preserved in git, not here; the specs now read as a clean v1 contract.
+
+Also added in 1.0.0: **`app-generation/`** — the App Generation feature's ECharts chart/component catalog, **reconciled from its old azure `#0a84ff` token system to the v1.0.0 tokens** (brand → `#0621C4`, neutrals/borders/text → `--sy-*` values, radius → on-scale, Pretendard). Mapping in `app-generation/tokens-map.md`. The chart blue data ramp was computed from `#0621C4` (Synapse has no blue ramp token) and is flagged for a designer's review.
+
+## Internal pre-release history
+
+*Maintainer-facing working logs. Everything below this heading is stripped from the published harness CHANGELOG by `scripts/build-dist.mjs` — including the dated sections, which previously slipped through the release-only cut.*
+
+### 2.0.0 working log (2026-07-24 → 2026-08-05, formerly `## Unreleased`)
+
+
 - **The text sat high because a textarea is inline-level — the wrapper was measuring a phantom descender gap.** `display: block` on the composer textarea is the fix; the 1px optical nudge added in the previous commit is removed with it.
 
   **The mechanism.** The textarea lives inside a `position:relative` wrapper that anchors the (now removed) refine button. A textarea is **inline-level by default**, so that wrapper's height was the field *plus* the ~4–5px baseline/descender space every inline box reserves below it. The wrapper was therefore taller than its content with the text pinned to its top — meaning **no alignment value could centre the text**, because what was being centred was a box with dead space at the bottom. `display: block` removes the phantom space and the wrapper becomes exactly the field's height.
@@ -566,38 +649,6 @@ Token-value retune from the visual-benchmark pilot (`proposals/2026-07-24-radius
 - **Chip side padding evened** (`.rel-chip` 4×12 → 4×8) — the 3× side-heavy ratio brought in line.
 - These join the existing optical corrections (badge 1px nudge, SourceChip numeral, thumbs ±1px translate), which were untouched.
 
-## 1.0.2 — 2026-07-24 — harness anatomy: tools, memory + twin components
-
-Fills out the missing harness-anatomy elements (tools, memory) and adds the components the AgentOS digital twin surfaced. No breaking changes; existing tokens/rules unchanged.
-
-- **Memory element — the correction ledger** (`docs/process/correction-ledger.md` + `feedback/` + `synapse digest`): the harness's memory, pointed at the **maintainers**, not the generator (a generator-facing memory would be a shadow contract — durable lessons belong promoted into `design.md`/the gate). Each reviewed screen gets a `synapse-corrections` block captured **in the PR** (embedded in `.github/PULL_REQUEST_TEMPLATE/ui_review.md`): one `category | attribution | severity | source | note` line per fix needed to reach shippable, with closed field sets so entries aggregate. `synapse digest` rolls the collected blocks up into a pattern report — separating the harness-actionable signal (`llm-generation`/`contract-gap`/`gate-gap`) from taste and requirement churn, and flagging categories that recur (≥2) as **DS-gap candidates** to take to the refinement register. Auto-detectable fixes (token/state/provenance) come from the diff+gate; only the un-lintable ones are hand-tagged. Wired into `design-cycle.md` (Review captures, Refine consumes). GitHub-PR auto-harvest lands once the connector is authorized; interim, blocks are dropped into `feedback/`.
-
-- **Five component types added (52 → 57)**, extracted from the AOS digital twin (`proposals/2026-07-23-twin-component-candidates.md`) and specified to the Synapse contract — spec-only, not yet implemented in `storybook/`:
-  - **GraphCanvas · FlowNode · Edge** — the node-graph editor for the Workflow / Pipeline / Ontology-Link builders (the biggest prior `workbench` coverage gap).
-  - **RunLog** — hierarchical execution log (run → step → line).
-  - **PivotTable** — cross-tab aggregation for dashboards.
-  - **AssistantPanel** — the docked/floating global agent (composite).
-  - **AppLauncher** — the app tile-grid overlay.
-  - Manifest rebuilt; `build_manifest.py` `C` set extended in lockstep.
-  - Added `preview.html` component-browser stories (token-only demos + When/Avoid/Anti/Where guidance) for all five, so they show in the browser.
-- **New recipe R16 · Builder workbench shell** — the reusable `workbench` layout the Workflow, Pipeline, and dev-stage Replay/CUA builders share (generalizes the twin's replay-shell screens, which are too app-specific to be components). Also **reconciled the recipe cap**: the screen-intent schema and manifest recipe set were stuck at R1–R12 while `recipes.md` already defined R13–R15 — extended both to **R1–R16** (and the intake skill) so all recipes are actually declarable. Also filled the **preview.html Recipes group**: it demoed only 4 recipes (R1/R4/R6/R9); added token-only stories for the other 12 (R2/R3/R5/R7/R8/R10–R16) so all 16 show in the browser.
-- **New harness CLI — `tools/synapse.py`** (the "tools" harness element): `lookup <name>` verifies a component/token/recipe/archetype is real and prints its rules — or the closest matches if not (prevents off-manifest components (RC6) and off-token values (RC3) *at generation time*, not just at the gate); `validate <intent.json>` and `gate` wrap `validate.py`; `list` prints a closed set. Wired into `screen-intake-skill.md` and `design-cycle.md` so the generating agent calls it. Stdlib-only; wrap-able as an MCP server later.
-- **External-tools stance** documented in `design-cycle.md` (§Tools): the process is **strictly code-based** — no Figma/Canva or design-inspiration boards. The one sanctioned external tool is **bounded web reference research** — a *capability* (web search + viewing a live UI reference), tool-agnostic: fulfilled by whatever the generation tool provides or, at the floor, a human-supplied URL/screenshot, so it's not Claude-bound. The only hard tool dependency is bash (for `tools/synapse.py`). It may inform *structure/interaction* in Frame and maintainer refinement only — never visual style, never Generate directly, never Intake's data — and must clear the refinement rubric's Tier B (so it can't smuggle in consumer-app polish).
-
-## 1.0.1 — 2026-07-23 — v1 cleanup release
-
-Housekeeping and consumption-layer fixes; no new components, tokens, or rules.
-
-- **Package scope → `@enhans-jooyeon/synapse`** across the harness (was `@enhans/synapse`) — consumers and the product-gates now point at this repo's system, not the superseded one.
-- **Docs are English-only.** Removed the 8 `.ko.md` translations and the SY018 staleness gate; the docs hub renders Korean on demand (client-side). The generated product UI stays bilingual.
-- **Stripped `v2`–`v6` provenance tags** from the specs, tokens, and manifest — rationale kept, version stamps gone.
-- Archived resolved pre-1.0 proposals to `proposals/archive/`; removed a superseded token snapshot; fixed `scripts/dist.allowlist` after the `.ko.md` removal.
-
-## 1.0.0 — 2026-07-21 — Initial team release
-
-The first public/team release. Re-baselined from the internal 6.x pre-release line to **1.0.0** and adopted release-based versioning (the number now marks a team release, not each internal edit). **No spec or token changes in this bump** — it renumbers the system; everything shipped through internal 6.62.0 is the content of 1.0.0. The internal 6.x pre-release history — and the per-rule `(vX.Y)` provenance tags that used to annotate the specs — are preserved in git, not here; the specs now read as a clean v1 contract.
-
-Also added in 1.0.0: **`app-generation/`** — the App Generation feature's ECharts chart/component catalog, **reconciled from its old azure `#0a84ff` token system to the v1.0.0 tokens** (brand → `#0621C4`, neutrals/borders/text → `--sy-*` values, radius → on-scale, Pretendard). Mapping in `app-generation/tokens-map.md`. The chart blue data ramp was computed from `#0621C4` (Synapse has no blue ramp token) and is flagged for a designer's review.
 
 ## 2026-07-30 — shadcn → v1 colour mapping locked; danger solid fill shifted a step deeper
 

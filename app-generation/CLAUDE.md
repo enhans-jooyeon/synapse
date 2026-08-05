@@ -1,5 +1,7 @@
 # Component Catalog — 작업 컨텍스트
 
+> **⚠ v2.0.0 STALENESS WARNING (2026-08-05).** 아래 색상 표는 **v1.0.0 기준**이다. v2.0.0에서 브랜드가 재지정되어 `Brand #0621C4`와 Blue Scale 전체는 **현재 시스템의 어떤 토큰과도 일치하지 않는 카탈로그 전용 레거시 값**이 되었고, `radius-md`는 10px → 12px로 이동했다. Neutrals / Status / Type은 여전히 일치한다. 이 값들을 새 UI로 복사하지 말 것 — 현재 값과 해소 방침은 `tokens-map.md`의 상태 노트를 볼 것.
+
 ## 파일
 - `component-catalog.html` — ECharts 5 기반 Synapse 디자인 시스템 차트 컴포넌트 카탈로그 (단일 HTML, 외부 의존 없음)
 

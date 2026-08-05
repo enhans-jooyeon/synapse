@@ -22,9 +22,26 @@ synapse.manifest.json
 # NB: assets/fonts/ is intentionally NOT shipped — Artific is licensed to Enhans and
 # must not be redistributed in the public harness (see foundations.md §2.1 / assets/fonts/README.md).
 
+# --- Enforcement tools (stdlib-only Python; the gate SHIPS WITH the contract —
+# a harness that references validate.py must contain validate.py) ---
+tools/validate.py
+tools/synapse.py
+tools/build_manifest.py
+tools/check_icons.py
+tools/screen-intent.schema.json
+examples/screen-intent.example.json
+# check_icons.py hard-requires the Tabler registry at import; the registry is generated
+# from the pinned MIT-licensed @tabler/icons package, so unlike assets/fonts/ it may ship.
+assets/icons/tabler-registry.json
+
 # --- Generation prompt + team workflow ---
 docs/process/prd-template.md
 docs/process/design-review-protocol.md
+# The review protocol's feedback loop: the fill-in PR template captures the
+# correction-ledger block, and the ledger doc defines its closed vocabulary
+# (synapse.py digest parses that format).
+.github/PULL_REQUEST_TEMPLATE/ui_review.md
+docs/process/correction-ledger.md
 tooling/product-gates/
 
 # --- App Generation feature: chart/component catalog (reconciled to v1.0.0) ---

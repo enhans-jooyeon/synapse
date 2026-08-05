@@ -2,17 +2,17 @@
   "name": "Run history workbench",
   "archetype": "workbench",
   "regions": [
-    { "id": "main", "density": "dense",
+    { "id": "main",
       "components": ["Table", "Badge", "Avatar", "Input (text)", "Select", "DatePicker", "SegmentedControl", "Button", "Pagination", "EmptyState", "Skeleton · Spinner", "Card"],
       "recipes": ["R1", "R4", "R6"] },
-    { "id": "detail-pane", "density": "focus", "boundary": "splitpanel",
+    { "id": "detail-pane", "boundary": "splitpanel",
       "components": ["DescriptionList", "Badge", "AgentStep", "Button", "Tabs"] }
   ],
   "locales": ["en", "ko"],
   "states": { "empty": true, "loading": true, "error": true },
   "permissions": {
-    "viewer_role": "editor",
+    "viewer_role": "Member",
     "hidden_capabilities": ["billing-export"],
-    "disabled_with_reason": ["bulk-delete (requires admin)"]
+    "disabled_with_reason": ["bulk-delete (requires Admin)"]
   }
 }

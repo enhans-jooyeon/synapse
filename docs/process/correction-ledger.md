@@ -91,6 +91,6 @@ Reading it: three of four are real harness signal; the `reviewer-preference` lin
 1. **Capture** — reviewer fills the block in the PR (auto lines pre-filled, manual lines added).
 2. **Harvest** — merged blocks collected (GitHub connector, or `feedback/`).
 3. **Digest** — `synapse digest` rolls up: counts by category and attribution, the `llm-generation`-only signal, recurring patterns, and **candidate DS gaps** (categories with repeated `contract-gap` / `component-provenance` hits).
-4. **Decide** — the maintainer reads the digest, and a recurring pattern becomes one `harness-refinement-register.md` entry + a proposed contract change, held for June's approval.
+4. **Decide** — the maintainer reads the digest, and a recurring pattern becomes one `docs/process/harness-refinement-register.md` entry (maintainer-facing, source repo) + a proposed contract change, held for June's approval.
 
 The point is step 4: the ledger exists to make *what LLMs keep getting wrong* countable, so harness changes are driven by evidence instead of by whichever screen was reviewed most recently.

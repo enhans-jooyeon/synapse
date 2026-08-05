@@ -28,13 +28,13 @@ Anything a machine can check — token use, component provenance, contrast, requ
 |---|---|
 | Contract & governance | [`design.md`](design.md) — read first; authority order, hard rules, workflow |
 | Tokens (source of truth) | `tokens/synapse.tokens.json` → generated `tokens/synapse.css` |
-| Specs (English — Korean rendered on demand in the hub) | `foundations.md` · `components.md` (67) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` |
+| Specs (English — Korean rendered on demand in the hub) | `foundations.md` · `components.md` (68) · `recipes.md` · `patterns.md` · `ai-patterns.md` · `content.md` · `icons.md` |
 | Machine index for agents | `synapse.manifest.json` (built by `tools/build_manifest.py`; agents load this first) |
 | DS-repo gate | `tools/validate.py` — `tokens` / `ui` / `page` modes (enforces this repo's own artifacts) |
 | Harness CLI (generation-time tools) | `tools/synapse.py` — `lookup` (is a component/token/recipe/archetype real? + closest-match) · `validate` (screen-intent) · `gate` · `list` · `digest` (mine the correction ledgers) |
 | Memory (maintainer-facing) | `docs/process/correction-ledger.md` + `feedback/` — per-screen fix records captured in PRs; `synapse digest` surfaces recurring LLM failures + DS-gap candidates |
 | Component browser + sample pages | `preview.html` |
-| React + Storybook workspace | `storybook/` (seed: Button · Badge · Input · Card) |
+| React + Storybook workspace | `storybook/` (13-component seed: Button · Badge · Input · Card + the chat set) |
 | **Process doctrine** | `docs/process/` — design-development cycle (`design-cycle.md`), guided intake (`screen-intake-skill.md`), refinement loop (`harness-refinement-protocol.md` + `harness-refinement-register.md`), correction ledger (`correction-ledger.md`), review protocol + PRD template, `.github/PULL_REQUEST_TEMPLATE/ui_review.md` |
 | **Distribution & rollout** | [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) — how this reaches the team + current status |
 | Product-repo gate bundle | `tooling/product-gates/` — drop-in ESLint/Tailwind/coverage gates for the product CI |
@@ -57,7 +57,7 @@ python3 tools/synapse.py digest                              # what LLMs keep ge
 
 ## Status (read before adopting)
 
-The **doctrine is mature** (67 components, AI patterns, tokens, gate, bilingual specs at 1.0.0). The **consumption layer is not finished**: the React library in `storybook/` is a 12-of-67 seed (Button · Badge · Input · Card + the 2026-08-03 chat set) and is not yet published as an installable `@enhans-jooyeon/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
+The **doctrine is mature** (68 components, AI patterns, tokens, gate, bilingual specs). The **consumption layer is not finished**: the React library in `storybook/` is a 13-of-68 seed (Button · Badge · Input · Card + the 2026-08-03 chat set) and is not yet published as an installable `@enhans-jooyeon/synapse` package, and the product-repo gates (protocol §6) are provided in `tooling/product-gates/` but not yet wired into a product repo. See [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md) for the sequenced path from "readable" to "usable under enforcement."
 
 ## Governance
 

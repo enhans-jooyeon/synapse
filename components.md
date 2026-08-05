@@ -1,6 +1,6 @@
 # Synapse components
 
-**This is a closed set.** The 67 component entries below (a `##` heading each; some entries group sibling controls, e.g. Checkbox · Radio · Switch) are the only building blocks permitted in generated UI. Common multi-component assemblies are specified in `recipes.md` — check there before composing from scratch. If a need cannot be met by these components or their documented composition (`patterns.md`), the correct action is to escalate per `design.md` §6 — never to invent a variant, add a prop, or restyle an existing component.
+**This is a closed set.** The 68 component entries below (a `##` heading each; some entries group sibling controls, e.g. Checkbox · Radio · Switch) are the only building blocks permitted in generated UI. Common multi-component assemblies are specified in `recipes.md` — check there before composing from scratch. If a need cannot be met by these components or their documented composition (`patterns.md`), the correct action is to escalate per `design.md` §6 — never to invent a variant, add a prop, or restyle an existing component.
 
 Every spec follows the same schema. `variants` and `sizes` are exhaustive enumerations. `forbidden` lists the modifications agents most commonly attempt and must not. Components use the single system size scale; Table runs compact by default (foundations §4).
 
