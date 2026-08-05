@@ -1,4 +1,4 @@
-<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-07-31 — migration commits are PUSHED and main is in sync with origin; point-color jurisdiction clarified (key = black, azure selective, graphite = identity). -->
+<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-08-03 — chat interface promoted from render to contract (8 new components + FloatingPill), composer rebuilt to arrangement B, AgentStep consolidated to a nine-state superset, SY021 added. main is 38 commits AHEAD of origin/main: PUSH FIRST. -->
 
 # Synapse — session handoff
 
