@@ -1,185 +1,274 @@
 #!/usr/bin/env python3
 """Build synapse.manifest.json — the machine-readable component index for generation agents.
 
-Run after any components.md change (governance: the manifest is a build artifact, never
-hand-edited). Fails if the entry set here drifts from components.md's ## headings.
+The components section is a PURE PROJECTION of components.md: every entry is parsed from
+that file's labelled bold slots (**Purpose:**, **Variants:**, **Sizes:**, **States:**,
+**A11y:**, **Forbidden:**, **Key rules (machine index):** — plus their accepted wording
+variants). Nothing component-shaped is hardcoded here, so prose and manifest can no
+longer drift apart: there is one authored copy (adoption ruling #1,
+proposals/2026-08-05-astryx-adoption-rulings.md).
 
-Entry fields: purpose (1 line) · variants/sizes (closed lists) · key_rules (the rules an
-agent most often needs without opening the spec) · spec (authoritative section).
+Run after any components.md change (governance: the manifest is a build artifact, never
+hand-edited). Exits 1, listing every offence, when the spec's slots are unparseable:
+an entry without a **Purpose:** slot, a **Key rules** slot without bullets, or a bold
+`**Label:**` that matches no registered label (catches typos like `**Purpos:**` —
+a genuinely new label is taught to LABELS / KNOWN_UNMAPPED, deliberately).
+
+Entry fields, in order: purpose (always) · variants/sizes/states/a11y/forbidden (present
+wherever the prose has the slot; a single-paragraph slot is a string; bullet-list, table
+and multi-block slots are a list of strings) · key_rules (the rules an agent most often
+needs without opening the spec — the **Key rules (machine index):** bullets, verbatim).
 """
 import json, re, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+COMPONENTS_MD = os.path.join(ROOT, "components.md")
 
-C = {
- "Button": {"purpose": "Trigger an action; never navigation (that is Link).",
-  "variants": ["TWO AXES as of 2026-07-30", "buttonStyle: primary | secondary (tonal, was tertiary) | outline (white+border, was secondary) | ghost", "target: default | destructive | brand (bright AZURE azure.500 #0073E6, NOT the indigo info blue; conversational-AI CTA only, max 1/screen across ALL styles)"],
-  "sizes": ["xs (24, INLINE-ONLY per WCAG 2.5.8 Inline exception)", "sm", "md", "lg"],
-  "key_rules": ["max 1 primary per region", "target=brand = bright AZURE (azure ramp; never the indigo blue ramp, which is functional info/link/focus — the two blues must never be mixed), max 1/screen across ALL FOUR styles — scarcity is no longer enforced by absence and MUST be enforced by review/lint; operational agent actions (Run/Retry/Resume) stay target=default; primary x destructive (solid red) stays destructive-confirmation-only, lower-emphasis destructive styles serve row/inline deletes; secondary on bg.sunken MUST open to bg.page (tray rule) or it becomes indistinguishable from ghost; tonal coloured fills are one ramp step lighter than status.*-bg so they do not duplicate the subtle Banner/Badge tint", "text-only labels by default; icon+text only for brand AI actions and toolbar/filter contexts (approved icons)", "pill radius: primary + lg ONLY, in Guided heroes / empty-state first-use, target=default or brand (never destructive, never xs/sm/md, never secondary/outline/ghost)", "icon-only buttons are always square in FOOTPRINT (width = size height) — a circle satisfies this, so the circular controls below are RADIUS exceptions, not aspect-ratio ones", "CIRCULAR ICON-BUTTONS ARE A CLOSED SET OF THREE (2026-08-03): the Composer row leading + and trailing send (the bookend pair bracketing the input) plus the AssistantPanel launcher. Nothing else is circular. The §26 recording-bar confirm is NOT a fourth — it occupies the SEND POSITION in the recording state, so it is the send bookend morphed (like send<->stop, one control in two states). The set counts POSITIONS, not glyphs. Declaring the set resolved two contradictory claims — ResponseToolbar said send was the ONLY circular control while AssistantPanel called its launcher an exception SHARED with send", "optical trim: icon+text buttons drop 2px padding on the icon side, computed from the SIZE-SPECIFIC control-padding-x-{xs,sm,md,lg} = 8/10/12/16", "leading + trailing icon together is permitted (confirmed 2026-07-30) but only reachable in toolbar/filter context; never two chevrons", "pill: primary + lg only, Guided heroes / empty-state first-use, target default or brand, never destructive", "NO active/pressed state (dropped 2026-07-30) — pressed feedback comes from the click; bg.active is NOT a Button token, it belongs to table rows and menu items", "focus ring: HUE from target, STRENGTH from buttonStyle — primary takes the strong ring (border.focus-input / border.error-hover / action.brand-border-hover), secondary/outline/ghost take the soft one (border.focus-soft / border.error-soft / action.brand-border-soft); soft rings are mode-invariant 500 steps", "loading: spinner (registry loader-circle) replaces the leading icon, or on an icon-only button the glyph itself; aria-label MUST persist + aria-busy=true since the affordance is gone while busy; width never changes; disabled is a fill on FILLED variants, never opacity; ghost is CARVED OUT 2026-08-03 and takes no fill — bg.disabled #F4F4F6 was within one step per channel of ghost's own hover (#F5F5F5 over white), so the fill read as hover; ghost mutes the label/glyph to text.disabled instead (2.33:1 light, a noted deviation from the 3:1 disabled floor — never let it be the only channel); the disabled LABEL is text.disabled in ALL 12 cells (per-target disabled labels withdrawn 2026-07-30 — the brand one was azure.500, the same hex as the live brand fill, so disabled read as available)", "danger solid clears AA at 4.62:1 with NORMAL label weight (status.danger-bg-solid moved red.400->red.500 on 2026-07-30; danger LEFT the §9 solid-label deviation — do not emit semibold for it)", "render/asChild: polymorphic slot for framework routing ONLY — one child, no nested interactivity, never on target=brand; not a licence to style links as buttons"]},
- "Link": {"purpose": "Navigation. text.link; underline on hover/focus; inline links always underlined.",
-  "key_rules": ["never styled as a button", "external links take the arrow-up-right mark", "no 'click here' labels"]},
- "Input (text)": {"purpose": "Single-line text entry (text/email/password/number/search).",
-  "key_rules": ["outlined anatomy: white bg.page + 1px border.default; hover border.strong; focus = 1px NEUTRAL border.focus-input border swap (no offset ring on fields; non-entry controls keep the blue 2px offset ring); disabled bg.disabled grey is the one filled state (borderless-filled was reversed — its fill equaled disabled)", "label above, always; placeholder is example content only", "errors name the fix (border.error)", "mixed bulk values show 'Mixed'/'여러 값'", "no fixed widths on translatable content", "affixes: one leading registry icon + one trailing unit-suffix or registry icon, inside the fill, non-focusable", "add-ons (InputGroup): fused leading/trailing text, leading/trailing Select, trailing secondary Button, ⌘K kbd hint, or help-circle tooltip beside the label — one per side, shared outer shape (border.default seams), every segment takes the input body's side padding (control-padding-x; dropdown chevron uses it as right inset) so the group aligns on one inset, never a dropdown+button on one side, never decorative"]},
- "Textarea": {"purpose": "Multi-line Input; min 3 rows; vertical resize; char counter counts characters not bytes.",
-  "key_rules": ["autogrow variant: 1 row to a declared max (default 8), then internal scroll, resize handle removed", "action bar (2026-07-30): trailing row fused to the field bottom, border.subtle full-bleed seam, height 40, bg.page, control-padding-x matching the field body; counter moves into it; max 2 buttons, secondary/ghost ONLY — never primary/brand/danger; forbidden inside the Composer, which owns its own send row", "action bar follows the Textarea in tab order, never precedes it"]},
- "Select": {"purpose": "Choose one of 5–15 static options. <5 → Radio; >15/async → Combobox.",
-  "key_rules": ["trigger inherits outlined Input anatomy", "menu is a Popover; selected shows leading check"]},
- "Checkbox · Radio · Switch": {"purpose": "Form on/off · one-of-2–5 · instant-effect toggle.",
-  "key_rules": ["checked = key color, not blue", "switch never inside a Save-button form", "mixed states: checkbox minus, switch centered thumb + minus glyph (track NEVER key color), radio has none", "mixed-value convention applies across all controls"]},
- "Badge": {"purpose": "Static annotation: status, counts, categories. Never interactive (that is Chip).",
-  "variants": ["colors: neutral,info,success,warning,danger,ai,category(subtle only) — NOTE solid neutral RETIRED: that treatment moved to Chip's selected state; release markers (New/Beta/Early access) now use neutral SUBTLE, never info (blue is already link+focus+info+brand)", "emphasis: subtle,solid,dot — outline RETIRED 2026-07-30 (outline is now Chip's resting state; dense-table case covered by dot)", "shape: pill(default) | rounded — a density/tone choice, one per view. Interactivity is encoded by FILL not shape (2026-07-30): Badge is filled/tinted, Chip is outlined at rest", "sizes: md, lg(page headers only)"],
-  "key_rules": ["status vocabulary = content.md §3.3 closed set", "undeclared color = neutral; a badge never renders unfilled", "solid has named jobs only: urgent marks (1 solid color/view), ops-table opt-in, neutral=release markers (must expire), ai=live-activity beacon on ai.solid slate (disappears on completion)", "dot uses status.*-bg-solid fills", "with-icon option: 12px registry status icon for triple redundancy (subtle/solid only)", "count overlay on the bell only: 18px bg.inverse-soft mini-pill + surface ring, half-in corner anchor (top/right -2px) covering part of the glyph; never neutral-subtle, never renders 0", "md optical nudge: line-height 1 + 1px top padding (md only)"]},
- "Chip": {"purpose": "Interactive compact element: select, refine, remove, accept a suggestion. Clickable=Chip, informs-only=Badge.",
-  "variants": ["input (removable — outlined at rest + trailing X)", "filter (toggleable; selected treatment depends on selection model — multi-select takes NO FILL: transparent + border.selected + text.primary + check, which keeps dense filter rows quiet; single-select/toggle takes bg.inverse-soft + text.on-inverse + check)", "category RETIRED 2026-07-30 — it duplicated Badge category, split only by clickability. Label-only = Badge category; click-to-filter = filter chip", "suggestion (outlined bg.raised + hairline, hover bg.hover/border.strong — style swap w/ source pills; Console/empty states only, max 3)"],
-  "key_rules": ["interactivity is encoded by FILL not shape (2026-07-30): Chip is OUTLINED at rest, Badge is filled/tinted; shape is a free density choice on Badge", "every Chip carries an affordance glyph — trailing X removable, leading check selected, trailing chevron opens a menu; a chip with no glyph and no selected state is a mislabelled Badge", "chips do NOT carry the full colour palette — interactive stays quieter than status", "disabled uses text.disabled + border.subtle, NEVER opacity", "never carries commands (that is Button)", "no manual colors", "labels never truncate"]},
- "Card": {"purpose": "Bounded group of related content.",
-  "variants": ["flat (default: bg.surface, borderless)", "outlined (separable/interactive objects)", "elevated (max 1/page; sole static shadow)", "ai (agent content)", "stat (KPI anatomy; uniform — the emphasized opt-in removed)"],
-  "key_rules": ["interactive implies outlined/elevated + exactly one action + optional hover-lift", "no bordered nesting", "selected = border.selected ring (selection is key color; focus stays blue)"]},
- "Table": {"purpose": "Workhorse for data-heavy records with aligned columns.",
-  "key_rules": ["18 closed cell renderers fix alignment/format per column; empty cell = em dash", "header row: label-size medium text.tertiary, transparent fill, hairline rule only; sort glyph space reserved", "selection column: 40px, zero padding, centered both axes — control cell, not text cell", "emphasis column opt-in: emphasis.surface fill marks current period/totals, max 1/table", "status columns default dot+text; solid opt-in for ops walls", "frameless by default (bare header); scrolling/pinned-column tables framed", "column menu closed set; bulk selection bar; inline edit for text/number/select cells; 1-level grouping; virtualize >200 rows", "no zebra striping"]},
- "Tabs": {"purpose": "Peer views of one object (2–7). Underline style only.",
-  "key_rules": ["never for sequential steps (use Stepper recipe — recipes.md R9)", "overflow scrolls, never wraps", "editable variant (2026-07-30) for USER-created tabs: trailing X per tab, trailing + after the last, double-click renames in place; closing the active tab activates its right neighbour", "the 7-tab cap holds — author-defined tabs are capped by review, editable tabs by DISABLING the + at 7; beyond 7 open items is a Sidebar list or Tree, not a tab strip", "editable never for product-defined views (if the user cannot create it, they must not close it); never close the last remaining tab", "dirty state = 6px text.tertiary dot replacing the X until hover"]},
- "Sidebar (app navigation)": {"purpose": "The single global navigation surface.",
-  "key_rules": ["240px expanded/64 rail", "container padding 12; items 32px, 4px gaps; group labels 16px top pad (micro-label, sentence case)", "collection rows may carry an 8px viz-tint category dot — the one color in the sidebar; never on system destinations", "labels never truncate when expanded — shorten the label", "max 2 nesting levels"]},
- "Breadcrumb": {"purpose": "Path context for depth >2; collapse middle beyond 4 into overflow."},
- "Modal": {"purpose": "Blocking decision or focused short task.",
-  "key_rules": ["widths 400(confirm)/480/640 max", "opaque bg.raised (glass retired from scrimmed layers)", "footer: Cancel + one primary (danger for destructive, consequences named by count+noun)", "no modal-on-modal; z.modal", "header action slot (2026-07-30): at most ONE ghost action/icon-button/Link between title and close, 12px gap; for ancillary affordances only (Learn more, Open in full page, view toggle)", "the two-button footer cap counts DECISIONS — a header action never resolves the modal; if it would close or commit, it is a decision and belongs in the footer", "no header action on a 400px confirm modal; never primary/brand/danger styling in the header"]},
- "Drawer": {"purpose": "Side detail/edit without leaving context; right side (bottom below 768px); 480/640.",
-  "key_rules": ["full-screen data drawers for review surfaces", "wide 800 variant for data review (DiffView)", "opaque bg.raised always (glass retired from scrimmed layers)", "z.drawer", "bottom rendering below the 768 breakpoint (2026-07-30): full width, max-height 85vh, radius xl on the top two corners, 32x4 border.strong grab handle — this is RESPONSIVE, not an author-set side prop; edge is a function of available space so the system decides it", "side is NOT author-controlled: left is forbidden (Sidebar), top is forbidden (the top edge is app chrome — topbar/palette/Banner — so a panel from there reads as a system message; use a Modal or Banner), bottom is forbidden at >=768"]},
- "Popover / Menu": {"purpose": "Anchored floating panel; menus of actions/options.",
-  "key_rules": ["border.overlay (none in light, visible in dark) + shadow.lg; z.dropdown", "6px container padding (concentric: 10-6=4 item radius); items 32px with 4px gaps; destructive last; dividers full-bleed — binds EVERY horizontal rule in any floating panel, incl. search/hint/footer rows", "search row optional >8 items", "one submenu level max", "Kbd slot (2026-07-30): a menu item MAY carry its shortcut right-aligned as a .sy-kbd hint in text.tertiary, min 24px from the label, label truncates before the hint; renders IDENTICALLY to Tooltip's Kbd slot and CommandPalette's trailing kbd — one shortcut vocabulary across all three", "never invent a shortcut hint for a binding that does not exist; never a Kbd slot on a danger item"]},
- "Tooltip": {"purpose": "≤10-word clarification of an icon or truncation. Same-scheme surface; 300ms delay; z.tooltip.",
-  "key_rules": ["never interactive; never an error surface"]},
- "Toast": {"purpose": "Transient outcome notification; bottom-right; max 3; z.toast.",
-  "key_rules": ["same-scheme surface (raised-2 + border.overlay + shadow)", "errors 8s + manual dismiss; never for validation or decisions", "contents first-line aligned; dismiss × = compact 20px box (not a form control )", "undo convention: reversible-lite ops get Undo toast (8s) instead of Popconfirm — never both"]},
- "Banner / Alert": {"purpose": "Persistent inline notice for a page/section.",
-  "variants": ["colors: neutral,info,success,warning,danger", "emphasis: subtle (borderless status tint, no border/rail ), solid (app-critical strip; max 1 in app; semibold text)"],
-  "key_rules": ["max 1 per region"]},
- "Avatar": {"purpose": "Identity. Round = human, squared = agent (mandatory product language).",
-  "sizes": ["20 (no dot)", "24", "32", "40", "56"],
-  "key_rules": ["dots per size 8/10/12/14 using status.*-bg-solid", "AvatarGroup: max 4 + '+N'", "initials on deterministic viz tint"]},
- "Skeleton · Spinner": {"purpose": "Loading: skeleton for known shapes >300ms; spinner (16 in controls / 20 standalone) for unknown.",
-  "key_rules": ["skeleton mirrors true layout via line/block/circle presets only", "one spinner per region"]},
- "EmptyState": {"purpose": "Every list/table/search has one. Flavors: first-use, no-results, error (+retry).",
-  "key_rules": ["always an action when possible", "no illustrations in v1", "icon medallion: sunken circle + two concentric hairline rings; error flavor tints it danger-bg", "explanations balance-wrapped", "compact variant (one line, no icon) required inside small overlays"]},
- "Pagination": {"purpose": "Table/list nav; 'Load more' for feeds; infinite scroll forbidden in tables."},
- "CommandPalette": {"purpose": "⌘K universal entry: navigation, actions, ask-agent.",
-  "key_rules": ["never dead-ends — final row is 'Ask agent: {query}'", "opaque bg.raised panel over a bg.scrim backdrop, radius lg, border.default hairline, shadow.xl — NOT glass (corrected 2026-08-03: this entry still said 'glass material, SCRIMLESS' after the glass→opaque reversal; backdrop-filter is forbidden by SY015 and glass is on the design.md §8 never-list)", "560 wide, offset 15vh from top; esc / scrim-click / click-away dismiss", "grouped results, kbd hints, match highlighting", "z.dropdown"]},
- "ProgressBar": {"purpose": "Long-running work. 4px track.",
-  "variants": ["default (meter.fill gray)", "ai (brand blue)"],
-  "key_rules": ["determinate needs a real denominator", "failed persists red; cancelled = border.strong", "never a bare spinner >10s"]},
- "Composer": {"purpose": "The message/instruction input for Console and ask-agent surfaces.",
-  "key_rules": ["never disabled during generation (empty-send is the one sanctioned disable)", "SHAPE MORPH: pill (radius.full) ONLY while content occupies a single line; past that a rounded rect at lg (16) with THE SAME RADIUS ON ALL FOUR CORNERS — the rect never takes asymmetric corners. Any attachment, chip or quote forces the rect regardless of line count", "HOW SINGLE-LINE IS DETERMINED: where the tray holds a TEXTAREA the text decides — the field's own empty-state height is the one-row baseline, so the flip is on the first WRAP not the first keystroke, and control height is deliberately excluded (a 36px button beside an empty field is still one line of text). Where the tray holds STATIC content, its content height is measured in LINE UNITS. Corrected 2026-08-03: four static demos were briefly marked single-row by hand, which was wrong — the slot-chip case is genuinely two lines (prompt + caption) and was forced into a pill", "ANATOMY (settled 2026-08-03): the tray holds the INPUT ROW ONLY — circular leading + / textarea / mic / circular send — and the agent picker, capability toggle and model selector sit in a FOOTER ROW BELOW the container. The footer was briefly removed the same day and restored: the removal matched only the .cmp-footer class, so the comparison story kept its footer while the real composers lost theirs and the two renderings diverged silently for several commits", "TWO RULES REMAIN HOMELESS, recorded as OPEN not dropped: (1) §24 refine-prompt has no trigger, so the preset menu / reviewable rewrite / Undo Toast are unreachable; (2) the + deviation dot was removed so capability state is SILENT, which the spec forbids in those words. The footer capability toggle is a DIFFERENT thing — one named capability, not deviation from the agent's defaults", "MORPH CONDITIONS (both required for the pill): exactly one text row AND no fused panel — an attachment or quote makes the tray two regions so it takes lg regardless of line count. The morph fires on the first WRAP, not the first keystroke: detection compares the field's own empty-state height, not a computed line-height", "this AMENDS foundations §5, which assigned the tray a flat md — the Composer tray is now the only container in the system whose radius depends on its content", "the composer row has a CIRCULAR BOOKEND PAIR: leading + (tonal, action.secondary-bg) and trailing send (primary/black). The mic between them stays a bare ghost SQUARE — that is what keeps the pair legible as a pair rather than a row of circles", "send is PRIMARY/BLACK — the accent was REALLOCATED 2026-08-03 (design.md §3.7): the most predictable control on the screen does not need an accent to be found, so the azure brand accent moved onto AI-CAPABILITY markers (the palette Ask-agent escape hatch, and the Composer capability toggle whose state changes what the agent can do). Send keeps its circular icon-only exception. A brand-coloured send is now WRONG; operational agent actions and send are both primary, which removes send as an exception", "capability toggle ON uses action.brand-bg-subtle (azure.100 light / azure.900 dark, a token ADDED 2026-08-03) with action.brand-fg-on-page — 5.25:1 light, 7.06:1 dark, gated by a new SY-contrast pair", "tray carries a 4px ZERO-BLUR ring in bg.hover outside its hairline — literally an alpha value (rgba(9,9,11,0.04) light / rgba(255,255,255,0.06) dark) so it inverts by mode with no per-mode pair; zero-blur token rings are the sanctioned SY009 exemption, so no raw shadow and no new token", "tray radius is lg (16) in the grown state — xl (20) is closer to reference designs but foundations §5 reserves it for section shells; the composer row uses md (36) icon-buttons not sm (32), which is what lets the single-line state read as a pill rather than a thin lozenge without disturbing the 12px inset; a fused panel follows the tray to lg on its top corners", "SURFACE MODEL inverted 2026-08-03: the tray is the LIGHT container (bg.page + 1px border.default) and the draft-owned panel above the input carries the bg.sunken tint — it used to be sunken across the whole tray, which put the tint UNDER THE TEXT and is what made the input read cramped at every padding value. The chip bg.page override is retired since Chip reads correctly on a light tray", "DRAFT-OWNED CONTENT SITS ON THE TRAY SURFACE — no tint, no hairline (2026-08-03, reversing the fused-tinted panel from earlier the same day): attachments, ComposerQuote and knowledge/source pickers stack directly above the input row with nothing separating them, because they ARE part of the message and the tray is ONE surface. The flush-nesting radius argument for the panel top corners now applies to nothing and is gone. FollowUpPanel still detaches 8px above for the unchanged reason — a suggestion is NOT part of the draft. Attachments still force the rect radius", "the input textarea MUST be display: block — a textarea is INLINE-LEVEL by default, so the position:relative wrapper anchoring it measures the field PLUS a ~4-5px baseline/descender gap beneath, leaving the wrapper taller than its content with the text pinned to its top, so the text sits above true centre however the row aligns. display: block removes the phantom space. Four earlier passes chased the symptom (alignment flag, control heights, rows=1, a 1px optical nudge); the nudge was compensating for this gap and was removed with the fix", "spacing between draft-owned content and the input row is 12px (space-3, raised from 8px): with no tint or hairline separating the regions, spacing is the ONLY device distinguishing them, so it carries more than when a boundary was drawn; matches the tray inset", "ROW ALIGNMENT AND TRAY RADIUS ANSWER DIFFERENT QUESTIONS: alignment depends on the TEXT ALONE (one line centres against the controls, multiple lines bottom-align so the last line meets them); radius depends on the text AND whether draft content is present. Conflating them meant one line of text plus an attachment lost the centred alignment along with the pill, so a 22px line bottom-aligned against 36px controls and read as sitting too low", "tray inset is a UNIFORM 12px (space-3), stated 2026-08-03 — it had never been authored, only inferrable from ComposerQuote's concentric note, and the 4px that produced made this the tightest container in the system while being the only one holding text. 12 matches control-padding-x-md and the header inset of ProposalCard and ConversationSummary. The CONCENTRIC RULE DOES NOT BIND: foundations §5 exempts elements inset >= the outer radius, and 12 == the tray's md radius, so children clear the corner region and take the radius that suits them (ComposerQuote stays sm). ONE inset governs every child; children add no horizontal padding of their own", "send↔stop morph in place", "ComposerQuote bar: ai.surface radius-xs, max 1/send; the follow-up panel anchors above the tray — see the FollowUpPanel entry, which owns its anatomy (relocated 2026-08-03)", "slash commands: / scopes palette to agent actions; ghost completion accepted with →, never Tab; closed glossary only", "templates: / = expert quick-insert; bookmark opens the Template Library Modal — anatomy is in ai-patterns.md §23 and is NOT restated here. KNOWN DEBT (2026-08-03): §23 carries ~1,900 words of pure component anatomy (pane widths, padding, star-toggle states) that belongs in components.md; until it is relocated, the manifest cannot source it, and SY021 will flag any attempt to restate it in this entry. Slot chips and the unfilled-slot send block are also §23", "authoring coach: max one non-blocking quality hint; the `pen-line` icon opens the CLOSED refinement-preset menu (다듬기/자세히/간결/범위/형식 ), rewrite replaces draft w/ Undo, disabled on empty", "voice = dictation only ( §26): tray morphs to recording bar (cancel / pulsing danger dot + timer / pause / primary check confirm); transcript inserts at caret, NEVER auto-sends; no audio in thread", "agent-picker menu: search + grouped rows + one submenu + mandatory request-footer escape (no model rows — reversed)", "model selector (trailing): menu grouped by provider under micro-label headers, real product names in mono, 자동 row = agent default; per-conversation, defaults from agent, lockable; never changes permissions/approval", "tools popover (plug): per-conversation capability switches; disabled tool → agent asks; enabling never bypasses ProposalCard", "composer footer: leading = + menu (첨부/템플릿/도구) + agent picker; trailing = model + mic (send-adjacent, never in + menu) + send; kbd hint removed; refine-prompt = contextual pen at input top-right, rendered only with a non-empty draft; 1 visible leading icon default, 5 hard cap", "input-pattern laws: starters = zero-state only, insert never send, dismissible; chip label IS the query; selection pill = 답장/설명/재생성 closed set, thread append-only; attachment captions advisory-only; batch = per-item queue, one failure never aborts, ProposalCard still gates; ghost text → accepts never Tab, suppressed during Hangul composition", "Enter sends, Shift+Enter breaks, Enter during IME composition NEVER sends", "attachments as input Chips; agent/scope picker ghost", "drafts persist; no formatting toolbar; one per screen"]},
- "ResponseToolbar": {"purpose": "Actions on an agent message: copy · regenerate · thumbs · overflow.",
-  "key_rules": ["agent messages only; fixed order", "hover-reveal default, persistent where hover is unreliable", "regenerate on latest message only — creates variant N+1, never destroys; answer header carries the ‹n/N› pager ( §22)", "thumbs selected = stroke + bg.selected circle, never filled icons", "no destructive actions", "media variant RETIRED 2026-08-03: a media-only reply now takes the STANDARD toolbar in its standard place, a horizontal row below the MediaGroup — same as a text reply places it below the prose. The old rule was conditional (rail only when media was the sole content) which moved the feedback surface depending on the reply's content type and made the renderer inspect sibling content to choose a treatment. One surface, one place, always"]},
- "AgentStep": {"purpose": "One row of visible agent work (step/tool call).",
-  "key_rules": ["closed states are the NINE-STATE SUPERSET in ai-patterns §3 (single source since 2026-08-03): pending, queued, running, awaiting-input, partial, success, failed(+Retry), cancelled, skipped. §3 also carries a REACHABILITY column — a thread step is never queued, a batch item never skipped. Added 2026-08-03 to close real defects, not to add features: awaiting-input (a blocked step rendered as running forever), cancelled (specified for runs in §8 and in RunLog but not for steps, so Stop left the in-flight step stateless), partial (§10 REQUIRES partial reporting and the five-state set could not express it), queued (already in RunLog and §29). retrying was REJECTED: a retry emits a NEW step, keeping the record append-only", "collapses to '5 steps · 12s' summary on completion (the summary counts LEAVES, not groups)", "CONCURRENT fan-out (2026-08-03): when >1 step runs at once the list switches to a concurrent group — one parent row with the shared goal + a live tally, children indented one level (the single nesting level §3 allows). Children order by START TIME and NEVER reorder as they finish. The parent state is DERIVED not authored: running while any child runs, partial if some failed and some succeeded, failed only if all failed, success if all succeeded, cancelled if stopped — this is why partial had to exist. The 3-row cap applies to GROUPS, not children. Forbidden: a progress bar on the parent instead of the tally (§11 needs a real denominator per run), nesting a group inside a group, or rendering concurrent children as separate top-level steps", "tool ids in mono; payloads collapsed; max 1 nesting level", "role=log aria-live=polite", "named working line above steps while generating (pulse, no shimmer); long replies open with title + duration badge + collapse"]},
- "DescriptionList": {"purpose": "Key-value rows for detail views/drawers/expanded rows.",
-  "key_rules": ["term column sized to widest term of active locale; never truncates", "empty = em dash", "not a form"]},
- "ButtonGroup": {"purpose": "Fused peer actions (attached tonal segments) or split button (main + chevron menu of true variants).",
-  "key_rules": ["never attach primaries", "≤4 segments"]},
- "ProposalCard": {"purpose": "Human-in-the-loop approval of a consequential agent action.",
-  "key_rules": ["tray anatomy: borderless ai.surface fill, radius md, no shadow (corrected 2026-08-03 by SY021, was lg); header row + ai.border hairline (single-tone; two-tone reversed); payload surfaces open to bg.page; squared avatar FIRST in header (the agency marker); forbidden formula = tint + outline", "Approve=primary (danger if destructive; approving is a human decision, not an AI CTA), Reject=secondary (light mode: bg.page fill on the tray — tonal gray dissolves on slate; dark keeps standard fill)", "no auto-approve, no countdowns", "resolved collapses to attribution row, never deleted", "diffs: tint backgrounds + gutter markers, never color alone"]},
- "Thread": {"purpose": "The transcript container — the scrolling Console region holding Messages in order; owns scroll position and catch-up affordances.",
-  "variants": ["default"],
-  "key_rules": ["scroll container spans the full region with a max-width 760 message column centered inside it — no mid-canvas scrollbar beside the column", "stick to bottom only while the user IS at the bottom; on scroll-up release the lock and NEVER re-acquire it while streaming; a released lock raises the 'Jump to latest' affordance — a FloatingPill (horizontal, one action) at the bottom-centre of the column, dismissed by reaching the bottom. NOT a Toast: that citation was false (a Toast is a transient notification — bottom-right, max 3, auto-dismiss, status icon)", "APPEND-ONLY (provenance law): messages are never edited, reordered, or removed — 답장/설명 compose new turns, whole-reply regeneration adds a variant, a summary renders beside the transcript never over it. OPEN: §22 partial regeneration writes in place, which conflicts with this law — held for a ruling 2026-08-03", "no group headers between turns (avatar shape + bubble already carry authorship — a third signal is redundant)", "space-6 between turns, padding 24", "one Thread per screen; no nested scroll container; no infinite-scroll history paging", "empty state carries NO EmptyState — the Composer is the affordance and §27 starters render above it", "role=log aria-live=polite declared ONCE at the Thread, never per Message (nested live regions double-announce)"]},
- "Message": {"purpose": "One turn in a Thread — the most-rendered object in AgentOS. Two actor forms, closed.",
-  "variants": ["human", "agent"],
-  "key_rules": ["human = right-anchored bubble, margin-left auto, max-width 75% of the column, bg.sunken, radius xl, padding 8x12, body type — NO avatar, no timestamp at rest, no toolbar", "agent = full-width, NO bubble and NO fill: plain body text on bg.page, flex row of squared Avatar 24 + content column (flex 1, min-width 0)", "the bubble/no-bubble asymmetry is LOAD-BEARING — it is the shape channel that makes authorship scannable without reading; never tidy it into matching containers", "agent content column order is FIXED (may omit, may NOT reorder): working line → AgentStep list → Reasoning → AnswerHeader → answer body → sources row → ProposalCard → MediaGroup → ResponseToolbar → follow-up chips", "human attachments stack ABOVE the bubble text: document ContextCards first, then images (radius lg + hairline, max-height 240; 2 side by side, 3+ as a 2-wide grid), then text — never a MediaGroup fan", "states: human sent/send-failed; agent streaming/settled/stopped/failed/guardrail-blocked", "no avatars on human messages, no fills or borders on agent messages, no feedback affordances on human messages, no editing a sent message in place, no third actor form (system = Banner, handoff = §16 event)", "each Message is an <article> named for its actor; the Thread owns the live region"]},
- "AnswerHeader": {"purpose": "Titled opening of a substantial agent reply — title, duration, variant pager, collapse.",
-  "key_rules": ["flex row inside the agent content column: heading-sm title (from the run's stated goal) + neutral duration Badge (tabular-nums) + right-aligned VariantPager + collapse chevron (ghost sm icon-button)", "WHEN: replies over ~4 paragraphs or produced by a multi-step run — ONE header per reply, never per section", "the §20 named working line resolves INTO this title on completion — same string, promoted from body-sm pulse to heading-sm", "collapsed keeps title + duration; expansion state persists in the transcript per user", "never heading-md or larger (agent text never produces page-level hierarchy)", "duration is an ACTUAL, never invented or estimated", "no auto-collapsing a reply the user did not collapse"]},
- "VariantPager": {"purpose": "Non-destructive navigation between regenerations of one agent reply.",
-  "key_rules": ["‹ › ghost sm icon-buttons around a caption tabular-nums counter ('2/2') — no dots, no version dropdown, no labels", "regenerate creates variant N+1 and NEVER destroys; switching is non-destructive", "each variant keeps its OWN provenance and attribution — its own SourceChips, uncertainty Badges, AgentStep record; carrying one variant's citations onto another is a provenance break", "max 5 variants, then the oldest UNPINNED is replaced", "latest agent reply only — earlier replies show no pager because they cannot be regenerated", "never expose variants as Tabs or a Select; the pager is the closed form", "arrows name their destination; counter is aria-live polite; arrows disable at the ends, never wrap"]},
- "Reasoning": {"purpose": "Disclosure of an agent's working text, subordinate to the answer and never answer content.",
-  "key_rules": ["collapsed by default: 24px row = chevron + 'Reasoning'/'추론 과정' (label, text.tertiary) + duration (tabular-nums)", "expanded = body-sm text.secondary on bg.surface, agent-markdown rules BUT capped: no headings, no images", "three structural subordination rules: never text.primary, never carries SourceChips (citations belong to the ANSWER), excluded from copy/regenerate", "AUTO-EXPAND IS FORBIDDEN — the answer is the deliverable, reasoning is an offer; expand state persists per user per conversation", "redacted by policy says so plainly, never renders empty", "the expanded region is NOT a live region even while streaming — announcing working text over the answer inverts the subordination"]},
- "FloatingPill": {"purpose": "Shared surface for a small transient action affordance that floats over content — raised by a condition, gone when it ends. A surface primitive: it owns the shell, consumers own the behaviour.",
-  "variants": ["none — a single form; rail was declared and removed 2026-08-03 with its only consumer"],
-  "key_rules": ["WHY IT EXISTS: this anatomy was implemented three times identically (SelectionPill, Thread's jump-to-latest, and ResponseToolbar's media rail — the last since retired) and declared nowhere — one of them citing Toast, which shares the tokens and none of the behaviour. Consumers now reference this entry and never restate it", "horizontal: 28px height, padding 0 space-3, radius full, shadow.lg, z.dropdown, label-sm type (never a raw font-size), standard entrance; multiple actions split by a 1px border.default hairline 12px tall; 12px registry icons", "SURFACE IS PER-MODE (2026-08-03): dark takes bg.raised-2 (#33333A) + 1px border.overlay (#4A4A52); LIGHT takes glass.surface (#F6F8FB) + 1px glass.border (#E4E9F0) — the OPAQUE faux-frost family, no backdrop-filter, SY015 still holds. Why: in light mode bg.raised-2 IS #FFFFFF (same as bg.page) and border.overlay is TRANSPARENT, so the pill was 1.00:1 on the page with no hairline — separated only by an 8% shadow, while dark had three separation channels. A missing channel, not a taste gap, and unfixable by a darker fill because the light ramp jumps #FFFFFF -> #F4F4F6 (1.10:1) -> #33333A (12.53:1). Per-mode divergence with a reason is established practice (cf. ProposalCard secondary). REJECTED: an inverse bg.inverse-soft fill — too heavy for a catch-up hint at 12.53:1, and it is the system emphasis fill", "EVERY CHILD IS A REAL CONTROL — a <button>, or a Link where it navigates. A pill rendered as a <span> is a DEFECT: these affordances are often the only path to the action they carry, so a non-interactive element makes it keyboard-unreachable", "anchored to whatever raised it, NEVER to the viewport; overlays content and never displaces it (no layout shift on appear — the §19 rule generalised)", "dismissed by its raising condition ending (deselect, Esc, reaching the bottom, pointer-out) — never an x, never persists as chrome", "consumers are a CLOSED set: SelectionPill (§18) and Thread's jump-to-latest. ResponseToolbar media was the third and was RETIRED 2026-08-03, which also removed the rail variant — a variant with no consumer is dead spec", "FORBIDDEN: destructive actions (too easy to hit by accident — use Popconfirm or a Modal); more than 3 actions (past that it is a Menu); primary/brand/danger fill on the pill or its children; a status icon (Toast's vocabulary, and it invites the confusion this entry ends); more than one pill per raising condition"]},
- "SelectionPill": {"purpose": "Floating action pill raised by selecting text inside an agent Message.",
-  "key_rules": ["surface is a FloatingPill (horizontal) — that entry owns the shell (28px, bg.raised-2, border.overlay, radius full, shadow.lg, z.dropdown, label-sm, the 1px border.default separators, the real-<button> requirement); anchored above the selection. SelectionPill adds only WHICH actions and where they apply", "closed set is THREE actions: 답장 · 설명 · 재생성 (ruling 2026-08-03 — ai-patterns §22's 'never a third pill action' was stale and is struck; a closed set with two definitions is not closed)", "답장 inserts a ComposerQuote (max 1 per send, quoting replaces any existing quote); 설명 composes a quoted follow-up answered as a NORMAL agent turn — neither mutates the source. 재생성 is IN THE CLOSED SET but its write semantics are UNRESOLVED as of 2026-08-03: an in-place passage rewrite contradicts the append-only law, held for a maintainer ruling — do not implement it yet", "quoted passage takes a BARE ai.surface fill at radius xs — NO outline (tint + outline is the forbidden wireframe formula and read as a Badge; amended 2026-08-03), box-decoration-break: clone per wrapped line; ai.* not emphasis.* since §1 bars emphasis tokens from AI surfaces", "scope law: 재생성 scopes to the SELECTION, never the surrounding paragraph; rewrite-type actions apply only to the user's OWN draft (§24), never to agent output", "agent Messages only — selecting a human bubble raises nothing", "no toolbar of options, no second pill, no fourth action without governance, never persists past deselect or Esc"]},
- "FollowUpPanel": {"purpose": "Anchored panel of suggested next turns above a focused Composer; active counterpart to passive suggestion Chips.",
-  "key_rules": ["SOLID bg.raised panel — explicitly NOT glass (small, dense, over thread text where translucency reads muddy; foundations §6; backdrop-filter forbidden by SY015) — border.default hairline, shadow.lg, radius md, 6px padding", "32px rows at radius xs leading with the 12px follow-up arrow; full-bleed keycap header row (↑↓ 이동 · ↵ 선택 · esc 닫기); row hover/selected = bg.selected", "anchored 8px above the Composer's top edge (anchored menus use 4px; the panel's larger mass earns 8) and OVERLAYS thread messages — never pushes content down, layout shift on open is forbidden", "refine rows above pivot rows, split by the standard full-bleed divider; optional micro-label group headers ('더 자세히'/'다음 단계'); MAX 4 ROWS total", "chip honesty: a row's visible label IS the query it sends; if the query needs more words the row inserts into the Composer instead of sending", "selecting INSERTS into the Composer, never auto-sends", "chips and panel never render together; the panel never renders in the zero state (§27 starters own it)", "no per-row rationale line — it would break chip honesty; grouping is how the panel signals why a row is offered", "role=listbox, ↑↓ traversal, ↵ selection; the keycap header is aria-hidden decoration over real key handlers"]},
- "ConversationSummary": {"purpose": "Agent-generated recap of a long thread — decisions, action items, open questions.",
-  "key_rules": ["collapsible block on ai.surface WITH the standard agent attribution row (squared Avatar + name + timestamp) — both required; a summary that reads as chrome is a provenance failure. The BODY STAYS ON ai.surface and does NOT open to bg.page: ProposalCard's tray rule opens a PAYLOAD (diff, preview, record list) to bg.page, but a summary's body IS the content, and bg.page is #FFFFFF in light mode exactly like the thread behind it, so the body dissolved. Generally: 'opens to bg.page' only means something when the container is not already on bg.page", "at the top of the Thread or in the thread's detail Drawer; header carries a refresh ghost action + a last-generated caption", "GROUNDED: each point links back to the turns it summarizes (SourceChip-style jump); a point with no jump-back link, or a decision absent from the thread, violates §10 honesty", "refreshable, NOT authoritative: never replaces or rewrites the transcript (Thread is append-only); a stale summary shows its age, never a false 'current'", "NOT for short threads (a summary longer than the thread is noise); never summarize into a surface that widens who can see the content", "never presented as system chrome or as the user's own notes"]},
- "SourceChip": {"purpose": "Inline provenance marker [n] for agent claims; popover with source detail.",
-  "key_rules": ["never fake citations — unsourced claims get the 'Model knowledge' badge", "≤3 per sentence", "sources row: 출처 eyebrow ABOVE pill source cards — leading 18px page-filled numeral circle (mirrors the inline marker) + 12px type icon + name (icon restored); card↔marker hover linkage; ≥24px hit areas", "marker = 18px circle, neutral bg.sunken + text.secondary, bare numeral 11 semibold tabular — brackets/mono retired"]},
- "Combobox": {"purpose": "Large (>15) or async option sets; single or multi (input Chips).",
-  "key_rules": ["conveniences opt-in: search-in-menu, select-all (filtered set), groups, descriptions, recent, load-more, virtualize >100", "creatable only when data model allows; never auto-create on blur"]},
- "DatePicker": {"purpose": "date · range (preset rail) · datetime (footer time row) · time.",
-  "key_rules": ["locale formats per content.md §6; timezone label mandatory when it matters", "durations are number+unit, never a time picker", "today outlined; endpoints filled; range interior squared"]},
- "SegmentedControl": {"purpose": "Exclusive 2–5-way switch, immediate effect (not Tabs, not Radio).",
-  "key_rules": ["content-based widths; disabled whole-control only", "concentric geometry: radius-md container, 4px padding, radius-sm segments (prose states the arithmetic: 12 - 4 = 8; corrected 2026-08-03 by SY021, both were one step low) — inner = outer − inset; assembled control = 36"]},
- "Accordion": {"purpose": "Progressive disclosure of secondary content.",
-  "key_rules": ["never hides primary content/actions/errors", "chevron is the affordance; height animates (sanctioned exception)"]},
- "FileUpload": {"purpose": "Dropzone or button; per-file progress rows.",
-  "key_rules": ["constraints visible before selection; violations named per file", "no combined progress bar", "dropzone: dashed border.strong + radius xl + medallion (corrected 2026-08-03 by SY021, was lg); drag-over = border.focus-input + emphasis.surface; dashed = drop targets only"]},
- "SplitPanel": {"purpose": "Resizable workbench panes with a draggable divider.",
-  "key_rules": ["≤3 panes; min widths 280/200; ratio persists; not in fixed-layout archetypes (Settings/Guided)", "container = section shell: radius 2xl + hairline, flush panes (corrected 2026-08-03 by SY021, was xl)"]},
- "Chart": {"purpose": "Data viz inside Cards; closed types: line, area(1 series), bar, stacked-bar, donut(≤3), sparkline.",
-  "key_rules": ["viz-1..8 in fixed order; status charts use status tokens", "bars start at 0; no dual y-axes; >8 series → 'Other'", "loading skeleton / EmptyState / error states required"]},
- "ContextCard": {"purpose": "Referenced object (doc/meeting/table) as a physical card in threads and Composer.",
-  "key_rules": ["outlined radius-md card: icon tile + title + one caption meta line (corrected 2026-08-03 by SY021, was sm); no thumbnails", "stack: flat -4px underlay + page-colored ring + '+N', max 3, never rotated", "compact inline variant for Composer @-mentions"]},
- "Timeline": {"purpose": "Chronological activity: audit trails, run feeds.",
-  "key_rules": ["actor avatar shape carries authorship", "verb-first templated sentences; absolute time on hover", "day dividers; same-actor collapse; Load more (no infinite tables)", "history never editable"]},
- "Tree": {"purpose": "Hierarchy display/selection; folders, org units.",
-  "key_rules": ["rows 28; indent 20/level; max 4 levels then drill-in", "checkbox mode uses mixed-state parents", "drop target = focus insertion line", "no guide lines; middle-out truncation + tooltip"]},
- "CodeBlock": {"purpose": "Code/log/config display (promoted from .sy-code-block).",
-  "key_rules": ["header: language chip + copy", "one muted syntax theme ≤5 colors system-wide", "max-height 400 + expand; renders on fence close", "display only — no editing"]},
- "DiffView": {"purpose": "Standalone change comparison (promoted from ProposalCard diff rules).",
-  "key_rules": ["unified default; side-by-side ≥960px", "tint + gutter markers, never color alone", "unchanged runs collapse; +N −M counts tabular", "no syntax highlighting inside diffs"]},
- "MediaGroup": {"purpose": "Agent-GENERATED media as a casual fan — the one sanctioned playful moment.",
-  "key_rules": ["±2.5° alternating rotation, ~20% overlap, max 3 + '+N' (badge in caption strip); single item flat", "card = media area + surface caption strip with hairline rule", "hover straightens + raises; reduced-motion renders flat", "jurisdiction hard: generated media in agent replies ONLY — rotation exists nowhere else (design.md §8)", "playfulness lives in output, never chrome"]},
- "Slider · NumberInput": {"purpose": "Bounded continuous values (position=meaning) · precise numeric entry (paired, not interchangeable).",
-  "key_rules": ["slider never without a visible value; never for unbounded/precision", "number input: steppers, unit suffix, clamp on blur, tabular"]},
- "ChoiceCard": {"purpose": "2–6 described options as selectable outlined cards (plan/agent-type pickers).",
-  "key_rules": ["radio semantics default, multi variant shows checkboxes", "selected = border.selected ring + check", "equal heights; whole card is the target; >6 → Select"]},
- "HoverCard": {"purpose": "Rich entity preview on hover/focus (user/agent/run).",
-  "key_rules": ["500ms delay; ≤320px; avatar header + 2–4 key-value rows + ≤1 ghost action", "hover is enhancement — same info must exist on click-through", "no forms; no nesting"]},
- "Popconfirm": {"purpose": "Inline confirm for low-stakes recreatable actions — between no-confirm and Modal.",
-  "key_rules": ["one question + Cancel/confirm pair", "permanent loss, bulk, named counts → Modal", "no chaining; no inputs"]},
- "ContextMenu": {"purpose": "Right-click Menu on data surfaces.",
-  "key_rules": ["same Menu component at pointer", "duplication rule: every action also exists in visible UI", "one submenu level; not on prose"]},
- "CalendarView": {"purpose": "Schedule visualization (month/week) — runs, not bookings.",
-  "key_rules": ["day cells ≥96px; max 3 events + '+N' popover", "event colors = system-assigned viz tints only", "drag-reschedule only where model allows, Toast + undo", "empty days are empty"]},
- "NotificationCenter": {"purpose": "The bell's panel: what happened while away.",
-  "key_rules": ["items templated from content verbs; unread dot + surface fill", "click navigates + marks read; consequential actions only OPEN their surface (never approve from a notification)", "30 items then View all"]},
- "GraphCanvas · FlowNode · Edge": {"purpose": "The node-graph editor behind workbench builders (Workflow, Pipeline, Ontology Link/Lineage): pannable/zoomable canvas of node cards + typed edges, with a node palette and canvas controls.",
-  "variants": ["modes: build (edit), run (read-only + status)", "edge: default, labeled/branching (Condition If/Else)"],
-  "key_rules": ["canvas = bg.sunken + subtle dot grid (the one sanctioned bg texture); one fixed Start anchor, ≥1 End", "FlowNode = outlined card: header (16px icon + type label + AgentStep status dot) + config summary + left input / right output ports (8px squared handles); fixed width tier (240)", "Edge = 1px border.strong output→input, one connector style system-wide; Condition branch carries a label-sm If/Else tag; state = token + glyph, never hue alone", "NodePalette = grouped closed node-type list (micro-label headers), drag or click to insert; manifest node types only", "CanvasControls = floating zoom/fit/minimap cluster (bg.raised + border.overlay + shadow.lg); icon-only square + aria-label", "build vs run mode (run = read-only + per-node status + RunLog)", "no decorative node fill-color, no free-form shapes, no gradient/glow, no mixed edge styles, one grouping nesting level"]},
- "RunLog": {"purpose": "Hierarchical execution log (run → step → line) for Workflow Run mode, Pipeline runs, and CUA run review.",
-  "key_rules": ["expandable steps using the ai-patterns §3 state superset (SHARED with AgentStep — this entry previously claimed the two vocabularies matched while the two prose specs listed different five-state sets) → mono log lines in a bg.sunken block", "header: title + status Badge + tabular duration; success collapses to 'N steps · 12s'", "failed steps auto-expand + surface the error + optional Retry", "live-append aria-live polite; running step pulses (no shimmer); pin-to-bottom is a toggle, never forced", "display only; virtualize long logs; status = dot + glyph, never hue alone"]},
- "PivotTable": {"purpose": "Cross-tab aggregation (dimensions × measures) for dashboards; extends Table but is a distinct component.",
-  "key_rules": ["sticky row-dimension gutter (nested, expand/collapse) + grouped sticky column-dimension headers; always framed (scrolls)", "cells = Table's numeric renderers, right-aligned tabular; empty = em dash", "subtotal/total bands use emphasis.surface (Table emphasis rule; totals only)", "field bar (rows/columns/measures) above = filter-bar recipe", "inherits Table alignment/renderers/header treatment; virtualize >200 rows", "no zebra, no default heatmap cell-coloring, no dual aggregation per cell"]},
- "AssistantPanel": {"purpose": "Persistent docked/floating global agent — compact chat that maximizes into the Console. Composite (Composer + message stream), like CommandPalette.",
-  "key_rules": ["floating brand circular launcher (the shared circular exception) → docked panel (bg.raised, border.default, shadow.lg, z.dropdown)", "header (squared Avatar 24 + name + maximize + close) · ai.surface message stream (AgentStep/ProposalCard/SourceChip) · one docked Composer", "reuses Composer/ResponseToolbar/AgentStep — never a re-implemented chat", "exactly one per app; non-modal (no scrim); hidden on the full Console page; never overlaps a primary action region", "no second persistent chat, no auto-open/nagging"]},
- "AppLauncher": {"purpose": "Browsable overlay tile grid of system + user apps (the Application entry); distinct from CommandPalette's ⌘K search.",
-  "key_rules": ["centered FAUX-GLASS overlay over a bg.scrim backdrop — an OPAQUE frosted tint (glass.surface + glass.rim inset highlight + glass.border), radius 2xl, shadow.xl, z.modal; it READS as frosted glass with NO backdrop-filter (corrected 2026-08-03: this entry said 'glass-scrimless … radius lg', stale after the glass→opaque reversal — real translucency is forbidden by SY015 and the design.md §8 never-list, and the launcher does sit over a scrim)", "optional search + system-apps grid + your-apps grid under micro-label headers", "tiles = outlined Card (icon medallion + name + caption), whole-tile click opens, hover-lift", "keyboard traversal + ↵ opens; empty groups hide on filter", "no decorative tile color, no nested modal, fixed responsive column steps"]},
- "Divider": {"purpose": "Separate content with a 1px rule — the standalone borders-first divider.",
-  "variants": ["full", "inset", "labeled", "vertical"],
-  "key_rules": ["1px only — border.subtle inside components, border.default for stronger boundaries + the vertical variant", "labeled = rule · caption/micro label (text.tertiary) · rule", "margins come from surrounding rhythm, never baked in", "reach for it only when a visible line aids grouping — whitespace/component borders first", "no thick or colored dividers; one divider weight per region", "role=separator (aria-orientation=vertical for vertical); a decorative rule is aria-hidden"]},
- "ToggleButton": {"purpose": "A pressable on/off control — pin, favorite, mute, panel/display toggle.",
-  "variants": ["icon (square, aria-label)", "labeled (icon + word)", "group (ToggleButtonGroup, multi-select)"],
-  "sizes": ["sm", "md", "lg"],
-  "key_rules": ["disabled = bg.disabled fill + text.disabled label, never text-only and never opacity (aligned to Button 2026-07-30; ToggleButton was the only control disabling without a fill)", "distinct from Switch (instant setting) and SegmentedControl (exclusive choice)", "on-state = bg.selected + text.primary; icon stays stroke — favorite star is the sole fill-on-active exception", "aria-pressed reflects state; icon-only requires aria-label", "never the point/brand color for the on-state — selection is neutral bg.selected", "group is multi-select (role=group + label); exclusive choice is SegmentedControl", "icon-only toggles are square (width = control height)"]},
+# --------------------------------------------------------------- slot labels
+#
+# Manifest field <- the prose labels that feed it. The FIRST entry per field is
+# the canonical wording; the rest are accepted variants (the build prints a
+# WARNING for each entry using one, so wording converges without blocking).
+LABELS = {
+    "purpose":   ["Purpose"],
+    "variants":  ["Variants", "Variants (closed)", "Color variants",
+                  "Emphasis variants", "Types (closed)"],
+    "sizes":     ["Sizes"],
+    "states":    ["States", "States (closed)"],
+    "a11y":      ["A11y"],
+    "forbidden": ["Forbidden", "Forbidden — with their replacements"],
+    "key_rules": ["Key rules (machine index)"],
+}
+FIELD_ORDER = ["purpose", "variants", "sizes", "states", "a11y", "forbidden", "key_rules"]
+LABEL_TO_FIELD = {l: f for f, ls in LABELS.items() for l in ls}
+CANONICAL = {f: ls[0] for f, ls in LABELS.items()}
+
+# Labels that are legitimate prose structure but not manifest fields. Explicit by
+# design (SY020's stance: a guessed mapping makes coverage unknowable). Matching
+# strips backticks and, when the full label misses, retries without a trailing
+# " — qualifier" and/or "(parenthetical)" — so "Anatomy (outlined)" and
+# "Anatomy — `human`" both resolve to "Anatomy".
+KNOWN_UNMAPPED = {
+    "Anatomy", "Anatomy & behavior", "Behavior", "Bilingual", "Jurisdiction",
+    "Keyboard", "Placement", "Affixes", "Optical centering", "Count badge",
+    "with-icon option", "Selection column", "Column rules", "States per cell",
+    "Multi-select", "Convenience features", "Calendar anatomy", "range",
+    "datetime", "time", "Formats", "File rows", "Rules", "Color", "Scale rules",
+    "AI side surfaces", "Dividers", "Optional search row", "Undo convention",
+    "Status indicator", "AvatarGroup", "Results", "Usage-meter jurisdiction",
+    "⚠ Two rules remain homeless. Recorded, not silently dropped",
+    "⚠ Three rules are now homeless or contradicted. Recorded, not silently dropped",
+    "Send ↔ Stop morph", "Slash commands", "Drafts", "Feedback completeness",
+    "Scroll contract", "Append-only", "When", "When not", "Subordination rules",
+    "Rejected on the way", "Dismissal", "Consumers", "Actions", "Scope law",
+    "Grouping", "Chip honesty", "Mutual exclusion", "Grounded",
+    "Refreshable, not authoritative", "Description content", "Optional row action",
+    "Sources row", "Stack", "Compact", "Selection", "Drag", "Syntax theme",
+    "Streaming", "Principle", "Slider", "NumberInput", "Rule",
+    "The duplication rule", "Month grid", "Week variant", "Item types",
+    "Per-item controls", "Empty state", "Canvas", "FlowNode", "Edge",
+    "NodePalette", "CanvasControls", "Modes", "Icon well", "compact variant",
+    "Label & icon rules", "Pill option", "Jurisdiction constraints on target",
+    "Content column", "Attachment order",
 }
 
-class ManifestDrift(Exception):
-    """components.md headings and the C entry set have diverged."""
+
+class SpecParseError(Exception):
+    """components.md's labelled slots could not be parsed into the manifest."""
 
 
-def build():
-    """Return the manifest dict from components.md + C + tokens. Raises ManifestDrift on heading drift.
-    Pure (no file writes) so validators can compare against the on-disk manifest without side effects."""
-    comps = open(os.path.join(ROOT, "components.md"), encoding="utf-8").read()
-    headings = re.findall(r"^## (.+)$", comps, flags=re.M)
-    missing = [h for h in headings if h not in C]
-    extra = [k for k in C if k not in headings]
-    if missing or extra:
-        raise ManifestDrift(f"missing entries: {missing} | stale entries: {extra}")
+# a bold run opening a line; the label may end ':' or '.' inside the bold
+BOLD_LEAD = re.compile(r"^\*\*(.+?)\*\*")
+# a MAPPED label opening mid-line (single-paragraph entries fold **Forbidden:**
+# into their lead line); unknown mid-line bolds are inline emphasis, kept as text
+MIDLINE = re.compile(r"(?<!^)\*\*([^*\n]+?):\*\*")
+
+
+def _norm_label(label):
+    """Strip backticks and trailing punctuation for registry matching."""
+    return label.replace("`", "").strip().rstrip(".:").strip()
+
+
+def _match_label(label, table):
+    """Exact label, else without a ' — qualifier' suffix, else without a trailing
+    '(parenthetical)'. Returns the registered form that matched, or None."""
+    cands = [label]
+    if " — " in label:
+        cands.append(label.split(" — ")[0].strip())
+    for c in list(cands):
+        stripped = re.sub(r"\s*\([^)]*\)$", "", c).strip()
+        if stripped != c:
+            cands.append(stripped)
+    for c in cands:
+        if c in table:
+            return c
+    return None
+
+
+def _clean(text):
+    """Markdown -> plain manifest text: drop emphasis/backticks, collapse space.
+
+    A `*` inside a backtick code span is a literal wildcard (`status.*-bg`) and
+    survives; a bare `*` outside one is an emphasis marker and is dropped.
+    """
+    text = re.sub(r"`([^`]*)`", lambda m: m.group(1).replace("*", "\x00"), text)
+    text = re.sub(r"\*\*(.+?)\*\*", r"\1", text)
+    text = re.sub(r"~~(.+?)~~", r"\1", text)
+    text = text.replace("`", "").replace("*", "").replace("\x00", "*")
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _blocks(lines):
+    """Slot content lines -> cleaned blocks: a paragraph is one string; a bullet
+    list contributes one string per bullet; a table one string per data row
+    (cells joined with ' — ', |---| separator rows dropped)."""
+    out, para = [], []
+    def flush():
+        if para:
+            out.append(_clean(" ".join(para)))
+            para.clear()
+    for ln in lines:
+        s = ln.strip()
+        if not s:
+            flush()
+        elif s.startswith("- "):
+            flush()
+            out.append(_clean(s[2:]))
+        elif s.startswith("|"):
+            flush()
+            cells = [c.strip() for c in s.strip("|").split("|")]
+            if all(re.fullmatch(r":?-{3,}:?", c) for c in cells):
+                continue
+            out.append(_clean(" — ".join(c for c in cells if c)))
+        else:
+            para.append(s)
+    flush()
+    return [b for b in out if b]
+
+
+def _split_sections(md):
+    """components.md -> [(name, [body lines])] in file order."""
+    sections, cur, buf = [], None, []
+    for line in md.splitlines():
+        m = re.match(r"^## (.+)$", line)
+        if m:
+            if cur is not None:
+                sections.append((cur, buf))
+            cur, buf = m.group(1).strip(), []
+        elif cur is not None:
+            buf.append(line)
+    if cur is not None:
+        sections.append((cur, buf))
+    return sections
+
+
+def _parse_entry(name, lines, errors, warnings):
+    """One ## section -> manifest entry dict, or None (error recorded).
+
+    A slot opens at a line-initial registered bold label — or at a mapped label
+    mid-line — and closes at the next line-initial bold run, '---', or section
+    end. A line-initial bold ending ':' that matches nothing is a typo -> error.
+    """
+    slots = {f: [] for f in FIELD_ORDER}   # field -> [slot line-list, ...]
+    open_seg = None                        # the line-list currently being filled
+
+    def note_label(matched):
+        field = LABEL_TO_FIELD[matched]
+        if matched != CANONICAL[field]:
+            warnings.append(f"{name}: non-canonical slot label '{matched}' "
+                            f"(canonical: '{CANONICAL[field]}')")
+        return field
+
+    def feed(text):
+        """Append text to the open slot; a mapped mid-line label splits it."""
+        nonlocal open_seg
+        pos = 0
+        for m in MIDLINE.finditer(text):
+            matched = _match_label(_norm_label(m.group(1)), LABEL_TO_FIELD)
+            if not matched:
+                continue
+            if open_seg is not None:
+                open_seg.append(text[pos:m.start()])
+            open_seg = []
+            slots[note_label(matched)].append(open_seg)
+            pos = m.end()
+        if open_seg is not None:
+            open_seg.append(text[pos:])
+
+    for ln in lines:
+        if ln.strip() == "---":
+            open_seg = None
+            continue
+        m = BOLD_LEAD.match(ln)
+        if m:
+            raw = m.group(1)
+            mapped = _match_label(_norm_label(raw), LABEL_TO_FIELD)
+            if mapped:
+                open_seg = []
+                slots[note_label(mapped)].append(open_seg)
+                feed(ln[m.end():].lstrip(": "))
+                continue
+            colon_marked = raw.rstrip().endswith(":") or ln[m.end():m.end() + 1] == ":"
+            if colon_marked and not _match_label(_norm_label(raw), KNOWN_UNMAPPED):
+                errors.append(f"{name}: unrecognised slot label '**{raw}**' — typo, or teach "
+                              f"tools/build_manifest.py the new label (LABELS / KNOWN_UNMAPPED)")
+            open_seg = None   # any bold lead closes the open slot
+            continue
+        feed(ln)              # inside a slot: content; outside: free prose whose
+                              # mapped mid-line labels may still open a slot
+
+    entry = {}
+    for field in FIELD_ORDER:
+        segs = slots[field]
+        if not segs:
+            continue
+        if field == "key_rules":
+            rules = [s.strip()[2:] for seg in segs for s in seg if s.strip().startswith("- ")]
+            if not rules:
+                errors.append(f"{name}: **Key rules (machine index):** slot has no '- ' bullets")
+                continue
+            entry[field] = rules
+            continue
+        blocks = [b for seg in segs for b in _blocks(seg)]
+        if not blocks:
+            continue
+        if field == "purpose":
+            entry[field] = blocks[0]   # the slot's text, single paragraph
+        else:
+            entry[field] = blocks[0] if len(blocks) == 1 else blocks
+    if "purpose" not in entry:
+        errors.append(f"{name}: no **Purpose:** slot — every entry must declare one")
+        return None
+    return entry
+
+
+def build_components(md, warnings):
+    """Parse every ## entry of components.md; raise SpecParseError listing every
+    offence if any entry is unparseable."""
+    errors, components = [], {}
+    for name, lines in _split_sections(md):
+        entry = _parse_entry(name, lines, errors, warnings)
+        if entry is not None:
+            components[name] = entry
+    if errors:
+        raise SpecParseError("components.md is unparseable:\n  " + "\n  ".join(errors))
+    return components
+
+
+def build(verbose=False):
+    """Return the manifest dict parsed from components.md + tokens. Raises
+    SpecParseError when the prose's slots cannot be parsed. Pure (no file writes)
+    so validators can compare against the on-disk manifest without side effects."""
+    md = open(COMPONENTS_MD, encoding="utf-8").read()
+    warnings = []
+    components = build_components(md, warnings)
+    if verbose:
+        for w in dict.fromkeys(warnings):
+            print("WARNING:", w, file=sys.stderr)
     tokens = json.load(open(os.path.join(ROOT, "tokens", "synapse.tokens.json"), encoding="utf-8"))
     manifest = {
         "$version": tokens["$version"],
-        "$generated_by": "tools/build_manifest.py — regenerate after any components.md change; never hand-edit",
+        "$generated_by": "tools/build_manifest.py — pure projection of components.md's labelled slots; regenerate after any components.md change; never hand-edit",
         "authority": "design.md > tokens/synapse.tokens.json > foundations.md > components.md > recipes.md > ai-patterns.md > content.md",
         "archetypes": ["workbench", "object", "settings", "guided", "console", "home"],
         "locales": ["en", "ko"],
@@ -196,7 +285,7 @@ def build():
                   "particle attached to a variable in Korean; concatenated sentence fragments",
                   "auto-approval of agent proposals; silent agent side effects; fake citations",
                   "optimistic rendering of agent output; marquee/auto-playing motion; white-label/per-client theming"],
-        "components": {h: C[h] for h in headings},
+        "components": components,
     }
     manifest["typography_styles"] = [k for k in tokens["semantic"]["type"] if not k.startswith("$")]
     return manifest
@@ -211,7 +300,11 @@ def serialize(manifest):
 
 
 def main():
-    manifest = build()
+    try:
+        manifest = build(verbose=True)
+    except SpecParseError as e:
+        print(f"ERROR: {e}", file=sys.stderr)
+        sys.exit(1)
     with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
         f.write(serialize(manifest))
     print("wrote", MANIFEST_PATH, "-", len(manifest["components"]), "components")

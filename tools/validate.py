@@ -20,7 +20,7 @@ Rules (E = error, W = warning):
   SY007 W letter-spacing declared (verify it never applies to Hangul) — foundations §2.3
   SY015 E backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §6)
   SY016 E Hangul inside an Artific display element — foundations §2.1 (Artific is English-only; brand titles stay English in KO)
-  SY017 E synapse.manifest.json stale vs a fresh build — run tools/build_manifest.py (mirrors the CI gate locally)
+  SY017 E synapse.manifest.json stale vs a fresh parse of components.md, or components.md unparseable — run tools/build_manifest.py (mirrors the CI gate locally)
   SY019 E icon not in assets/icons/lucide-registry.json, off-scale size, or stroke != 1.5 — run tools/check_icons.py (icons.md)
   SY020 E tokens/synapse.css disagrees with tokens/synapse.tokens.json (per mode); W = a CSS var with no JSON origin — closes the TOKEN half of audit Defect 7
   SY021 E synapse.manifest.json key_rules contradict components.md prose (never-list vocabulary, token names, radius names) — closes the PROSE half of audit Defect 7
@@ -245,8 +245,8 @@ def check_token_parity(data, modes):
     """SY020 — tokens/synapse.css must agree with tokens/synapse.tokens.json.
 
     synapse.css is documented as generated but is hand-maintained, so the two can
-    drift with a green gate: SY017 only compares the manifest against the same
-    generator that produces it. Three drifts of this class were found by hand in a
+    drift with a green gate: SY017 covers the manifest (now parsed from
+    components.md), not the CSS. Three drifts of this class were found by hand in a
     single session (danger fill hover modes; border.error-hover and
     action.brand-border-hover missing their dark modes), plus the earlier
     control-height-xs case, which is audit Defect 7.
@@ -546,7 +546,13 @@ def check_page(path):
 
 def check_manifest():
     """SY017 — the committed manifest must equal a fresh build (mirrors the CI gate locally,
-    so version bumps and spec edits can't drift the manifest past a green local run)."""
+    so version bumps and spec edits can't drift the manifest past a green local run).
+
+    build_manifest.py is a pure parser over components.md's labelled slots (adoption
+    ruling #1, 2026-08-05) — no hardcoded component data — so the two failure modes here
+    are real, not circular: a STALE committed manifest (spec edited, manifest not
+    regenerated) or an UNPARSEABLE spec (SpecParseError: missing **Purpose:** slot,
+    empty **Key rules** slot, or a typo'd bold slot label)."""
     import importlib.util
     spec = importlib.util.spec_from_file_location(
         "build_manifest", os.path.join(ROOT, "tools", "build_manifest.py"))
@@ -554,8 +560,9 @@ def check_manifest():
     try:
         spec.loader.exec_module(bm)
         expected = bm.serialize(bm.build())
-    except bm.ManifestDrift as e:  # type: ignore
-        report("E", "SY017", bm.MANIFEST_PATH, 0, f"components.md ↔ manifest entry drift ({e}) — update tools/build_manifest.py")
+    except bm.SpecParseError as e:  # type: ignore
+        report("E", "SY017", os.path.join(ROOT, "components.md"), 0,
+               f"components.md is unparseable by tools/build_manifest.py — {e}")
         return
     except Exception as e:
         report("E", "SY017", os.path.join(ROOT, "synapse.manifest.json"), 0, f"could not build manifest: {e}")
@@ -580,9 +587,10 @@ FORBIDDEN_SURFACE_TERMS = {
     "glow": "glow",
 }
 # Negation/qualification within the same clause makes the mention legitimate:
-# "NOT glass", "glass retired", "faux-glass … opaque", "reduced-transparency → opaque".
+# "NOT glass", "glass retired", "faux-glass … opaque", "reduced-transparency → opaque",
+# "glass over a scrim reads muddy" (the spec's rejection idiom — Modal, FollowUpPanel).
 NEGATORS = ("opaque", "retired", "faux", "forbidden", "corrected", "reversed",
-            "without any translucency", "no backdrop-filter", "frosted")
+            "without any translucency", "no backdrop-filter", "frosted", "reads muddy")
 # A prohibition is not an assertion: "no gradient/glow", "never glass".
 PROHIBITION_RE = re.compile(r"\b(?:no|not|never|without|zero)\s+[\w/ .-]{0,24}$")
 
@@ -616,13 +624,17 @@ def _md_sections(md):
 def check_prose_manifest_parity():
     """SY021 — synapse.manifest.json key_rules must not contradict components.md.
 
-    The prose half of audit Defect 7. build_manifest.py HARDCODES each entry's
-    key_rules, and SY017 compares the manifest against that same generator, so a
-    hardcoded string can drift from the spec it summarises indefinitely with a
-    green gate. That produced six real contradictions before this rule existed —
-    control-height-xs, and (2026-08-03) three manifest entries still describing
-    glass/scrimless overlays after the glass->opaque reversal, in the very file
-    design.md §7 tells agents to load FIRST.
+    The prose half of audit Defect 7. HISTORY: build_manifest.py used to HARDCODE
+    each entry's key_rules while SY017 compared the manifest against that same
+    generator, so a hardcoded string could drift from the spec it summarises
+    indefinitely with a green gate — six real contradictions (control-height-xs,
+    and (2026-08-03) three entries still describing glass/scrimless overlays after
+    the glass->opaque reversal) before this rule existed. As of adoption ruling #1
+    (2026-08-05) the manifest is parsed from components.md's own labelled slots, so
+    that circularity is gone; SY021 is KEPT deliberately: a **Key rules (machine
+    index):** bullet is still hand-authored summary text that can contradict the
+    prose entry it sits under, and this rule also guards the committed manifest
+    file directly (belt to SY017's braces).
 
     Deliberately narrow. Only claims precise enough to compare mechanically are
     checked, because a noisy gate gets switched off, which is worse than no gate:

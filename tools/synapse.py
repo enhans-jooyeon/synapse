@@ -62,12 +62,21 @@ def norm_token(q):
 
 
 def _print_component(name, entry):
+    # manifest fields are parsed from components.md's slots: a single-paragraph
+    # slot is a string, a bullet-list/table slot is a list of strings
+    def emit(field, sep=" · "):
+        v = entry.get(field)
+        if not v:
+            return
+        print(f"  {field}: " + (v if isinstance(v, str) else sep.join(v)))
+
     print(f"COMPONENT  {name}")
     print(f"  purpose: {entry.get('purpose','')}")
-    if entry.get("variants"):
-        print("  variants: " + " · ".join(entry["variants"]))
-    if entry.get("sizes"):
-        print("  sizes: " + ", ".join(entry["sizes"]))
+    emit("variants")
+    emit("sizes", sep=", ")
+    emit("states")
+    emit("a11y")
+    emit("forbidden")
     for r in entry.get("key_rules", []):
         print(f"  • {r}")
 

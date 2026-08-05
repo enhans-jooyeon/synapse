@@ -91,6 +91,22 @@ The three soft rings are **mode-invariant** — each is the `500` step of its fa
 **A11y:** `<button>` element; Enter/Space activate; loading sets `aria-busy`.
 **Bilingual:** label sizing from content + `--sy-control-padding-x`; verbs first in EN ("Save changes"), natural KO word order (variables allowed: "변경사항 저장"); never truncate.
 
+**Key rules (machine index):**
+- max 1 primary per region
+- target=brand = bright AZURE (azure ramp; never the indigo blue ramp, which is functional info/link/focus — the two blues must never be mixed), max 1/screen across ALL FOUR styles — scarcity is no longer enforced by absence and MUST be enforced by review/lint; operational agent actions (Run/Retry/Resume) stay target=default; primary x destructive (solid red) stays destructive-confirmation-only, lower-emphasis destructive styles serve row/inline deletes; secondary on bg.sunken MUST open to bg.page (tray rule) or it becomes indistinguishable from ghost; tonal coloured fills are one ramp step lighter than status.*-bg so they do not duplicate the subtle Banner/Badge tint
+- text-only labels by default; icon+text only for brand AI actions and toolbar/filter contexts (approved icons)
+- pill radius: primary + lg ONLY, in Guided heroes / empty-state first-use, target=default or brand (never destructive, never xs/sm/md, never secondary/outline/ghost)
+- icon-only buttons are always square in FOOTPRINT (width = size height) — a circle satisfies this, so the circular controls below are RADIUS exceptions, not aspect-ratio ones
+- CIRCULAR ICON-BUTTONS ARE A CLOSED SET OF THREE (2026-08-03): the Composer row leading + and trailing send (the bookend pair bracketing the input) plus the AssistantPanel launcher. Nothing else is circular. The §26 recording-bar confirm is NOT a fourth — it occupies the SEND POSITION in the recording state, so it is the send bookend morphed (like send<->stop, one control in two states). The set counts POSITIONS, not glyphs. Declaring the set resolved two contradictory claims — ResponseToolbar said send was the ONLY circular control while AssistantPanel called its launcher an exception SHARED with send
+- optical trim: icon+text buttons drop 2px padding on the icon side, computed from the SIZE-SPECIFIC control-padding-x-{xs,sm,md,lg} = 8/10/12/16
+- leading + trailing icon together is permitted (confirmed 2026-07-30) but only reachable in toolbar/filter context; never two chevrons
+- pill: primary + lg only, Guided heroes / empty-state first-use, target default or brand, never destructive
+- NO active/pressed state (dropped 2026-07-30) — pressed feedback comes from the click; bg.active is NOT a Button token, it belongs to table rows and menu items
+- focus ring: HUE from target, STRENGTH from buttonStyle — primary takes the strong ring (border.focus-input / border.error-hover / action.brand-border-hover), secondary/outline/ghost take the soft one (border.focus-soft / border.error-soft / action.brand-border-soft); soft rings are mode-invariant 500 steps
+- loading: spinner (registry loader-circle) replaces the leading icon, or on an icon-only button the glyph itself; aria-label MUST persist + aria-busy=true since the affordance is gone while busy; width never changes; disabled is a fill on FILLED variants, never opacity; ghost is CARVED OUT 2026-08-03 and takes no fill — bg.disabled #F4F4F6 was within one step per channel of ghost's own hover (#F5F5F5 over white), so the fill read as hover; ghost mutes the label/glyph to text.disabled instead (2.33:1 light, a noted deviation from the 3:1 disabled floor — never let it be the only channel); the disabled LABEL is text.disabled in ALL 12 cells (per-target disabled labels withdrawn 2026-07-30 — the brand one was azure.500, the same hex as the live brand fill, so disabled read as available)
+- danger solid clears AA at 4.62:1 with NORMAL label weight (status.danger-bg-solid moved red.400->red.500 on 2026-07-30; danger LEFT the §9 solid-label deviation — do not emit semibold for it)
+- render/asChild: polymorphic slot for framework routing ONLY — one child, no nested interactivity, never on target=brand; not a licence to style links as buttons
+
 ---
 
 ## Link
@@ -108,6 +124,11 @@ The three soft rings are **mode-invariant** — each is the `500` step of its fa
 
 shadcn's `variant="link"` Button conflates the first and fourth rows, which is why it has no v1 equivalent. **Every `variant="link"` call site resolves to one of these four** — most to `Link`, the rest to `ghost`. A link is never `primary`, and a Button never sits inside a sentence.
 **Forbidden — with their replacements:** styling a link as a button or vice versa (**→ the table above**; if you need Button styling on a route change, that is `Button` + `render`, which emits a single `<a>`); "click here" labels (**→ label the destination**: "View the run log", KO: "여기를 클릭" 금지); a Link that acts without navigating (**→ `buttonStyle=ghost`**); `target="_blank"` without the external icon (**→ append it**, it is part of the affordance).
+
+**Key rules (machine index):**
+- never styled as a button
+- external links take the arrow-up-right mark
+- no 'click here' labels
 
 ---
 
@@ -134,15 +155,29 @@ Add-ons are for genuine input enhancement — a dropdown that changes the value'
 **A11y:** `<label for>` always; error linked via `aria-describedby`; `aria-invalid` on error.
 **Bilingual:** labels above the field (never left-aligned beside — KO/EN label width divergence breaks alignment); helper/error text wraps, never truncates.
 
+**Key rules (machine index):**
+- outlined anatomy: white bg.page + 1px border.default; hover border.strong; focus = 1px NEUTRAL border.focus-input border swap (no offset ring on fields; non-entry controls keep the blue 2px offset ring); disabled bg.disabled grey is the one filled state (borderless-filled was reversed — its fill equaled disabled)
+- label above, always; placeholder is example content only
+- errors name the fix (border.error)
+- mixed bulk values show 'Mixed'/'여러 값'
+- no fixed widths on translatable content
+- affixes: one leading registry icon + one trailing unit-suffix or registry icon, inside the fill, non-focusable
+- add-ons (InputGroup): fused leading/trailing text, leading/trailing Select, trailing secondary Button, ⌘K kbd hint, or help-circle tooltip beside the label — one per side, shared outer shape (border.default seams), every segment takes the input body's side padding (control-padding-x; dropdown chevron uses it as right inset) so the group aligns on one inset, never a dropdown+button on one side, never decorative
+
 ---
 
 ## Textarea
 
-Multi-line Input. Min-height 3 rows, vertical resize only, otherwise inherits all Input rules. Character counter (caption, `text.tertiary`, bottom-right) when a limit exists — count characters, not bytes (Hangul). **`autogrow` variant:** grows with content from 1 row to a declared max (default 8), then scrolls internally; resize handle removed — Composer's behavior, now available to inline forms (comments, descriptions).
+**Purpose:** Multi-line Input. Min-height 3 rows, vertical resize only, otherwise inherits all Input rules. Character counter (caption, `text.tertiary`, bottom-right) when a limit exists — count characters, not bytes (Hangul). **`autogrow` variant:** grows with content from 1 row to a declared max (default 8), then scrolls internally; resize handle removed — Composer's behavior, now available to inline forms (comments, descriptions).
 
 **Action bar (added 2026-07-30 — migration gap).** A Textarea MAY carry a trailing action row fused to the bottom of the field, sharing its outer shape: 1px `border.subtle` seam above the row (edge to edge, per the divider rule), row height 40px, `bg.page` fill, `control-padding-x` side padding matching the field body. Contents, left to right: optional metadata (character counter or hint, `caption`, `text.tertiary`) then right-aligned Buttons — `sm` size, at most two, `secondary` and/or `ghost`. The counter moves into this row when it exists rather than floating below the field. This is the generalized form of the Composer's send row and the replacement for the old library's `Textarea.Actions` compound.
 **Forbidden:** `primary`, `brand` or `danger` Buttons in the action row (a text field is not the place to site a page's main action — put it in the form footer); more than two buttons; an action row on an `autogrow` Textarea inside the Composer (the Composer owns its own send row and must not nest a second one); icon-only buttons in the row outside the approved icon list.
 **A11y:** the row is inside the field's labelled group, so it follows the Textarea in tab order — never before it. Buttons that act on the field's content (Clear, Copy) reference it with `aria-controls`.
+
+**Key rules (machine index):**
+- autogrow variant: 1 row to a declared max (default 8), then internal scroll, resize handle removed
+- action bar (2026-07-30): trailing row fused to the field bottom, border.subtle full-bleed seam, height 40, bg.page, control-padding-x matching the field body; counter moves into it; max 2 buttons, secondary/ghost ONLY — never primary/brand/danger; forbidden inside the Composer, which owns its own send row
+- action bar follows the Textarea in tab order, never precedes it
 
 ---
 
@@ -155,9 +190,15 @@ Trigger renders as Input anatomy with trailing chevron (16px). Menu is a Popover
 **A11y:** listbox pattern; full keyboard (arrows, Home/End, type-ahead); Esc closes.
 **Bilingual:** menu width fits longest option of the active locale; no fixed trigger widths.
 
+**Key rules (machine index):**
+- trigger inherits outlined Input anatomy
+- menu is a Popover; selected shows leading check
+
 ---
 
 ## Checkbox · Radio · Switch
+
+**Purpose:** Form on/off · one-of-2–5 · instant-effect toggle.
 
 | Control | Semantic | Never |
 |---|---|---|
@@ -178,6 +219,12 @@ Checked state: `action.primary-bg` fill (black/white — key color, not blue). L
 **The mixed-value convention (cross-component).** Whenever one control edits multiple objects whose current values differ, the control shows the mixed marker — never one object's value as if shared. Text-like controls (Input, Select, Combobox, DatePicker) display the placeholder-styled string "Mixed" / "여러 값" in `text.tertiary`; entering any value overwrites all. A cleared mixed field returns to "Mixed", not to empty.
 **Forbidden — with their replacements:** a check-mark indicator on Radio (**→ the dot**; Radio is a circle with a dot and Checkbox is a box with a check, and that difference is what tells a user "one of these" from "any of these" before they click. **Re-litigated and upheld 2026-07-31, with the reasoning corrected:** the earlier claim that `indicatorType=check` "erases" the signal was overstated — a circle containing a check is still a circle, and the silhouette is what reads first at 16px. The ruling stands on three other grounds. (1) It would make **two renderings legal for one state**, which is exactly the drift the closed-variant policy exists to prevent — two engineers build the same form differently and the gate cannot adjudicate. (2) A 16px radio leaves ~8px of interior; a check there is 3–4 strokes against the dot's single solid form, and it sits **below the 12px icon floor** (§7), so it contradicts the icon scale and degrades further at the 24px `xs` control. (3) It carries **no meaning the dot lacks** — both say "selected". The 8 shadcn call sites are marked *mechanical* in `migration/replacement-rules.csv`; converting them is cheaper than permanent API surface. **A check is NOT forbidden for one-of selection — it is just not Radio's mark.** The system already uses one, twice, and picks by option count and content richness: <5 bare options → **Radio** (circle + dot) · 5–15 known options → **Select** (`bg.selected` + leading 16px check) · 2–6 options with descriptions → **ChoiceCard** (`border.selected` halo + 16px check top-right, *Radio semantics by default* — i.e. ChoiceCard already IS a check-marked radio). Note both sanctioned checks are **16px**, above the §7 12px icon floor; a check inside a 16px Radio has ~8px of interior, which is why the mark differs. So the answer to "I want a check-marked single choice" is to pick the right one of those three, not to add a fourth rendering); a label to the left of any of the three controls (**→ label stays right**, always — a left label puts a ragged right edge between text and control and the eye loses the row; for a settings row where the label reads far from the switch, use a `DescriptionList`-style row with the Switch in the trailing position, which is a layout, not a label position); Switch inside a form with a Save button (**→ `Checkbox`** — Switch means "applied now"); Radio for >5 options (**→ `Select`**); a key-colored track on a mixed Switch (**→ `border.strong` fill**, per the table above).
 **A11y:** native inputs under the hood; radio groups use `fieldset/legend`; mixed states use `aria-checked="mixed"`.
+
+**Key rules (machine index):**
+- checked = key color, not blue
+- switch never inside a Save-button form
+- mixed states: checkbox minus, switch centered thumb + minus glyph (track NEVER key color), radio has none
+- mixed-value convention applies across all controls
 
 ---
 
@@ -222,6 +269,15 @@ One size per view, as with shape.
 **Forbidden — with their replacements:** interactive badges (**→ `Chip`** — if it can be clicked, removed or toggled it is a Chip; Badge is a read-only mark); sentence-length content (**→ a `Banner`** for a sentence, or truncate to one or two words); inventing colors, including a `color={hex}` override (**→ one of the six semantic colors** — `neutral` / `info` / `success` / `warning` / `danger` / `ai`; map by *meaning*, not by hue: a purple category badge becomes `neutral`, not `ai`, unless it genuinely marks agent output); an `active` / `selected` prop (**→ `Chip` with `selected`** — selection is interaction, so it is Chip's job; this is where the retired `neutral solid` treatment went); mixing emphasis levels for the same status meaning within one view; mixing shapes within one view; solid outside its named job in the table above (**→ `subtle`**, which is the default for a reason).
 **Bilingual:** KO status terms are often 2–4 syllables ("진행 중", "완료") — width from content, never fixed. Status vocabulary is the closed set in `content.md` §3.3.
 
+**Key rules (machine index):**
+- status vocabulary = content.md §3.3 closed set
+- undeclared color = neutral; a badge never renders unfilled
+- solid has named jobs only: urgent marks (1 solid color/view), ops-table opt-in, neutral=release markers (must expire), ai=live-activity beacon on ai.solid slate (disappears on completion)
+- dot uses status.*-bg-solid fills
+- with-icon option: 12px registry status icon for triple redundancy (subtle/solid only)
+- count overlay on the bell only: 18px bg.inverse-soft mini-pill + surface ring, half-in corner anchor (top/right -2px) covering part of the glyph; never neutral-subtle, never renders 0
+- md optical nudge: line-height 1 + 1px top padding (md only)
+
 ---
 
 ## Chip
@@ -256,6 +312,15 @@ One size per view, as with shape.
 **Forbidden — with their replacements:** chips as command buttons (**→ `Button`** — a chip never performs a primary or destructive action); mixing `input` and `list-filter` in one row (**→ split into two rows**, each with one job); manual color selection, including a leading colour dot or `tag` prop (**→ `Badge` `dot` variant** where a colour-keyed status marker is genuinely wanted — an 8px `status.*-bg-solid` dot with `text.secondary` text and no container; a chip's job is selection, and colour-coding a selectable thing means the user must learn two systems at once); `suggestion` chips outside their sanctioned surfaces; truncating chip labels (wrap the row instead).
 **Bilingual:** width from content; remove-✕ `aria-label` localizes ("Remove" / "제거").
 
+**Key rules (machine index):**
+- interactivity is encoded by FILL not shape (2026-07-30): Chip is OUTLINED at rest, Badge is filled/tinted; shape is a free density choice on Badge
+- every Chip carries an affordance glyph — trailing X removable, leading check selected, trailing chevron opens a menu; a chip with no glyph and no selected state is a mislabelled Badge
+- chips do NOT carry the full colour palette — interactive stays quieter than status
+- disabled uses text.disabled + border.subtle, NEVER opacity
+- never carries commands (that is Button)
+- no manual colors
+- labels never truncate
+
 ---
 
 ## Card
@@ -274,6 +339,11 @@ One size per view, as with shape.
 
 **Modifiers** (combine with any variant): `interactive` (whole card clickable: hover `border.strong` + `bg.hover` + optional `hover-lift` per foundations §7; exactly one action; keyboard focusable), `selected` (1px `border.selected` outline — selection, not focus).
 **Forbidden:** shadows outside `elevated`; nesting bordered cards (use `flat`); cards as page layout scaffolding; `ai` variant on non-agent content.
+
+**Key rules (machine index):**
+- interactive implies outlined/elevated + exactly one action + optional hover-lift
+- no bordered nesting
+- selected = border.selected ring (selection is key color; focus stays blue)
 
 ---
 
@@ -326,6 +396,16 @@ One size per view, as with shape.
 
 Empty cell value is always an em dash "—" in `text.tertiary` — never blank, never "N/A", never "null".
 
+**Key rules (machine index):**
+- 18 closed cell renderers fix alignment/format per column; empty cell = em dash
+- header row: label-size medium text.tertiary, transparent fill, hairline rule only; sort glyph space reserved
+- selection column: 40px, zero padding, centered both axes — control cell, not text cell
+- emphasis column opt-in: emphasis.surface fill marks current period/totals, max 1/table
+- status columns default dot+text; solid opt-in for ops walls
+- frameless by default (bare header); scrolling/pinned-column tables framed
+- column menu closed set; bulk selection bar; inline edit for text/number/select cells; 1-level grouping; virtualize >200 rows
+- no zebra striping
+
 ---
 
 ## Combobox
@@ -350,6 +430,10 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 **Forbidden:** Combobox for <5 options (Radio) or 5–15 static (Select); free-text values without explicit creatable mode; menus narrower than the trigger; selected Chips truncating (wrap instead); select-all defaulting destructive bulk changes.
 **Bilingual:** filtering matches both locales' labels and romanized Hangul; option and Chip widths from content.
 
+**Key rules (machine index):**
+- conveniences opt-in: search-in-menu, select-all (filtered set), groups, descriptions, recent, load-more, virtualize >100
+- creatable only when data model allows; never auto-create on blur
+
 ---
 
 ## DatePicker
@@ -366,6 +450,11 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 **States:** as Input, plus open, invalid-date error (names the accepted format), min/max-bounded (out-of-range days disabled with reason in a Tooltip).
 **Forbidden:** text-only date entry without a picker; dropdown-per-unit (day/month/year Selects) except birthdate-style historic entry; two calendars for a single date; relative-only display without absolute on hover.
 
+**Key rules (machine index):**
+- locale formats per content.md §6; timezone label mandatory when it matters
+- durations are number+unit, never a time picker
+- today outlined; endpoints filled; range interior squared
+
 ---
 
 ## SegmentedControl
@@ -377,6 +466,10 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 **A11y:** `radiogroup` semantics; arrow keys move selection.
 **Forbidden:** >5 segments (use Select); icon-only segments outside the approved icon list; mixed icon+text and text-only segments in one control; using it for navigation or form submission.
 **Bilingual:** segment widths from content — "지난 30일" and "Last 30 days" must both fit without truncation.
+
+**Key rules (machine index):**
+- content-based widths; disabled whole-control only
+- concentric geometry: radius-md container, 4px padding, radius-sm segments (prose states the arithmetic: 12 - 4 = 8; corrected 2026-08-03 by SY021, both were one step low) — inner = outer − inset; assembled control = 36
 
 ---
 
@@ -390,6 +483,10 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 **A11y:** header is a `<button>` with `aria-expanded` and `aria-controls`.
 **Forbidden:** hiding primary content, primary actions, or error states inside collapsed items; nesting accordions; accordion as a substitute for Tabs or table grouping; icons other than the chevron as the affordance.
 
+**Key rules (machine index):**
+- never hides primary content/actions/errors
+- chevron is the affordance; height animates (sanctioned exception)
+
 ---
 
 ## FileUpload
@@ -401,6 +498,11 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 **Rules:** constraints (types, size, count) are always visible before selection, and violations are named per file, not as a generic failure. Multiple files upload in parallel with individual progress; never a single combined bar.
 **Forbidden:** uploads without visible progress; silent rejection of oversized/wrong-type files; auto-submit on drop when a form has other unfilled required fields.
 
+**Key rules (machine index):**
+- constraints visible before selection; violations named per file
+- no combined progress bar
+- dropzone: dashed border.strong + radius xl + medallion (corrected 2026-08-03 by SY021, was lg); drag-over = border.focus-input + emphasis.surface; dashed = drop targets only
+
 ---
 
 ## SplitPanel
@@ -411,6 +513,10 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 **Behavior:** drag resizes within min widths (content pane ≥ 280px, rail/inspector ≥ 200px); double-click the divider resets the default ratio; the ratio persists per user per view. Panes scroll independently.
 **Forbidden:** more than 3 panes; nested splits beyond one horizontal + one vertical level; SplitPanel in fixed-layout archetypes (Settings, Guided); panes without min widths (KO labels need the floor).
 **A11y:** divider is `role="separator"` with `aria-valuenow`, keyboard-resizable via arrow keys when focused.
+
+**Key rules (machine index):**
+- ≤3 panes; min widths 280/200; ratio persists; not in fixed-layout archetypes (Settings/Guided)
+- container = section shell: radius 2xl + hairline, flush panes (corrected 2026-08-03 by SY021, was xl)
 
 ---
 
@@ -426,6 +532,11 @@ Empty cell value is always an em dash "—" in `text.tertiary` — never blank, 
 **Sizes:** min-height 240px; sparkline 24px.
 **Forbidden:** 3D, dual y-axes, pie beyond 3 slices, >8 series (aggregate the tail into "Other" / "기타"), decorative icons inside plots, y-axis label rotation (widen or abbreviate instead).
 
+**Key rules (machine index):**
+- viz-1..8 in fixed order; status charts use status tokens
+- bars start at 0; no dual y-axes; >8 series → 'Other'
+- loading skeleton / EmptyState / error states required
+
 ---
 
 ## Tabs
@@ -440,6 +551,14 @@ Style: text tabs (`--sy-body-size` medium), `text.secondary` at rest, active tab
 **A11y:** the ✕ is a separate button inside the tab, not part of its activation target — arrow keys move between tabs, `Delete`/`Backspace` on a focused tab closes it, and the close button is reachable by Tab within the strip. Renaming moves focus into the inline Input and returns it to the tab on commit.
 **Bilingual:** tab width from content; total overflow scrolls horizontally with fade edges, never wraps to two lines.
 
+**Key rules (machine index):**
+- never for sequential steps (use Stepper recipe — recipes.md R9)
+- overflow scrolls, never wraps
+- editable variant (2026-07-30) for USER-created tabs: trailing X per tab, trailing + after the last, double-click renames in place; closing the active tab activates its right neighbour
+- the 7-tab cap holds — author-defined tabs are capped by review, editable tabs by DISABLING the + at 7; beyond 7 open items is a Sidebar list or Tree, not a tab strip
+- editable never for product-defined views (if the user cannot create it, they must not close it); never close the last remaining tab
+- dirty state = 6px text.tertiary dot replacing the X until hover
+
 ---
 
 ## Sidebar (app navigation)
@@ -449,11 +568,18 @@ Width 240px expanded, 64px collapsed (icon rail with tooltips). `bg.surface`, ri
 **Forbidden:** third nesting level; badges on more than 3 items simultaneously; per-item custom icons outside the icon family.
 **Bilingual:** labels never truncate when expanded — the 240px width is sized for KO labels; if a label exceeds it, shorten the label, not the type size.
 
+**Key rules (machine index):**
+- 240px expanded/64 rail
+- container padding 12; items 32px, 4px gaps; group labels 16px top pad (micro-label, sentence case)
+- collection rows may carry an 8px viz-tint category dot — the one color in the sidebar; never on system destinations
+- labels never truncate when expanded — shorten the label
+- max 2 nesting levels
+
 ---
 
 ## Breadcrumb
 
-Path context for pages deeper than 2 levels. 13px, `text.tertiary` links with `text.primary` current page, `/` separators. Collapse middle levels beyond 4 into an overflow menu ("…"). Forbidden on top-level pages.
+**Purpose:** Path context for pages deeper than 2 levels. 13px, `text.tertiary` links with `text.primary` current page, `/` separators. Collapse middle levels beyond 4 into an overflow menu ("…"). Forbidden on top-level pages.
 
 ---
 
@@ -464,22 +590,39 @@ Path context for pages deeper than 2 levels. 13px, `text.tertiary` links with `t
 **Why it does not break the two-button footer rule.** The footer cap counts *decisions* — the ways of resolving the modal. A header action never resolves the modal: it opens a secondary surface, navigates away, or changes presentation. If the affordance you want in the header would close the modal or commit its content, it is a decision and belongs in the footer, which means you have three decisions and the real fix is to simplify the modal.
 **Forbidden:** modals opening modals; scrollable full-page content inside a modal (use Drawer or a page); more than 2 footer buttons; modals for non-blocking info (use Toast/Banner); more than one header action; `primary`, `brand` or `danger` styling on a header action (emphasis in the header competes with the footer's primary — if it deserves that weight it is a decision, see above); a header action on a `confirm` (400px) modal — confirms carry no ancillary affordances.
 
+**Key rules (machine index):**
+- widths 400(confirm)/480/640 max
+- opaque bg.raised (glass retired from scrimmed layers)
+- footer: Cancel + one primary (danger for destructive, consequences named by count+noun)
+- no modal-on-modal; z.modal
+- header action slot (2026-07-30): at most ONE ghost action/icon-button/Link between title and close, 12px gap; for ancillary affordances only (Learn more, Open in full page, view toggle)
+- the two-button footer cap counts DECISIONS — a header action never resolves the modal; if it would close or commit, it is a decision and belongs in the footer
+- no header action on a 400px confirm modal; never primary/brand/danger styling in the header
+
 ---
 
 ## Drawer
 
-Side panel for detail/edit without leaving context. Slides from right, width 480px (max 640px; **`wide` variant 800px** for data-review surfaces — DiffView, run inspection — where 640 forces unusable wrapping), full height, `shadow.xl`, opaque `bg.raised` panel (glass retired from scrimmed layers, foundations §6), same header pattern as Modal. Non-blocking variant (no scrim) allowed in data workspaces.
+**Purpose:** Side panel for detail/edit without leaving context. Slides from right, width 480px (max 640px; **`wide` variant 800px** for data-review surfaces — DiffView, run inspection — where 640 forces unusable wrapping), full height, `shadow.xl`, opaque `bg.raised` panel (glass retired from scrimmed layers, foundations §6), same header pattern as Modal. Non-blocking variant (no scrim) allowed in data workspaces.
 **AI side surfaces:** the `wide` variant is also the home for agent **artifacts** (a generated doc/code/diagram/table opened for viewing and editing) and the **source browser** (retrieved sources shown beside the answer) — see `ai-patterns.md` §32–33. These are Drawer *content*, not new components; in the workbench archetype the same content MAY occupy a SplitPanel pane instead.
 
 **`bottom` side — narrow viewports only (added 2026-07-30 — migration gap).** Below the 768px breakpoint (`patterns.md`) a 480px right-hand panel is wider than the viewport, so at `<768` a Drawer MUST render from the bottom instead: full width, height capped at 85vh, radius `xl` on the top two corners only, a 32×4px `border.strong` grab handle centered 8px below the top edge, same opaque `bg.raised` panel and header pattern. This is a **responsive rendering of the same Drawer**, not a `side` prop the author chooses — `side` stays unset and the component switches on viewport. Swipe-down dismiss is expected where the platform supports it; Esc and scrim-click still apply.
 **Why `side` is not author-controlled.** Letting authors pick a side reintroduces the inconsistency the closed-variant policy exists to prevent — two teams would place the same detail panel differently. Edge is a function of available space, so the system decides it.
 **Forbidden:** left-side drawers (reserved for Sidebar — use the right side, or a Modal if the content is a blocking decision); `top` drawers (the top edge is app chrome: topbar, CommandPalette entry, Banner strip — a panel from there is indistinguishable from a system message; use a Modal, or a Banner for non-blocking notice); nested drawers; `bottom` at ≥768 (a bottom sheet on a wide desktop viewport wastes the horizontal space that made the side panel the right shape to begin with).
 
+**Key rules (machine index):**
+- full-screen data drawers for review surfaces
+- wide 800 variant for data review (DiffView)
+- opaque bg.raised always (glass retired from scrimmed layers)
+- z.drawer
+- bottom rendering below the 768 breakpoint (2026-07-30): full width, max-height 85vh, radius xl on the top two corners, 32x4 border.strong grab handle — this is RESPONSIVE, not an author-set side prop; edge is a function of available space so the system decides it
+- side is NOT author-controlled: left is forbidden (Sidebar), top is forbidden (the top edge is app chrome — topbar/palette/Banner — so a panel from there reads as a system message; use a Modal or Banner), bottom is forbidden at >=768
+
 ---
 
 ## Popover / Menu
 
-Anchored floating panel: `bg.raised` (`bg.raised-2` when opened from an L2 surface such as a modal), `border.overlay`, radius `md`, **4px container padding** (concentric-corner rule: 12 − 4 = 8 = item radius `sm`), `shadow.lg`, `fast` fade+4px-shift enter. Menu items: height 32px, radius `sm`, 13px, 16px optional leading icon, **4px vertical gap between items** (without it, adjacent hover and selected tints fuse; 2px proved sub-perceptual). Destructive items `status.danger` text, always last. Max ~8 visible items, then scroll.
+**Purpose:** Anchored floating panel: `bg.raised` (`bg.raised-2` when opened from an L2 surface such as a modal), `border.overlay`, radius `md`, **4px container padding** (concentric-corner rule: 12 − 4 = 8 = item radius `sm`), `shadow.lg`, `fast` fade+4px-shift enter. Menu items: height 32px, radius `sm`, 13px, 16px optional leading icon, **4px vertical gap between items** (without it, adjacent hover and selected tints fuse; 2px proved sub-perceptual). Destructive items `status.danger` text, always last. Max ~8 visible items, then scroll.
 
 **Kbd slot (added 2026-07-30 — migration gap).** A menu item MAY carry its keyboard shortcut right-aligned in the row as a `.sy-kbd` hint, `text.tertiary`, with a minimum 24px gap from the label (the label truncates before the hint does — the shortcut is fixed-width, the label is not). This completes the shortcut vocabulary already established in Tooltip's Kbd slot and CommandPalette's trailing `.sy-kbd`: **the same affordance renders identically in all three**, which is the point — a user who learns `⌘K` in the palette recognises it in a menu. Replaces shadcn's `DropdownMenuShortcut`.
 **Forbidden:** invented shortcuts (the hint documents a binding that exists, it never implies one); hints on items without a global or surface-level binding; a Kbd slot on a `danger` item (destructive actions are not keyboard-accelerated).
@@ -487,28 +630,45 @@ Anchored floating panel: `bg.raised` (`bg.raised-2` when opened from an L2 surfa
 **Optional search row:** menus with >8 items MAY start with a borderless filter input (search icon, 13px, `border.subtle` bottom rule, full-bleed) — same filtering behavior as Combobox, including match highlighting.
 **Forbidden:** forms beyond a single control inside popovers; submenus deeper than one level; inset dividers.
 
+**Key rules (machine index):**
+- border.overlay (none in light, visible in dark) + shadow.lg; z.dropdown
+- 6px container padding (concentric: 10-6=4 item radius); items 32px with 4px gaps; destructive last; dividers full-bleed — binds EVERY horizontal rule in any floating panel, incl. search/hint/footer rows
+- search row optional >8 items
+- one submenu level max
+- Kbd slot (2026-07-30): a menu item MAY carry its shortcut right-aligned as a .sy-kbd hint in text.tertiary, min 24px from the label, label truncates before the hint; renders IDENTICALLY to Tooltip's Kbd slot and CommandPalette's trailing kbd — one shortcut vocabulary across all three
+- never invent a shortcut hint for a binding that does not exist; never a Kbd slot on a danger item
+
 ---
 
 ## Tooltip
 
-10-word max clarification of an icon or truncated string. `bg.raised-2`, 1px `border.default`, `text.primary`, `caption` type, radius `xs`, padding 4/8, `shadow.lg`, appears after 300ms hover/focus. **Kbd slot:** MAY append the action's shortcut as a trailing `.sy-kbd` hint ("Copy ⌘C") — the sanctioned way to teach shortcuts in place. Same-scheme surface: light in light mode, dark in dark mode (changed — inverse surfaces read too stark against the neutral field).
+**Purpose:** 10-word max clarification of an icon or truncated string. `bg.raised-2`, 1px `border.default`, `text.primary`, `caption` type, radius `xs`, padding 4/8, `shadow.lg`, appears after 300ms hover/focus. **Kbd slot:** MAY append the action's shortcut as a trailing `.sy-kbd` hint ("Copy ⌘C") — the sanctioned way to teach shortcuts in place. Same-scheme surface: light in light mode, dark in dark mode (changed — inverse surfaces read too stark against the neutral field).
 **No arrow / tail — deliberate (ruled 2026-07-30).** Tooltips are plain rectangles. `Popover / Menu`, `HoverCard` and `Popconfirm` carry no arrow either, and one floating surface growing a tail while the others do not is the kind of drift the closed-variant policy exists to prevent. Proximity plus the 4px enter-shift already establish what the surface is anchored to; an arrow adds a rendering edge case at every viewport boundary for no comprehension gain. shadcn's `TooltipArrow` and the old library's `tip` / `tipPosition` props therefore have **no replacement — drop them.** If an anchor is ever genuinely ambiguous, the fix is to move the tooltip closer, not to point at the target.
 **Forbidden — with their replacements:** interactive content (**→ `HoverCard`** for rich hoverable content, `Popover` if it needs a click); tooltips as error surfaces (**→ the field's error text**, `caption` / `status.danger` below the field — an error the user must read cannot live behind a hover); tooltips on plainly labeled elements (**→ nothing**; delete it, a tooltip repeating a visible label is noise); inverse/contrast-flipped styling (**→ the same-scheme surface** described above); arrows/tails (**→ nothing**, see above).
+
+**Key rules (machine index):**
+- never interactive; never an error surface
 
 ---
 
 ## Toast
 
-Transient outcome notification, bottom-right stack, max 3. `bg.raised-2` panel, 1px `border.overlay`, `shadow.lg`, `text.primary` `body-sm` text, radius `md`, leading status icon (`status.*` color), optional single action (`text.link` text button), auto-dismiss 5s (errors: 8s + manual dismiss), `slow` slide+fade. *Hairline corrected 2026-08-03 (SY021): this read `border.default`, but `foundations.md` §6 explicitly lists **toasts** among the floating layers that take `border.overlay` — transparent in light mode, where the shadow carries the edge, visible in dark mode where shadows die against black. Token usage is foundations' jurisdiction (design.md §1), so the component entry was the stale side. **Superseded 2026-08-03:** the phrase "Toast surface" no longer resolves anywhere else — Thread's "Jump to latest" and SelectionPill were re-pointed at `FloatingPill`, which owns that shell. They shared Toast's tokens and none of its contract, so the citation was false. Toast's hairline is still `border.overlay` on its own merits (foundations §6 lists toasts among the floating layers).*
+**Purpose:** Transient outcome notification, bottom-right stack, max 3. `bg.raised-2` panel, 1px `border.overlay`, `shadow.lg`, `text.primary` `body-sm` text, radius `md`, leading status icon (`status.*` color), optional single action (`text.link` text button), auto-dismiss 5s (errors: 8s + manual dismiss), `slow` slide+fade. *Hairline corrected 2026-08-03 (SY021): this read `border.default`, but `foundations.md` §6 explicitly lists **toasts** among the floating layers that take `border.overlay` — transparent in light mode, where the shadow carries the edge, visible in dark mode where shadows die against black. Token usage is foundations' jurisdiction (design.md §1), so the component entry was the stale side. **Superseded 2026-08-03:** the phrase "Toast surface" no longer resolves anywhere else — Thread's "Jump to latest" and SelectionPill were re-pointed at `FloatingPill`, which owns that shell. They shared Toast's tokens and none of its contract, so the citation was false. Toast's hairline is still `border.overlay` on its own merits (foundations §6 lists toasts among the floating layers).*
 
 **Undo convention:** reversible-lite mutations (archive, remove-from-view, single delete with soft-delete backing) confirm via Toast with an Undo action at 8s instead of pre-confirming — prefer undo over Popconfirm when the operation is safely reversible; the pair never both appear for one action. Same-scheme surface: light in light mode, dark in dark mode (changed). **First-line alignment:** contents top-align to the first text line — icon at +2px, action link on the text line-height, and the dismiss × as a compact 20px box (inline dismiss affordances in Toasts and quote bars are not form controls; the control-height scale does not apply to them). Trailing controls never center against a wrapped block.
 **Forbidden:** toasts for validation errors (inline at the field); toasts requiring a decision (Modal); stacking >3 (queue instead); inverse/contrast-flipped styling.
+
+**Key rules (machine index):**
+- same-scheme surface (raised-2 + border.overlay + shadow)
+- errors 8s + manual dismiss; never for validation or decisions
+- contents first-line aligned; dismiss × = compact 20px box (not a form control )
+- undo convention: reversible-lite ops get Undo toast (8s) instead of Popconfirm — never both
 
 ---
 
 ## Banner / Alert
 
-Persistent inline notice for a page or section. Full-width of container, radius `md`, padding 12/16: 16px icon + `body-sm` text + optional action link + optional dismiss.
+**Purpose:** Persistent inline notice for a page or section. Full-width of container, radius `md`, padding 12/16: 16px icon + `body-sm` text + optional action link + optional dismiss.
 
 **Color variants:** `neutral` (non-status notices: scheduled maintenance windows, informational context — `bg.sunken`, `text.secondary`), `info`, `success`, `warning`, `danger`.
 **Emphasis variants:**
@@ -520,27 +680,40 @@ Persistent inline notice for a page or section. Full-width of container, radius 
 
 **Forbidden:** more than one Banner visible per region; `solid` for anything a user can simply dismiss; Banners as marketing surfaces.
 
+**Key rules (machine index):**
+- max 1 per region
+
 ---
 
 ## Avatar
 
-User/agent identity. Sizes 20/24/32/40/56px (20 = dense table cells and inline mentions; 56 = profile surfaces). `full` radius for humans; squared (`sm` radius) for agents — mandatory product language, shape alone must scan authorship. Image, or initials (2 Latin letters / 1 Hangul syllable) on deterministic `viz` palette background at 20% opacity with matching 600-weight text.
+**Purpose:** User/agent identity. Sizes 20/24/32/40/56px (20 = dense table cells and inline mentions; 56 = profile surfaces). `full` radius for humans; squared (`sm` radius) for agents — mandatory product language, shape alone must scan authorship. Image, or initials (2 Latin letters / 1 Hangul syllable) on deterministic `viz` palette background at 20% opacity with matching 600-weight text.
 
+**Sizes:** `20` (dense table cells and inline mentions; never carries a status dot) · `24` · `32` · `40` · `56` (profile surfaces).
 **Status indicator:** optional dot, bottom-right, 2px `bg.page` ring. Sized per avatar: 24→8px, 32→10px, 40→12px, 56→14px; the 20px avatar NEVER carries a dot (illegible at that scale — surface the state elsewhere in the row). Humans: presence (`status.success-bg-solid` = active, `border.strong` = away). Agents: run state (`status.info-bg-solid` pulse = running, `status.danger-bg-solid` = failed, none = idle). Dots use the mid `-bg-solid` values, never the darker text tokens. One vocabulary per product surface — never both meanings in one view.
 **AvatarGroup:** overlapping stack (offset −25%, each with 2px `bg.page` ring), max 4 visible + "+N" overflow circle (`bg.sunken`, `micro` text; click → popover listing all). Humans and agents may mix in a group; ordering is humans first, then agents.
 **Forbidden:** rectangular human avatars or round agent avatars; status dots without an established vocabulary; groups hiding the overflow count.
+
+**Key rules (machine index):**
+- dots per size 8/10/12/14 using status.*-bg-solid
+- AvatarGroup: max 4 + '+N'
+- initials on deterministic viz tint
 
 ---
 
 ## Skeleton · Spinner
 
-Skeleton (preferred): `bg.sunken` blocks, radius `xs`, subtle 1.5s opacity pulse, mirroring the true layout — for any load >300ms with known shape. **Preset shapes:** `line` (one text row at the local type style's height), `block` (rect at the target's dimensions), `circle` (avatar placeholder at avatar sizes) — compose these three; free-form skeleton shapes are forbidden. Spinner (16/20px, `text.tertiary` stroke): inside controls and unknown-shape loads only. **Forbidden:** full-page spinners when layout is known; skeletons that don't match the loaded layout; more than one spinner visible per region.
+**Purpose:** Skeleton (preferred): `bg.sunken` blocks, radius `xs`, subtle 1.5s opacity pulse, mirroring the true layout — for any load >300ms with known shape. **Preset shapes:** `line` (one text row at the local type style's height), `block` (rect at the target's dimensions), `circle` (avatar placeholder at avatar sizes) — compose these three; free-form skeleton shapes are forbidden. Spinner (16/20px, `text.tertiary` stroke): inside controls and unknown-shape loads only. **Forbidden:** full-page spinners when layout is known; skeletons that don't match the loaded layout; more than one spinner visible per region.
+
+**Key rules (machine index):**
+- skeleton mirrors true layout via line/block/circle presets only
+- one spinner per region
 
 ---
 
 ## EmptyState
 
-Every list, table, and search MUST have one. Centered in the content area: a **line illustration** (~112×80, see below) · one-line title (16 semibold) · one-line explanation (body, `text.secondary`) · optional single action (primary if creating the first object, secondary otherwise). The illustration reserves its own vertical box with `space-4` clear beneath it to the title — it never crowds the text (the retired medallion's concentric rings overran their box and collided with the title; the illustration must not repeat that).
+**Purpose:** Every list, table, and search MUST have one. Centered in the content area: a **line illustration** (~112×80, see below) · one-line title (16 semibold) · one-line explanation (body, `text.secondary`) · optional single action (primary if creating the first object, secondary otherwise). The illustration reserves its own vertical box with `space-4` clear beneath it to the title — it never crowds the text (the retired medallion's concentric rings overran their box and collided with the title; the illustration must not repeat that).
 
 **Illustration.** Follows the shared illustration language (foundations §8.1): single **1.5px-stroke** line art at scene scale, **achromatic** — **ink** `text.primary` for outlines and content lines, `border.default` grey for depth/stacked layers only, no status or brand color (including the error spot) — carrying **at least one visible neutral fill, used sparingly** (typically one element) from the light-fill tier (`bg.page`/`bg.surface` faces over `bg.sunken` recesses). A stacked/back layer may sit at a slight angle (~5–8°) for layered depth; the foreground object stays upright. ~112×84, `space-4` clear beneath. Motifs are a **closed set, one per flavor** — a new motif (for a new empty context) is added by governance, never improvised:
 - **first-use** — **depicts the object being created** (per surface; new object types are added by governance, not improvised). A generic tray/box is wrong — the spot names the object. The agent-list first-use is a **new agent tile**: the registered agent glyph on a squared agent card, with a create badge (`plus` in a `bg.inverse` circle) and an empty agent slot angled behind; the glyph is the real brand path, never a substitute star.
@@ -550,11 +723,18 @@ Three sanctioned flavors: first-use ("Create your first …" — KO: "첫 … �
 **`compact` variant:** for small containers (Drawer sections, popovers, NotificationCenter, HoverCard bodies): no illustration, single `body-sm` `text.secondary` line + optional inline Link action, padding 16. Full-size EmptyStates inside small overlays are forbidden — use compact.
 **Forbidden:** motifs outside the closed set above; illustration off the foundations §8.1 language (any status or brand color — fill or stroke, including the error spot — saturated/multi-color fills, gradients, glow, off-weight strokes, or a line-only spot with no fill); illustrations on components outside the sanctioned tier (foundations §8.1 — ChoiceCard and dense/data/chrome surfaces stay illustration-free); multi-paragraph explanations; dead-end empty states with no action when an action is possible.
 
+**Key rules (machine index):**
+- always an action when possible
+- no illustrations in v1
+- icon medallion: sunken circle + two concentric hairline rings; error flavor tints it danger-bg
+- explanations balance-wrapped
+- compact variant (one line, no icon) required inside small overlays
+
 ---
 
 ## Pagination
 
-Table/list navigation: 13px, previous/next icon-buttons + page numbers (current: `bg.selected`), plus "N of M" summary (`text.tertiary`) and optional page-size Select in dense tables. Use cursor-style "Load more" (secondary Button) for feeds. **Forbidden:** infinite scroll in data tables.
+**Purpose:** Table/list navigation: 13px, previous/next icon-buttons + page numbers (current: `bg.selected`), plus "N of M" summary (`text.tertiary`) and optional page-size Select in dense tables. Use cursor-style "Load more" (secondary Button) for feeds. **Forbidden:** infinite scroll in data tables.
 
 ---
 
@@ -569,6 +749,13 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Forbidden:** more than one palette; palette as a form container; mouse-only affordances; fuzzy-match results without highlighting the matched substring.
 **Bilingual:** matching must work across both locales' labels and reasonable romanization of Hangul; group labels localize; result rows never truncate the label (truncate the trailing context instead).
 
+**Key rules (machine index):**
+- never dead-ends — final row is 'Ask agent: {query}'
+- opaque bg.raised panel over a bg.scrim backdrop, radius lg, border.default hairline, shadow.xl — NOT glass (corrected 2026-08-03: this entry still said 'glass material, SCRIMLESS' after the glass→opaque reversal; backdrop-filter is forbidden by SY015 and glass is on the design.md §8 never-list)
+- 560 wide, offset 15vh from top; esc / scrim-click / click-away dismiss
+- grouped results, kbd hints, match highlighting
+- z.dropdown
+
 ---
 
 ## ProgressBar
@@ -580,6 +767,11 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **States:** in-progress, success (fill switches to `status.success-bg-solid` for one `slow` beat, then the bar is replaced by its completion state), failed (fill `status.danger-bg-solid`, bar persists with error text below), cancelled (fill `border.strong`).
 **Usage-meter jurisdiction:** plan/token/quota consumption is the sanctioned "capacity" use of ProgressBar — determinate, `meter.fill`, switching to `status.warning-bg-solid` at ≥80% and `status.danger-bg-solid` at 100% (with the plan-limit Banner escalation). Lives in settings/billing surfaces and MAY appear as a compact bar adjacent to the Composer when a limit is near; NEVER as permanent navigation chrome. Values tabular-nums ("1.2M / 2M tokens").
 **Forbidden:** heights other than 4px; percent text without a known denominator; static "score" displays (compose a stat Card instead — quota consumption is the one sanctioned capacity meter); more than one indeterminate bar per region.
+
+**Key rules (machine index):**
+- determinate needs a real denominator
+- failed persists red; cancelled = border.strong
+- never a bare spinner >10s
 
 ---
 
@@ -631,6 +823,40 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Drafts:** content persists per conversation across navigation; never silently discarded.
 **Forbidden:** disabling the composer during generation; toolbar clutter (formatting buttons — agent input is plain text + attachments); more than one Composer per screen; placeholder carrying instructions that vanish on focus (use the kbd hint).
 
+**Key rules (machine index):**
+- never disabled during generation (empty-send is the one sanctioned disable)
+- SHAPE MORPH: pill (radius.full) ONLY while content occupies a single line; past that a rounded rect at lg (16) with THE SAME RADIUS ON ALL FOUR CORNERS — the rect never takes asymmetric corners. Any attachment, chip or quote forces the rect regardless of line count
+- HOW SINGLE-LINE IS DETERMINED: where the tray holds a TEXTAREA the text decides — the field's own empty-state height is the one-row baseline, so the flip is on the first WRAP not the first keystroke, and control height is deliberately excluded (a 36px button beside an empty field is still one line of text). Where the tray holds STATIC content, its content height is measured in LINE UNITS. Corrected 2026-08-03: four static demos were briefly marked single-row by hand, which was wrong — the slot-chip case is genuinely two lines (prompt + caption) and was forced into a pill
+- ANATOMY (settled 2026-08-03): the tray holds the INPUT ROW ONLY — circular leading + / textarea / mic / circular send — and the agent picker, capability toggle and model selector sit in a FOOTER ROW BELOW the container. The footer was briefly removed the same day and restored: the removal matched only the .cmp-footer class, so the comparison story kept its footer while the real composers lost theirs and the two renderings diverged silently for several commits
+- TWO RULES REMAIN HOMELESS, recorded as OPEN not dropped: (1) §24 refine-prompt has no trigger, so the preset menu / reviewable rewrite / Undo Toast are unreachable; (2) the + deviation dot was removed so capability state is SILENT, which the spec forbids in those words. The footer capability toggle is a DIFFERENT thing — one named capability, not deviation from the agent's defaults
+- MORPH CONDITIONS (both required for the pill): exactly one text row AND no fused panel — an attachment or quote makes the tray two regions so it takes lg regardless of line count. The morph fires on the first WRAP, not the first keystroke: detection compares the field's own empty-state height, not a computed line-height
+- this AMENDS foundations §5, which assigned the tray a flat md — the Composer tray is now the only container in the system whose radius depends on its content
+- the composer row has a CIRCULAR BOOKEND PAIR: leading + (tonal, action.secondary-bg) and trailing send (primary/black). The mic between them stays a bare ghost SQUARE — that is what keeps the pair legible as a pair rather than a row of circles
+- send is PRIMARY/BLACK — the accent was REALLOCATED 2026-08-03 (design.md §3.7): the most predictable control on the screen does not need an accent to be found, so the azure brand accent moved onto AI-CAPABILITY markers (the palette Ask-agent escape hatch, and the Composer capability toggle whose state changes what the agent can do). Send keeps its circular icon-only exception. A brand-coloured send is now WRONG; operational agent actions and send are both primary, which removes send as an exception
+- capability toggle ON uses action.brand-bg-subtle (azure.100 light / azure.900 dark, a token ADDED 2026-08-03) with action.brand-fg-on-page — 5.25:1 light, 7.06:1 dark, gated by a new SY-contrast pair
+- tray carries a 4px ZERO-BLUR ring in bg.hover outside its hairline — literally an alpha value (rgba(9,9,11,0.04) light / rgba(255,255,255,0.06) dark) so it inverts by mode with no per-mode pair; zero-blur token rings are the sanctioned SY009 exemption, so no raw shadow and no new token
+- tray radius is lg (16) in the grown state — xl (20) is closer to reference designs but foundations §5 reserves it for section shells; the composer row uses md (36) icon-buttons not sm (32), which is what lets the single-line state read as a pill rather than a thin lozenge without disturbing the 12px inset; a fused panel follows the tray to lg on its top corners
+- SURFACE MODEL inverted 2026-08-03: the tray is the LIGHT container (bg.page + 1px border.default) and the draft-owned panel above the input carries the bg.sunken tint — it used to be sunken across the whole tray, which put the tint UNDER THE TEXT and is what made the input read cramped at every padding value. The chip bg.page override is retired since Chip reads correctly on a light tray
+- DRAFT-OWNED CONTENT SITS ON THE TRAY SURFACE — no tint, no hairline (2026-08-03, reversing the fused-tinted panel from earlier the same day): attachments, ComposerQuote and knowledge/source pickers stack directly above the input row with nothing separating them, because they ARE part of the message and the tray is ONE surface. The flush-nesting radius argument for the panel top corners now applies to nothing and is gone. FollowUpPanel still detaches 8px above for the unchanged reason — a suggestion is NOT part of the draft. Attachments still force the rect radius
+- the input textarea MUST be display: block — a textarea is INLINE-LEVEL by default, so the position:relative wrapper anchoring it measures the field PLUS a ~4-5px baseline/descender gap beneath, leaving the wrapper taller than its content with the text pinned to its top, so the text sits above true centre however the row aligns. display: block removes the phantom space. Four earlier passes chased the symptom (alignment flag, control heights, rows=1, a 1px optical nudge); the nudge was compensating for this gap and was removed with the fix
+- spacing between draft-owned content and the input row is 12px (space-3, raised from 8px): with no tint or hairline separating the regions, spacing is the ONLY device distinguishing them, so it carries more than when a boundary was drawn; matches the tray inset
+- ROW ALIGNMENT AND TRAY RADIUS ANSWER DIFFERENT QUESTIONS: alignment depends on the TEXT ALONE (one line centres against the controls, multiple lines bottom-align so the last line meets them); radius depends on the text AND whether draft content is present. Conflating them meant one line of text plus an attachment lost the centred alignment along with the pill, so a 22px line bottom-aligned against 36px controls and read as sitting too low
+- tray inset is a UNIFORM 12px (space-3), stated 2026-08-03 — it had never been authored, only inferrable from ComposerQuote's concentric note, and the 4px that produced made this the tightest container in the system while being the only one holding text. 12 matches control-padding-x-md and the header inset of ProposalCard and ConversationSummary. The CONCENTRIC RULE DOES NOT BIND: foundations §5 exempts elements inset >= the outer radius, and 12 == the tray's md radius, so children clear the corner region and take the radius that suits them (ComposerQuote stays sm). ONE inset governs every child; children add no horizontal padding of their own
+- send↔stop morph in place
+- ComposerQuote bar: ai.surface radius-xs, max 1/send; the follow-up panel anchors above the tray — see the FollowUpPanel entry, which owns its anatomy (relocated 2026-08-03)
+- slash commands: / scopes palette to agent actions; ghost completion accepted with →, never Tab; closed glossary only
+- templates: / = expert quick-insert; bookmark opens the Template Library Modal — anatomy is in ai-patterns.md §23 and is NOT restated here. KNOWN DEBT (2026-08-03): §23 carries ~1,900 words of pure component anatomy (pane widths, padding, star-toggle states) that belongs in components.md; until it is relocated, the manifest cannot source it, and SY021 will flag any attempt to restate it in this entry. Slot chips and the unfilled-slot send block are also §23
+- authoring coach: max one non-blocking quality hint; the `pen-line` icon opens the CLOSED refinement-preset menu (다듬기/자세히/간결/범위/형식 ), rewrite replaces draft w/ Undo, disabled on empty
+- voice = dictation only ( §26): tray morphs to recording bar (cancel / pulsing danger dot + timer / pause / primary check confirm); transcript inserts at caret, NEVER auto-sends; no audio in thread
+- agent-picker menu: search + grouped rows + one submenu + mandatory request-footer escape (no model rows — reversed)
+- model selector (trailing): menu grouped by provider under micro-label headers, real product names in mono, 자동 row = agent default; per-conversation, defaults from agent, lockable; never changes permissions/approval
+- tools popover (plug): per-conversation capability switches; disabled tool → agent asks; enabling never bypasses ProposalCard
+- composer footer: leading = + menu (첨부/템플릿/도구) + agent picker; trailing = model + mic (send-adjacent, never in + menu) + send; kbd hint removed; refine-prompt = contextual pen at input top-right, rendered only with a non-empty draft; 1 visible leading icon default, 5 hard cap
+- input-pattern laws: starters = zero-state only, insert never send, dismissible; chip label IS the query; selection pill = 답장/설명/재생성 closed set, thread append-only; attachment captions advisory-only; batch = per-item queue, one failure never aborts, ProposalCard still gates; ghost text → accepts never Tab, suppressed during Hangul composition
+- Enter sends, Shift+Enter breaks, Enter during IME composition NEVER sends
+- attachments as input Chips; agent/scope picker ghost
+- drafts persist; no formatting toolbar; one per screen
+
 ---
 
 ## ResponseToolbar
@@ -648,6 +874,14 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Feedback completeness:** a registered thumb or comment gives a quiet acknowledgment (the select-state persists; a Toast confirms a submitted comment); feedback is never forced (no rating modal gates the next turn) and the affordance appears only after the answer settles, never on streaming tokens (`ai-patterns.md` §35).
 **Forbidden:** destructive actions in the toolbar; share/export actions outside the ⋯ overflow; feedback icons anywhere except here.
 
+**Key rules (machine index):**
+- agent messages only; fixed order
+- hover-reveal default, persistent where hover is unreliable
+- regenerate on latest message only — creates variant N+1, never destroys; answer header carries the ‹n/N› pager ( §22)
+- thumbs selected = stroke + bg.selected circle, never filled icons
+- no destructive actions
+- media variant RETIRED 2026-08-03: a media-only reply now takes the STANDARD toolbar in its standard place, a horizontal row below the MediaGroup — same as a text reply places it below the prose. The old rule was conditional (rail only when media was the sole content) which moved the feedback surface depending on the reply's content type and made the renderer inspect sibling content to choose a treatment. One surface, one place, always
+
 ---
 
 ## AgentStep
@@ -658,6 +892,14 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **States (closed):** the **nine-state superset in `ai-patterns.md` §3** is the single source — `pending`, `queued`, `running`, `awaiting-input`, `partial`, `success`, `failed`, `cancelled`, `skipped`. That table also carries the *reachability* column: a thread step is never `queued`, a batch item never `skipped`. Consolidated 2026-08-03 from three incompatible copies (this entry's five, RunLog's five different ones, and the manifest's false claim that they matched). A step list collapses to a summary row on completion ("5 steps · 12s", expandable).
 **Forbidden:** nesting beyond one level; paragraph-length summaries; using AgentStep outside agent activity (it is not a generic checklist — compose Checkbox lists for that); animating state transitions beyond the indicator swap.
 **A11y:** the list is `role="log"` with `aria-live="polite"` **when it is the announcing surface — i.e. standalone (RunLog, Workbench run views). Inside a Thread the step list does NOT declare its own live region** (clarified 2026-08-03): the Thread already owns one, and a nested live region double-announces every step. State changes announce as text, not sound.
+
+**Key rules (machine index):**
+- closed states are the NINE-STATE SUPERSET in ai-patterns §3 (single source since 2026-08-03): pending, queued, running, awaiting-input, partial, success, failed(+Retry), cancelled, skipped. §3 also carries a REACHABILITY column — a thread step is never queued, a batch item never skipped. Added 2026-08-03 to close real defects, not to add features: awaiting-input (a blocked step rendered as running forever), cancelled (specified for runs in §8 and in RunLog but not for steps, so Stop left the in-flight step stateless), partial (§10 REQUIRES partial reporting and the five-state set could not express it), queued (already in RunLog and §29). retrying was REJECTED: a retry emits a NEW step, keeping the record append-only
+- collapses to '5 steps · 12s' summary on completion (the summary counts LEAVES, not groups)
+- CONCURRENT fan-out (2026-08-03): when >1 step runs at once the list switches to a concurrent group — one parent row with the shared goal + a live tally, children indented one level (the single nesting level §3 allows). Children order by START TIME and NEVER reorder as they finish. The parent state is DERIVED not authored: running while any child runs, partial if some failed and some succeeded, failed only if all failed, success if all succeeded, cancelled if stopped — this is why partial had to exist. The 3-row cap applies to GROUPS, not children. Forbidden: a progress bar on the parent instead of the tally (§11 needs a real denominator per run), nesting a group inside a group, or rendering concurrent children as separate top-level steps
+- tool ids in mono; payloads collapsed; max 1 nesting level
+- role=log aria-live=polite
+- named working line above steps while generating (pulse, no shimmer); long replies open with title + duration badge + collapse
 
 ---
 
@@ -670,12 +912,20 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Forbidden:** auto-approval, approval countdowns, default-focused Approve-all in batches; more than 3 footer actions; ProposalCards for non-consequential acts (answering a question needs no approval); removing resolved proposals from the transcript.
 **Bilingual:** consequence statements name count + noun in both locales; button labels never truncate.
 
+**Key rules (machine index):**
+- tray anatomy: borderless ai.surface fill, radius md, no shadow (corrected 2026-08-03 by SY021, was lg); header row + ai.border hairline (single-tone; two-tone reversed); payload surfaces open to bg.page; squared avatar FIRST in header (the agency marker); forbidden formula = tint + outline
+- Approve=primary (danger if destructive; approving is a human decision, not an AI CTA), Reject=secondary (light mode: bg.page fill on the tray — tonal gray dissolves on slate; dark keeps standard fill)
+- no auto-approve, no countdowns
+- resolved collapses to attribution row, never deleted
+- diffs: tint backgrounds + gutter markers, never color alone
+
 ---
 
 ## Thread
 
 **Purpose:** the transcript container — the scrolling conversation region that holds Messages in order and owns scroll position, the bottom-stick contract, and catch-up affordances. Full behavior: `ai-patterns.md` §2 (the scroll and streaming contract). Conversation *history* in the Sidebar, new-thread, and temporary chat are §25 — a different surface, not this container. (Added 2026-08-03 — chat-interface gap audit: the region was specified only as `patterns.md` §1E layout bullets and rendered only in `preview.html`.)
 
+**Variants:** `default` — a single form.
 **Anatomy:** the scroll container spans the full Console region (Console law: no mid-canvas scrollbar beside the message column) with a **max-width 760 message column centered inside it**, padding 24, and `space-6` between turns. Turns stack in strict chronological order; there is no grouping chrome between consecutive messages from the same actor — the avatar and bubble shape carry authorship, so a "message group" wrapper would add a third redundant signal.
 **Scroll contract (§2):** stick to bottom while the user is at the bottom; the instant the user scrolls up, release the lock — never re-acquire it automatically while output streams. A released lock raises the **"Jump to latest"** affordance: a **`FloatingPill`** (`horizontal`, one action — chevron + label) at the bottom-centre of the column, dismissed by reaching the bottom. *Corrected 2026-08-03: this said "Toast surface", which was a false citation — a Toast is a transient notification (bottom-right, max 3, auto-dismiss, status icon) and this is a persistent action. It shared Toast's tokens and none of its contract.
 **Append-only (provenance law):** Messages are never edited, reordered, or removed once rendered — not by a 답장 or 설명 selection action (§18), not by a whole-reply regeneration (§22's variant model adds a variant, it does not replace a turn), not by a summary (§34 renders beside the transcript, never over it). A resolved ProposalCard collapses in place; it does not leave.
@@ -685,12 +935,23 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Forbidden:** more than one Thread per screen; a second scroll container nested inside it; re-acquiring the bottom lock while the user is reading above it; infinite-scroll paging of history (older turns page in via an explicit affordance — the feed cursor case, `patterns.md` §4); date/actor group headers between turns; rendering the human and agent columns as two separate scroll regions.
 **A11y:** the container is `role="log"` `aria-live="polite"`, **declared once here and nowhere inside it** — not per Message, and not on the AgentStep list, which drops its own live region when nested in a Thread (see AgentStep A11y). A nested live region double-announces every step. "Jump to latest" is a real button in the tab order, not a scroll-position artifact.
 
+**Key rules (machine index):**
+- scroll container spans the full region with a max-width 760 message column centered inside it — no mid-canvas scrollbar beside the column
+- stick to bottom only while the user IS at the bottom; on scroll-up release the lock and NEVER re-acquire it while streaming; a released lock raises the 'Jump to latest' affordance — a FloatingPill (horizontal, one action) at the bottom-centre of the column, dismissed by reaching the bottom. NOT a Toast: that citation was false (a Toast is a transient notification — bottom-right, max 3, auto-dismiss, status icon)
+- APPEND-ONLY (provenance law): messages are never edited, reordered, or removed — 답장/설명 compose new turns, whole-reply regeneration adds a variant, a summary renders beside the transcript never over it. OPEN: §22 partial regeneration writes in place, which conflicts with this law — held for a ruling 2026-08-03
+- no group headers between turns (avatar shape + bubble already carry authorship — a third signal is redundant)
+- space-6 between turns, padding 24
+- one Thread per screen; no nested scroll container; no infinite-scroll history paging
+- empty state carries NO EmptyState — the Composer is the affordance and §27 starters render above it
+- role=log aria-live=polite declared ONCE at the Thread, never per Message (nested live regions double-announce)
+
 ---
 
 ## Message
 
 **Purpose:** one turn in a Thread — the single most-rendered object in AgentOS. Two actor forms, closed. Content rendering: `ai-patterns.md` §12; attribution: §9. (Added 2026-08-03 — chat-interface gap audit; anatomy previously existed only as `preview.html` CSS.)
 
+**Variants:** `human` · `agent` — the two actor forms, closed (anatomy below).
 **Anatomy — `human`:** right-anchored bubble, `margin-left: auto`, **max-width 75% of the message column**, `bg.sunken` fill, radius `xl`, padding 8×12, `body` type. No avatar (position and fill identify the author — a right-anchored bubble in a two-actor thread needs no third marker), no timestamp at rest, no toolbar (ResponseToolbar is agent-only jurisdiction).
 **Anatomy — `agent`:** full-width, **no bubble and no fill** — plain `body` text on `bg.page`, laid out as a flex row: squared agent Avatar (24, `flex:none`, the agency marker per §1) + content column (`flex:1`, `min-width:0`). Agents speak as the product; humans speak in bubbles. The asymmetry is deliberate and load-bearing: **it is the shape channel that makes authorship scannable without reading**, and it is why the human bubble's radius `xl` sits beside an agent reply with no radius at all. Do not "tidy" this into matching containers.
 **Attachment order (`human`, §12):** attachments stack **above** the bubble text in fixed order — document ContextCards first, then images (bubble-aligned, radius `lg` + hairline, max-height 240; two side by side, 3+ as a 2-wide grid), then the text. Never a MediaGroup fan — rotation is generated-media only (§21).
@@ -699,6 +960,16 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Forbidden:** avatars on human messages; bubbles, fills, or borders on agent messages; ResponseToolbar or feedback affordances on human messages; timestamps on every message at rest (they belong to attribution rows and handoff events, not to the bubble); editing a sent message in place (append a new turn — Thread is append-only); a third actor form (system notices are Banners, handoffs are §16 events, neither is a Message); italics or ALL-CAPS in message content (`foundations.md` §2.3.2).
 **A11y:** each Message is an `<article>` with an accessible name naming its actor ("June", "{agent name}") so a screen reader can traverse turns; the Thread owns the live region, the Message does not declare its own.
 **Bilingual:** the 75% cap is proportional, so KO and EN wrap differently at the same content — verified at +25% string width per `foundations.md` §2.3. Nothing inside a Message is fixed-width.
+
+**Key rules (machine index):**
+- human = right-anchored bubble, margin-left auto, max-width 75% of the column, bg.sunken, radius xl, padding 8x12, body type — NO avatar, no timestamp at rest, no toolbar
+- agent = full-width, NO bubble and NO fill: plain body text on bg.page, flex row of squared Avatar 24 + content column (flex 1, min-width 0)
+- the bubble/no-bubble asymmetry is LOAD-BEARING — it is the shape channel that makes authorship scannable without reading; never tidy it into matching containers
+- agent content column order is FIXED (may omit, may NOT reorder): working line → AgentStep list → Reasoning → AnswerHeader → answer body → sources row → ProposalCard → MediaGroup → ResponseToolbar → follow-up chips
+- human attachments stack ABOVE the bubble text: document ContextCards first, then images (radius lg + hairline, max-height 240; 2 side by side, 3+ as a 2-wide grid), then text — never a MediaGroup fan
+- states: human sent/send-failed; agent streaming/settled/stopped/failed/guardrail-blocked
+- no avatars on human messages, no fills or borders on agent messages, no feedback affordances on human messages, no editing a sent message in place, no third actor form (system = Banner, handoff = §16 event)
+- each Message is an <article> named for its actor; the Thread owns the live region
 
 ---
 
@@ -712,6 +983,15 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Forbidden:** more than one header per reply; a header on a reply with no title-worthy goal (an untitled answer is correct, not unfinished); `heading-md` or larger (agent text never produces page-level hierarchy, §12); a duration Badge with an invented or estimated number — actuals only (§11); auto-collapsing a reply the user has not collapsed.
 **A11y:** the chevron is a real toggle with `aria-expanded` and an accessible name naming the section; the duration Badge is not a live region — it settles once.
 
+**Key rules (machine index):**
+- flex row inside the agent content column: heading-sm title (from the run's stated goal) + neutral duration Badge (tabular-nums) + right-aligned VariantPager + collapse chevron (ghost sm icon-button)
+- WHEN: replies over ~4 paragraphs or produced by a multi-step run — ONE header per reply, never per section
+- the §20 named working line resolves INTO this title on completion — same string, promoted from body-sm pulse to heading-sm
+- collapsed keeps title + duration; expansion state persists in the transcript per user
+- never heading-md or larger (agent text never produces page-level hierarchy)
+- duration is an ACTUAL, never invented or estimated
+- no auto-collapsing a reply the user did not collapse
+
 ---
 
 ## VariantPager
@@ -724,6 +1004,15 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Forbidden:** destructive regeneration (overwriting the current variant); a pager on a human message or on an earlier agent reply; carrying one variant's citations onto another (a provenance break — §6 never fake a citation); more than 5 retained variants; exposing variants as a Tabs or Select control (the pager is the closed form).
 **A11y:** each arrow carries an accessible name stating the destination ("Previous version, 1 of 2"); the counter is `aria-live="polite"` so switching announces; arrows disable at the ends rather than wrapping.
 
+**Key rules (machine index):**
+- ‹ › ghost sm icon-buttons around a caption tabular-nums counter ('2/2') — no dots, no version dropdown, no labels
+- regenerate creates variant N+1 and NEVER destroys; switching is non-destructive
+- each variant keeps its OWN provenance and attribution — its own SourceChips, uncertainty Badges, AgentStep record; carrying one variant's citations onto another is a provenance break
+- max 5 variants, then the oldest UNPINNED is replaced
+- latest agent reply only — earlier replies show no pager because they cannot be regenerated
+- never expose variants as Tabs or a Select; the pager is the closed form
+- arrows name their destination; counter is aria-live polite; arrows disable at the ends, never wrap
+
 ---
 
 ## Reasoning
@@ -735,6 +1024,14 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **States:** collapsed, expanded (persists per user per conversation), running (the row renders while reasoning streams, duration counting), redacted (policy-suppressed — says so plainly: "Reasoning not available for this response" / "이 응답의 추론 과정은 제공되지 않습니다").
 **Forbidden:** auto-expanding (absolutely — the answer is the deliverable, the reasoning is an offer); rendering empty when redacted; `text.primary` or any emphasis that competes with the answer; SourceChips inside it; including it in copy/regenerate scope; presenting reasoning as the answer when no answer was produced (that is a §10 failure state).
 **A11y:** `aria-expanded` on the row; the expanded region is *not* a live region even while streaming — announcing working text over the answer inverts the subordination the component exists to enforce.
+
+**Key rules (machine index):**
+- collapsed by default: 24px row = chevron + 'Reasoning'/'추론 과정' (label, text.tertiary) + duration (tabular-nums)
+- expanded = body-sm text.secondary on bg.surface, agent-markdown rules BUT capped: no headings, no images
+- three structural subordination rules: never text.primary, never carries SourceChips (citations belong to the ANSWER), excluded from copy/regenerate
+- AUTO-EXPAND IS FORBIDDEN — the answer is the deliverable, reasoning is an offer; expand state persists per user per conversation
+- redacted by policy says so plainly, never renders empty
+- the expanded region is NOT a live region even while streaming — announcing working text over the answer inverts the subordination
 
 ---
 
@@ -765,6 +1062,16 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Forbidden:** destructive actions (a floating affordance is too easy to hit by accident — destructive goes through Popconfirm or a Modal); more than 3 actions (past that it is a Menu); a `primary`, `brand` or `danger` fill on the pill or its children (the surface is neutral by construction — emphasis inside a floating layer competes with the region's real primary); persisting after the raising condition ends; anchoring to the viewport; carrying a status icon (that is Toast's vocabulary and invites the confusion this entry exists to end); a `<span>` or `<div>` where a control belongs; more than one pill per raising condition.
 **A11y:** each action independently focusable and labelled; Esc dismisses and returns focus to the anchor; the pill's appearance is not announced (it is an affordance, not a status change) — but its actions must be reachable without a pointer, since hover-reveal alone is a keyboard trap.
 
+**Key rules (machine index):**
+- WHY IT EXISTS: this anatomy was implemented three times identically (SelectionPill, Thread's jump-to-latest, and ResponseToolbar's media rail — the last since retired) and declared nowhere — one of them citing Toast, which shares the tokens and none of the behaviour. Consumers now reference this entry and never restate it
+- horizontal: 28px height, padding 0 space-3, radius full, shadow.lg, z.dropdown, label-sm type (never a raw font-size), standard entrance; multiple actions split by a 1px border.default hairline 12px tall; 12px registry icons
+- SURFACE IS PER-MODE (2026-08-03): dark takes bg.raised-2 (#33333A) + 1px border.overlay (#4A4A52); LIGHT takes glass.surface (#F6F8FB) + 1px glass.border (#E4E9F0) — the OPAQUE faux-frost family, no backdrop-filter, SY015 still holds. Why: in light mode bg.raised-2 IS #FFFFFF (same as bg.page) and border.overlay is TRANSPARENT, so the pill was 1.00:1 on the page with no hairline — separated only by an 8% shadow, while dark had three separation channels. A missing channel, not a taste gap, and unfixable by a darker fill because the light ramp jumps #FFFFFF -> #F4F4F6 (1.10:1) -> #33333A (12.53:1). Per-mode divergence with a reason is established practice (cf. ProposalCard secondary). REJECTED: an inverse bg.inverse-soft fill — too heavy for a catch-up hint at 12.53:1, and it is the system emphasis fill
+- EVERY CHILD IS A REAL CONTROL — a <button>, or a Link where it navigates. A pill rendered as a <span> is a DEFECT: these affordances are often the only path to the action they carry, so a non-interactive element makes it keyboard-unreachable
+- anchored to whatever raised it, NEVER to the viewport; overlays content and never displaces it (no layout shift on appear — the §19 rule generalised)
+- dismissed by its raising condition ending (deselect, Esc, reaching the bottom, pointer-out) — never an x, never persists as chrome
+- consumers are a CLOSED set: SelectionPill (§18) and Thread's jump-to-latest. ResponseToolbar media was the third and was RETIRED 2026-08-03, which also removed the rail variant — a variant with no consumer is dead spec
+- FORBIDDEN: destructive actions (too easy to hit by accident — use Popconfirm or a Modal); more than 3 actions (past that it is a Menu); primary/brand/danger fill on the pill or its children; a status icon (Toast's vocabulary, and it invites the confusion this entry ends); more than one pill per raising condition
+
 ---
 
 ## SelectionPill
@@ -780,6 +1087,15 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **⚠ 재생성 is blocked pending a ruling.** Its "in place" write conflicts with the append-only law — see the UNRESOLVED note under `Thread`. The action stays in the closed set (that was ruled 2026-08-03); its *write semantics* are what is open.
 **A11y:** the pill is keyboard-reachable from the selection, each action independently focusable and labeled; Esc dismisses and returns focus to the selection anchor.
 
+**Key rules (machine index):**
+- surface is a FloatingPill (horizontal) — that entry owns the shell (28px, bg.raised-2, border.overlay, radius full, shadow.lg, z.dropdown, label-sm, the 1px border.default separators, the real-<button> requirement); anchored above the selection. SelectionPill adds only WHICH actions and where they apply
+- closed set is THREE actions: 답장 · 설명 · 재생성 (ruling 2026-08-03 — ai-patterns §22's 'never a third pill action' was stale and is struck; a closed set with two definitions is not closed)
+- 답장 inserts a ComposerQuote (max 1 per send, quoting replaces any existing quote); 설명 composes a quoted follow-up answered as a NORMAL agent turn — neither mutates the source. 재생성 is IN THE CLOSED SET but its write semantics are UNRESOLVED as of 2026-08-03: an in-place passage rewrite contradicts the append-only law, held for a maintainer ruling — do not implement it yet
+- quoted passage takes a BARE ai.surface fill at radius xs — NO outline (tint + outline is the forbidden wireframe formula and read as a Badge; amended 2026-08-03), box-decoration-break: clone per wrapped line; ai.* not emphasis.* since §1 bars emphasis tokens from AI surfaces
+- scope law: 재생성 scopes to the SELECTION, never the surrounding paragraph; rewrite-type actions apply only to the user's OWN draft (§24), never to agent output
+- agent Messages only — selecting a human bubble raises nothing
+- no toolbar of options, no second pill, no fourth action without governance, never persists past deselect or Esc
+
 ---
 
 ## FollowUpPanel
@@ -793,6 +1109,17 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Mutual exclusion:** suggestion Chips and the panel never render simultaneously; the panel never renders in the zero state (prompt starters own the empty conversation, §27, and hand off at the first turn).
 **Forbidden:** glass or `backdrop-filter` (SY015); more than 4 rows; auto-sending on selection; pushing thread content down; a per-row rationale line (it would break chip honesty — the label is the query, and grouping is how the panel signals *why* a row is offered); rendering alongside Chips or in the zero state.
 **A11y:** `role="listbox"` with ↑↓ traversal and ↵ selection; the keycap header is decorative (`aria-hidden`) — the shortcuts are real key handlers, not a rendered legend doing the work.
+
+**Key rules (machine index):**
+- SOLID bg.raised panel — explicitly NOT glass (small, dense, over thread text where translucency reads muddy; foundations §6; backdrop-filter forbidden by SY015) — border.default hairline, shadow.lg, radius md, 6px padding
+- 32px rows at radius xs leading with the 12px follow-up arrow; full-bleed keycap header row (↑↓ 이동 · ↵ 선택 · esc 닫기); row hover/selected = bg.selected
+- anchored 8px above the Composer's top edge (anchored menus use 4px; the panel's larger mass earns 8) and OVERLAYS thread messages — never pushes content down, layout shift on open is forbidden
+- refine rows above pivot rows, split by the standard full-bleed divider; optional micro-label group headers ('더 자세히'/'다음 단계'); MAX 4 ROWS total
+- chip honesty: a row's visible label IS the query it sends; if the query needs more words the row inserts into the Composer instead of sending
+- selecting INSERTS into the Composer, never auto-sends
+- chips and panel never render together; the panel never renders in the zero state (§27 starters own it)
+- no per-row rationale line — it would break chip honesty; grouping is how the panel signals why a row is offered
+- role=listbox, ↑↓ traversal, ↵ selection; the keycap header is aria-hidden decoration over real key handlers
 
 ---
 
@@ -808,6 +1135,14 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Forbidden:** replacing or editing transcript turns; a point with no jump-back link; stating a decision absent from the thread; presenting it as chrome or as the user's notes; auto-generating on every thread regardless of length; a summary with no visible generation age.
 **A11y:** the collapse toggle carries `aria-expanded`; jump-back links are real links that move focus to the target turn.
 
+**Key rules (machine index):**
+- collapsible block on ai.surface WITH the standard agent attribution row (squared Avatar + name + timestamp) — both required; a summary that reads as chrome is a provenance failure. The BODY STAYS ON ai.surface and does NOT open to bg.page: ProposalCard's tray rule opens a PAYLOAD (diff, preview, record list) to bg.page, but a summary's body IS the content, and bg.page is #FFFFFF in light mode exactly like the thread behind it, so the body dissolved. Generally: 'opens to bg.page' only means something when the container is not already on bg.page
+- at the top of the Thread or in the thread's detail Drawer; header carries a refresh ghost action + a last-generated caption
+- GROUNDED: each point links back to the turns it summarizes (SourceChip-style jump); a point with no jump-back link, or a decision absent from the thread, violates §10 honesty
+- refreshable, NOT authoritative: never replaces or rewrites the transcript (Thread is append-only); a stale summary shows its age, never a false 'current'
+- NOT for short threads (a summary longer than the thread is noise); never summarize into a surface that widens who can see the content
+- never presented as system chrome or as the user's own notes
+
 ---
 
 ## DescriptionList
@@ -820,6 +1155,11 @@ Table/list navigation: 13px, previous/next icon-buttons + page numbers (current:
 **Forbidden:** more than ~10 rows without grouping under `heading-sm` titles; two-column term/value grids (KO/EN term widths diverge — one list per column region instead); using it as a form (labels + inputs = form, `patterns.md` §3).
 **A11y:** semantic `<dl>/<dt>/<dd>`.
 **Bilingual:** term column width from the active locale's widest term; terms never truncate.
+
+**Key rules (machine index):**
+- term column sized to widest term of active locale; never truncates
+- empty = em dash
+- not a form
 
 ---
 
@@ -838,6 +1178,10 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Forbidden:** attaching `primary` buttons to each other (one primary per region still holds); split buttons whose menu contains unrelated actions; more than 4 segments; using `attached` where SegmentedControl (exclusive state) is the real need.
 **A11y:** `role="group"` with a group label; split's chevron gets `aria-haspopup` + its own label ("More run options").
 
+**Key rules (machine index):**
+- never attach primaries
+- ≤4 segments
+
 ---
 
 ## SourceChip
@@ -851,6 +1195,12 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 ---
 **Sources row (layout):** the plain-text footnote line is retired — a `micro-label` "출처" eyebrow sits on its own line ABOVE a row of **pill-shaped** source cards — borderless `bg.sunken` fill; anatomy: a **leading 18px page-filled numeral circle** (11/1 semibold tabular — structurally mirrors the inline marker: both are numbered circles, at text scale and pill scale) + **12px source-type icon (`text.tertiary`)** + source name (12/18, `text.secondary`), gap 6, padding 2×8 with a 2px leading inset so the circle sits evenly (icon restored, maintainer preference — with the numeral contained in its circle, the icon reads as clean metadata rather than clutter; it aids scanning when several sources share a row). Hover on the gray ladder's next step. The pill silhouette deliberately differs from the rounded suggestion Chips sharing the Console — the two chat-chip species must be tellable apart by shape alone; source pills are ContextCard derivatives, outside the Chip family's rounded rule. Hovering a card highlights its inline [n] markers and vice versa — the number mapping becomes visual, not mental. **Hit target:** the 18px chip keeps its visual size but carries an invisible ≥24px hit area (inset −4 pseudo) — the 24px floor applies to targets, not glyphs.
 
+**Key rules (machine index):**
+- never fake citations — unsourced claims get the 'Model knowledge' badge
+- ≤3 per sentence
+- sources row: 출처 eyebrow ABOVE pill source cards — leading 18px page-filled numeral circle (mirrors the inline marker) + 12px type icon + name (icon restored); card↔marker hover linkage; ≥24px hit areas
+- marker = 18px circle, neutral bg.sunken + text.secondary, bare numeral 11 semibold tabular — brackets/mono retired
+
 ## ContextCard
 
 **Purpose:** a referenced object (document, meeting, table, page) rendered as a physical card in Console threads and the Composer — the visible form of "what the agent is looking at". (Added.)
@@ -859,6 +1209,11 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Stack:** 2+ referenced objects stack flat — a single offset underlay card at −4px with the top card separated by a 2px page-colored outline ring (count-overlay precedent), plus a `+N` Badge on the top card. Max 3 visible objects; expand lists vertically. **No rotation** — precision, not playfulness.
 **Compact (Composer @-mention):** icon tile 16px + title only, padding 2×8; renders inline in the Composer text row.
 **Forbidden:** thumbnails or content previews inside the card (v1 has no preview language); more than one meta line; manual colors; stacks used for anything but referenced objects.
+
+**Key rules (machine index):**
+- outlined radius-md card: icon tile + title + one caption meta line (corrected 2026-08-03 by SY021, was sm); no thumbnails
+- stack: flat -4px underlay + page-colored ring + '+N', max 3, never rotated
+- compact inline variant for Composer @-mentions
 
 ---
 
@@ -870,6 +1225,12 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Behavior:** consecutive same-actor events MAY collapse ("edited 3 fields" / "필드 3개 수정") expandable; handoffs render as first-class events (ai-patterns §16); load older via "Load more" (never infinite table rules — feeds are the sanctioned cursor case).
 **`compact` variant:** avatar-less `caption`-height rows for embedded mini-logs inside Cards/Drawers (actor name inline, weight 500); full Timeline remains the page-level form.
 **Forbidden:** editable or deletable history rows; relative-only timestamps; mixing a comment thread into the audit feed (separate surfaces); icons per row unless the concept is in the registry.
+
+**Key rules (machine index):**
+- actor avatar shape carries authorship
+- verb-first templated sentences; absolute time on hover
+- day dividers; same-actor collapse; Load more (no infinite tables)
+- history never editable
 
 ---
 
@@ -883,6 +1244,12 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Drag:** re-parent only where the model allows; drop target = 2px `border.focus` insertion line.
 **Forbidden:** trees for flat or 2-level data (grouped list instead); connecting guide lines (indent + chevron suffice).
 
+**Key rules (machine index):**
+- rows 28; indent 20/level; max 4 levels then drill-in
+- checkbox mode uses mixed-state parents
+- drop target = focus insertion line
+- no guide lines; middle-out truncation + tooltip
+
 ---
 
 ## CodeBlock
@@ -894,6 +1261,12 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Streaming:** renders when the fence closes (ai-patterns §12).
 **Forbidden:** editing affordances (this is display; editors are out of system scope); nested scrolling beyond the one horizontal overflow.
 
+**Key rules (machine index):**
+- header: language chip + copy
+- one muted syntax theme ≤5 colors system-wide
+- max-height 400 + expand; renders on fence close
+- display only — no editing
+
 ---
 
 ## DiffView
@@ -902,6 +1275,12 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **Anatomy:** unified layout default; side-by-side variant permitted ≥960px for config comparisons. Line rows: gutter (+/− marker + optional line number) + mono 12 content. Added = `status.success-bg`, removed = `status.danger-bg`, word-level changes darker tint within the line — NEVER color alone (gutter markers are the colorblind-safe channel). Unchanged runs collapse to an expandable "⋯ 24 unchanged lines" row. Header: object name + change counts (+12 −4, tabular).
 **Forbidden:** three-way diffs (out of scope v1); syntax highlighting inside diffs (one signal at a time); scroll-linked panes that can desynchronize.
+
+**Key rules (machine index):**
+- unified default; side-by-side ≥960px
+- tint + gutter markers, never color alone
+- unchanged runs collapse; +N −M counts tabular
+- no syntax highlighting inside diffs
 
 ---
 
@@ -914,6 +1293,13 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Jurisdiction (hard):** ONLY agent-generated media inside agent replies. Referenced/attached objects use ContextCard (always flat); thumbnails elsewhere are forbidden. **Rotation exists nowhere else in the system** — see design.md §8.
 **Principle:** playfulness lives in the agent's *output*, never in the chrome.
 
+**Key rules (machine index):**
+- ±2.5° alternating rotation, ~20% overlap, max 3 + '+N' (badge in caption strip); single item flat
+- card = media area + surface caption strip with hairline rule
+- hover straightens + raises; reduced-motion renders flat
+- jurisdiction hard: generated media in agent replies ONLY — rotation exists nowhere else (design.md §8)
+- playfulness lives in output, never chrome
+
 ---
 
 ## Slider · NumberInput
@@ -923,6 +1309,10 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Slider:** 4px track (`bg.sunken`) + `action.primary-bg` fill + 16px thumb (focus ring); value label appears above the thumb while dragging (Tooltip surface); optional tick marks at enumerated stops; arrows step, Shift = 10×; `range` variant = two thumbs, `bg.selected`… no — fill between thumbs uses the standard fill. Jurisdiction: values where *position is meaning* (thresholds, sampling %, volume). NEVER without a visible numeric value; NEVER for unbounded or precision-critical values.
 **NumberInput:** filled Input + stacked stepper (chevrons, 24px hit each) + optional unit suffix (`text.tertiary`); typed entry free, clamps to min/max on blur with a `caption` note; arrows step. Tabular numerals.
 **Forbidden:** sliders for dates/times; steppers on non-numeric inputs; percent sliders whose denominator is unknown.
+
+**Key rules (machine index):**
+- slider never without a visible value; never for unbounded/precision
+- number input: steppers, unit suffix, clamp on blur, tabular
 
 ---
 
@@ -935,6 +1325,11 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **A11y:** `radiogroup`/`group`, arrow-key navigation, whole card is the target.
 **Forbidden:** nesting inputs inside choice cards; unequal card heights in one group; images/illustrations (v1 has none).
 
+**Key rules (machine index):**
+- radio semantics default, multi variant shows checkboxes
+- selected = border.selected ring + check
+- equal heights; whole card is the target; >6 → Select
+
 ---
 
 ## HoverCard
@@ -945,6 +1340,11 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Rule:** hover is enhancement, never requirement — everything in a HoverCard must also exist on the entity's click-through page (keyboard and assistive access must not depend on hover).
 **Forbidden:** forms; nested HoverCards; hover cards on elements that already open popovers.
 
+**Key rules (machine index):**
+- 500ms delay; ≤320px; avatar header + 2–4 key-value rows + ≤1 ghost action
+- hover is enhancement — same info must exist on click-through
+- no forms; no nesting
+
 ---
 
 ## Popconfirm
@@ -954,6 +1354,11 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Anatomy:** popover anchored to the trigger (`z.dropdown`): one consequence-naming question (`body-sm`) + Cancel (`ghost` sm) + confirm (`danger`/`primary` sm). Esc/outside-click cancels.
 **Jurisdiction:** single-object actions whose result is easily recreatable (unpin, clear a saved filter, remove one attachment). Permanent data loss, bulk operations, or anything with named counts → Modal (R5 rules).
 **Forbidden:** chaining popconfirms; inputs inside; using it to soften actions that deserve a Modal.
+
+**Key rules (machine index):**
+- one question + Cancel/confirm pair
+- permanent loss, bulk, named counts → Modal
+- no chaining; no inputs
 
 ---
 
@@ -966,6 +1371,11 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Jurisdiction:** dense tables, trees, canvas-like surfaces. Not on focus-archetype prose.
 **Forbidden:** context-only actions; submenus beyond one level; overriding browser context menu on text selections.
 
+**Key rules (machine index):**
+- same Menu component at pointer
+- duplication rule: every action also exists in visible UI
+- one submenu level; not on prose
+
 ---
 
 ## CalendarView
@@ -976,6 +1386,12 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Week variant:** hour rows (48px) with event blocks; block = viz tint fill + `label-sm`; overlaps split width.
 **Behavior:** click event → popover with DescriptionList + open action; drag-to-reschedule only where the schedule model allows, with Toast confirm + undo.
 **Forbidden:** month cells scrolling internally; empty-day placeholders (empty days are simply empty); more than one event color system (viz assignment only).
+
+**Key rules (machine index):**
+- day cells ≥96px; max 3 events + '+N' popover
+- event colors = system-assigned viz tints only
+- drag-reschedule only where model allows, Toast + undo
+- empty days are empty
 
 ---
 
@@ -990,10 +1406,16 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Empty state:** the compact flavor ("You're all caught up" / "모두 확인했습니다"), shown when a filter yields nothing or the list is cleared.
 **Forbidden:** marketing content; more than one content inline action per item (the read/dismiss hover controls are exempt — they are chrome, not content actions); unread counts anywhere except the bell's count overlay (99+ rule); type expressed by color/tint alone.
 
+**Key rules (machine index):**
+- items templated from content verbs; unread dot + surface fill
+- click navigates + marks read; consequential actions only OPEN their surface (never approve from a notification)
+- 30 items then View all
+
 ## GraphCanvas · FlowNode · Edge
 
 **Purpose:** the node-graph editor behind the `workbench` builders — Workflow Builder, Pipeline Builder, and the Ontology Link / Lineage graph. A pannable, zoomable canvas of node cards connected by typed edges, with a node palette and canvas controls. One family, grouped because the parts only exist together.
 
+**Variants:** modes: `build` (edit) · `run` (read-only + per-node run status); edge: default · Condition branch (If / Else `label-sm` tag).
 **Canvas:** a full-bleed workbench surface on `bg.sunken` with a subtle dot grid (dots `border.subtle`) — the one sanctioned background texture, never a decorative pattern. Pan (space-drag) + zoom (wheel/controls). Every graph has one fixed **Start** anchor and one or more **End** nodes.
 
 **FlowNode:** an `outlined` card — `bg.surface`, 1px `border.default`, radius `lg`; `border.selected` when selected, blue `border.focus` ring on keyboard focus. Header row: 16px type icon + node-type label (`label`) + a leading status dot using the AgentStep state vocabulary. Body: a compact config summary (`caption`, `text.secondary`). **Ports:** input on the left edge, output on the right — 8px squared handles (`border.strong`; eligible/hover = `border.focus`). Fixed width tier (240); height to content.
@@ -1010,6 +1432,15 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **Forbidden:** decorative node fill-colors (status is dot + glyph, never hue alone); free-form node shapes (one silhouette); mixing straight and curved edge styles; gradients/glow on nodes or edges; more than one grouping nesting level; any node type absent from the manifest.
 
+**Key rules (machine index):**
+- canvas = bg.sunken + subtle dot grid (the one sanctioned bg texture); one fixed Start anchor, ≥1 End
+- FlowNode = outlined card: header (16px icon + type label + AgentStep status dot) + config summary + left input / right output ports (8px squared handles); fixed width tier (240)
+- Edge = 1px border.strong output→input, one connector style system-wide; Condition branch carries a label-sm If/Else tag; state = token + glyph, never hue alone
+- NodePalette = grouped closed node-type list (micro-label headers), drag or click to insert; manifest node types only
+- CanvasControls = floating zoom/fit/minimap cluster (bg.raised + border.overlay + shadow.lg); icon-only square + aria-label
+- build vs run mode (run = read-only + per-node status + RunLog)
+- no decorative node fill-color, no free-form shapes, no gradient/glow, no mixed edge styles, one grouping nesting level
+
 ## RunLog
 
 **Purpose:** the execution record of a run — Workflow Run mode, Pipeline runs, and the CUA run review. A hierarchical, append-capable log: run → step → line.
@@ -1021,6 +1452,13 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Behavior:** reuses AgentStep's closed state vocabulary; machine text in mono; timestamps absolute on hover; virtualize long logs; **pin-to-bottom is a toggle**, never forced. Display only.
 
 **Forbidden:** color-only status; editing log content; auto-scroll that fights manual scroll.
+
+**Key rules (machine index):**
+- expandable steps using the ai-patterns §3 state superset (SHARED with AgentStep — this entry previously claimed the two vocabularies matched while the two prose specs listed different five-state sets) → mono log lines in a bg.sunken block
+- header: title + status Badge + tabular duration; success collapses to 'N steps · 12s'
+- failed steps auto-expand + surface the error + optional Retry
+- live-append aria-live polite; running step pulses (no shimmer); pin-to-bottom is a toggle, never forced
+- display only; virtualize long logs; status = dot + glyph, never hue alone
 
 ## PivotTable
 
@@ -1034,6 +1472,14 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **Forbidden:** zebra striping; default heatmap cell-coloring (a governed decision, not a default); emphasis beyond the total/subtotal band; two aggregations muddled in one cell.
 
+**Key rules (machine index):**
+- sticky row-dimension gutter (nested, expand/collapse) + grouped sticky column-dimension headers; always framed (scrolls)
+- cells = Table's numeric renderers, right-aligned tabular; empty = em dash
+- subtotal/total bands use emphasis.surface (Table emphasis rule; totals only)
+- field bar (rows/columns/measures) above = filter-bar recipe
+- inherits Table alignment/renderers/header treatment; virtualize >200 rows
+- no zebra, no default heatmap cell-coloring, no dual aggregation per cell
+
 ## AssistantPanel
 
 **Purpose:** the persistent docked/floating global agent — a compact chat available across the app that maximizes into the full Console. A composite (like `CommandPalette` and `NotificationCenter`), assembled from existing parts, never a re-implemented chat.
@@ -1045,6 +1491,13 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Behavior:** exactly one per app; non-modal (no scrim); hidden on the full Console page (it *is* the Console there); never overlaps a primary action region — it offsets.
 
 **Forbidden:** a second persistent chat surface; auto-opening or nagging; a scrim/blocking behavior; re-implementing the Composer.
+
+**Key rules (machine index):**
+- floating brand circular launcher (the shared circular exception) → docked panel (bg.raised, border.default, shadow.lg, z.dropdown)
+- header (squared Avatar 24 + name + maximize + close) · ai.surface message stream (AgentStep/ProposalCard/SourceChip) · one docked Composer
+- reuses Composer/ResponseToolbar/AgentStep — never a re-implemented chat
+- exactly one per app; non-modal (no scrim); hidden on the full Console page; never overlaps a primary action region
+- no second persistent chat, no auto-open/nagging
 
 ## AppLauncher
 
@@ -1059,6 +1512,13 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 **Behavior:** icon-forward tiles (this is **not** the `Card` component — the earlier outlined-Card tile was replaced); the squircle is a fixed image well so generated icons drop in at a consistent size and shape. One action per tile; keyboard traversal + ↵ opens; fixed responsive column steps.
 
 **Forbidden:** color in the launcher's **own chrome** — panel, labels, frame, system-app tiles, and empty slots stay achromatic (graphite / neutral); color lives ONLY inside a user-supplied app icon, never in the frame or the system-app marks (the icon rule holds for chrome). A modal stacked on top; arbitrary grid reflow; bordered-card tiles (icon-forward, not boxed).
+
+**Key rules (machine index):**
+- centered FAUX-GLASS overlay over a bg.scrim backdrop — an OPAQUE frosted tint (glass.surface + glass.rim inset highlight + glass.border), radius 2xl, shadow.xl, z.modal; it READS as frosted glass with NO backdrop-filter (corrected 2026-08-03: this entry said 'glass-scrimless … radius lg', stale after the glass→opaque reversal — real translucency is forbidden by SY015 and the design.md §8 never-list, and the launcher does sit over a scrim)
+- optional search + system-apps grid + your-apps grid under micro-label headers
+- tiles = outlined Card (icon medallion + name + caption), whole-tile click opens, hover-lift
+- keyboard traversal + ↵ opens; empty groups hide on filter
+- no decorative tile color, no nested modal, fixed responsive column steps
 
 ## Divider
 
@@ -1079,6 +1539,14 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **A11y:** `role="separator"` (add `aria-orientation="vertical"` for the vertical variant); a purely decorative rule is `aria-hidden`.
 
+**Key rules (machine index):**
+- 1px only — border.subtle inside components, border.default for stronger boundaries + the vertical variant
+- labeled = rule · caption/micro label (text.tertiary) · rule
+- margins come from surrounding rhythm, never baked in
+- reach for it only when a visible line aids grouping — whitespace/component borders first
+- no thick or colored dividers; one divider weight per region
+- role=separator (aria-orientation=vertical for vertical); a decorative rule is aria-hidden
+
 ## ToggleButton
 
 **Purpose:** a button that toggles a single on/off state — pin, favorite, mute, show/hide a panel, a display or formatting option. Distinct from **Switch** (an instant-effect *setting*, in forms and settings rows) and **SegmentedControl** (an *exclusive* choice among peers).
@@ -1093,8 +1561,18 @@ Split follows its main button's variant (`primary` or `secondary`; `brand` is th
 
 **Anatomy:** built on Button (`ghost` or `secondary`, size-relative radius). **On-state** = `bg.selected` fill + `text.primary`, with the icon kept as a **stroke** glyph on the selected tint — never a filled icon. The favorite **star** is the single sanctioned fill-on-active exception (matching ResponseToolbar). Icon-only toggles are square (width = control height).
 
+**Sizes:** `sm` · `md` · `lg` — built on Button, size-relative radius (Anatomy above).
 **States:** off (default) · hover · **on** (`aria-pressed="true"`, `bg.selected`) · focus (the standard offset ring) · disabled (**`bg.disabled` fill + `text.disabled` label**, never opacity — *aligned to Button 2026-07-30*: this previously specified a text-only disabled treatment, which contradicted foundations §1.2's "the grey fill is the single unambiguous disabled signal" and made ToggleButton the only control in the system that disabled without a fill. `text.disabled` runs 2.12:1 on the page, so with no fill to frame it a disabled toggle was very faint).
 
 **Forbidden:** using a ToggleButton for an exclusive choice (that is SegmentedControl) or an instant-effect form setting (that is Switch); a filled-icon on-state (except the favorite star); the point/accent color for the on-state — selection is the neutral `bg.selected`, never the accent.
 
 **A11y:** `aria-pressed` reflects the state; icon-only toggles require `aria-label`; a `group` is `role="group"` with a label.
+
+**Key rules (machine index):**
+- disabled = bg.disabled fill + text.disabled label, never text-only and never opacity (aligned to Button 2026-07-30; ToggleButton was the only control disabling without a fill)
+- distinct from Switch (instant setting) and SegmentedControl (exclusive choice)
+- on-state = bg.selected + text.primary; icon stays stroke — favorite star is the sole fill-on-active exception
+- aria-pressed reflects state; icon-only requires aria-label
+- never the point/brand color for the on-state — selection is neutral bg.selected
+- group is multi-select (role=group + label); exclusive choice is SegmentedControl
+- icon-only toggles are square (width = control height)
