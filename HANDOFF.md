@@ -49,11 +49,35 @@ Gate rules worth knowing: **SY020 CSS<->JSON token parity** (added 2026-07-31; p
 
 ## Current state
 
-**As of 2026-08-03: `main` is the working branch again and carries everything.** The other machine's migration/SY020 work and this session's chat-interface tranche are **merged into `main`** (the `chat` branch was cut only because a second machine had unpushed work; that reconciliation is done and the branch is now redundant — delete it once the merge is pushed). Version **1.0.2**, in lockstep across the three locations. Gates green after the merge: `validate.py all` 0/0 (now including **SY020**), `check_icons.py` 0 errors / 2 expected warnings.
+**As of 2026-08-03: `main` carries everything and is 37 commits AHEAD of `origin/main`. THE PUSH IS THE FIRST THING TO DO** — the sandbox cannot push (no credentials). Gates green throughout: `validate.py all` 0/0 (SY001–SY021), `check_icons.py` 0 errors / 2 expected warnings, `verify-token-map.py` in sync, `preview.html` JS `node --check` clean, `components.md` headings == manifest keys 68/68.
 
-Note for future sessions: the sandbox **can** stage, commit, merge, and delete a stale `.git/index.lock` (given folder-delete permission — it cleared one this session). It still **cannot push**; June pushes.
+**Nothing in this session has been seen in a browser.** The preview cannot render in the sandbox, so every visual judgement was made from markup, token arithmetic and simulation. That is exactly how the composer alignment took five passes (see below) — **look at the deployed preview after pushing** before trusting any of the visual work.
 
-**Version: 1.0.0 (initial team release).** Gate is green (0/0). The prior work (AI side-surface tranche §32–35 + the team-distribution layer: README, `docs/process/`, `.github/PULL_REQUEST_TEMPLATE/ui_review.md`, `docs/DISTRIBUTION.md`, `tooling/product-gates/`, `storybook/PUBLISHING.md`) was pushed as commit `d2e8bbd` (internal 6.62.0). This session then **re-baselined the version to 1.0.0**, switched to release-based versioning (design.md §6), and added the **curated-distribution workflow** (`scripts/build-dist.mjs` + `dist.allowlist` + `.github/workflows/publish-harness.yml`) that publishes a cleaned-up bundle to a separate `synapse-harness` repo on release tags. All of that is **uncommitted; needs a push from June's Mac** (working folder is now the real clone `~/Claude/Projects/synapse-clone`). Two-repo setup steps (create `synapse-harness`, add `HARNESS_DEPLOY_TOKEN` secret) are in `docs/DISTRIBUTION.md`. Vercel deploys the docs hub + preview; after pushes that touch token values or storybook, confirm the build is green.
+## This session (2026-08-03, later) — composer rebuild + FloatingPill + AgentStep states
+
+Driven by June's reference designs, iterating against `preview.html`. All merged to `main`.
+
+**Composer — settled anatomy.** Light outlined tray (`bg.page` + hairline, 12px uniform inset, 4px `bg.hover` alpha ring) holding ONE row: circular `+` · textarea · mic · circular send. Footer below the container: agent picker · capability toggle · model. Tray morphs **pill (`radius.full`) ↔ rect (`lg`)** on the first text *wrap*, and always takes the rect when attachments/chips/quote are present. Attachments sit ON the tray surface — no tint, no hairline — 12px above the input row.
+
+**Accent reallocated (touches `design.md` §3.7).** Send is `primary`/black; the azure `brand` accent moved to **AI-capability markers** (palette Ask-agent, the composer's capability toggle). New token `action.brand-bg-subtle` (azure.100/900), gated by a new contrast pair at 5.25:1 light / 7.06:1 dark.
+
+**Other rulings:** circular icon-buttons are a **closed set of three** (composer bookend pair + AssistationPanel launcher; the §26 recording confirm is the send bookend morphed — the set counts *positions*); `FloatingPill` declared as the shared shell for SelectionPill + Thread's jump affordance; AgentStep's four state vocabularies consolidated into a **nine-state superset** with a reachability column, plus `awaiting-input`/`cancelled`/`partial`/`queued` and a concurrent fan-out collapse rule; `SY021` added (prose↔manifest parity) and it caught three of my own regressions during the session.
+
+**The composer alignment took five passes. Worth reading before touching it:**
+1. Split row alignment from tray radius — real defect.
+2. Unified the row's control heights (send was 32px, `+`/mic 36px) — real defect.
+3. Added `rows="1"` (a bare textarea defaults to TWO rows) — real defect.
+4. A 1px optical nudge — **not** a real defect; removed.
+5. **`display: block` on the textarea** — the actual cause. A textarea is inline-level, so its `position:relative` wrapper measured the field plus a ~4–5px descender gap, leaving the text pinned to the top of an oversized box. No alignment value could have fixed that.
+
+**Lesson for the next session:** when something looks misaligned, measure the box being aligned before debating the alignment rule.
+
+**Open, deliberately:**
+- **§24's refine-prompt has no trigger** — the pencil was removed; the preset menu, reviewable rewrite and Undo Toast are unreachable.
+- **Capability state is silent** — the `+` deviation dot was removed, but the rule reads "capability state is never silent". Withdraw the rule or restore an indicator.
+- **The textarea's `position:relative` wrapper now anchors nothing** (the pencil is gone). Removing it would eliminate the descender-gap class of bug rather than correct it — a small, safe cleanup.
+- No Console/chat **recipe** still (thread 3a); §23's Template Library anatomy still stranded in `ai-patterns.md`; Guardrail (§15) and Handoff (§16) still story-only.
+- `storybook/` has **no Composer**, so none of this anatomy is implemented in React.
 
 ## This session (2026-08-03) — chat interface: render → contract, on branch `chat`
 
