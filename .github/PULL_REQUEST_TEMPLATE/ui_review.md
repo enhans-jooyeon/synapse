@@ -1,7 +1,7 @@
 # Review package / PR template
 
 > **When it's produced:** at review submission (PR open). Tells the reviewer **what to look at** and hands them a **runnable artifact**.
-> **Related protocol:** `design-review-protocol.md` §5-1, §8
+> **Related protocol:** `docs/process/design-review-protocol.md` §5-1, §8
 > **Recommended location:** save as `.github/PULL_REQUEST_TEMPLATE/ui_review.md` → recorded in the repo and diffed (code-based end-to-end).
 
 ---
