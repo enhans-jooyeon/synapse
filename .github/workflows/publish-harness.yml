@@ -20,13 +20,37 @@ jobs:
 
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
+
+      # The tag IS the version. Refuse to publish a tag whose source $version disagrees —
+      # this is the check that would have caught two incompatible token sets both
+      # claiming 1.0.2 (the space-scale rename shipped without a bump).
+      - name: Tag must match source $version
+        run: |
+          set -euo pipefail
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          SRC_VERSION="$(python3 -c "import json; print(json.load(open('tokens/synapse.tokens.json'))['\$version'])")"
+          HDR_VERSION="$(grep -om1 'Version [0-9][0-9.]*' design.md | cut -d' ' -f2)"
+          if [ "$TAG_VERSION" != "$SRC_VERSION" ] || [ "$TAG_VERSION" != "$HDR_VERSION" ]; then
+            echo "VERSION MISMATCH: tag=v${TAG_VERSION} tokens.\$version=${SRC_VERSION} design.md=${HDR_VERSION}"
+            echo "Bump the source version (tokens JSON + design.md header + preview.html, per design.md §6) before tagging."
+            exit 1
+          fi
+
       - name: Gate must be green before publishing
         run: python3 tools/validate.py all
+
+      - name: Manifest must be current (regenerate == no diff)
+        run: |
+          python3 tools/build_manifest.py
+          git diff --exit-code synapse.manifest.json || { echo "synapse.manifest.json is stale — run tools/build_manifest.py and commit before tagging."; exit 1; }
 
       - uses: actions/setup-node@v4
         with: { node-version: '20' }
       - name: Build curated bundle
-        run: node scripts/build-dist.mjs
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          SOURCE_DATE="$(date -u +%F)" node scripts/build-dist.mjs
 
       - name: Mirror ./dist to the team harness repo
         env:
