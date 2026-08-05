@@ -574,13 +574,14 @@
      so its 44px box left the text sitting on the first line while the 36px controls centred in
      the taller row — reading as text too high. rows="1" fixes the intrinsic height; this keeps
      the static render correct even before autogrow runs (fixed 2026-08-03). */
-  .cmp-row > div > textarea { width: 100%; height: auto;
-    /* Optical nudge, numeral-nudge family (ResponseToolbar thumbs use translateX(∓1px), Badge md
-       takes a 1px top nudge). Geometrically the 22px line box centres in the 36px row, but
-       Pretendard's cap-height centre sits above the line-box centre, so the text reads ~1px high.
-       transform is deliberate over padding/margin: it shifts the glyphs without touching
-       scrollHeight, so the morph baseline and the wrap detection are unaffected. */
-    transform: translateY(1px); }
+  /* display: BLOCK is the fix, not a nudge. A textarea is inline-level by default, so the
+     position:relative wrapper measured the textarea PLUS a ~4-5px baseline/descender gap beneath
+     it, leaving the wrapper taller than its content with the text pinned to its top. However the
+     row aligned that wrapper, the text sat above true centre. Four earlier passes treated the
+     symptom (alignment flag, control heights, rows="1", a 1px optical nudge); this is the cause.
+     The 1px translateY nudge is REMOVED with it — it was compensating for a structural gap and
+     would now push the text a pixel low. */
+  .cmp-row > div > textarea { width: 100%; height: auto; display: block; }
   /* One control height across the row. The send button previously carried an inline 32px while
      + and mic resolved to 36px through this rule, because send lacked .btn-icon — a 4px mismatch
      that threw the row off its common centre line (fixed 2026-08-03). */

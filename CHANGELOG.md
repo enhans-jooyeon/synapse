@@ -4,6 +4,14 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+- **The text sat high because a textarea is inline-level — the wrapper was measuring a phantom descender gap.** `display: block` on the composer textarea is the fix; the 1px optical nudge added in the previous commit is removed with it.
+
+  **The mechanism.** The textarea lives inside a `position:relative` wrapper that anchors the (now removed) refine button. A textarea is **inline-level by default**, so that wrapper's height was the field *plus* the ~4–5px baseline/descender space every inline box reserves below it. The wrapper was therefore taller than its content with the text pinned to its top — meaning **no alignment value could centre the text**, because what was being centred was a box with dead space at the bottom. `display: block` removes the phantom space and the wrapper becomes exactly the field's height.
+
+  **Four passes chased this symptom before finding it**, and it is worth recording honestly which were real and which were noise. Splitting alignment from radius, unifying the row's three control heights (36/36/32), and adding `rows="1"` were all genuine defects that needed fixing regardless. The 1px optical nudge was **not** — it was compensating for a structural 4–5px gap with a cosmetic offset, and it is gone.
+
+  **What I should have done differently:** the symptom was "text high relative to controls", and I kept examining the *row's* alignment rather than asking whether the *element being aligned* was the size it appeared to be. Once the question became "how tall is the wrapper, and why", the answer was immediate. Measuring the container rather than debating the alignment rule would have found it four passes earlier.
+
 - **A 1px optical nudge on the input text, and 12px between the attachment area and the input row.**
 
   **The remaining "too high" was optical, not geometric.** With `rows="1"` the 22px line box centres exactly in the 36px row — the arithmetic is right. But Pretendard's cap-height centre sits above its line-box centre, so text still reads about a pixel high. The textarea takes `transform: translateY(1px)`, which is the **numeral-nudge family the system already uses**: ResponseToolbar's thumbs take `translateX(∓1px)` for asymmetric ink, and Badge `md` takes a 1px top nudge for the same reason at 11px.
