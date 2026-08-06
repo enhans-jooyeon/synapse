@@ -78,6 +78,7 @@
  "components": {
   "Button": {
    "purpose": "trigger an action. Not for navigation (use Link) — a button never changes the URL.",
+   "category": "Action",
    "keywords": [
     "action",
     "cta",
@@ -85,6 +86,13 @@
     "icon button",
     "loading button",
     "press"
+   ],
+   "related": [
+    "Link",
+    "ButtonGroup",
+    "ToggleButton",
+    "Composer",
+    "AssistantPanel"
    ],
    "variants": "Reversal of the flat single-axis list, adopting the old @enhans/synapse API shape so the migration is a 1:1 prop mapping. The axes are orthogonal by design: buttonStyle says how loud, target says what kind. Conflating them into one flat list (the btn-danger pattern) is the weaker design; separating them is what Chakra (variant × colorScheme) and Ant (type × danger) do.",
    "sizes": "xs (height-xs 24, label 11, padding-x 8, icon 12) · sm (height-sm 32, label 13, padding-x 10, icon 16) · md (height-md 36, label 13 default, padding-x 12, icon 16) · lg (height-lg 40, heroes only, label 14, padding-x 16, icon 16). The label deliberately does NOT step at every size. sm and md share the 13px label because that is the dense range — toolbars, table rows, form footers — where a changing type size makes rows harder to scan than a changing height does; they are separated by height, padding and radius instead. Type steps only at the small end: xs drops to 11 to fit a 24px control; sm/md share 13, and lg sits at 14 — the body size. Icons likewise step once, at xs (12), holding at 16 through lg. A larger lg (label 16 / icon 20) was built and reverted on 2026-07-31: 14px is the industry norm for a button label — Carbon's productive set, Ant, Material 3 Label Large and shadcn/ui all use it — so 16 read oversized rather than heroic, and a 20px icon beside it inverted the conventional icon ≈ label pairing (an icon fills its box with strokes, so it carries more weight than text at the same nominal size). Note 20/40 did match the 0.50 icon ratio at sm/xs, which is a useful reminder that the ratio catches outliers but does not predict perceived weight. lg gets its presence from height, padding and radius, not type. Radius by size (not one fixed value): xs → radius.control-xs (6) · sm → radius.sm (8) · md → radius.control-md (10, default) · lg → radius.md (12). The progression is deliberately near-proportional — radius÷height runs 0.250 / 0.250 / 0.278 / 0.300 — so no size reads squarer or rounder than its neighbours. xs was radius.xs (4) until 2026-07-31, which put it at 0.167, a third below the band, and it read visibly squarer than the rest; the pill option (primary + lg + Guided heroes/empty-state first-use, default or brand target only) overrides to full.",
@@ -104,6 +112,54 @@
     "NEVER in forms, toolbars, tables, or dense regions — the pill silhouette is a hero mark, not a general style; never at xs/sm/md; never on target=destructive; never on secondary/outline/ghost (the override is primary-only, unchanged).",
     "more than one child; a child that is itself interactive in a second way (no <a> wrapping a <button>, no nested handlers); render used to avoid the Link rule; render on target=brand (the AI CTA is always a real button — it triggers an agent, it does not navigate).",
     "fixed widths (KO/EN); custom colors (→ pick a target: destructive intent → target=destructive, AI emphasis → target=brand; there is no hex escape hatch); more than one primary per region (→ demote the others to secondary); icon-only outside the approved list of close, more, edit, delete, copy, refresh, expand/collapse, settings (→ add a visible label, i.e. buttonStyle=ghost with icon + text; an unapproved bare glyph is unlearnable and fails 2.4.6 in practice even with aria-label); ALL-CAPS labels (→ sentence case); off-scale radius (→ the size's own radius, radius is size-relative per Sizes); link-style buttons (→ use Link — see the Link component; a borderless text action that navigates is a Link, and one that acts is buttonStyle=ghost)."
+   ],
+   "props": [
+    {
+     "name": "buttonStyle",
+     "type": "\"primary\" | \"secondary\" | \"outline\" | \"ghost\"",
+     "description": "emphasis axis; max one primary per region",
+     "default": "\"secondary\""
+    },
+    {
+     "name": "target",
+     "type": "\"default\" | \"destructive\" | \"brand\"",
+     "description": "intent axis; hue lives here, behaviour never does",
+     "default": "\"default\""
+    },
+    {
+     "name": "size",
+     "type": "\"xs\" | \"sm\" | \"md\" | \"lg\"",
+     "description": "xs is inline-only, lg is heroes only",
+     "default": "\"md\""
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "description": "swaps the leading icon (or, on an icon-only button, the glyph) for the loader-circle spinner and sets aria-busy",
+     "default": "false"
+    },
+    {
+     "name": "iconOnly",
+     "type": "boolean",
+     "description": "square button, width = the size's control height; approved glyphs only, aria-label required",
+     "default": "false"
+    },
+    {
+     "name": "icon",
+     "type": "React.ReactNode",
+     "description": "leading icon; permitted only for AI-entry buttons and toolbar/filter contexts"
+    },
+    {
+     "name": "trailingIcon",
+     "type": "React.ReactNode",
+     "description": "closed affordance set (chevron-down, arrow-up-right, chevron-right); one max"
+    },
+    {
+     "name": "pill",
+     "type": "boolean",
+     "description": "radius.full silhouette; primary + lg only, in Guided heroes / empty-state first-use, target default or brand",
+     "default": "false"
+    }
    ],
    "key_rules": [
     "API defaults (ratified 2026-08-05): buttonStyle=secondary · target=default · size=md",
@@ -125,12 +181,18 @@
   },
   "Link": {
    "purpose": "navigation. text.link color, no underline at rest, underline on hover/focus. Inline links inside body text are always underlined. External links append a 16px external icon.",
+   "category": "Action",
    "keywords": [
     "anchor",
     "hyperlink",
     "href",
     "navigation link",
     "text link"
+   ],
+   "related": [
+    "Button",
+    "Breadcrumb",
+    "Table"
    ],
    "states": "rest (no underline; inline links inside body text are always underlined) · hover/focus (underline).",
    "a11y": "a real <a href> (the decision table's element column); an element that acts without navigating is a Button, not a Link; external links carry the 16px external icon as part of the affordance.",
@@ -143,6 +205,7 @@
   },
   "Input (text)": {
    "purpose": "single-line text entry. Covers text, email, password, number, search (search adds leading 16px icon + clear button when filled).",
+   "category": "Input",
    "keywords": [
     "text field",
     "textbox",
@@ -152,10 +215,45 @@
     "input group",
     "addon"
    ],
+   "related": [
+    "Textarea",
+    "Select",
+    "Combobox",
+    "DatePicker",
+    "Tooltip"
+   ],
    "sizes": "md only.",
    "states": "default (white bg.page, 1px border.default), hover (border steps to border.strong — fill stays white), focus (border swaps to border.focus-input — neutral 1px perimeter, no offset ring: entry surfaces focus in the neutral key tone because click-to-type shows focus constantly and a blue offset ring overexposed the accent; non-entry controls keep the blue border.focus flush ring), disabled (bg.disabled grey fill — the one filled state — text.disabled), error (1px border.error + error text; error text MUST name the fix, not just \"invalid\"; error border holds while focused), read-only (bg.surface faint fill, no hover response). Select, Combobox, and DatePicker triggers inherit this outlined anatomy.",
    "a11y": "<label for> always; error linked via aria-describedby; aria-invalid on error.",
    "forbidden": "placeholder as label (placeholder is example content only, text.tertiary); floating labels (break with Hangul metrics); fixed field widths under 240px for translatable content; hiding the label visually except in table inline-edit cells.",
+   "props": [
+    {
+     "name": "label",
+     "type": "string",
+     "required": true,
+     "description": "renders above the field; the Table inline-edit cell is the only sanctioned hidden-label case"
+    },
+    {
+     "name": "helper",
+     "type": "string",
+     "description": "caption below the field, replaced by error when one is present"
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "description": "error text that MUST name the fix; sets aria-invalid and links via aria-describedby"
+    },
+    {
+     "name": "leading",
+     "type": "React.ReactNode",
+     "description": "leading affix slot (one 16px registry icon), inside the fill and never focusable"
+    },
+    {
+     "name": "trailing",
+     "type": "React.ReactNode",
+     "description": "trailing affix slot (unit suffix or one registry icon), inside the fill and never focusable"
+    }
+   ],
    "key_rules": [
     "outlined anatomy: white bg.page + 1px border.default; hover border.strong; focus = 1px NEUTRAL border.focus-input border swap (no offset ring on fields; non-entry controls keep the blue 2px offset ring); disabled bg.disabled grey is the one filled state (borderless-filled was reversed — its fill equaled disabled)",
     "label above, always; placeholder is example content only",
@@ -168,6 +266,7 @@
   },
   "Textarea": {
    "purpose": "Multi-line Input. Min-height 3 rows, vertical resize only, otherwise inherits all Input rules. Character counter (caption, text.tertiary, bottom-right) when a limit exists — count characters, not bytes (Hangul). autogrow variant: grows with content from 1 row to a declared max (default 8), then scrolls internally; resize handle removed — Composer's behavior, now available to inline forms (comments, descriptions).",
+   "category": "Input",
    "keywords": [
     "multiline",
     "text area",
@@ -175,6 +274,11 @@
     "autogrow",
     "comment box",
     "long text"
+   ],
+   "related": [
+    "Input (text)",
+    "Composer",
+    "Button"
    ],
    "states": "as Input; autogrow grows from 1 row to the declared max (default 8), then scrolls internally.",
    "a11y": "the row is inside the field's labelled group, so it follows the Textarea in tab order — never before it. Buttons that act on the field's content (Clear, Copy) reference it with aria-controls.",
@@ -187,12 +291,20 @@
   },
   "Select": {
    "purpose": "choose one option from 5–15 known, static options. <5 options: use Radio. >15, async, or user-known values: use Combobox. Trigger renders as Input anatomy with trailing chevron (16px). Menu is a Popover: bg.raised, border.default, radius lg, shadow.lg; options height-md, bg.hover on hover, bg.selected + leading 16px check on selected.",
+   "category": "Input",
    "keywords": [
     "dropdown",
     "picker",
     "single select",
     "listbox",
     "options"
+   ],
+   "related": [
+    "Input (text)",
+    "Combobox",
+    "Checkbox · Radio · Switch",
+    "Popover / Menu",
+    "Chip"
    ],
    "states": "as Input, plus open (chevron rotates 180°, fast duration).",
    "a11y": "listbox pattern; full keyboard (arrows, Home/End, type-ahead); Esc closes.",
@@ -204,6 +316,7 @@
   },
   "Checkbox · Radio · Switch": {
    "purpose": "Form on/off · one-of-2–5 · instant-effect toggle.",
+   "category": "Input",
    "keywords": [
     "toggle",
     "radio group",
@@ -212,6 +325,13 @@
     "indeterminate",
     "on off",
     "form control"
+   ],
+   "related": [
+    "Select",
+    "ChoiceCard",
+    "ToggleButton",
+    "Table",
+    "Tree"
    ],
    "states": "unchecked · checked (action.primary-bg fill — key color, not blue) · mixed (Checkbox: key-color fill + minus bar; Switch: centered thumb + minus glyph on a border.strong track — never the key color; Radio: none — no selection + a \"Mixed values\" / \"여러 값\" caption).",
    "a11y": "native inputs under the hood; radio groups use fieldset/legend; mixed states use aria-checked=\"mixed\".",
@@ -225,6 +345,7 @@
   },
   "Badge": {
    "purpose": "compact static annotation — status, counts, categories. Never interactive (interaction = Chip). Default rendering: a Badge with no declared color renders as neutral — a badge never appears as unfilled floating text.",
+   "category": "Display",
    "keywords": [
     "tag",
     "label",
@@ -233,6 +354,12 @@
     "count",
     "dot",
     "annotation"
+   ],
+   "related": [
+    "Chip",
+    "Banner / Alert",
+    "Table",
+    "NotificationCenter"
    ],
    "variants": [
     "neutral, info, success, warning, danger, ai (uses ai.* tokens — agent-related states only), category (static taxonomy label: neutral bg.sunken fill + text.secondary label — colour-coding removed 2026-07-30 with the category-* family; the taxonomy noun carries the meaning, not a hash-assigned hue). category supports the subtle emphasis only — taxonomy is never urgent, outlined, or reduced to a dot.",
@@ -251,6 +378,37 @@
    ],
    "a11y": "never interactive (interaction is Chip); the with-icon option adds the 12px registry status icon for icon + color + text triple redundancy — colorblind-safe scanning in status-critical views.",
    "forbidden": "interactive badges (→ Chip — if it can be clicked, removed or toggled it is a Chip; Badge is a read-only mark); sentence-length content (→ a Banner for a sentence, or truncate to one or two words); inventing colors, including a color={hex} override (→ one of the six semantic colors — neutral / info / success / warning / danger / ai; map by meaning, not by hue: a purple category badge becomes neutral, not ai, unless it genuinely marks agent output); an active / selected prop (→ Chip with selected — selection is interaction, so it is Chip's job; this is where the retired neutral solid treatment went); mixing emphasis levels for the same status meaning within one view; mixing shapes within one view; solid outside its named job in the table above (→ subtle, which is the default for a reason).",
+   "props": [
+    {
+     "name": "color",
+     "type": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"ai\"",
+     "description": "semantic colour, mapped by meaning; the spec's seventh value category is not in the implemented union",
+     "default": "\"neutral\""
+    },
+    {
+     "name": "emphasis",
+     "type": "\"subtle\" | \"solid\" | \"outline\"",
+     "description": "the implemented union still carries outline, which this entry RETIRED on 2026-07-30; dot is composed inline rather than being a value here",
+     "default": "\"subtle\""
+    },
+    {
+     "name": "shape",
+     "type": "\"pill\" | \"rounded\"",
+     "description": "a density/tone choice, one shape per view",
+     "default": "\"pill\""
+    },
+    {
+     "name": "size",
+     "type": "\"md\" | \"lg\"",
+     "description": "lg only beside heading-xl+ titles and heroes, never in tables",
+     "default": "\"md\""
+    },
+    {
+     "name": "icon",
+     "type": "React.ReactNode",
+     "description": "the with-icon option: the matching 12px registry status icon, subtle and solid only"
+    }
+   ],
    "key_rules": [
     "status vocabulary = content.md §3.3 closed set",
     "undeclared color = neutral; a badge never renders unfilled",
@@ -263,6 +421,7 @@
   },
   "Chip": {
    "purpose": "compact interactive element — select, refine, remove, or accept a suggestion. The static counterpart is Badge; the split is absolute: if it can be clicked, it's a Chip; if it only informs, it's a Badge. Height 24px, radius sm.",
+   "category": "Action",
    "keywords": [
     "tag",
     "token",
@@ -270,6 +429,13 @@
     "removable",
     "selectable",
     "suggestion"
+   ],
+   "related": [
+    "Badge",
+    "Button",
+    "Combobox",
+    "Composer",
+    "FollowUpPanel"
    ],
    "variants": [
     "Variant — Rendering — Behavior & use",
@@ -281,6 +447,48 @@
    "states": "default (outlined), hover (bg.hover or border.strong), selected (filled per selection model), focus ring, disabled (text.disabled + border.subtle, no interaction — never opacity, which the system forbids as a state signal).",
    "a11y": "the remove ✕ requires an aria-label (localized: \"Remove\" / \"제거\"); every chip carries an affordance glyph naming what it does.",
    "forbidden": "chips as command buttons (→ Button — a chip never performs a primary or destructive action); mixing input and list-filter in one row (→ split into two rows, each with one job); manual color selection, including a leading colour dot or tag prop (→ Badge dot variant where a colour-keyed status marker is genuinely wanted — an 8px status.*-bg-solid dot with text.secondary text and no container; a chip's job is selection, and colour-coding a selectable thing means the user must learn two systems at once); suggestion chips outside their sanctioned surfaces; truncating chip labels (wrap the row instead).",
+   "props": [
+    {
+     "name": "variant",
+     "type": "\"input\" | \"list-filter\" | \"suggestion\"",
+     "description": "the closed set; never mix input and list-filter in one row",
+     "default": "\"input\""
+    },
+    {
+     "name": "onRemove",
+     "type": "() => void",
+     "description": "input only; the trailing 12px ✕ is the sole target, the chip body is not a second one"
+    },
+    {
+     "name": "removeLabel",
+     "type": "string",
+     "description": "accessible name for the remove ✕, localized (\"제거\")",
+     "default": "\"Remove\""
+    },
+    {
+     "name": "avatar",
+     "type": "React.ReactNode",
+     "description": "input only; leading avatar slot when the value is a person or agent"
+    },
+    {
+     "name": "selected",
+     "type": "boolean",
+     "description": "list-filter only; adds the leading 12px ✓ plus the selection model's treatment",
+     "default": "false"
+    },
+    {
+     "name": "selectionMode",
+     "type": "\"multi\" | \"single\"",
+     "description": "list-filter only; multi stays unfilled on border.selected, single fills bg.inverse-soft",
+     "default": "\"multi\""
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "description": "text.disabled + border.subtle, never opacity",
+     "default": "false"
+    }
+   ],
    "key_rules": [
     "interactivity is encoded by FILL not shape (2026-07-30): Chip is OUTLINED at rest, Badge is filled/tinted; shape is a free density choice on Badge",
     "every Chip carries an affordance glyph — trailing X removable, leading check selected, trailing chevron opens a menu; a chip with no glyph and no selected state is a mislabelled Badge",
@@ -293,6 +501,7 @@
   },
   "Card": {
    "purpose": "bounded group of related content. Radius md, padding --sy-card-padding. Optional header (heading-lg or heading-md + optional actions) and footer separated by full-bleed border.subtle.",
+   "category": "Container",
    "keywords": [
     "panel",
     "container",
@@ -301,6 +510,12 @@
     "box",
     "stat",
     "kpi"
+   ],
+   "related": [
+    "ChoiceCard",
+    "ContextCard",
+    "ProposalCard",
+    "Chart"
    ],
    "variants": [
     "Variant — Rendering — Use",
@@ -313,6 +528,26 @@
    "states": "static by default; interactive adds hover (border.strong + bg.hover + optional hover-lift) and keyboard focus; selected = 1px border.selected outline (selection, not focus).",
    "a11y": "an interactive card is keyboard focusable, the whole card is clickable, and it carries exactly one action.",
    "forbidden": "shadows outside elevated; nesting bordered cards (use flat); cards as page layout scaffolding; ai variant on non-agent content.",
+   "props": [
+    {
+     "name": "variant",
+     "type": "\"flat\" | \"outlined\" | \"elevated\" | \"ai\"",
+     "description": "this entry's fifth variant stat is not in the implemented union",
+     "default": "\"flat\""
+    },
+    {
+     "name": "selected",
+     "type": "boolean",
+     "description": "1px border.selected outline; selection, not focus",
+     "default": "false"
+    },
+    {
+     "name": "interactive",
+     "type": "boolean",
+     "description": "whole card clickable with exactly one action; upgrades flat to outlined because clickability needs an edge",
+     "default": "false"
+    }
+   ],
    "key_rules": [
     "interactive implies outlined/elevated + exactly one action + optional hover-lift",
     "no bordered nesting",
@@ -321,6 +556,7 @@
   },
   "Table": {
    "purpose": "the workhorse for data-heavy screens. Structured records with aligned columns.",
+   "category": "Data",
    "keywords": [
     "data table",
     "datagrid",
@@ -329,6 +565,13 @@
     "columns",
     "list view",
     "spreadsheet"
+   ],
+   "related": [
+    "PivotTable",
+    "Pagination",
+    "EmptyState",
+    "Badge",
+    "DescriptionList"
    ],
    "states": "row hover bg.hover · row selected bg.selected + leading checkbox · empty (EmptyState inside the frame, never a bare \"no data\" string) · loading (Skeleton rows matching the column layout) · invalid inline-edit cell (status.danger border + Tooltip naming the fix).",
    "a11y": "header checkbox = select-all with the Checkbox mixed state (indeterminate for partial); inline edit is keyboard-complete — double-click or Enter to edit, Enter commits, Esc cancels, Tab commits + moves; the borderless cell editor is the sanctioned hidden-label exception and keeps the standard focus ring.",
@@ -346,6 +589,7 @@
   },
   "Combobox": {
    "purpose": "choose one or many values from large (>15), async-loaded, or user-known option sets. This is Select's big sibling — Select stays for 5–15 static options.",
+   "category": "Input",
    "keywords": [
     "autocomplete",
     "typeahead",
@@ -353,6 +597,13 @@
     "search select",
     "async options",
     "creatable"
+   ],
+   "related": [
+    "Select",
+    "Input (text)",
+    "Chip",
+    "Popover / Menu",
+    "Checkbox · Radio · Switch"
    ],
    "states": "as Input, plus open, loading, no-results (\"No matches for '{query}'\" row + optional \"Create '{query}'\" action — creation only where the data model explicitly allows it, styled as a menu item with a plus icon, never auto-created on blur).",
    "a11y": "ARIA combobox pattern; full keyboard including Backspace to remove the last Chip in multi.",
@@ -364,6 +615,7 @@
   },
   "DatePicker": {
    "purpose": "date, date-range, and time selection. Formatted Input trigger + calendar Popover.",
+   "category": "Input",
    "keywords": [
     "calendar",
     "date input",
@@ -371,6 +623,12 @@
     "time picker",
     "datetime",
     "date field"
+   ],
+   "related": [
+    "Input (text)",
+    "CalendarView",
+    "Popover / Menu",
+    "Slider · NumberInput"
    ],
    "variants": "date (default) · range · datetime · time.",
    "states": "as Input, plus open, invalid-date error (names the accepted format), min/max-bounded (out-of-range days disabled with reason in a Tooltip).",
@@ -384,6 +642,7 @@
   },
   "SegmentedControl": {
    "purpose": "exclusive switch between 2–5 peer views or parameters with immediate effect — chart periods (1D/7D/30D), layout toggles (list/grid). Not Tabs (object facets), not Radio (form data, deferred effect).",
+   "category": "Input",
    "keywords": [
     "segmented button",
     "toggle group",
@@ -391,9 +650,51 @@
     "exclusive choice",
     "mode switch"
    ],
+   "related": [
+    "Tabs",
+    "Checkbox · Radio · Switch",
+    "Select",
+    "ToggleButton",
+    "NotificationCenter"
+   ],
    "states": "default, hover (text.primary), selected, disabled (whole control only — never individual segments), focus-visible ring on the active segment.",
    "a11y": "radiogroup semantics; arrow keys move selection.",
    "forbidden": ">5 segments (use Select); icon-only segments outside the approved icon list; mixed icon+text and text-only segments in one control; using it for navigation or form submission.",
+   "props": [
+    {
+     "name": "options",
+     "type": "SegmentedControlOption[]",
+     "required": true,
+     "description": "2–5 segments of { value, label, icon? }; beyond five use Select"
+    },
+    {
+     "name": "value",
+     "type": "string",
+     "description": "controlled selection"
+    },
+    {
+     "name": "defaultValue",
+     "type": "string",
+     "description": "uncontrolled initial selection; falls back to the first option"
+    },
+    {
+     "name": "onChange",
+     "type": "(value: string) => void",
+     "description": "fires on click and on arrow-key selection (arrows move selection, per the radiogroup pattern)"
+    },
+    {
+     "name": "iconOnly",
+     "type": "boolean",
+     "description": "every segment renders its icon with label as the aria-label; mixing icon+text and text-only segments in one control is forbidden",
+     "default": "false"
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "description": "whole control only; individual segments are never disabled",
+     "default": "false"
+    }
+   ],
    "key_rules": [
     "content-based widths; disabled whole-control only",
     "concentric geometry: radius-md container, 4px padding, radius-sm segments (prose states the arithmetic: 12 - 4 = 8; corrected 2026-08-03 by SY021, both were one step low) — inner = outer − inset; assembled control = 36"
@@ -401,12 +702,18 @@
   },
   "Accordion": {
    "purpose": "progressive disclosure of secondary content — advanced settings, FAQ-style detail, raw payloads.",
+   "category": "Container",
    "keywords": [
     "collapsible",
     "disclosure",
     "expander",
     "expand collapse",
     "details"
+   ],
+   "related": [
+    "Tabs",
+    "Table",
+    "Reasoning"
    ],
    "states": "collapsed, expanded, disabled item (text.disabled, no chevron rotation).",
    "a11y": "header is a <button> with aria-expanded and aria-controls.",
@@ -418,12 +725,19 @@
   },
   "FileUpload": {
    "purpose": "file input with visible progress and recoverable errors.",
+   "category": "Input",
    "keywords": [
     "uploader",
     "dropzone",
     "file input",
     "drag and drop",
     "attachment"
+   ],
+   "related": [
+    "Button",
+    "ProgressBar",
+    "EmptyState",
+    "Composer"
    ],
    "variants": "dropzone (dashed 1px border.strong, radius xl, padding 32×24, centered: 20px upload icon in a 48px bg.sunken medallion (single border.default hairline ring — the dropzone keeps this icon medallion; it no longer references EmptyState, which now uses line illustrations) + \"Drop files here or browse\" (13 medium, browse as Link) + constraints caption — \"PDF, CSV up to 20MB\" / \"PDF, CSV · 최대 20MB\") and button (a secondary Button \"Attach file\" / \"파일 첨부\" for compact contexts). Drag-over state: border.focus-input border + emphasis.surface fill. Dashed borders remain sanctioned for drop targets ONLY.",
    "states": "drag-over (border.focus-input border + emphasis.surface fill); per file row: uploading (4px determinate ProgressBar + percent) · success (status.success check) · error (status.danger icon + one-line cause + Retry).",
@@ -437,6 +751,7 @@
   },
   "SplitPanel": {
    "purpose": "resizable adjacent regions in Workbench archetypes — list + detail, editor + preview, table + inspector. Container is a section shell: radius 2xl, 1px border.default, flush panes.",
+   "category": "Container",
    "keywords": [
     "resizable",
     "splitter",
@@ -444,6 +759,11 @@
     "split view",
     "resize handle",
     "resizable panel"
+   ],
+   "related": [
+    "Drawer",
+    "Table",
+    "Tree"
    ],
    "states": "divider hover/drag (border.strong, col-resize cursor) · collapsed (secondary pane collapses to nothing; a re-open affordance stays at the edge).",
    "a11y": "divider is role=\"separator\" with aria-valuenow, keyboard-resizable via arrow keys when focused.",
@@ -455,6 +775,7 @@
   },
   "Chart": {
    "purpose": "standardized data visualization. Charts live inside Cards with a 16-semibold header; one chart per Card.",
+   "category": "Data",
    "keywords": [
     "graph",
     "plot",
@@ -463,6 +784,13 @@
     "line chart",
     "bar chart",
     "donut"
+   ],
+   "related": [
+    "Card",
+    "Table",
+    "EmptyState",
+    "Skeleton · Spinner",
+    "Tooltip"
    ],
    "variants": "line (trends; ≤8 series), area (single series only), bar vertical/horizontal (comparisons), stacked-bar (composition over categories), donut (composition, ≤3 slices — otherwise bar), sparkline (inline 24px, no axes, single series).",
    "sizes": "min-height 240px; sparkline 24px.",
@@ -477,6 +805,7 @@
   },
   "Tabs": {
    "purpose": "switch between peer views of the same object. 2–7 tabs. Style: text tabs (--sy-body-size medium), text.secondary at rest, active tab text.primary + 2px bg.inverse underline; container has border.subtle bottom rule. Height 40px. Optional count Badge after label.",
+   "category": "Navigation",
    "keywords": [
     "tab bar",
     "tab strip",
@@ -484,9 +813,74 @@
     "dynamic tabs",
     "views"
    ],
+   "related": [
+    "SegmentedControl",
+    "Sidebar (app navigation)",
+    "Tree",
+    "Badge",
+    "Accordion"
+   ],
    "states": "as base Tabs, plus dirty (unsaved content — a 6px text.tertiary dot replaces the ✕ until hover) and closing (fast width collapse).",
    "a11y": "the ✕ is a separate button inside the tab, not part of its activation target — arrow keys move between tabs, Delete/Backspace on a focused tab closes it, and the close button is reachable by Tab within the strip. Renaming moves focus into the inline Input and returns it to the tab on commit.",
    "forbidden": "boxed/pill tab styles; tabs for sequential steps (compose a stepper per patterns.md — R9 in recipes.md is the reference); >7 tabs (author-defined: restructure; editable: the + disables at 7); icon-only tabs (an icon alone cannot carry a user-named document — use icon + label); editable for product-defined views (if the user cannot create the tab, they must not be able to close it); closing the last remaining tab (leave one, or render an EmptyState in the panel instead).",
+   "props": [
+    {
+     "name": "items",
+     "type": "TabItem[]",
+     "required": true,
+     "description": "2–7 tabs of { id, label, badge?, dirty?, panelId? }"
+    },
+    {
+     "name": "activeId",
+     "type": "string",
+     "required": true,
+     "description": "id of the active tab"
+    },
+    {
+     "name": "onChange",
+     "type": "(id: string) => void",
+     "required": true,
+     "description": "activation; also fires when closing the active tab hands off to a neighbour"
+    },
+    {
+     "name": "editable",
+     "type": "boolean",
+     "description": "USER-created tab sets only: adds the per-tab ✕, the trailing +, Delete/Backspace-to-close and double-click rename",
+     "default": "false"
+    },
+    {
+     "name": "onClose",
+     "type": "(id: string) => void",
+     "description": "editable only; called after the closing collapse so the parent can remove the item"
+    },
+    {
+     "name": "onAdd",
+     "type": "() => void",
+     "description": "editable only; the + button, which disables at 7 regardless"
+    },
+    {
+     "name": "onRename",
+     "type": "(id: string, label: string) => void",
+     "description": "editable only; commit of a double-click inline rename"
+    },
+    {
+     "name": "closeLabel",
+     "type": "(label: string) => string",
+     "description": "localized per-tab ✕ label; defaults to the EN \"Close {name}\" form"
+    },
+    {
+     "name": "addLabel",
+     "type": "string",
+     "description": "localized + label",
+     "default": "\"New tab\""
+    },
+    {
+     "name": "addDisabledHint",
+     "type": "string",
+     "description": "hint carried while the + is disabled at 7",
+     "default": "\"Close a tab to open another\""
+    }
+   ],
    "key_rules": [
     "never for sequential steps (use Stepper recipe — recipes.md R9)",
     "overflow scrolls, never wraps",
@@ -498,6 +892,7 @@
   },
   "Sidebar (app navigation)": {
    "purpose": "the single global navigation surface of AgentOS. Width 240px expanded, 64px collapsed (icon rail with tooltips). bg.surface, right border.subtle, container padding 12px (previously unspecified). Items: height 32px, radius md, padding-x 8, 20px icon + label (13 medium), text.secondary, 4px vertical gap between items (2px proved sub-perceptual; adjacent hover/active tints need visible separation); hover bg.hover; active item bg.selected + text.primary + medium weight — no leading bar or edge indicator (maintainer reversal of the bar: dated; tint + weight carry the state). Sections separated by 16px gap + optional micro-label text.tertiary group label (16px top padding above the label; sentence case — caps forbidden). Collection rows: nav items representing user-created collections MAY carry an 8px neutral dot (icon.tertiary) before the label — the one place color enters the sidebar; never on system destinations. Max 2 nesting levels.",
+   "category": "Navigation",
    "keywords": [
     "navigation",
     "nav",
@@ -505,6 +900,12 @@
     "rail",
     "menu",
     "app shell"
+   ],
+   "related": [
+    "Tabs",
+    "Tree",
+    "Badge",
+    "AppLauncher"
    ],
    "states": "expanded (240px) · collapsed (64px icon rail — labels surface as tooltips) · item hover bg.hover · active item bg.selected + text.primary + medium weight (no leading bar or edge indicator).",
    "forbidden": "third nesting level; badges on more than 3 items simultaneously; per-item custom icons outside the icon family.",
@@ -518,16 +919,23 @@
   },
   "Breadcrumb": {
    "purpose": "Path context for pages deeper than 2 levels. 13px, text.tertiary links with text.primary current page, / separators. Collapse middle levels beyond 4 into an overflow menu (\"…\"). Forbidden on top-level pages.",
+   "category": "Navigation",
    "keywords": [
     "path",
     "trail",
     "navigation path",
     "hierarchy",
     "location"
+   ],
+   "related": [
+    "Link",
+    "Sidebar (app navigation)",
+    "Popover / Menu"
    ]
   },
   "Modal": {
    "purpose": "blocking decision or focused short task. bg.scrim backdrop, opaque bg.raised panel (glass over a scrim reads muddy; the scrim carries the de-emphasis), radius xl, shadow.xl, width 480px (confirm: 400px, max 640px for forms; browse-library modals: 760, the tier between form-max and the 800 wide Drawer; the Template Library is the reference case), padding 24. Header: section title + ghost close icon-button. Footer: right-aligned Button pair — secondary (\"Cancel\") then primary; destructive confirms use danger primary.",
+   "category": "Overlay",
    "keywords": [
     "dialog",
     "popup",
@@ -535,6 +943,13 @@
     "confirm",
     "alertdialog",
     "lightbox"
+   ],
+   "related": [
+    "Drawer",
+    "Popconfirm",
+    "Toast",
+    "Banner / Alert",
+    "Button"
    ],
    "forbidden": "modals opening modals; scrollable full-page content inside a modal (use Drawer or a page); more than 2 footer buttons; modals for non-blocking info (use Toast/Banner); more than one header action; primary, brand or danger styling on a header action (emphasis in the header competes with the footer's primary — if it deserves that weight it is a decision, see above); a header action on a confirm (400px) modal — confirms carry no ancillary affordances.",
    "key_rules": [
@@ -549,6 +964,7 @@
   },
   "Drawer": {
    "purpose": "Side panel for detail/edit without leaving context. Slides from right, width 480px (max 640px; wide variant 800px for data-review surfaces — DiffView, run inspection — where 640 forces unusable wrapping), full height, shadow.xl, opaque bg.raised panel (glass retired from scrimmed layers, foundations §6), same header pattern as Modal. Non-blocking variant (no scrim) allowed in data workspaces.",
+   "category": "Overlay",
    "keywords": [
     "sheet",
     "side panel",
@@ -556,6 +972,13 @@
     "slideout",
     "bottom sheet",
     "artifact panel"
+   ],
+   "related": [
+    "Modal",
+    "SplitPanel",
+    "Sidebar (app navigation)",
+    "DiffView",
+    "Banner / Alert"
    ],
    "a11y": "Esc and scrim-click dismiss (they still apply in the bottom rendering; swipe-down where the platform supports it).",
    "forbidden": "left-side drawers (reserved for Sidebar — use the right side, or a Modal if the content is a blocking decision); top drawers (the top edge is app chrome: topbar, CommandPalette entry, Banner strip — a panel from there is indistinguishable from a system message; use a Modal, or a Banner for non-blocking notice); nested drawers; bottom at ≥768 (a bottom sheet on a wide desktop viewport wastes the horizontal space that made the side panel the right shape to begin with).",
@@ -570,6 +993,7 @@
   },
   "Popover / Menu": {
    "purpose": "Anchored floating panel: bg.raised (bg.raised-2 when opened from an L2 surface such as a modal), border.overlay, radius md, 4px container padding (concentric-corner rule: 12 − 4 = 8 = item radius sm), shadow.lg, fast fade+4px-shift enter. Menu items: height 32px, radius sm, 13px, 16px optional leading icon, 4px vertical gap between items (without it, adjacent hover and selected tints fuse; 2px proved sub-perceptual). Destructive items status.danger text, always last. Max ~8 visible items, then scroll.",
+   "category": "Overlay",
    "keywords": [
     "dropdown",
     "dropdown menu",
@@ -578,6 +1002,13 @@
     "overflow menu",
     "kebab",
     "actions"
+   ],
+   "related": [
+    "ContextMenu",
+    "Tooltip",
+    "CommandPalette",
+    "Select",
+    "Combobox"
    ],
    "states": "open (fast fade + 4px-shift enter) · item hover and selected tints (the 4px item gap keeps adjacent tints from fusing) · >8 visible items scroll.",
    "forbidden": [
@@ -595,12 +1026,18 @@
   },
   "Tooltip": {
    "purpose": "10-word max clarification of an icon or truncated string. bg.raised-2, 1px border.default, text.primary, caption type, radius xs, padding 4/8, shadow.lg, appears after 300ms hover/focus. Kbd slot: MAY append the action's shortcut as a trailing .sy-kbd hint (\"Copy ⌘C\") — the sanctioned way to teach shortcuts in place. Same-scheme surface: light in light mode, dark in dark mode (changed — inverse surfaces read too stark against the neutral field).",
+   "category": "Overlay",
    "keywords": [
     "hint",
     "hover label",
     "info bubble",
     "title",
     "shortcut hint"
+   ],
+   "related": [
+    "HoverCard",
+    "Popover / Menu",
+    "CommandPalette"
    ],
    "states": "hidden at rest · shown after a 300ms hover/focus delay.",
    "a11y": "triggered on focus as well as hover; never interactive content (that is HoverCard/Popover); never an error surface — an error the user must read cannot live behind a hover.",
@@ -611,12 +1048,19 @@
   },
   "Toast": {
    "purpose": "Transient outcome notification, bottom-right stack, max 3. bg.raised-2 panel, 1px border.overlay, shadow.lg, text.primary body-sm text, radius md, leading status icon (status.* color), optional single action (text.link text button), auto-dismiss 5s (errors: 8s + manual dismiss), slow slide+fade. Hairline corrected 2026-08-03 (SY021): this read border.default, but foundations.md §6 explicitly lists toasts among the floating layers that take border.overlay — transparent in light mode, where the shadow carries the edge, visible in dark mode where shadows die against black. Token usage is foundations' jurisdiction (design.md §1), so the component entry was the stale side. Superseded 2026-08-03: the phrase \"Toast surface\" no longer resolves anywhere else — Thread's \"Jump to latest\" and SelectionPill were re-pointed at FloatingPill, which owns that shell. They shared Toast's tokens and none of its contract, so the citation was false. Toast's hairline is still border.overlay on its own merits (foundations §6 lists toasts among the floating layers).",
+   "category": "Feedback",
    "keywords": [
     "notification",
     "snackbar",
     "flash message",
     "undo",
     "transient alert"
+   ],
+   "related": [
+    "Banner / Alert",
+    "Modal",
+    "Popconfirm",
+    "FloatingPill"
    ],
    "states": "entering (slow slide+fade) · visible (auto-dismiss 5s; errors 8s + manual dismiss) · stacked (max 3, then queue).",
    "forbidden": "toasts for validation errors (inline at the field); toasts requiring a decision (Modal); stacking >3 (queue instead); inverse/contrast-flipped styling.",
@@ -629,12 +1073,18 @@
   },
   "Banner / Alert": {
    "purpose": "Persistent inline notice for a page or section. Full-width of container, radius md, padding 12/16: 16px icon + body-sm text + optional action link + optional dismiss.",
+   "category": "Feedback",
    "keywords": [
     "callout",
     "notice",
     "inline message",
     "announcement",
     "system strip"
+   ],
+   "related": [
+    "Toast",
+    "Modal",
+    "Badge"
    ],
    "variants": [
     "neutral (non-status notices: scheduled maintenance windows, informational context — bg.sunken, text.secondary), info, success, warning, danger.",
@@ -649,6 +1099,7 @@
   },
   "Avatar": {
    "purpose": "User/agent identity. Sizes 20/24/32/40/56px (20 = dense table cells and inline mentions; 56 = profile surfaces). full radius for humans; squared (sm radius) for agents — mandatory product language, shape alone must scan authorship. Image, or initials (2 Latin letters / 1 Hangul syllable) on deterministic viz palette background at 20% opacity with matching 600-weight text.",
+   "category": "Display",
    "keywords": [
     "profile picture",
     "user image",
@@ -656,9 +1107,50 @@
     "presence",
     "identity"
    ],
+   "related": [
+    "Message",
+    "Chip",
+    "Timeline",
+    "NotificationCenter"
+   ],
    "sizes": "20 (dense table cells and inline mentions; never carries a status dot) · 24 · 32 · 40 · 56 (profile surfaces).",
    "states": "carried by the optional status dot — humans: presence (status.success-bg-solid = active, border.strong = away); agents: run state (status.info-bg-solid pulse = running, status.danger-bg-solid = failed, none = idle); one vocabulary per product surface.",
    "forbidden": "rectangular human avatars or round agent avatars; status dots without an established vocabulary; groups hiding the overflow count.",
+   "props": [
+    {
+     "name": "name",
+     "type": "string",
+     "required": true,
+     "description": "accessible name; also drives the initials and the deterministic viz hue"
+    },
+    {
+     "name": "src",
+     "type": "string",
+     "description": "image source; without one, initials render on the deterministic viz tint"
+    },
+    {
+     "name": "kind",
+     "type": "\"human\" | \"agent\"",
+     "description": "shape encodes authorship: humans circular, agents squared",
+     "default": "\"human\""
+    },
+    {
+     "name": "size",
+     "type": "20 | 24 | 32 | 40 | 56",
+     "description": "the closed size set",
+     "default": "32"
+    },
+    {
+     "name": "status",
+     "type": "\"active\" | \"away\" | \"running\" | \"failed\"",
+     "description": "optional dot; humans take presence, agents take run state, and size 20 never carries one"
+    },
+    {
+     "name": "statusLabel",
+     "type": "string",
+     "description": "localized status text appended to the accessible name, since the dot is colour-only"
+    }
+   ],
    "key_rules": [
     "dots per size 8/10/12/14 using status.*-bg-solid",
     "AvatarGroup: max 4 + '+N'",
@@ -667,12 +1159,19 @@
   },
   "Skeleton · Spinner": {
    "purpose": "Skeleton (preferred): bg.sunken blocks, radius xs, subtle 1.5s opacity pulse, mirroring the true layout — for any load >300ms with known shape. Preset shapes: line (one text row at the local type style's height), block (rect at the target's dimensions), circle (avatar placeholder at avatar sizes) — compose these three; free-form skeleton shapes are forbidden. Spinner (16/20px, text.tertiary stroke): inside controls and unknown-shape loads only.",
+   "category": "Feedback",
    "keywords": [
     "loading",
     "loader",
     "placeholder",
     "shimmer",
     "busy indicator"
+   ],
+   "related": [
+    "Table",
+    "Chart",
+    "Button",
+    "EmptyState"
    ],
    "forbidden": "full-page spinners when layout is known; skeletons that don't match the loaded layout; more than one spinner visible per region.",
    "key_rules": [
@@ -682,12 +1181,20 @@
   },
   "EmptyState": {
    "purpose": "Every list, table, and search MUST have one. Centered in the content area: a line illustration (~112×80, see below) · one-line title (16 semibold) · one-line explanation (body, text.secondary) · optional single action (primary if creating the first object, secondary otherwise). The illustration reserves its own vertical box with space-4 clear beneath it to the title — it never crowds the text (the retired medallion's concentric rings overran their box and collided with the title; the illustration must not repeat that).",
+   "category": "Feedback",
    "keywords": [
     "no data",
     "no results",
     "zero state",
     "blank slate",
     "first use"
+   ],
+   "related": [
+    "Table",
+    "Chart",
+    "NotificationCenter",
+    "HoverCard",
+    "Button"
    ],
    "forbidden": "motifs outside the closed set above; illustration off the foundations §8.1 language (any status or brand color — fill or stroke, including the error spot — saturated/multi-color fills, gradients, glow, off-weight strokes, or a line-only spot with no fill); illustrations on components outside the sanctioned tier (foundations §8.1 — ChoiceCard and dense/data/chrome surfaces stay illustration-free); multi-paragraph explanations; dead-end empty states with no action when an action is possible.",
    "key_rules": [
@@ -700,6 +1207,7 @@
   },
   "Pagination": {
    "purpose": "Table/list navigation: 13px, previous/next icon-buttons + page numbers (current: bg.selected), plus \"N of M\" summary (text.tertiary) and optional page-size Select in dense tables. Use cursor-style \"Load more\" (secondary Button) for feeds.",
+   "category": "Navigation",
    "keywords": [
     "pager",
     "page numbers",
@@ -707,10 +1215,17 @@
     "paging",
     "next previous"
    ],
+   "related": [
+    "Table",
+    "Select",
+    "Button",
+    "Timeline"
+   ],
    "forbidden": "infinite scroll in data tables."
   },
   "CommandPalette": {
    "purpose": "universal keyboard-first entry point for navigation, actions, and asking the agent. Opened with ⌘K / Ctrl+K from anywhere; also via the topbar search affordance.",
+   "category": "Navigation",
    "keywords": [
     "command",
     "cmdk",
@@ -718,6 +1233,12 @@
     "quick switcher",
     "global search",
     "shortcut palette"
+   ],
+   "related": [
+    "AppLauncher",
+    "Popover / Menu",
+    "Composer",
+    "EmptyState"
    ],
    "states": "empty query → recent items; no results → single EmptyState-style row plus the mandatory final fallback row \"Ask agent: '{query}'\" (ai.fg text + squared glyph) — the palette never dead-ends; loading → 3 skeleton rows.",
    "a11y": "full keyboard — arrows, Enter, Esc, ⌘K toggles; esc / scrim-click / click-away dismiss; focus returns to the invoking context on close.",
@@ -732,6 +1253,7 @@
   },
   "ProgressBar": {
    "purpose": "progress of long-running work (agent runs, imports, batch jobs). See ai-patterns.md §11 for when it is mandatory.",
+   "category": "Feedback",
    "keywords": [
     "progress",
     "meter",
@@ -739,6 +1261,12 @@
     "percent",
     "determinate",
     "usage"
+   ],
+   "related": [
+    "FileUpload",
+    "Skeleton · Spinner",
+    "Banner / Alert",
+    "AgentStep"
    ],
    "variants": "default (fill meter.fill — neutral mid-gray, user-initiated work; changed from key-black), ai (fill ai.solid — agent runs;, was accent-bg). Determinate fill animates width at base duration; indeterminate shows a 30%-width segment sweeping at 1.2s intervals.",
    "states": "in-progress, success (fill switches to status.success-bg-solid for one slow beat, then the bar is replaced by its completion state), failed (fill status.danger-bg-solid, bar persists with error text below), cancelled (fill border.strong).",
@@ -751,6 +1279,7 @@
   },
   "Composer": {
    "purpose": "the message/instruction input for Console and inline ask-agent surfaces — the single most-used control in AgentOS. (Added.)",
+   "category": "Conversation",
    "keywords": [
     "message input",
     "chat input",
@@ -758,6 +1287,13 @@
     "send box",
     "chat box",
     "instruction input"
+   ],
+   "related": [
+    "Thread",
+    "FollowUpPanel",
+    "ContextCard",
+    "Textarea",
+    "AssistantPanel"
    ],
    "states": "default, focus (ring on container), generating (stop morph), send-failed (inline caption status.danger error + retry text button above; draft preserved), empty (send disabled is the ONE sanctioned disable — nothing to send).",
    "a11y": "Enter sends, Shift+Enter breaks the line, and Enter during IME composition NEVER sends (Korean/Japanese compose via Enter); ghost completion accepts with →, never Tab, and is suppressed during Hangul composition; never disabled during generation (empty-send is the one sanctioned disable).",
@@ -799,12 +1335,20 @@
   },
   "ResponseToolbar": {
    "purpose": "actions on an agent message: copy · regenerate · feedback (thumbs) · overflow. (Added.)",
+   "category": "Conversation",
    "keywords": [
     "message actions",
     "feedback",
     "thumbs",
     "copy",
     "regenerate toolbar"
+   ],
+   "related": [
+    "Message",
+    "MediaGroup",
+    "VariantPager",
+    "ProposalCard",
+    "FloatingPill"
    ],
    "states": "rest text.tertiary · hover/focus-revealed (persistent in dense consoles) · thumbs selected = bg.selected fill + text.primary stroke, mutually exclusive, tappable to undo · appears only after the answer settles, never on streaming tokens.",
    "forbidden": "destructive actions in the toolbar; share/export actions outside the ⋯ overflow; feedback icons anywhere except here.",
@@ -819,12 +1363,20 @@
   },
   "AgentStep": {
    "purpose": "one row of visible agent work (a reasoning step or tool call). Full behavior: ai-patterns.md §3–4.",
+   "category": "Agent",
    "keywords": [
     "tool call",
     "step",
     "run step",
     "activity row",
     "working log"
+   ],
+   "related": [
+    "RunLog",
+    "Thread",
+    "Reasoning",
+    "GraphCanvas · FlowNode · Edge",
+    "CodeBlock"
    ],
    "states": "the nine-state superset in ai-patterns.md §3 is the single source — pending, queued, running, awaiting-input, partial, success, failed, cancelled, skipped. That table also carries the reachability column: a thread step is never queued, a batch item never skipped. Consolidated 2026-08-03 from three incompatible copies (this entry's five, RunLog's five different ones, and the manifest's false claim that they matched). A step list collapses to a summary row on completion (\"5 steps · 12s\", expandable).",
    "a11y": "the list is role=\"log\" with aria-live=\"polite\" when it is the announcing surface — i.e. standalone (RunLog, Workbench run views). Inside a Thread the step list does NOT declare its own live region (clarified 2026-08-03): the Thread already owns one, and a nested live region double-announces every step. State changes announce as text, not sound.",
@@ -840,6 +1392,7 @@
   },
   "ProposalCard": {
    "purpose": "human-in-the-loop approval of a consequential agent action. Full behavior: ai-patterns.md §5.",
+   "category": "Agent",
    "keywords": [
     "approval",
     "human in the loop",
@@ -847,6 +1400,13 @@
     "consent",
     "action request",
     "permission"
+   ],
+   "related": [
+    "Card",
+    "ConversationSummary",
+    "Composer",
+    "DiffView",
+    "Message"
    ],
    "states": "open, resolved-approved / resolved-rejected (collapses to attribution row: icon + \"Approved by {user} · {time}\"), expired (agent withdrew or context changed — text.tertiary note, actions removed).",
    "forbidden": "auto-approval, approval countdowns, default-focused Approve-all in batches; more than 3 footer actions; ProposalCards for non-consequential acts (answering a question needs no approval); removing resolved proposals from the transcript.",
@@ -860,6 +1420,7 @@
   },
   "Thread": {
    "purpose": "the transcript container — the scrolling conversation region that holds Messages in order and owns scroll position, the bottom-stick contract, and catch-up affordances. Full behavior: ai-patterns.md §2 (the scroll and streaming contract). Conversation history in the Sidebar, new-thread, and temporary chat are §25 — a different surface, not this container. (Added 2026-08-03 — chat-interface gap audit: the region was specified only as patterns.md §1E layout bullets and rendered only in preview.html.)",
+   "category": "Conversation",
    "keywords": [
     "transcript",
     "conversation",
@@ -867,10 +1428,30 @@
     "message list",
     "scrollback"
    ],
+   "related": [
+    "Message",
+    "Composer",
+    "FloatingPill",
+    "ConversationSummary",
+    "AgentStep"
+   ],
    "variants": "default — a single form.",
    "states": "empty (zero turns — prompt starters per §27 render above the Composer, and the Thread region itself carries no EmptyState: the Composer is the affordance), populated, streaming (the last Message is live per §2), loading-history (Skeleton lines at the top edge while older turns page in).",
    "a11y": "the container is role=\"log\" aria-live=\"polite\", declared once here and nowhere inside it — not per Message, and not on the AgentStep list, which drops its own live region when nested in a Thread (see AgentStep A11y). A nested live region double-announces every step. \"Jump to latest\" is a real button in the tab order, not a scroll-position artifact.",
    "forbidden": "more than one Thread per screen; a second scroll container nested inside it; re-acquiring the bottom lock while the user is reading above it; infinite-scroll paging of history (older turns page in via an explicit affordance — the feed cursor case, patterns.md §4); date/actor group headers between turns; rendering the human and agent columns as two separate scroll regions.",
+   "props": [
+    {
+     "name": "jumpLabel",
+     "type": "string",
+     "description": "label on the \"Jump to latest\" FloatingPill; localize it",
+     "default": "\"Jump to latest\""
+    },
+    {
+     "name": "loadingHistory",
+     "type": "React.ReactNode",
+     "description": "rendered at the top edge while older turns page in"
+    }
+   ],
    "key_rules": [
     "scroll container spans the full region with a max-width 760 message column centered inside it — no mid-canvas scrollbar beside the column",
     "stick to bottom only while the user IS at the bottom; on scroll-up release the lock and NEVER re-acquire it while streaming; a released lock raises the 'Jump to latest' affordance — a FloatingPill (horizontal, one action) at the bottom-centre of the column, dismissed by reaching the bottom. NOT a Toast: that citation was false (a Toast is a transient notification — bottom-right, max 3, auto-dismiss, status icon)",
@@ -884,6 +1465,7 @@
   },
   "Message": {
    "purpose": "one turn in a Thread — the single most-rendered object in AgentOS. Two actor forms, closed. Content rendering: ai-patterns.md §12; attribution: §9. (Added 2026-08-03 — chat-interface gap audit; anatomy previously existed only as preview.html CSS.)",
+   "category": "Conversation",
    "keywords": [
     "chat bubble",
     "turn",
@@ -891,10 +1473,61 @@
     "chat message",
     "utterance"
    ],
+   "related": [
+    "Thread",
+    "ResponseToolbar",
+    "AnswerHeader",
+    "Avatar",
+    "ContextCard"
+   ],
    "variants": "human · agent — the two actor forms, closed (anatomy below).",
    "states": "human — sent, send-failed (inline caption status.danger + retry, draft preserved). agent — streaming (§2 cursor + Stop reachable), settled, stopped (partial output + text.tertiary \"Stopped by you\" caption), failed (§10 inline error flavor + Retry), guardrail-blocked (§15 neutral notice in place of the answer body — never status.danger).",
    "a11y": "each Message is an <article> with an accessible name naming its actor (\"June\", \"{agent name}\") so a screen reader can traverse turns; the Thread owns the live region, the Message does not declare its own.",
    "forbidden": "avatars on human messages; bubbles, fills, or borders on agent messages; ResponseToolbar or feedback affordances on human messages; timestamps on every message at rest (they belong to attribution rows and handoff events, not to the bubble); editing a sent message in place (append a new turn — Thread is append-only); a third actor form (system notices are Banners, handoffs are §16 events, neither is a Message); italics or ALL-CAPS in message content (foundations.md §2.3.2).",
+   "props": [
+    {
+     "name": "variant",
+     "type": "\"human\" | \"agent\"",
+     "required": true,
+     "description": "the two actor forms, closed; there is no third"
+    },
+    {
+     "name": "actor",
+     "type": "string",
+     "required": true,
+     "description": "accessible name for the turn, so a screen reader can traverse authors"
+    },
+    {
+     "name": "avatarGlyph",
+     "type": "React.ReactNode",
+     "description": "agent only; overrides the default squared agent glyph"
+    },
+    {
+     "name": "state",
+     "type": "\"sent\" | \"send-failed\" | \"streaming\" | \"settled\" | \"stopped\" | \"failed\" | \"guardrail-blocked\"",
+     "description": "the first two are human states, the rest agent"
+    },
+    {
+     "name": "documents",
+     "type": "React.ReactNode",
+     "description": "human only; document ContextCards, stacked above images and text"
+    },
+    {
+     "name": "images",
+     "type": "React.ReactNode",
+     "description": "human only; image attachments between documents and text — never a MediaGroup fan"
+    },
+    {
+     "name": "caption",
+     "type": "React.ReactNode",
+     "description": "the caption under a stopped or failed reply"
+    },
+    {
+     "name": "children",
+     "type": "React.ReactNode",
+     "description": "the turn's content, in the fixed order this entry sets"
+    }
+   ],
    "key_rules": [
     "human = right-anchored bubble, margin-left auto, max-width 75% of the column, bg.sunken, radius xl, padding 8x12, body type — NO avatar, no timestamp at rest, no toolbar",
     "agent = full-width, NO bubble and NO fill: plain body text on bg.page, flex row of squared Avatar 24 + content column (flex 1, min-width 0)",
@@ -908,6 +1541,7 @@
   },
   "AnswerHeader": {
    "purpose": "the titled opening of a substantial agent reply — names what the run produced, states how long it took, and carries the variant pager. Full behavior: ai-patterns.md §20, §22. (Added 2026-08-03 — chat-interface gap audit.)",
+   "category": "Conversation",
    "keywords": [
     "reply title",
     "response header",
@@ -915,9 +1549,50 @@
     "duration",
     "collapse header"
    ],
+   "related": [
+    "Message",
+    "VariantPager",
+    "Badge",
+    "Thread"
+   ],
    "states": "expanded · collapsed (keeps title + duration, hides the answer body); expansion state persists in the transcript per user.",
    "a11y": "the chevron is a real toggle with aria-expanded and an accessible name naming the section; the duration Badge is not a live region — it settles once.",
    "forbidden": "more than one header per reply; a header on a reply with no title-worthy goal (an untitled answer is correct, not unfinished); heading-md or larger (agent text never produces page-level hierarchy, §12); a duration Badge with an invented or estimated number — actuals only (§11); auto-collapsing a reply the user has not collapsed.",
+   "props": [
+    {
+     "name": "title",
+     "type": "string",
+     "required": true,
+     "description": "the run's stated goal; the §20 working line resolves into this string"
+    },
+    {
+     "name": "duration",
+     "type": "string",
+     "description": "pre-formatted ACTUAL elapsed time, never an estimate"
+    },
+    {
+     "name": "expanded",
+     "type": "boolean",
+     "required": true,
+     "description": "controlled collapse state; persist it in the transcript per user"
+    },
+    {
+     "name": "onToggle",
+     "type": "(next: boolean) => void",
+     "required": true,
+     "description": "collapse chevron activation"
+    },
+    {
+     "name": "pager",
+     "type": "React.ReactNode",
+     "description": "the VariantPager slot, rendered before the chevron when variants exist"
+    },
+    {
+     "name": "toggleLabel",
+     "type": "(expanded: boolean) => string",
+     "description": "localized accessible name for the chevron; defaults to the EN collapse/expand pair"
+    }
+   ],
    "key_rules": [
     "flex row inside the agent content column: heading-sm title (from the run's stated goal) + neutral duration Badge (tabular-nums) + right-aligned VariantPager + collapse chevron (ghost sm icon-button)",
     "WHEN: replies over ~4 paragraphs or produced by a multi-step run — ONE header per reply, never per section",
@@ -930,15 +1605,52 @@
   },
   "VariantPager": {
    "purpose": "non-destructive navigation between regenerations of one agent reply. Full behavior: ai-patterns.md §22. (Added 2026-08-03 — chat-interface gap audit.)",
+   "category": "Conversation",
    "keywords": [
     "regeneration",
     "version switcher",
     "alternatives",
     "variant counter"
    ],
+   "related": [
+    "AnswerHeader",
+    "ResponseToolbar",
+    "Message",
+    "SourceChip"
+   ],
    "states": "arrows disable at the ends (never wrap); switching is instant and non-destructive.",
    "a11y": "each arrow carries an accessible name stating the destination (\"Previous version, 1 of 2\"); the counter is aria-live=\"polite\" so switching announces; arrows disable at the ends rather than wrapping.",
    "forbidden": "destructive regeneration (overwriting the current variant); a pager on a human message or on an earlier agent reply; carrying one variant's citations onto another (a provenance break — §6 never fake a citation); more than 5 retained variants; exposing variants as a Tabs or Select control (the pager is the closed form).",
+   "props": [
+    {
+     "name": "index",
+     "type": "number",
+     "required": true,
+     "description": "1-based index of the visible variant"
+    },
+    {
+     "name": "total",
+     "type": "number",
+     "required": true,
+     "description": "retained variants; capped at 5, after which the oldest unpinned is replaced"
+    },
+    {
+     "name": "onChange",
+     "type": "(nextIndex: number) => void",
+     "required": true,
+     "description": "arrow activation; arrows disable at the ends and never wrap"
+    },
+    {
+     "name": "prevLabel",
+     "type": "(i: number, n: number) => string",
+     "description": "localized accessible name naming the destination; defaults to the EN \"Previous version, i of n\""
+    },
+    {
+     "name": "nextLabel",
+     "type": "(i: number, n: number) => string",
+     "description": "localized accessible name naming the destination; defaults to the EN \"Next version, i of n\""
+    }
+   ],
    "key_rules": [
     "‹ › ghost sm icon-buttons around a caption tabular-nums counter ('2/2') — no dots, no version dropdown, no labels",
     "regenerate creates variant N+1 and NEVER destroys; switching is non-destructive",
@@ -951,6 +1663,7 @@
   },
   "Reasoning": {
    "purpose": "disclosure of an agent's working text, rendered subordinate to the answer and never as answer content. Full behavior: ai-patterns.md §14. (Added 2026-08-03 — chat-interface gap audit; previously specified only in ai-patterns.md §14 with a preview.html story.)",
+   "category": "Agent",
    "keywords": [
     "thinking",
     "chain of thought",
@@ -958,9 +1671,48 @@
     "scratchpad",
     "thoughts"
    ],
+   "related": [
+    "Message",
+    "AgentStep",
+    "ResponseToolbar",
+    "SourceChip"
+   ],
    "states": "collapsed, expanded (persists per user per conversation), running (the row renders while reasoning streams, duration counting), redacted (policy-suppressed — says so plainly: \"Reasoning not available for this response\" / \"이 응답의 추론 과정은 제공되지 않습니다\").",
    "a11y": "aria-expanded on the row; the expanded region is not a live region even while streaming — announcing working text over the answer inverts the subordination the component exists to enforce.",
    "forbidden": "auto-expanding (absolutely — the answer is the deliverable, the reasoning is an offer); rendering empty when redacted; text.primary or any emphasis that competes with the answer; SourceChips inside it; including it in copy/regenerate scope; presenting reasoning as the answer when no answer was produced (that is a §10 failure state).",
+   "props": [
+    {
+     "name": "label",
+     "type": "string",
+     "description": "the disclosure row's label; localize it (\"추론 과정\")",
+     "default": "\"Reasoning\""
+    },
+    {
+     "name": "duration",
+     "type": "string",
+     "description": "pre-formatted actual duration, tabular numerals"
+    },
+    {
+     "name": "redactedNotice",
+     "type": "string",
+     "description": "the policy-suppressed line, stated plainly; the region is never rendered empty"
+    },
+    {
+     "name": "expanded",
+     "type": "boolean",
+     "description": "controlled expansion; auto-expanding is forbidden"
+    },
+    {
+     "name": "onExpandedChange",
+     "type": "(next: boolean) => void",
+     "description": "expansion toggle; persist per user per conversation"
+    },
+    {
+     "name": "children",
+     "type": "React.ReactNode",
+     "description": "the working text under the agent-markdown rules, capped to no headings and no images"
+    }
+   ],
    "key_rules": [
     "collapsed by default: 24px row = chevron + 'Reasoning'/'추론 과정' (label, text.tertiary) + duration (tabular-nums)",
     "expanded = body-sm text.secondary on bg.surface, agent-markdown rules BUT capped: no headings, no images",
@@ -972,16 +1724,36 @@
   },
   "FloatingPill": {
    "purpose": "the shared surface for a small, transient action affordance that floats over content — raised by a condition (a selection, a released scroll lock, a hovered media group) and gone when that condition ends. It is a surface primitive, not a standalone affordance: it owns the shell, and its consumers own the behaviour. (Added 2026-08-03 — the anatomy below was already implemented three times, identically, and declared nowhere.)",
+   "category": "Overlay",
    "keywords": [
     "floating action",
     "transient affordance",
     "overlay pill",
     "jump to latest"
    ],
+   "related": [
+    "SelectionPill",
+    "Thread",
+    "Toast",
+    "ResponseToolbar"
+   ],
    "variants": "none — FloatingPill has a single form. (rail was declared and removed on 2026-08-03; see above.)",
    "states": "raised while its raising condition holds · dismissed when the condition ends (deselect, Esc, reaching the bottom, pointer-out) — never an ✕, never persists as chrome.",
    "a11y": "each action independently focusable and labelled; Esc dismisses and returns focus to the anchor; the pill's appearance is not announced (it is an affordance, not a status change) — but its actions must be reachable without a pointer, since hover-reveal alone is a keyboard trap.",
    "forbidden": "destructive actions (a floating affordance is too easy to hit by accident — destructive goes through Popconfirm or a Modal); more than 3 actions (past that it is a Menu); a primary, brand or danger fill on the pill or its children (the surface is neutral by construction — emphasis inside a floating layer competes with the region's real primary); persisting after the raising condition ends; anchoring to the viewport; carrying a status icon (that is Toast's vocabulary and invites the confusion this entry exists to end); a <span> or <div> where a control belongs; more than one pill per raising condition.",
+   "props": [
+    {
+     "name": "variant",
+     "type": "\"horizontal\"",
+     "description": "a one-member union; rail was declared and removed with its only consumer on 2026-08-03",
+     "default": "\"horizontal\""
+    },
+    {
+     "name": "children",
+     "type": "React.ReactNode",
+     "description": "the actions; each MUST be a real control, never a bare span"
+    }
+   ],
    "key_rules": [
     "WHY IT EXISTS: this anatomy was implemented three times identically (SelectionPill, Thread's jump-to-latest, and ResponseToolbar's media rail — the last since retired) and declared nowhere — one of them citing Toast, which shares the tokens and none of the behaviour. Consumers now reference this entry and never restate it",
     "horizontal: 28px height, padding 0 space-3, radius full, shadow.lg, z.dropdown, label-sm type (never a raw font-size), standard entrance; multiple actions split by a 1px border.default hairline 12px tall; 12px registry icons",
@@ -995,6 +1767,7 @@
   },
   "SelectionPill": {
    "purpose": "the floating action pill raised by selecting text inside an agent Message — the affordance that makes a passage a conversational object. Full behavior: ai-patterns.md §18, §22. (Added 2026-08-03 — chat-interface gap audit.)",
+   "category": "Conversation",
    "keywords": [
     "text selection",
     "highlight menu",
@@ -1002,9 +1775,34 @@
     "reply actions",
     "selection toolbar"
    ],
+   "related": [
+    "FloatingPill",
+    "Message",
+    "Composer",
+    "Thread"
+   ],
    "states": "raised on selection in an agent Message · dismissed on deselect or Esc (never persists) · quoted passage carries a bare ai.surface fill at radius xs, no outline, box-decoration-break: clone per wrapped line.",
    "a11y": "the pill is keyboard-reachable from the selection, each action independently focusable and labeled; Esc dismisses and returns focus to the selection anchor.",
    "forbidden": "a toolbar of options instead of one pill; more than one pill visible; a fourth action without governance; mutating the original Message in place for 답장 or 설명 — both compose new turns and never touch the source passage; the pill on human messages, on ProposalCards, or on Reasoning text; persisting after deselect or Esc.",
+   "props": [
+    {
+     "name": "labels",
+     "type": "Record<\"reply\" | \"explain\" | \"regenerate\", string>",
+     "required": true,
+     "description": "per-locale labels for the closed three-action set (답장 · 설명 · 재생성)"
+    },
+    {
+     "name": "onAction",
+     "type": "(action: \"reply\" | \"explain\" | \"regenerate\") => void",
+     "required": true,
+     "description": "action invocation; 재생성's write semantics are unresolved, so do not wire it yet"
+    },
+    {
+     "name": "onDismiss",
+     "type": "() => void",
+     "description": "deselect or Esc; the pill never persists past its raising condition"
+    }
+   ],
    "key_rules": [
     "surface is a FloatingPill (horizontal) — that entry owns the shell (28px, bg.raised-2, border.overlay, radius full, shadow.lg, z.dropdown, label-sm, the 1px border.default separators, the real-<button> requirement); anchored above the selection. SelectionPill adds only WHICH actions and where they apply",
     "closed set is THREE actions: 답장 · 설명 · 재생성 (ruling 2026-08-03 — ai-patterns §22's 'never a third pill action' was stale and is struck; a closed set with two definitions is not closed)",
@@ -1017,6 +1815,7 @@
   },
   "FollowUpPanel": {
    "purpose": "the anchored panel of suggested next turns that MAY open above a focused Composer — the active counterpart to passive suggestion Chips. Full behavior and ordering law: ai-patterns.md §19. (Added 2026-08-03 — chat-interface gap audit; anatomy relocated here from ai-patterns.md §19, which retains the behavior rules.)",
+   "category": "Conversation",
    "keywords": [
     "suggestions",
     "follow ups",
@@ -1024,9 +1823,44 @@
     "prompt suggestions",
     "suggestion panel"
    ],
+   "related": [
+    "Composer",
+    "Chip",
+    "Thread",
+    "Message"
+   ],
    "states": "row hover/selected bg.selected · opens only above a focused Composer, never in the zero state · esc closes.",
    "a11y": "role=\"listbox\" with ↑↓ traversal and ↵ selection; the keycap header is decorative (aria-hidden) — the shortcuts are real key handlers, not a rendered legend doing the work.",
    "forbidden": "glass or backdrop-filter (SY015); more than 4 rows; auto-sending on selection; pushing thread content down; a per-row rationale line (it would break chip honesty — the label is the query, and grouping is how the panel signals why a row is offered); rendering alongside Chips or in the zero state.",
+   "props": [
+    {
+     "name": "rows",
+     "type": "FollowUpRow[]",
+     "required": true,
+     "description": "{ label, intent } rows; refine sorts above pivot and the list is hard-capped at 4"
+    },
+    {
+     "name": "onSelect",
+     "type": "(row: FollowUpRow) => void",
+     "required": true,
+     "description": "inserts the row's label into the Composer; never auto-sends"
+    },
+    {
+     "name": "onDismiss",
+     "type": "() => void",
+     "description": "Esc; the panel never renders in the zero state"
+    },
+    {
+     "name": "groupLabels",
+     "type": "{ refine: string; pivot: string }",
+     "description": "optional micro-label group headers, rendered only when both intents are present"
+    },
+    {
+     "name": "keycapHint",
+     "type": "string",
+     "description": "the decorative keycap header row; the real handlers are the key bindings, not this legend"
+    }
+   ],
    "key_rules": [
     "SOLID bg.raised panel — explicitly NOT glass (small, dense, over thread text where translucency reads muddy; foundations §6; backdrop-filter forbidden by SY015) — border.default hairline, shadow.lg, radius md, 6px padding",
     "32px rows at radius xs leading with the 12px follow-up arrow; full-bleed keycap header row (↑↓ 이동 · ↵ 선택 · esc 닫기); row hover/selected = bg.selected",
@@ -1041,6 +1875,7 @@
   },
   "ConversationSummary": {
    "purpose": "an agent-generated recap of a long thread — decisions, action items, open questions — so a user can catch up without rereading. Full behavior: ai-patterns.md §34. (Added 2026-08-03 — chat-interface gap audit.)",
+   "category": "Conversation",
    "keywords": [
     "recap",
     "tldr",
@@ -1048,9 +1883,51 @@
     "digest",
     "thread summary"
    ],
+   "related": [
+    "ProposalCard",
+    "Thread",
+    "Drawer",
+    "SourceChip"
+   ],
    "states": "expanded/collapsed (collapsible block) · refreshed on demand (refresh action + last-generated caption) · stale (shows its generation age — never a false \"current\").",
    "a11y": "the collapse toggle carries aria-expanded; jump-back links are real links that move focus to the target turn.",
    "forbidden": "replacing or editing transcript turns; a point with no jump-back link; stating a decision absent from the thread; presenting it as chrome or as the user's notes; auto-generating on every thread regardless of length; a summary with no visible generation age.",
+   "props": [
+    {
+     "name": "agentName",
+     "type": "string",
+     "required": true,
+     "description": "attribution actor; a summary that reads as chrome is a provenance failure"
+    },
+    {
+     "name": "timestamp",
+     "type": "string",
+     "required": true,
+     "description": "attribution timestamp on the header row"
+    },
+    {
+     "name": "lastGenerated",
+     "type": "string",
+     "required": true,
+     "description": "generation age; a stale summary shows it, never a false \"current\""
+    },
+    {
+     "name": "onRefresh",
+     "type": "() => void",
+     "description": "the header's refresh ghost action"
+    },
+    {
+     "name": "refreshLabel",
+     "type": "string",
+     "description": "localized accessible name for the refresh action",
+     "default": "\"Regenerate summary\""
+    },
+    {
+     "name": "children",
+     "type": "React.ReactNode",
+     "description": "the summary body, which stays on ai.surface and never opens to bg.page"
+    }
+   ],
    "key_rules": [
     "collapsible block on ai.surface WITH the standard agent attribution row (squared Avatar + name + timestamp) — both required; a summary that reads as chrome is a provenance failure. The BODY STAYS ON ai.surface and does NOT open to bg.page: ProposalCard's tray rule opens a PAYLOAD (diff, preview, record list) to bg.page, but a summary's body IS the content, and bg.page is #FFFFFF in light mode exactly like the thread behind it, so the body dissolved. Generally: 'opens to bg.page' only means something when the container is not already on bg.page",
     "at the top of the Thread or in the thread's detail Drawer; header carries a refresh ghost action + a last-generated caption",
@@ -1062,6 +1939,7 @@
   },
   "DescriptionList": {
    "purpose": "key–value display — the backbone of Object detail views, drawers, and expanded table rows. (Added gap audit: previously improvised with ad-hoc label/value stacks.)",
+   "category": "Data",
    "keywords": [
     "key value",
     "definition list",
@@ -1069,6 +1947,13 @@
     "property list",
     "details",
     "metadata"
+   ],
+   "related": [
+    "Table",
+    "Card",
+    "Drawer",
+    "HoverCard",
+    "Badge"
    ],
    "states": "static display · row hover reveals the optional trailing action · empty value = \"—\" (text.tertiary).",
    "a11y": "semantic <dl>/<dt>/<dd>.",
@@ -1081,11 +1966,18 @@
   },
   "ButtonGroup": {
    "purpose": "visually attached group of related actions. (Added gap audit.)",
+   "category": "Action",
    "keywords": [
     "split button",
     "attached buttons",
     "action group",
     "fused buttons"
+   ],
+   "related": [
+    "Button",
+    "SegmentedControl",
+    "Popover / Menu",
+    "Input (text)"
    ],
    "variants": [
     "Variant — Composition — Use",
@@ -1102,12 +1994,20 @@
   },
   "SourceChip": {
    "purpose": "inline provenance marker for agent claims. Full behavior: ai-patterns.md §6. Marker anatomy (maintainer reference: circular superscript style): an 18px round chip (radius.full, neutral bg.sunken fill, text.secondary bare numeral — no brackets, 11px semibold tabular, sans not mono, 1px top-padding optical nudge — the Badge md-nudge precedent: Pretendard's 11px digits sit high at line-height 1 in small containers; applies to the pill's numeral circle too,) at the end of the supported sentence, text-bottom aligned; hover/link-highlight steps to ai.surface-hover. The bracketed mono [n] form is retired.",
+   "category": "Display",
    "keywords": [
     "citation",
     "footnote",
     "reference",
     "provenance",
     "source marker"
+   ],
+   "related": [
+    "ContextCard",
+    "Message",
+    "Reasoning",
+    "Popover / Menu",
+    "ConversationSummary"
    ],
    "states": "default, hover (bg.selected), broken (source no longer retrievable — chip gets status.warning numeral and the popover says so).",
    "a11y": "the 18px marker keeps an invisible ≥24px hit area (the 24px floor applies to targets, not glyphs); hovering a source card highlights its inline [n] markers and vice versa — the number mapping is visual, not mental.",
@@ -1121,12 +2021,20 @@
   },
   "ContextCard": {
    "purpose": "a referenced object (document, meeting, table, page) rendered as a physical card in Console threads and the Composer — the visible form of \"what the agent is looking at\". (Added.)",
+   "category": "Display",
    "keywords": [
     "attachment card",
     "document card",
     "reference card",
     "mention",
     "file card"
+   ],
+   "related": [
+    "Composer",
+    "Message",
+    "MediaGroup",
+    "SourceChip",
+    "Badge"
    ],
    "states": "hover border.strong (click opens the object) · stacks past 3 expand to a vertical list.",
    "forbidden": "thumbnails or content previews inside the card (v1 has no preview language); more than one meta line; manual colors; stacks used for anything but referenced objects.",
@@ -1138,12 +2046,19 @@
   },
   "Timeline": {
    "purpose": "chronological activity — audit trails, run history feeds. (P3,.)",
+   "category": "Data",
    "keywords": [
     "activity feed",
     "audit log",
     "history",
     "event stream",
     "changelog"
+   ],
+   "related": [
+    "Avatar",
+    "NotificationCenter",
+    "RunLog",
+    "Pagination"
    ],
    "states": "consecutive same-actor events MAY collapse, expandable · timestamps show absolute on hover · older entries load via \"Load more\".",
    "forbidden": "editable or deletable history rows; relative-only timestamps; mixing a comment thread into the audit feed (separate surfaces); icons per row unless the concept is in the registry.",
@@ -1156,12 +2071,19 @@
   },
   "Tree": {
    "purpose": "hierarchy display and selection — folders, org units, nested resources. (P3.)",
+   "category": "Data",
    "keywords": [
     "tree view",
     "hierarchy",
     "folder tree",
     "file explorer",
     "nested list"
+   ],
+   "related": [
+    "Sidebar (app navigation)",
+    "Tabs",
+    "Checkbox · Radio · Switch",
+    "Table"
    ],
    "states": "expanded/collapsed per node (chevron rotates, fast) · selected row bg.selected (single) or checkbox mode with mixed-state parents · drag drop-target = 2px border.focus insertion line.",
    "a11y": "arrows navigate/expand/collapse, roving tabindex, type-ahead; checkbox mode uses mixed-state parents per the cross-component convention.",
@@ -1175,6 +2097,7 @@
   },
   "CodeBlock": {
    "purpose": "code, logs, config display — promotion of .sy-code-block. (P3.)",
+   "category": "Data",
    "keywords": [
     "code snippet",
     "syntax",
@@ -1182,6 +2105,12 @@
     "pre",
     "monospace",
     "code display"
+   ],
+   "related": [
+    "DiffView",
+    "AgentStep",
+    "RunLog",
+    "Toast"
    ],
    "states": "capped at max-height 400px with a \"Show all\" expander · streaming content renders when the fence closes · copy confirms via Toast.",
    "forbidden": "editing affordances (this is display; editors are out of system scope); nested scrolling beyond the one horizontal overflow.",
@@ -1194,12 +2123,18 @@
   },
   "DiffView": {
    "purpose": "standalone change comparison — run configs, policy edits; promotion of the ProposalCard diff rules. (P3.)",
+   "category": "Data",
    "keywords": [
     "diff",
     "comparison",
     "side by side",
     "unified diff",
     "changes"
+   ],
+   "related": [
+    "CodeBlock",
+    "ProposalCard",
+    "Drawer"
    ],
    "states": "unchanged runs collapse to an expandable \"⋯ N unchanged lines\" row.",
    "a11y": "never color alone — the +/− gutter markers are the colorblind-safe channel for added/removed lines.",
@@ -1213,12 +2148,19 @@
   },
   "MediaGroup": {
    "purpose": "agent-generated media (images, chart renders, previews) presented as a casual fan in Console replies — the system's one sanctioned playful moment. (Added.)",
+   "category": "Conversation",
    "keywords": [
     "gallery",
     "image group",
     "media fan",
     "thumbnails",
     "generated images"
+   ],
+   "related": [
+    "ContextCard",
+    "Message",
+    "ResponseToolbar",
+    "Badge"
    ],
    "states": "rest (2–3 cards fanned; a single item flat) · hover/focus (card straightens to 0° and raises shadow.xs at fast) · prefers-reduced-motion renders the whole group flat and static.",
    "a11y": "cards respond to focus as they do to hover (straighten + raise); prefers-reduced-motion renders the group flat and static.",
@@ -1232,12 +2174,19 @@
   },
   "Slider · NumberInput": {
    "purpose": "bounded continuous values (Slider) and precise numeric entry (NumberInput). They pair; neither replaces the other. (P3.)",
+   "category": "Input",
    "keywords": [
     "range",
     "numeric field",
     "spinbox",
     "number field",
     "range slider"
+   ],
+   "related": [
+    "Input (text)",
+    "DatePicker",
+    "Tooltip",
+    "Card"
    ],
    "states": "dragging (value label above the thumb, Tooltip surface) · thumb focus ring · NumberInput clamps to min/max on blur with a caption note.",
    "a11y": "keyboard steps — Slider arrows step, Shift = 10×; NumberInput stepper chevrons carry 24px hit areas and arrows step; a Slider never renders without a visible numeric value.",
@@ -1249,12 +2198,18 @@
   },
   "ChoiceCard": {
    "purpose": "one-of or many-of selection where options deserve descriptions — plan pickers, agent-type choice, onboarding decisions. (P3.)",
+   "category": "Input",
    "keywords": [
     "selectable card",
     "option card",
     "radio card",
     "plan picker",
     "pricing options"
+   ],
+   "related": [
+    "Card",
+    "Checkbox · Radio · Switch",
+    "Select"
    ],
    "states": "unselected (outlined Card) · selected = 1px border.selected + flush 4px border.subtle outline (one continuous two-tone halo) + 16px check top-right.",
    "a11y": "radiogroup/group, arrow-key navigation, whole card is the target.",
@@ -1267,12 +2222,19 @@
   },
   "HoverCard": {
    "purpose": "rich preview of an entity reference (user, agent, run) on hover/focus. (P3.)",
+   "category": "Overlay",
    "keywords": [
     "preview",
     "profile preview",
     "peek",
     "entity preview",
     "hover popover"
+   ],
+   "related": [
+    "Tooltip",
+    "Popover / Menu",
+    "DescriptionList",
+    "Avatar"
    ],
    "states": "closed at rest · open after 500ms hover or on focus · closes on leave/Esc.",
    "a11y": "opens on focus, not only hover; Esc closes; hover is enhancement, never requirement — everything in the card must also exist on the entity's click-through page, so keyboard and assistive access never depend on hover.",
@@ -1285,12 +2247,19 @@
   },
   "Popconfirm": {
    "purpose": "inline confirmation for low-stakes reversible-ish actions — the step between no-confirm and Modal. (P3.)",
+   "category": "Overlay",
    "keywords": [
     "inline confirm",
     "confirm popover",
     "quick confirm",
     "are you sure",
     "delete confirm"
+   ],
+   "related": [
+    "Modal",
+    "Toast",
+    "Popover / Menu",
+    "Button"
    ],
    "states": "open, anchored to the trigger · Esc/outside-click cancels.",
    "forbidden": "chaining popconfirms; inputs inside; using it to soften actions that deserve a Modal.",
@@ -1302,11 +2271,17 @@
   },
   "ContextMenu": {
    "purpose": "right-click menu on dense data surfaces. (P3.)",
+   "category": "Overlay",
    "keywords": [
     "right click",
     "right click menu",
     "contextual actions",
     "secondary menu"
+   ],
+   "related": [
+    "Popover / Menu",
+    "Table",
+    "Tree"
    ],
    "a11y": "an accelerator, never the only path — every action also exists in visible UI (pointer-hidden affordances must not gate any action); the browser context menu on text selections is never overridden.",
    "forbidden": "context-only actions; submenus beyond one level; overriding browser context menu on text selections.",
@@ -1318,12 +2293,19 @@
   },
   "CalendarView": {
    "purpose": "schedule visualization — when agents run, what ran. Not a booking system. (P3.)",
+   "category": "Data",
    "keywords": [
     "schedule",
     "month view",
     "week view",
     "events",
     "agenda"
+   ],
+   "related": [
+    "DatePicker",
+    "DescriptionList",
+    "Popover / Menu",
+    "Toast"
    ],
    "states": "today = outlined pill · >3 events per cell collapse to \"+N\" (popover lists all) · empty days are simply empty.",
    "forbidden": "month cells scrolling internally; empty-day placeholders (empty days are simply empty); more than one event color system (viz assignment only).",
@@ -1336,12 +2318,20 @@
   },
   "NotificationCenter": {
    "purpose": "the bell's panel — what happened while you were away. (P3.)",
+   "category": "Overlay",
    "keywords": [
     "inbox",
     "bell",
     "notification",
     "activity center",
     "unread"
+   ],
+   "related": [
+    "Badge",
+    "SegmentedControl",
+    "Avatar",
+    "EmptyState",
+    "ProposalCard"
    ],
    "states": "unread (bg.surface fill + 8px status.info-bg-solid dot on the left edge) · row hover/focus floats the read/dismiss cluster (adds an overlay, never reflows the row) · empty (compact EmptyState flavor).",
    "forbidden": "marketing content; more than one content inline action per item (the read/dismiss hover controls are exempt — they are chrome, not content actions); unread counts anywhere except the bell's count overlay (99+ rule); type expressed by color/tint alone.",
@@ -1353,6 +2343,7 @@
   },
   "GraphCanvas · FlowNode · Edge": {
    "purpose": "the node-graph editor behind the workbench builders — Workflow Builder, Pipeline Builder, and the Ontology Link / Lineage graph. A pannable, zoomable canvas of node cards connected by typed edges, with a node palette and canvas controls. One family, grouped because the parts only exist together.",
+   "category": "Agent",
    "keywords": [
     "node editor",
     "flow",
@@ -1361,6 +2352,12 @@
     "node graph",
     "pipeline builder",
     "minimap"
+   ],
+   "related": [
+    "AgentStep",
+    "RunLog",
+    "Card",
+    "Popover / Menu"
    ],
    "variants": "modes: build (edit) · run (read-only + per-node run status); edge: default · Condition branch (If / Else label-sm tag).",
    "states": "empty (a lone Start node + \"add first node\" affordance), default, node selected, node running/failed, connecting (a live edge follows the cursor; invalid targets dim), read-only (Run mode or insufficient permission).",
@@ -1378,12 +2375,20 @@
   },
   "RunLog": {
    "purpose": "the execution record of a run — Workflow Run mode, Pipeline runs, and the CUA run review. A hierarchical, append-capable log: run → step → line.",
+   "category": "Agent",
    "keywords": [
     "execution log",
     "run history",
     "step log",
     "job output",
     "console log"
+   ],
+   "related": [
+    "AgentStep",
+    "CodeBlock",
+    "Drawer",
+    "Badge",
+    "GraphCanvas · FlowNode · Edge"
    ],
    "states": "from the ai-patterns.md §3 superset (single source since 2026-08-03) — a run reaches pending, queued, running, awaiting-input, partial, success, failed, cancelled, skipped. RunLog's own behaviours on top of the shared indicators: running live-appends with a named working line (aria-live=polite) and pulses, no shimmer; success collapses to \"N steps · 12s\"; failed auto-expands and surfaces the error line + an optional Retry ghost action; awaiting-input surfaces the unblocking action and does not auto-expand (a blocked run is not an error). This line previously listed five states that differed from AgentStep's five while the manifest claimed they were identical.",
    "a11y": "live-append is aria-live=polite with a named working line; the running step pulses, never shimmers; pin-to-bottom is a toggle, never forced; status = dot + glyph, never hue alone.",
@@ -1398,6 +2403,7 @@
   },
   "PivotTable": {
    "purpose": "cross-tabulated aggregation (dimensions × measures) of ontology/dataset rows for the Application/dashboard surface. Extends Table but is a distinct component — it has row- and column-header dimensions and aggregated cells, not flat records.",
+   "category": "Data",
    "keywords": [
     "pivot",
     "crosstab",
@@ -1405,6 +2411,11 @@
     "cube",
     "summary table",
     "measures"
+   ],
+   "related": [
+    "Table",
+    "Chart",
+    "EmptyState"
    ],
    "states": "default · loading (skeleton mirroring the grid) · empty (no data for the pivot) · expanded/collapsed dimension levels · error.",
    "forbidden": "zebra striping; default heatmap cell-coloring (a governed decision, not a default); emphasis beyond the total/subtotal band; two aggregations muddled in one cell.",
@@ -1419,12 +2430,20 @@
   },
   "AssistantPanel": {
    "purpose": "the persistent docked/floating global agent — a compact chat available across the app that maximizes into the full Console. A composite (like CommandPalette and NotificationCenter), assembled from existing parts, never a re-implemented chat.",
+   "category": "Conversation",
    "keywords": [
     "copilot",
     "chat widget",
     "docked chat",
     "chatbot",
     "floating assistant"
+   ],
+   "related": [
+    "Composer",
+    "Thread",
+    "AgentStep",
+    "ProposalCard",
+    "CommandPalette"
    ],
    "states": "collapsed (launcher only) · open (panel) · maximized (full Console) · running (AgentStep working line) · empty (starters per ai-patterns §27).",
    "forbidden": "a second persistent chat surface; auto-opening or nagging; a scrim/blocking behavior; re-implementing the Composer.",
@@ -1438,12 +2457,19 @@
   },
   "AppLauncher": {
    "purpose": "a browsable overlay grid of system apps + user-published apps — the entry to the Application surface. Distinct from CommandPalette (which is ⌘K search); this is a tile grid.",
+   "category": "Navigation",
    "keywords": [
     "app grid",
     "waffle",
     "app switcher",
     "tile grid",
     "applications"
+   ],
+   "related": [
+    "CommandPalette",
+    "Card",
+    "Modal",
+    "Sidebar (app navigation)"
    ],
    "states": "default · search-filtered (empty groups hide; compact no-results line) · loading (skeleton squircles) · empty (\"no apps yet\" + create action).",
    "a11y": "keyboard traversal with ↵ opening a tile; one action per tile.",
@@ -1458,12 +2484,19 @@
   },
   "Divider": {
    "purpose": "separate content with a 1px rule — the standalone, documented form of the borders-first divider (foundations §6). Most separation is already carried by whitespace or a component's own border; reach for Divider only when a visible line genuinely aids grouping.",
+   "category": "Container",
    "keywords": [
     "separator",
     "hr",
     "horizontal rule",
     "hairline",
     "section break"
+   ],
+   "related": [
+    "Popover / Menu",
+    "Card",
+    "Timeline",
+    "DescriptionList"
    ],
    "variants": [
     "Variant — Composition — Use",
@@ -1485,6 +2518,7 @@
   },
   "ToggleButton": {
    "purpose": "a button that toggles a single on/off state — pin, favorite, mute, show/hide a panel, a display or formatting option. Distinct from Switch (an instant-effect setting, in forms and settings rows) and SegmentedControl (an exclusive choice among peers).",
+   "category": "Action",
    "keywords": [
     "toggle",
     "pressed button",
@@ -1493,6 +2527,12 @@
     "mute",
     "icon toggle",
     "toggle group"
+   ],
+   "related": [
+    "Button",
+    "Checkbox · Radio · Switch",
+    "SegmentedControl",
+    "ResponseToolbar"
    ],
    "variants": [
     "Variant — Composition — Use",

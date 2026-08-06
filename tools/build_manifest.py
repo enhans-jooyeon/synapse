@@ -2,25 +2,48 @@
 """Build synapse.manifest.json — the machine-readable component index for generation agents.
 
 The components section is a PURE PROJECTION of components.md: every entry is parsed from
-that file's labelled bold slots (**Purpose:**, **Keywords:**, **Variants:**, **Sizes:**,
-**States:**, **A11y:**, **Forbidden:**, **Key rules (machine index):** — plus their
-accepted wording variants). Nothing component-shaped is hardcoded here, so prose and
-manifest can no longer drift apart: there is one authored copy (adoption rulings #1/#2,
+that file's labelled bold slots (**Purpose:**, **Category:**, **Keywords:**, **Related:**,
+**Variants:**, **Sizes:**, **States:**, **A11y:**, **Forbidden:**, **Props:**,
+**Key rules (machine index):** — plus their accepted wording variants). Nothing
+component-shaped is hardcoded here, so prose and manifest can no longer drift apart:
+there is one authored copy (adoption rulings #1/#2,
 proposals/2026-08-05-astryx-adoption-rulings.md).
 
 Run after any components.md change (governance: the manifest is a build artifact, never
 hand-edited). Exits 1, listing every offence, when the spec's slots are unparseable:
-an entry without a **Purpose:** slot, a **Key rules** or **Keywords** slot without
-content, or a bold `**Label:**` that matches no registered label (catches typos like
-`**Purpos:**` — a genuinely new label is taught to LABELS / KNOWN_UNMAPPED, deliberately).
+an entry without a **Purpose:** or **Category:** slot, a **Key rules** / **Keywords** /
+**Related** / **Props** slot without content, a **Category:** value outside the closed
+CATEGORIES set, a **Related:** name that is not an existing `##` heading, a **Props:**
+bullet that does not match the declared grammar, or a bold `**Label:**` that matches no
+registered label (catches typos like `**Purpos:**` — a genuinely new label is taught to
+LABELS / KNOWN_UNMAPPED, deliberately).
 
-Entry fields, in order: purpose (always) · keywords (discovery aliases — lowercased,
-comma-split; never contract vocabulary) · variants/sizes/states/a11y/forbidden (present
-wherever the prose has the slot; a single-paragraph slot is a string; bullet-list, table
-and multi-block slots are a list of strings) · key_rules (the rules an agent most often
-needs without opening the spec — the **Key rules (machine index):** bullets, verbatim).
+Entry fields, in order:
+  purpose    always; the slot's text.
+  category   always; exactly one value from CATEGORIES (closed — an unknown value is
+             build-fatal, which is the whole point: Astryx documents a 12-value enum
+             whose own data carries 17, so theirs is documentation and ours is a gate).
+  keywords   discovery aliases — lowercased, comma-split; never contract vocabulary.
+  related    2–5 sibling component names an author should weigh alongside this entry,
+             comma-split, ORIGINAL CASE preserved. Every name is verified against the
+             set of `##` headings, so the slot is also a referential-integrity check.
+  variants / sizes / states / a11y / forbidden
+             present wherever the prose has the slot; a single-paragraph slot is a
+             string, bullet-list/table/multi-block slots are a list of strings.
+  props      ONLY on entries with a React implementation, derived from that file's props
+             type. A LIST OF OBJECTS, one per public prop, in spec order:
+               {"name": str, "type": str, "description": str,
+                "required": true   (omitted when the prop is optional),
+                "default": str     (omitted when the code sets no default)}
+             Grammar of one bullet (PROP_RE):
+               - `name`: `type` **(required)** — description (default: `value`)
+             where the `**(required)**` marker and the trailing `(default: …)` are both
+             optional. validate.py's SY024 compares this name set against the
+             `<Name>Props` interface in storybook/src/components/<Name>/<Name>.tsx.
+  key_rules  the rules an agent most often needs without opening the spec — the
+             **Key rules (machine index):** bullets, verbatim.
 """
-import json, re, os, sys
+import json, re, os, sys, difflib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 COMPONENTS_MD = os.path.join(ROOT, "components.md")
@@ -32,18 +55,54 @@ COMPONENTS_MD = os.path.join(ROOT, "components.md")
 # WARNING for each entry using one, so wording converges without blocking).
 LABELS = {
     "purpose":   ["Purpose"],
+    "category":  ["Category"],
     "keywords":  ["Keywords"],
+    "related":   ["Related"],
     "variants":  ["Variants", "Variants (closed)", "Color variants",
                   "Emphasis variants", "Types (closed)"],
     "sizes":     ["Sizes"],
     "states":    ["States", "States (closed)"],
     "a11y":      ["A11y"],
     "forbidden": ["Forbidden", "Forbidden — with their replacements"],
+    "props":     ["Props"],
     "key_rules": ["Key rules (machine index)"],
 }
-FIELD_ORDER = ["purpose", "keywords", "variants", "sizes", "states", "a11y", "forbidden", "key_rules"]
+FIELD_ORDER = ["purpose", "category", "keywords", "related", "variants", "sizes",
+               "states", "a11y", "forbidden", "props", "key_rules"]
 LABEL_TO_FIELD = {l: f for f, ls in LABELS.items() for l in ls}
 CANONICAL = {f: ls[0] for f, ls in LABELS.items()}
+
+# --------------------------------------------------------------- category enum
+#
+# CLOSED, and enforced (an unknown value is build-fatal). Derived from this set of
+# 68 entries and from how AgentOS's surfaces actually group — deliberately NOT
+# imported from Astryx, whose documented 12-value enum its own data contradicts
+# with 17 values (lowercase strays like `interaction`, `layout`, `focus`, `media`,
+# `streaming`, `animation`): an enum nothing checks is documentation, not a
+# contract. There is no "misc" bucket by construction — every entry lands
+# somewhere real, and a new value is a governance change to components.md's
+# preamble table AND this tuple, together.
+CATEGORIES = (
+    "Action",        # invokes or commits something
+    "Input",         # collects or edits a value
+    "Data",          # structured records, series, hierarchies
+    "Navigation",    # moves between places or peer views
+    "Overlay",       # own layer above the page, dismissible
+    "Feedback",      # reports system/process state
+    "Container",     # bounds, groups, splits, separates
+    "Display",       # a static mark standing for someone/something
+    "Conversation",  # the Console transcript surface and its composing controls
+    "Agent",         # agent work made visible or governable
+)
+
+# One **Props:** bullet. The type is backticked so a union carrying `|`, `"` or
+# `—` cannot be confused with the description separator; the description runs to
+# end of line and its trailing "(default: `…`)" is lifted out afterwards.
+PROP_RE = re.compile(
+    r"^`(?P<name>[A-Za-z_$][A-Za-z0-9_$]*)`:\s*`(?P<type>.+?)`"
+    r"\s*(?P<req>\*\*\(required\)\*\*)?\s*—\s*(?P<desc>\S.*?)\s*$"
+)
+PROP_DEFAULT_RE = re.compile(r"\s*\(default:\s*`(?P<default>[^`]*)`\)\s*$")
 
 # Labels that are legitimate prose structure but not manifest fields. Explicit by
 # design (SY020's stance: a guessed mapping makes coverage unknowable). Matching
@@ -231,15 +290,62 @@ def _parse_entry(name, lines, errors, warnings):
                 continue
             entry[field] = rules
             continue
-        if field == "keywords":
-            # SINGLE-LINE slot by format: comma-separated discovery aliases on the
-            # label line itself -> lowercased, trimmed list. Content on later lines
-            # is deliberately ignored so an adjacent paragraph is never swallowed.
-            terms = [t.strip().lower().rstrip(".")
-                     for seg in segs for t in _clean(seg[0] if seg else "").split(",")]
+        if field == "props":
+            props, bad = [], False
+            for seg in segs:
+                for s in seg:
+                    s = s.strip()
+                    if not s.startswith("- "):
+                        continue          # the slot's own label line carries prose notes
+                    m = PROP_RE.match(s[2:].strip())
+                    if not m:
+                        bad = True
+                        errors.append(
+                            f"{name}: **Props:** bullet does not match the grammar "
+                            f"'- `prop`: `type` **(required)** — description (default: `value`)' "
+                            f"— got: {s[:80]}")
+                        continue
+                    desc = m.group("desc")
+                    dm = PROP_DEFAULT_RE.search(desc)
+                    prop = {"name": m.group("name"), "type": _clean(m.group("type"))}
+                    if m.group("req"):
+                        prop["required"] = True
+                    prop["description"] = _clean(desc[:dm.start()] if dm else desc)
+                    if dm:
+                        prop["default"] = dm.group("default")
+                    props.append(prop)
+            if bad:
+                continue
+            if not props:
+                errors.append(f"{name}: **Props:** slot has no '- ' bullets — a Props slot "
+                              f"exists only where the React implementation does, and it "
+                              f"lists that implementation's public props")
+                continue
+            entry[field] = props
+            continue
+        if field in ("keywords", "related", "category"):
+            # SINGLE-LINE slots by format: the value lives on the label line itself.
+            # Content on later lines is deliberately ignored so an adjacent paragraph
+            # is never swallowed.
+            raw = _clean(segs[0][0] if segs[0] else "")
+            if field == "category":
+                if raw not in CATEGORIES:
+                    errors.append(
+                        f"{name}: **Category:** '{raw}' is not in the closed set "
+                        f"{list(CATEGORIES)} — pick one, or take a new value through "
+                        f"governance (components.md preamble table AND CATEGORIES here)")
+                    continue
+                entry[field] = raw
+                continue
+            terms = [t.strip() for t in raw.split(",")]
+            if field == "keywords":
+                terms = [t.lower().rstrip(".") for t in terms]
             terms = [t for t in terms if t]
             if not terms:
-                errors.append(f"{name}: **Keywords:** slot is empty — list 3–8 discovery aliases")
+                errors.append(
+                    f"{name}: **Keywords:** slot is empty — list 3–8 discovery aliases"
+                    if field == "keywords" else
+                    f"{name}: **Related:** slot is empty — name 2–5 sibling components")
                 continue
             entry[field] = terms
             continue
@@ -253,6 +359,10 @@ def _parse_entry(name, lines, errors, warnings):
     if "purpose" not in entry:
         errors.append(f"{name}: no **Purpose:** slot — every entry must declare one")
         return None
+    if "category" not in entry:
+        errors.append(f"{name}: no **Category:** slot — every entry declares exactly one "
+                      f"of {list(CATEGORIES)}")
+        return None
     return entry
 
 
@@ -260,10 +370,25 @@ def build_components(md, warnings):
     """Parse every ## entry of components.md; raise SpecParseError listing every
     offence if any entry is unparseable."""
     errors, components = [], {}
-    for name, lines in _split_sections(md):
+    sections = _split_sections(md)
+    known = {name for name, _ in sections}
+    for name, lines in sections:
         entry = _parse_entry(name, lines, errors, warnings)
         if entry is not None:
             components[name] = entry
+    # REFERENTIAL INTEGRITY — every **Related:** name must be a real '## ' heading.
+    # Cheap, and it catches the typo class ("Popover/Menu" without the spaces,
+    # "Skeleton" for "Skeleton · Spinner") that a prose-only cross-reference hides.
+    for name, entry in components.items():
+        for ref in entry.get("related", []):
+            if ref not in known:
+                near = difflib.get_close_matches(ref, sorted(known), n=2, cutoff=0.6)
+                errors.append(
+                    f"{name}: **Related:** names '{ref}', which is not a '## ' heading in "
+                    f"components.md" + (f" — did you mean {' / '.join(near)}?" if near else "")
+                    + " (Related is a closed reference to the component set)")
+            elif ref == name:
+                errors.append(f"{name}: **Related:** names itself")
     if errors:
         raise SpecParseError("components.md is unparseable:\n  " + "\n  ".join(errors))
     return components

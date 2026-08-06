@@ -34,7 +34,31 @@ from collections import Counter
 #
 #   lookup.component        one component matched (by name or a unique keyword);
 #                           fields: name, matched_by ("name"|"keyword"), keyword?,
-#                           entry (the full manifest entry)
+#                           entry (the full manifest entry, verbatim).
+#                           `entry` keys, in manifest order — all parsed from
+#                           components.md's labelled slots, so this shape follows the
+#                           spec, never the CLI:
+#                             purpose    string (always)
+#                             category   string (always) — one of the CLOSED ten:
+#                                        Action · Input · Data · Navigation · Overlay ·
+#                                        Feedback · Container · Display · Conversation ·
+#                                        Agent. Branch on it; it cannot hold anything else
+#                                        (an unknown value fails the build).
+#                             keywords   [string] lowercased discovery aliases
+#                             related    [string] 2–5 sibling component NAMES; every one
+#                                        is a valid `lookup` argument (build-enforced)
+#                             variants / sizes / states / a11y / forbidden
+#                                        string when the slot is one paragraph, [string]
+#                                        when it is a bullet list / table (present only
+#                                        where the spec has the slot)
+#                             props      [object] ONLY on components with a React
+#                                        implementation (17 of 68 today; absence means
+#                                        "not built", never "no API"). Each object:
+#                                        {name, type, description, required?: true,
+#                                        default?: string} — `required`/`default` are
+#                                        omitted rather than null. Gated against the
+#                                        implementation by SY024.
+#                             key_rules  [string]
 #   lookup.component.multi  several components share the name part / keyword;
 #                           fields: query, matched_by, keyword?, matches
 #                           ([{name, purpose}] — run lookup <name> for the full entry)
@@ -150,11 +174,22 @@ def _print_component(name, entry):
 
     print(f"COMPONENT  {name}")
     print(f"  purpose: {entry.get('purpose','')}")
+    emit("category")
+    emit("related", sep=", ")
     emit("variants")
     emit("sizes", sep=", ")
     emit("states")
     emit("a11y")
     emit("forbidden")
+    # props exist only where the React implementation does (17 of 68) — absence means
+    # "not built yet", not "no API". Each line is name: type [required] — description.
+    props = entry.get("props") or []
+    if props:
+        print("  props:")
+        for p in props:
+            req = " (required)" if p.get("required") else ""
+            dflt = f" [default {p['default']}]" if "default" in p else ""
+            print(f"    - {p['name']}: {p['type']}{req} — {p.get('description','')}{dflt}")
     for r in entry.get("key_rules", []):
         print(f"  • {r}")
 

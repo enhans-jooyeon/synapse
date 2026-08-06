@@ -25,6 +25,10 @@ Rules (E = error, W = warning):
   SY020 E tokens/synapse.css disagrees with tokens/synapse.tokens.json (per mode); W = a CSS var with no JSON origin — closes the TOKEN half of audit Defect 7
   SY021 E synapse.manifest.json key_rules contradict components.md prose (never-list vocabulary, token names, radius names) — closes the PROSE half of audit Defect 7
   SY022 E a stated component-count claim disagrees with reality — the "67 vs 68" class; checks four surfaces (components.md preamble, README.md, docs/DISTRIBUTION.md, storybook/package.json) against components.md's ## heading count and storybook/src/components
+  SY024 E a component's **Props:** slot disagrees with its React implementation — the prop
+        NAME SET in components.md must equal the `<Name>Props` type in
+        storybook/src/components/<Name>/<Name>.tsx (deprecated props excluded); the spec
+        is the API contract (adoption ruling #5, 2026-08-05)
   SY023 E/W z-index outside the two sanctioned vocabularies — floating layers take --sy-z-* tokens; local sibling ordering is a −1..2 literal inside an isolated stacking context (W if the file lacks `isolation: isolate`) — foundations §6, ratified 2026-08-05
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6
@@ -808,6 +812,111 @@ def check_count_claims():
             check_pair(fpath, m.group(1), m.group(2), m.group(0))
 
 
+# ------------------------------------------- SY024 spec <-> React props parity
+
+SB_COMPONENTS = os.path.join(ROOT, "storybook", "src", "components")
+
+# One own member of a TS interface body, at brace depth 0: `name?: type;`.
+TS_PROP_RE = re.compile(r"^\s*(?:readonly\s+)?(?P<name>[A-Za-z_$][A-Za-z0-9_$]*)\s*\??\s*:")
+
+
+def _impl_dir(component_name):
+    """'## Input (text)' -> 'Input'. Headings may carry a qualifying parenthetical;
+    the implementation directory is the bare name before it."""
+    return re.sub(r"\s*\(.*\)$", "", component_name).strip()
+
+
+def _tsx_prop_names(src, iface):
+    """Own, non-deprecated property names declared by `export interface <iface> {…}`.
+
+    Returns (names, error) — `error` is a string when the interface is absent, which is
+    itself a finding (the spec claims a props contract the file does not expose).
+    Deliberately own-members-only: `extends React.ButtonHTMLAttributes<…>` contributes
+    DOM plumbing, not design-system API, and documenting it would be noise. A member
+    whose preceding JSDoc carries `@deprecated` is EXCLUDED — deprecated shims (Button's
+    v1 single-axis `variant`) exist to be removed, so the spec must not list them.
+    """
+    m = re.search(r"^export interface " + re.escape(iface) + r"\b[^{]*\{", src, re.M)
+    if not m:
+        return None, (f"no `export interface {iface}` in the file — the spec declares a "
+                      f"Props contract the implementation does not expose")
+    names, doc, depth, in_comment = [], [], 1, False
+    for line in src[m.end():].splitlines():
+        stripped = line.strip()
+        if in_comment or stripped.startswith(("/*", "//", "*")):
+            doc.append(stripped)
+            in_comment = stripped.startswith("/*") and "*/" not in stripped \
+                if not in_comment else "*/" not in stripped
+            continue
+        if depth == 1:
+            pm = TS_PROP_RE.match(line)
+            if pm:
+                # A member's own JSDoc sits immediately above it; @deprecated shims are
+                # excluded from the contract (they exist only to be removed).
+                if not any("@deprecated" in d for d in doc):
+                    names.append(pm.group("name"))
+            if stripped:
+                doc = []
+        depth += sum(line.count(c) for c in "{([") - sum(line.count(c) for c in "})]")
+        if depth <= 0:
+            break
+    return names, None
+
+
+def check_props_parity():
+    """SY024 — the **Props:** slot IS the React API contract.
+
+    Motivation (adoption ruling #5): `storybook/Button` shipped the superseded
+    single-axis `variant: primary|secondary|ghost|danger|brand` API for a week while
+    components.md described the two-axis one, and nothing failed. A prose slot that
+    merely *describes* props rots the same way. So: wherever an entry carries a Props
+    slot AND storybook/src/components/<Name>/<Name>.tsx exists, the two prop-name sets
+    must be EQUAL — every offence names both sides, so the fix is unambiguous
+    (add the prop to the spec, or delete it from the code).
+
+    Only the NAME SET is compared. Types and descriptions are prose the spec is allowed
+    to state more strictly than TypeScript can (SY021's philosophy: a noisy gate gets
+    switched off). Entries with no implementation carry no Props slot at all — that is
+    the point, not a gap: inventing an API for an unbuilt component is design.md §6
+    improvisation.
+    """
+    mpath = os.path.join(ROOT, "synapse.manifest.json")
+    try:
+        manifest = json.load(open(mpath, encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        report("E", "SY024", mpath, 0, f"cannot read synapse.manifest.json — {e}")
+        return
+    for name, entry in (manifest.get("components") or {}).items():
+        spec_props = entry.get("props")
+        if not spec_props:
+            continue
+        d = _impl_dir(name)
+        tsx = os.path.join(SB_COMPONENTS, d, d + ".tsx")
+        if not os.path.isfile(tsx):
+            report("E", "SY024", COMPONENTS_MD, 0,
+                   f"{name}: has a **Props:** slot but no {os.path.relpath(tsx, ROOT)} — "
+                   f"a Props slot exists only where the React implementation does "
+                   f"(delete the slot, or land the component)")
+            continue
+        code_names, err = _tsx_prop_names(open(tsx, encoding="utf-8").read(), d + "Props")
+        if err:
+            report("E", "SY024", tsx, 0, f"{name}: {err}")
+            continue
+        spec_names = [p["name"] if isinstance(p, dict) else str(p) for p in spec_props]
+        missing = [n for n in code_names if n not in set(spec_names)]      # code has, spec lacks
+        extra = [n for n in spec_names if n not in set(code_names)]        # spec has, code lacks
+        if missing:
+            report("E", "SY024", COMPONENTS_MD, 0,
+                   f"{name}: **Props:** is missing {missing} — declared by {d}Props in "
+                   f"{os.path.relpath(tsx, ROOT)} but absent from the spec slot "
+                   f"(the spec is the API contract: document it, or remove it from the code)")
+        if extra:
+            report("E", "SY024", tsx, 0,
+                   f"{name}: **Props:** declares {extra}, which {d}Props in "
+                   f"{os.path.relpath(tsx, ROOT)} does not implement "
+                   f"(props are DERIVED from the .tsx — never invented ahead of it)")
+
+
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ("tokens", "ui", "page", "all"):
         print(__doc__)
@@ -838,6 +947,7 @@ def main():
         check_manifest()
         check_prose_manifest_parity()
         check_count_claims()
+        check_props_parity()
     errors = [i for i in issues if i[0] == "E"]
     warnings = [i for i in issues if i[0] == "W"]
     for sev, rule, path, line, msg in issues:
