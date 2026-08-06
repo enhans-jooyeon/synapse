@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
  * SY001/SY002 backstop for the product repo: scan source for raw hex/rgb colors,
- * bare px literals, and Tailwind arbitrary values ([...]) in class strings.
+ * bare px literals, and Tailwind arbitrary values ([...]) in class strings — plus the
+ * Tailwind CLASS forms of rules validate.py can only see as CSS declarations: z-index
+ * (SY023), tracking/leading (SY007/SY010), box-shadow (SY009), duration (SY025).
  * Runs in CI as a hard fail. Complements Tailwind's token-only theme.
  *
  * Usage: node tooling/synapse-gates/check-raw-values.mjs  (argv[2] = a glob of ts/tsx/css files)
@@ -39,6 +41,43 @@ const TW_RAW_Z = /\bz-(?:[1-9]\d|\d{3,})\b/;    // Tailwind z classes at 10+ (z-
 // the backstop for what the theme can't delete (arbitrary values, stray strings).
 const TW_TRACKING = /\btracking-(?:tighter|tight|normal|wide|wider|widest|\[[^\]]+\])/;
 const TW_LEADING = /\bleading-(?:none|tight|snug|normal|relaxed|loose|\d+|\[[^\]]+\])/;
+// SY009 — box-shadow is not a free property. Synapse is BORDERS-FIRST (foundations §6):
+// in-flow hierarchy is 1px borders + background steps, and shadows are reserved for things
+// that genuinely float. Tailwind's own `shadow-*` scale and arbitrary `shadow-[…]` both
+// bypass `--sy-shadow-*` entirely, and SY009 in validate.py only lexes the CSS declaration
+// form (`box-shadow:`), so the class form was invisible — the 2026-08-06 migration test
+// found 100 arbitrary `shadow-[…]`, 23 raw inline `boxShadow`, and 160 `shadow-sm/md/lg/xl`.
+// The fix is not "pick the nearest token": June's 2026-08-06 ruling (adopting the engineer's
+// triage) classifies each call site by the ELEMENT'S ROLE first —
+//   • RING   — `0 0 0 Npx` with blur 0 is not elevation at all; it is the ring that
+//              foundations §6 already sanctions as an exception (inset border-substitute or
+//              outset focus ring). Machine-decidable: blur component is 0. Use a ring, at
+//              full token strength, never a `--sy-shadow-*`.
+//   • STATIC — static cards, chart frames, panels: DELETE the shadow (borders-first), or
+//              promote the surface to a genuinely elevated one (Card `elevated`).
+//   • FLOAT  — menus, popovers, tooltips, dialogs, drawers, toasts: snap to the nearest
+//              `--sy-shadow-*` step (xs · sm · md · lg · xl).
+// Arbitrary `shadow-[…]` also trips SY002 as a Tailwind arbitrary value; that is intentional
+// and matches how `leading-[…]` already double-reports — SY009 is the one that names the fix.
+// NAME COLLISION, read before wiring: the ruled class list is Tailwind's DEFAULT boxShadow
+// scale, and three of its keys (`sm`/`md`/`lg`/`xl`) are also Synapse's own shadow-token
+// names — so a theme that maps `boxShadow` straight off the tokens would make `shadow-lg`
+// legitimate and this rule would flag it. Do the z-index move: give the token scale names
+// that cannot collide (e.g. `shadow-float-md`, or drop the defaults entirely) so the raw
+// Tailwind names cease to exist. Until the theme does that, `synapse-allow` + a ticket ref
+// is the documented escape. (`shadow-xs` and bare `shadow` are NOT in the ruled list and are
+// not flagged here — implemented verbatim from the 2026-08-06 ruling.)
+const TW_SHADOW = /\bshadow-(?:sm|md|lg|xl|2xl|inner|none)\b/;
+const TW_SHADOW_ARBITRARY = /\bshadow-\[[^\]]+\]/;
+// SY025 — off-scale transition duration. foundations §7 closes motion duration to FOUR values:
+// instant 100 · fast 150 · base 200 · slow 300 (`--sy-duration-*`). Tailwind's `duration-<n>`
+// utilities are a different scale (75/300/500/700/1000…) and arbitrary `duration-[…]` is
+// unbounded. Ruling 2026-08-06 (June): `duration-500` → 300, `duration-120` → 100,
+// `duration-180` → 200 — snap, do not add a token; the scale stays closed. The negative
+// lookahead means on-scale values (100/150/200/300) pass untouched.
+// Easing is deliberately NOT covered here — that half of test 9 is open as a separate proposal.
+const TW_DURATION = /\bduration-(?!(?:100|150|200|300)\b)\d+\b/;
+const TW_DURATION_ARBITRARY = /\bduration-\[[^\]]+\]/;
 const ALLOW = /synapse-allow/;                  // opt-out marker requires a harness ticket ref
 
 let violations = 0;
@@ -54,6 +93,10 @@ for (const file of files) {
       ['SY023', TW_RAW_Z, 'raw z-index class (floating layers: z-sticky…z-tooltip token classes; local ordering: z-0/1/2 + isolation)'],
       ['SY007', TW_TRACKING, 'tracking-* class — letter-spacing belongs to the type style (and must never reach Hangul); use a .sy-type-* / text-* bundle class'],
       ['SY010', TW_LEADING, 'leading-* class — the type style\'s line-height is a FLOOR that fits Hangul ascent/descent; never set it independently'],
+      ['SY009', TW_SHADOW, 'Tailwind shadow-* class — triage by the element\'s role: blur-0 `0 0 0 Npx` is a RING (foundations §6 exception, not elevation) · static card/chart → delete the shadow (borders-first) or promote to an elevated surface · floating menu/popover/tooltip → a --sy-shadow-* step (xs…xl)'],
+      ['SY009', TW_SHADOW_ARBITRARY, 'arbitrary shadow-[…] — triage by the element\'s role: blur-0 `0 0 0 Npx` is a RING (foundations §6 exception, not elevation) · static card/chart → delete the shadow (borders-first) or promote to an elevated surface · floating menu/popover/tooltip → a --sy-shadow-* step (xs…xl)'],
+      ['SY025', TW_DURATION, 'off-scale transition duration — the scale is 100/150/200/300 (--sy-duration-instant/fast/base/slow, foundations §7); snap to the nearest step (500→300, 180→200, 120→100). No token is added for an off-scale value'],
+      ['SY025', TW_DURATION_ARBITRARY, 'arbitrary duration-[…] — the duration scale is closed at 100/150/200/300 (--sy-duration-instant/fast/base/slow, foundations §7); pick a step'],
     ]) {
       if (re.test(line)) {
         const hit = line.match(re)?.[0] ?? '';

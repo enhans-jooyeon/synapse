@@ -2,6 +2,8 @@
 """SY019 — every 24-viewBox icon resolves to the registry; stroke 1.5; sizes on-scale.
 Catches hand-drawn glyphs, off-registry concepts, and one-concept-two-glyphs drift.
 Excludes illustrations (foundations §8.1) and chart marks, which have their own rules.
+The size check runs up to the 24px ceiling only: anything larger is illustration by
+definition (ruling 2026-08-06) and belongs to foundations §8.1, not to this registry.
 """
 import re, os, json, sys, collections
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,10 +38,20 @@ def main():
         for m in re.finditer(r'<svg[^>]*viewBox="0 0 24 24"[^>]*stroke-width="([0-9.]+)"', s):
             if m.group(1) != "1.5":
                 errs.append((rel, f"SY019 E icon stroke-width {m.group(1)} (must be 1.5)", ""))
-        # C. icon sizes on-scale
+        # C. icon sizes on-scale — but only UP TO the top of the scale.
+        # Ruling 2026-08-06 (June, migration audit test 6): stroke art rendered ABOVE 24px
+        # is an ILLUSTRATION, not an icon, and is governed by foundations §8.1 — it is out
+        # of this registry's jurisdiction, so the closed size set must not error on it (the
+        # 29 renders at 32/36/40/48/64 in the product are hero/empty-state artwork). Off-scale
+        # sizes AT OR BELOW the 24px ceiling (e.g. the 14px used 331×) stay errors: those are
+        # icons drawn off the scale, which is exactly what this check exists to catch.
+        ICON_CEILING = max(SIZES)  # 24
         for m in re.finditer(r'class="icon"[^>]*?width:(\d+)px', s):
-            if int(m.group(1)) not in SIZES:
-                errs.append((rel, f"SY019 E off-scale icon size {m.group(1)}px (allowed {sorted(SIZES)})", ""))
+            px = int(m.group(1))
+            if px > ICON_CEILING:
+                continue  # illustration — foundations §8.1, not the icon registry
+            if px not in SIZES:
+                errs.append((rel, f"SY019 E off-scale icon size {px}px (allowed {sorted(SIZES)}; >{ICON_CEILING}px is an illustration, foundations §8.1)", ""))
     for f, msg, ctx in errs: print(f"{f}: {msg} {ctx}")
     for f, msg, ctx in warns: print(f"{f}: {msg} {ctx}")
     print(f"\n{len(errs)} error(s), {len(warns)} warning(s)")

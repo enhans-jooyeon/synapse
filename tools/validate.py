@@ -31,12 +31,24 @@ Rules (E = error, W = warning):
         is the API contract (adoption ruling #5, 2026-08-05)
   SY023 E/W z-index outside the two sanctioned vocabularies — floating layers take --sy-z-* tokens; local sibling ordering is a −1..2 literal inside an isolated stacking context (W if the file lacks `isolation: isolate`) — foundations §6, ratified 2026-08-05
   SY008 E reference to undefined --sy-* variable — tokens
-  SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6
+  SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6. This mode lexes the
+        CSS *declaration* form; the Tailwind CLASS form (`shadow-sm|md|lg|xl|2xl|inner|none`,
+        `shadow-[...]`) is flagged product-side by tooling/product-gates/check-raw-values.mjs
+        under the same id, with the role triage (ring / static / floating) in the message
+        (ruling 2026-08-06)
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
   SY011 E Hangul text outside a lang="ko" scope — foundations §9
   SY012 E forbidden glossary term — content.md §3
   SY013 W exclamation mark in UI text — content.md §1
   SY014 W >1 primary button inside one region/section — design.md §3.7
+  SY025 -- off-scale transition duration (the scale is 100/150/200/300 =
+        --sy-duration-instant/fast/base/slow, foundations §7) — ruling 2026-08-06.
+        PRODUCT-GATE ONLY for now: this id is NOT implemented in validate.py. The violating
+        form is the Tailwind class (`duration-<n>`, `duration-[...]`), which only exists in
+        product JSX, and this repo's own CSS already writes the tokens — so there is no
+        declaration form here to lex. Listed here so the id is reserved and discoverable;
+        enforcement lives in tooling/product-gates/check-raw-values.mjs. (Easing is
+        deliberately not covered — that half of the ruling is open as a separate proposal.)
 """
 import json, re, sys, os
 from html.parser import HTMLParser

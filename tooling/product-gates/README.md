@@ -11,6 +11,10 @@ The JS/TS enforcement layer for the **product repo** — the machine half of the
 | SY001 | No raw color values | Tailwind (no arbitrary values) + `check-raw-values.mjs` scan for hex/rgb in JSX/CSS |
 | SY002 | No off-scale spacing/type/radius | Tailwind theme = tokens only, arbitrary values off + `check-raw-values.mjs` px scan |
 | SY003–006 | Font family/weight/italic/uppercase | Tailwind theme restriction + ESLint `no-restricted-syntax` |
+| SY007 / SY010 | Typography is a bundle — no independent tracking/leading | `check-raw-values.mjs` flags `tracking-*` / `leading-*` classes |
+| SY009 | No raw box-shadow — borders-first, `--sy-shadow-*` for floating layers only | `check-raw-values.mjs` flags `shadow-{sm,md,lg,xl,2xl,inner,none}` + `shadow-[…]`, with the ring / static / floating triage in the message |
+| SY023 | z-index on the sanctioned vocabularies only | `check-raw-values.mjs` flags `z-10`+ / `z-9999` classes |
+| SY025 | Duration on the four-value motion scale (100/150/200/300) | `check-raw-values.mjs` flags off-scale `duration-<n>` + `duration-[…]` — **product-gate only**; there is no DS-side implementation |
 | Component provenance | Use the system component, not a raw element | ESLint `no-restricted-syntax` (`.eslintrc.synapse.cjs`) |
 | Variant validity | No nonexistent variants | TypeScript + CVA typing — `tsc --noEmit` in CI (compile-time, free) |
 | Required-state coverage | Every declared state has a story | `check-state-coverage.mjs` |
