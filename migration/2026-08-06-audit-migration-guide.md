@@ -163,6 +163,8 @@ The same rule applies to any off-scale spacing value: `SPACE_SCALE = {0, 1, 2, 4
 
 ## 4. Shadows (test 8) — triage by role, then ring / delete / snap
 
+> **NAMING RULED (June, 2026-08-06).** The token scale is exposed **prefixed** — `shadow-float-xs … shadow-float-xl` — replacing Tailwind's `boxShadow` defaults (`tooling/product-gates/tailwind.synapse.cjs`). Reason: four of Tailwind's default keys (`sm/md/lg/xl`) are byte-identical to Synapse's token names, so a same-named token scale would make `shadow-lg` mean two things and no lint rule could tell correct code from a leftover. With the prefix, a bare `shadow-*` is *always* a leftover, so **SY009 is a standing rule, not a migration-phase one**, and it now works as an allowlist (which also closes the `shadow-xs` / bare-`shadow` holes). `drop-shadow-*` has its own rule — a CSS-filter effect with no token behind it. The prefix encodes the triage: only *floating* layers keep a shadow, so the class says so.
+
 ### Audit numbers
 
 | Violation form | Count |
@@ -248,6 +250,8 @@ The message names the triage (ring / static / floating) so the fix is in the err
 ---
 
 ## 5. Motion — durations (test 9, partial)
+
+> **EASING RULED (June, 2026-08-06): continuous motion is out of scope, and no tokens are added.** `foundations` §7 now states the jurisdiction explicitly — the four durations and three curves govern **transitions**; `linear` and a loop-appropriate period are permitted for `infinite` animation only (the system's own Spinner is `0.8s linear infinite`; the Avatar dot pulses at `1.6s`). Product gate **SY025 skips any line declaring an `infinite` animation**. Migrate the five sidebar transitions to `--sy-ease-standard`; the progress ring keeps `linear`. A non-looping transition may never take `linear` or an off-scale duration. Full reasoning: `proposals/2026-08-06-continuous-motion-gap.md`.
 
 > **Easing is NOT in scope here.** The easing half of test 9 is being handled separately by the coordinator as a proposal, because the DS's own Button spinner uses `linear` and the ruling as stated would break continuous motion. Nothing in this section touches easing.
 

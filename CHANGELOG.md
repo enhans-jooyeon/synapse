@@ -8,6 +8,8 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## 2.3.0 — 2026-08-06 — the API contract: props/category/related slots, SY024, the migration-audit rulings (icon/illustration boundary, SY009 + SY025 product gates)
 
+- **Two migration-audit follow-ups ruled and executed (June, 2026-08-06).** (1) **Continuous motion is scoped out of the transition scale** rather than tokenized: `foundations` §7 now states that the four durations and three curves govern *transitions*, and `linear` plus a loop-appropriate period are permitted for `infinite` animation only — which makes the system's own Spinner (`0.8s linear infinite`) and Avatar pulse (`1.6s`) compliant by jurisdiction instead of by exception, the same move as the 24px icon ceiling. Product gate SY025 skips lines declaring an infinite animation; a non-looping transition still may never take `linear` or an off-scale duration. (2) **The shadow class-name collision is resolved by prefixing**: the token scale is exposed as `shadow-float-xs…xl`, replacing Tailwind's `boxShadow` defaults, so a bare `shadow-*` is unambiguously a leftover and SY009 becomes a standing rule rather than a migration-phase one. The prefix encodes the engineer's triage (only floating layers keep a shadow); SY009 is now an allowlist — closing the `shadow-xs` and bare-`shadow` holes — and `drop-shadow-*` gets its own rule instead of matching incidentally.
+
 **Minor release — additive.** v2.2.0 made the manifest a projection of the spec; this release makes that projection carry a component's **API surface**, and closes the last gate hole the product migration found.
 
 ### ⚠ Consumer-visible strictness

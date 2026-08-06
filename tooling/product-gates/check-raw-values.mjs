@@ -59,23 +59,25 @@ const TW_LEADING = /\bleading-(?:none|tight|snug|normal|relaxed|loose|\d+|\[[^\]
 //              `--sy-shadow-*` step (xs · sm · md · lg · xl).
 // Arbitrary `shadow-[…]` also trips SY002 as a Tailwind arbitrary value; that is intentional
 // and matches how `leading-[…]` already double-reports — SY009 is the one that names the fix.
-// NAME COLLISION, read before wiring: the ruled class list is Tailwind's DEFAULT boxShadow
-// scale, and three of its keys (`sm`/`md`/`lg`/`xl`) are also Synapse's own shadow-token
-// names — so a theme that maps `boxShadow` straight off the tokens would make `shadow-lg`
-// legitimate and this rule would flag it. Do the z-index move: give the token scale names
-// that cannot collide (e.g. `shadow-float-md`, or drop the defaults entirely) so the raw
-// Tailwind names cease to exist. Until the theme does that, `synapse-allow` + a ticket ref
-// is the documented escape. (`shadow-xs` and bare `shadow` are NOT in the ruled list and are
-// not flagged here — implemented verbatim from the 2026-08-06 ruling.)
-const TW_SHADOW = /\bshadow-(?:sm|md|lg|xl|2xl|inner|none)\b/;
-const TW_SHADOW_ARBITRARY = /\bshadow-\[[^\]]+\]/;
+// SY009, completed by the 2026-08-06 naming ruling. The token-sourced scale is PREFIXED
+// (`shadow-float-xs…xl`, see tailwind.synapse.cjs), so the rule is now an allowlist rather
+// than an enumeration of Tailwind's defaults: ANY `shadow-*` class that is not the sanctioned
+// prefixed form is a violation. That closes three holes the enumeration left — `shadow-xs`
+// and bare `shadow` were unflagged despite `xs` being a token name, and a correctly-migrated
+// product emitting `shadow-lg` from a same-named token scale would have been flagged forever.
+// `drop-shadow-*` is a CSS-filter utility with no Synapse token behind it: always a violation.
+const TW_SHADOW = /(?<!drop-)\bshadow(?!-float-(?:xs|sm|md|lg|xl)\b)(?:-[a-z0-9[\]()#.,%_-]+)?\b/;
+const TW_DROP_SHADOW = /\bdrop-shadow(?:-[a-z0-9[\]()#.,%_-]+)?\b/;
 // SY025 — off-scale transition duration. foundations §7 closes motion duration to FOUR values:
 // instant 100 · fast 150 · base 200 · slow 300 (`--sy-duration-*`). Tailwind's `duration-<n>`
 // utilities are a different scale (75/300/500/700/1000…) and arbitrary `duration-[…]` is
 // unbounded. Ruling 2026-08-06 (June): `duration-500` → 300, `duration-120` → 100,
 // `duration-180` → 200 — snap, do not add a token; the scale stays closed. The negative
 // lookahead means on-scale values (100/150/200/300) pass untouched.
-// Easing is deliberately NOT covered here — that half of test 9 is open as a separate proposal.
+// Easing is NOT covered here, by ruling (2026-08-06): continuous/looping animation is outside
+// the transition scale's jurisdiction (foundations §7), so `linear` and loop periods are
+// permitted for `infinite` animation. A line declaring an infinite animation is therefore
+// skipped by SY025 — the scale governs transitions, and a spinner is not a transition.
 const TW_DURATION = /\bduration-(?!(?:100|150|200|300)\b)\d+\b/;
 const TW_DURATION_ARBITRARY = /\bduration-\[[^\]]+\]/;
 const ALLOW = /synapse-allow/;                  // opt-out marker requires a harness ticket ref
@@ -85,6 +87,9 @@ for (const file of files) {
   const text = readFileSync(file, 'utf8');
   text.split('\n').forEach((line, i) => {
     if (ALLOW.test(line)) return;
+    // Continuous motion exemption (foundations §7, ruled 2026-08-06): a looping animation
+    // legitimately carries `linear` and an off-scale period. Only duration rules are relaxed.
+    const isLoop = /\binfinite\b/.test(line);
     for (const [rule, re, msg] of [
       ['SY001', RAW_HEX, 'raw hex color'],
       ['SY001', RAW_RGB, 'raw rgb/hsl color'],
@@ -93,10 +98,10 @@ for (const file of files) {
       ['SY023', TW_RAW_Z, 'raw z-index class (floating layers: z-sticky…z-tooltip token classes; local ordering: z-0/1/2 + isolation)'],
       ['SY007', TW_TRACKING, 'tracking-* class — letter-spacing belongs to the type style (and must never reach Hangul); use a .sy-type-* / text-* bundle class'],
       ['SY010', TW_LEADING, 'leading-* class — the type style\'s line-height is a FLOOR that fits Hangul ascent/descent; never set it independently'],
-      ['SY009', TW_SHADOW, 'Tailwind shadow-* class — triage by the element\'s role: blur-0 `0 0 0 Npx` is a RING (foundations §6 exception, not elevation) · static card/chart → delete the shadow (borders-first) or promote to an elevated surface · floating menu/popover/tooltip → a --sy-shadow-* step (xs…xl)'],
-      ['SY009', TW_SHADOW_ARBITRARY, 'arbitrary shadow-[…] — triage by the element\'s role: blur-0 `0 0 0 Npx` is a RING (foundations §6 exception, not elevation) · static card/chart → delete the shadow (borders-first) or promote to an elevated surface · floating menu/popover/tooltip → a --sy-shadow-* step (xs…xl)'],
-      ['SY025', TW_DURATION, 'off-scale transition duration — the scale is 100/150/200/300 (--sy-duration-instant/fast/base/slow, foundations §7); snap to the nearest step (500→300, 180→200, 120→100). No token is added for an off-scale value'],
-      ['SY025', TW_DURATION_ARBITRARY, 'arbitrary duration-[…] — the duration scale is closed at 100/150/200/300 (--sy-duration-instant/fast/base/slow, foundations §7); pick a step'],
+      ['SY009', TW_SHADOW, 'un-tokenized shadow class — the sanctioned scale is `shadow-float-xs…xl` (prefixed so it cannot collide with Tailwind\'s defaults). Triage by the element\'s role: blur-0 `0 0 0 Npx` is a RING (foundations §6 exception, not elevation) · static card/chart → delete the shadow (borders-first) or promote to an elevated surface · floating menu/popover/tooltip → `shadow-float-*`'],
+      ['SY009', TW_DROP_SHADOW, 'drop-shadow-* — a CSS-filter shadow with no Synapse token behind it; elevation is box-shadow on floating layers only (foundations §6)'],
+      ...(isLoop ? [] : [['SY025', TW_DURATION, 'off-scale transition duration — the scale is 100/150/200/300 (--sy-duration-instant/fast/base/slow, foundations §7); snap to the nearest step (500→300, 180→200, 120→100). No token is added for an off-scale value'],
+      ['SY025', TW_DURATION_ARBITRARY, 'arbitrary duration-[…] — the duration scale is closed at 100/150/200/300 (--sy-duration-instant/fast/base/slow, foundations §7); pick a step']]),
     ]) {
       if (re.test(line)) {
         const hit = line.match(re)?.[0] ?? '';

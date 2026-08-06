@@ -223,6 +223,7 @@ Motion confirms causality; it never decorates. Durations: `instant` 100ms (hover
 - Animate only `opacity` and `transform`. NEVER animate layout properties (width/height/top/left) except accordion height.
 - NEVER animate large data regions (table sorting, filtering results) — data updates snap.
 - Respect `prefers-reduced-motion`: all non-essential motion collapses to opacity fades ≤100ms.
+- **Continuous (looping) animation is outside this scale's jurisdiction** *(ruled 2026-08-06, migration audit test 9)*. The four durations and three curves govern **transitions** — a change from state A to state B, which starts and stops, and therefore needs acceleration. A loop does neither: a spinner, an indeterminate progress ring or a status pulse has no end state and represents a *rate*, so an ease curve makes it visibly speed up and slow down each cycle and misrepresents what it is showing. `linear` and a loop-appropriate period (the system's own Spinner runs `0.8s linear infinite`; the Avatar running-dot pulses at `1.6s`) are therefore **permitted for `infinite` animation only**, and no token is minted for them — the same scoping move as the 24px icon ceiling, where the value isn't wrong, it's simply governed elsewhere. A non-looping transition may never take `linear` or an off-scale duration. `prefers-reduced-motion` still applies: a loop stops, it does not slow down.
 
 ---
 
