@@ -132,6 +132,8 @@
     "navigation link",
     "text link"
    ],
+   "states": "rest (no underline; inline links inside body text are always underlined) · hover/focus (underline).",
+   "a11y": "a real <a href> (the decision table's element column); an element that acts without navigating is a Button, not a Link; external links carry the 16px external icon as part of the affordance.",
    "forbidden": "styling a link as a button or vice versa (→ the table above; if you need Button styling on a route change, that is Button + render, which emits a single <a>); \"click here\" labels (→ label the destination: \"View the run log\", KO: \"여기를 클릭\" 금지); a Link that acts without navigating (→ buttonStyle=ghost); target=\"_blank\" without the external icon (→ append it, it is part of the affordance).",
    "key_rules": [
     "never styled as a button",
@@ -174,6 +176,7 @@
     "comment box",
     "long text"
    ],
+   "states": "as Input; autogrow grows from 1 row to the declared max (default 8), then scrolls internally.",
    "a11y": "the row is inside the field's labelled group, so it follows the Textarea in tab order — never before it. Buttons that act on the field's content (Clear, Copy) reference it with aria-controls.",
    "forbidden": "primary, brand or danger Buttons in the action row (a text field is not the place to site a page's main action — put it in the form footer); more than two buttons; an action row on an autogrow Textarea inside the Composer (the Composer owns its own send row and must not nest a second one); icon-only buttons in the row outside the approved icon list.",
    "key_rules": [
@@ -210,6 +213,7 @@
     "on off",
     "form control"
    ],
+   "states": "unchecked · checked (action.primary-bg fill — key color, not blue) · mixed (Checkbox: key-color fill + minus bar; Switch: centered thumb + minus glyph on a border.strong track — never the key color; Radio: none — no selection + a \"Mixed values\" / \"여러 값\" caption).",
    "a11y": "native inputs under the hood; radio groups use fieldset/legend; mixed states use aria-checked=\"mixed\".",
    "forbidden": "a check-mark indicator on Radio (→ the dot; Radio is a circle with a dot and Checkbox is a box with a check, and that difference is what tells a user \"one of these\" from \"any of these\" before they click. Re-litigated and upheld 2026-07-31, with the reasoning corrected: the earlier claim that indicatorType=check \"erases\" the signal was overstated — a circle containing a check is still a circle, and the silhouette is what reads first at 16px. The ruling stands on three other grounds. (1) It would make two renderings legal for one state, which is exactly the drift the closed-variant policy exists to prevent — two engineers build the same form differently and the gate cannot adjudicate. (2) A 16px radio leaves ~8px of interior; a check there is 3–4 strokes against the dot's single solid form, and it sits below the 12px icon floor (§7), so it contradicts the icon scale and degrades further at the 24px xs control. (3) It carries no meaning the dot lacks — both say \"selected\". The 8 shadcn call sites are marked mechanical in migration/replacement-rules.csv; converting them is cheaper than permanent API surface. A check is NOT forbidden for one-of selection — it is just not Radio's mark. The system already uses one, twice, and picks by option count and content richness: <5 bare options → Radio (circle + dot) · 5–15 known options → Select (bg.selected + leading 16px check) · 2–6 options with descriptions → ChoiceCard (border.selected halo + 16px check top-right, Radio semantics by default — i.e. ChoiceCard already IS a check-marked radio). Note both sanctioned checks are 16px, above the §7 12px icon floor; a check inside a 16px Radio has ~8px of interior, which is why the mark differs. So the answer to \"I want a check-marked single choice\" is to pick the right one of those three, not to add a fourth rendering); a label to the left of any of the three controls (→ label stays right, always — a left label puts a ragged right edge between text and control and the eye loses the row; for a settings row where the label reads far from the switch, use a DescriptionList-style row with the Switch in the trailing position, which is a layout, not a label position); Switch inside a form with a Save button (→ Checkbox — Switch means \"applied now\"); Radio for >5 options (→ Select); a key-colored track on a mixed Switch (→ border.strong fill, per the table above).",
    "key_rules": [
@@ -245,6 +249,7 @@
     "lg — height 24px, label-sm text (600 when solid — foundations §9 weight compensation), padding-x 12 — Only beside heading-xl+ titles (page headers, R1) and hero/empty-state contexts. NEVER inside tables, lists, or dense regions — size constancy there is what makes statuses scannable.",
     "One size per view, as with shape."
    ],
+   "a11y": "never interactive (interaction is Chip); the with-icon option adds the 12px registry status icon for icon + color + text triple redundancy — colorblind-safe scanning in status-critical views.",
    "forbidden": "interactive badges (→ Chip — if it can be clicked, removed or toggled it is a Chip; Badge is a read-only mark); sentence-length content (→ a Banner for a sentence, or truncate to one or two words); inventing colors, including a color={hex} override (→ one of the six semantic colors — neutral / info / success / warning / danger / ai; map by meaning, not by hue: a purple category badge becomes neutral, not ai, unless it genuinely marks agent output); an active / selected prop (→ Chip with selected — selection is interaction, so it is Chip's job; this is where the retired neutral solid treatment went); mixing emphasis levels for the same status meaning within one view; mixing shapes within one view; solid outside its named job in the table above (→ subtle, which is the default for a reason).",
    "key_rules": [
     "status vocabulary = content.md §3.3 closed set",
@@ -274,6 +279,7 @@
     "category — RETIRED 2026-07-30 — It duplicated Badge category, separated only by clickability — the redundancy that made shape-encoding look necessary. If it only labels, it is a Badge category. If clicking filters by it, it is a list-filter chip. No third thing."
    ],
    "states": "default (outlined), hover (bg.hover or border.strong), selected (filled per selection model), focus ring, disabled (text.disabled + border.subtle, no interaction — never opacity, which the system forbids as a state signal).",
+   "a11y": "the remove ✕ requires an aria-label (localized: \"Remove\" / \"제거\"); every chip carries an affordance glyph naming what it does.",
    "forbidden": "chips as command buttons (→ Button — a chip never performs a primary or destructive action); mixing input and list-filter in one row (→ split into two rows, each with one job); manual color selection, including a leading colour dot or tag prop (→ Badge dot variant where a colour-keyed status marker is genuinely wanted — an 8px status.*-bg-solid dot with text.secondary text and no container; a chip's job is selection, and colour-coding a selectable thing means the user must learn two systems at once); suggestion chips outside their sanctioned surfaces; truncating chip labels (wrap the row instead).",
    "key_rules": [
     "interactivity is encoded by FILL not shape (2026-07-30): Chip is OUTLINED at rest, Badge is filled/tinted; shape is a free density choice on Badge",
@@ -304,6 +310,8 @@
     "ai — ai.surface, 1px ai.border — Container for agent-produced content. ProposalCard is a specialization of this variant.",
     "stat — outlined card with fixed anatomy: label + text.secondary title · stat/stat-lg value · optional delta row · optional sparkline. (the emphasized opt-in is REMOVED — maintainer: no slate on stat cards; metric grids render uniform, urgency belongs to queues and status, not card tint) — KPI display. See recipes.md for grid presets."
    ],
+   "states": "static by default; interactive adds hover (border.strong + bg.hover + optional hover-lift) and keyboard focus; selected = 1px border.selected outline (selection, not focus).",
+   "a11y": "an interactive card is keyboard focusable, the whole card is clickable, and it carries exactly one action.",
    "forbidden": "shadows outside elevated; nesting bordered cards (use flat); cards as page layout scaffolding; ai variant on non-agent content.",
    "key_rules": [
     "interactive implies outlined/elevated + exactly one action + optional hover-lift",
@@ -322,6 +330,8 @@
     "list view",
     "spreadsheet"
    ],
+   "states": "row hover bg.hover · row selected bg.selected + leading checkbox · empty (EmptyState inside the frame, never a bare \"no data\" string) · loading (Skeleton rows matching the column layout) · invalid inline-edit cell (status.danger border + Tooltip naming the fix).",
+   "a11y": "header checkbox = select-all with the Checkbox mixed state (indeterminate for partial); inline edit is keyboard-complete — double-click or Enter to edit, Enter commits, Esc cancels, Tab commits + moves; the borderless cell editor is the sanctioned hidden-label exception and keeps the standard focus ring.",
    "forbidden": "zebra striping (dividers suffice); >1 accent color inside a table; horizontal scroll without a pinned first column; card-per-row layouts pretending to be tables.",
    "key_rules": [
     "18 closed cell renderers fix alignment/format per column; empty cell = em dash",
@@ -364,6 +374,7 @@
    ],
    "variants": "date (default) · range · datetime · time.",
    "states": "as Input, plus open, invalid-date error (names the accepted format), min/max-bounded (out-of-range days disabled with reason in a Tooltip).",
+   "a11y": "disabled dates take no-hover + aria-disabled (strikethrough forbidden); out-of-range days are disabled with the reason in a Tooltip; datetime arrow keys step the focused segment by 15 minutes; typed values normalize on blur.",
    "forbidden": "text-only date entry without a picker; dropdown-per-unit (day/month/year Selects) except birthdate-style historic entry; two calendars for a single date; relative-only display without absolute on hover.",
    "key_rules": [
     "locale formats per content.md §6; timezone label mandatory when it matters",
@@ -415,6 +426,8 @@
     "attachment"
    ],
    "variants": "dropzone (dashed 1px border.strong, radius xl, padding 32×24, centered: 20px upload icon in a 48px bg.sunken medallion (single border.default hairline ring — the dropzone keeps this icon medallion; it no longer references EmptyState, which now uses line illustrations) + \"Drop files here or browse\" (13 medium, browse as Link) + constraints caption — \"PDF, CSV up to 20MB\" / \"PDF, CSV · 최대 20MB\") and button (a secondary Button \"Attach file\" / \"파일 첨부\" for compact contexts). Drag-over state: border.focus-input border + emphasis.surface fill. Dashed borders remain sanctioned for drop targets ONLY.",
+   "states": "drag-over (border.focus-input border + emphasis.surface fill); per file row: uploading (4px determinate ProgressBar + percent) · success (status.success check) · error (status.danger icon + one-line cause + Retry).",
+   "a11y": "every file row's remove ✕ is an icon-button with a required aria-label; violations are named per file, never as a generic failure; a truncated filename keeps its full name in a Tooltip.",
    "forbidden": "uploads without visible progress; silent rejection of oversized/wrong-type files; auto-submit on drop when a form has other unfilled required fields.",
    "key_rules": [
     "constraints visible before selection; violations named per file",
@@ -432,6 +445,7 @@
     "resize handle",
     "resizable panel"
    ],
+   "states": "divider hover/drag (border.strong, col-resize cursor) · collapsed (secondary pane collapses to nothing; a re-open affordance stays at the edge).",
    "a11y": "divider is role=\"separator\" with aria-valuenow, keyboard-resizable via arrow keys when focused.",
    "forbidden": "more than 3 panes; nested splits beyond one horizontal + one vertical level; SplitPanel in fixed-layout archetypes (Settings, Guided); panes without min widths (KO labels need the floor).",
    "key_rules": [
@@ -453,6 +467,7 @@
    "variants": "line (trends; ≤8 series), area (single series only), bar vertical/horizontal (comparisons), stacked-bar (composition over categories), donut (composition, ≤3 slices — otherwise bar), sparkline (inline 24px, no axes, single series).",
    "sizes": "min-height 240px; sparkline 24px.",
    "states": "loading = skeleton plot (gray bar/line silhouette, pulsing); empty = EmptyState inside the plot area; error = error EmptyState with Retry. Data updates snap — no transition animation on refresh; initial draw may animate once at base.",
+   "a11y": "colour alone never identifies a series — labels, legends or series filters are REQUIRED (marks are gated at 2.5:1, a documented deviation from 3:1, foundations §9).",
    "forbidden": "3D, dual y-axes, pie beyond 3 slices, >8 series (aggregate the tail into \"Other\" / \"기타\"), decorative icons inside plots, y-axis label rotation (widen or abbreviate instead).",
    "key_rules": [
     "viz-1..8 in fixed order; status charts use status tokens",
@@ -491,6 +506,7 @@
     "menu",
     "app shell"
    ],
+   "states": "expanded (240px) · collapsed (64px icon rail — labels surface as tooltips) · item hover bg.hover · active item bg.selected + text.primary + medium weight (no leading bar or edge indicator).",
    "forbidden": "third nesting level; badges on more than 3 items simultaneously; per-item custom icons outside the icon family.",
    "key_rules": [
     "240px expanded/64 rail",
@@ -541,6 +557,7 @@
     "bottom sheet",
     "artifact panel"
    ],
+   "a11y": "Esc and scrim-click dismiss (they still apply in the bottom rendering; swipe-down where the platform supports it).",
    "forbidden": "left-side drawers (reserved for Sidebar — use the right side, or a Modal if the content is a blocking decision); top drawers (the top edge is app chrome: topbar, CommandPalette entry, Banner strip — a panel from there is indistinguishable from a system message; use a Modal, or a Banner for non-blocking notice); nested drawers; bottom at ≥768 (a bottom sheet on a wide desktop viewport wastes the horizontal space that made the side panel the right shape to begin with).",
    "key_rules": [
     "full-screen data drawers for review surfaces",
@@ -562,6 +579,7 @@
     "kebab",
     "actions"
    ],
+   "states": "open (fast fade + 4px-shift enter) · item hover and selected tints (the 4px item gap keeps adjacent tints from fusing) · >8 visible items scroll.",
    "forbidden": [
     "invented shortcuts (the hint documents a binding that exists, it never implies one); hints on items without a global or surface-level binding; a Kbd slot on a danger item (destructive actions are not keyboard-accelerated).",
     "forms beyond a single control inside popovers; submenus deeper than one level; inset dividers."
@@ -584,6 +602,8 @@
     "title",
     "shortcut hint"
    ],
+   "states": "hidden at rest · shown after a 300ms hover/focus delay.",
+   "a11y": "triggered on focus as well as hover; never interactive content (that is HoverCard/Popover); never an error surface — an error the user must read cannot live behind a hover.",
    "forbidden": "interactive content (→ HoverCard for rich hoverable content, Popover if it needs a click); tooltips as error surfaces (→ the field's error text, caption / status.danger below the field — an error the user must read cannot live behind a hover); tooltips on plainly labeled elements (→ nothing; delete it, a tooltip repeating a visible label is noise); inverse/contrast-flipped styling (→ the same-scheme surface described above); arrows/tails (→ nothing, see above).",
    "key_rules": [
     "never interactive; never an error surface"
@@ -598,6 +618,7 @@
     "undo",
     "transient alert"
    ],
+   "states": "entering (slow slide+fade) · visible (auto-dismiss 5s; errors 8s + manual dismiss) · stacked (max 3, then queue).",
    "forbidden": "toasts for validation errors (inline at the field); toasts requiring a decision (Modal); stacking >3 (queue instead); inverse/contrast-flipped styling.",
    "key_rules": [
     "same-scheme surface (raised-2 + border.overlay + shadow)",
@@ -636,6 +657,7 @@
     "identity"
    ],
    "sizes": "20 (dense table cells and inline mentions; never carries a status dot) · 24 · 32 · 40 · 56 (profile surfaces).",
+   "states": "carried by the optional status dot — humans: presence (status.success-bg-solid = active, border.strong = away); agents: run state (status.info-bg-solid pulse = running, status.danger-bg-solid = failed, none = idle); one vocabulary per product surface.",
    "forbidden": "rectangular human avatars or round agent avatars; status dots without an established vocabulary; groups hiding the overflow count.",
    "key_rules": [
     "dots per size 8/10/12/14 using status.*-bg-solid",
@@ -698,6 +720,7 @@
     "shortcut palette"
    ],
    "states": "empty query → recent items; no results → single EmptyState-style row plus the mandatory final fallback row \"Ask agent: '{query}'\" (ai.fg text + squared glyph) — the palette never dead-ends; loading → 3 skeleton rows.",
+   "a11y": "full keyboard — arrows, Enter, Esc, ⌘K toggles; esc / scrim-click / click-away dismiss; focus returns to the invoking context on close.",
    "forbidden": "more than one palette; palette as a form container; mouse-only affordances; fuzzy-match results without highlighting the matched substring.",
    "key_rules": [
     "never dead-ends — final row is 'Ask agent: {query}'",
@@ -737,6 +760,7 @@
     "instruction input"
    ],
    "states": "default, focus (ring on container), generating (stop morph), send-failed (inline caption status.danger error + retry text button above; draft preserved), empty (send disabled is the ONE sanctioned disable — nothing to send).",
+   "a11y": "Enter sends, Shift+Enter breaks the line, and Enter during IME composition NEVER sends (Korean/Japanese compose via Enter); ghost completion accepts with →, never Tab, and is suppressed during Hangul composition; never disabled during generation (empty-send is the one sanctioned disable).",
    "forbidden": "disabling the composer during generation; toolbar clutter (formatting buttons — agent input is plain text + attachments); more than one Composer per screen; placeholder carrying instructions that vanish on focus (use the kbd hint).",
    "key_rules": [
     "never disabled during generation (empty-send is the one sanctioned disable)",
@@ -782,6 +806,7 @@
     "copy",
     "regenerate toolbar"
    ],
+   "states": "rest text.tertiary · hover/focus-revealed (persistent in dense consoles) · thumbs selected = bg.selected fill + text.primary stroke, mutually exclusive, tappable to undo · appears only after the answer settles, never on streaming tokens.",
    "forbidden": "destructive actions in the toolbar; share/export actions outside the ⋯ overflow; feedback icons anywhere except here.",
    "key_rules": [
     "agent messages only; fixed order",
@@ -890,6 +915,7 @@
     "duration",
     "collapse header"
    ],
+   "states": "expanded · collapsed (keeps title + duration, hides the answer body); expansion state persists in the transcript per user.",
    "a11y": "the chevron is a real toggle with aria-expanded and an accessible name naming the section; the duration Badge is not a live region — it settles once.",
    "forbidden": "more than one header per reply; a header on a reply with no title-worthy goal (an untitled answer is correct, not unfinished); heading-md or larger (agent text never produces page-level hierarchy, §12); a duration Badge with an invented or estimated number — actuals only (§11); auto-collapsing a reply the user has not collapsed.",
    "key_rules": [
@@ -910,6 +936,7 @@
     "alternatives",
     "variant counter"
    ],
+   "states": "arrows disable at the ends (never wrap); switching is instant and non-destructive.",
    "a11y": "each arrow carries an accessible name stating the destination (\"Previous version, 1 of 2\"); the counter is aria-live=\"polite\" so switching announces; arrows disable at the ends rather than wrapping.",
    "forbidden": "destructive regeneration (overwriting the current variant); a pager on a human message or on an earlier agent reply; carrying one variant's citations onto another (a provenance break — §6 never fake a citation); more than 5 retained variants; exposing variants as a Tabs or Select control (the pager is the closed form).",
    "key_rules": [
@@ -952,6 +979,7 @@
     "jump to latest"
    ],
    "variants": "none — FloatingPill has a single form. (rail was declared and removed on 2026-08-03; see above.)",
+   "states": "raised while its raising condition holds · dismissed when the condition ends (deselect, Esc, reaching the bottom, pointer-out) — never an ✕, never persists as chrome.",
    "a11y": "each action independently focusable and labelled; Esc dismisses and returns focus to the anchor; the pill's appearance is not announced (it is an affordance, not a status change) — but its actions must be reachable without a pointer, since hover-reveal alone is a keyboard trap.",
    "forbidden": "destructive actions (a floating affordance is too easy to hit by accident — destructive goes through Popconfirm or a Modal); more than 3 actions (past that it is a Menu); a primary, brand or danger fill on the pill or its children (the surface is neutral by construction — emphasis inside a floating layer competes with the region's real primary); persisting after the raising condition ends; anchoring to the viewport; carrying a status icon (that is Toast's vocabulary and invites the confusion this entry exists to end); a <span> or <div> where a control belongs; more than one pill per raising condition.",
    "key_rules": [
@@ -974,6 +1002,7 @@
     "reply actions",
     "selection toolbar"
    ],
+   "states": "raised on selection in an agent Message · dismissed on deselect or Esc (never persists) · quoted passage carries a bare ai.surface fill at radius xs, no outline, box-decoration-break: clone per wrapped line.",
    "a11y": "the pill is keyboard-reachable from the selection, each action independently focusable and labeled; Esc dismisses and returns focus to the selection anchor.",
    "forbidden": "a toolbar of options instead of one pill; more than one pill visible; a fourth action without governance; mutating the original Message in place for 답장 or 설명 — both compose new turns and never touch the source passage; the pill on human messages, on ProposalCards, or on Reasoning text; persisting after deselect or Esc.",
    "key_rules": [
@@ -995,6 +1024,7 @@
     "prompt suggestions",
     "suggestion panel"
    ],
+   "states": "row hover/selected bg.selected · opens only above a focused Composer, never in the zero state · esc closes.",
    "a11y": "role=\"listbox\" with ↑↓ traversal and ↵ selection; the keycap header is decorative (aria-hidden) — the shortcuts are real key handlers, not a rendered legend doing the work.",
    "forbidden": "glass or backdrop-filter (SY015); more than 4 rows; auto-sending on selection; pushing thread content down; a per-row rationale line (it would break chip honesty — the label is the query, and grouping is how the panel signals why a row is offered); rendering alongside Chips or in the zero state.",
    "key_rules": [
@@ -1018,6 +1048,7 @@
     "digest",
     "thread summary"
    ],
+   "states": "expanded/collapsed (collapsible block) · refreshed on demand (refresh action + last-generated caption) · stale (shows its generation age — never a false \"current\").",
    "a11y": "the collapse toggle carries aria-expanded; jump-back links are real links that move focus to the target turn.",
    "forbidden": "replacing or editing transcript turns; a point with no jump-back link; stating a decision absent from the thread; presenting it as chrome or as the user's notes; auto-generating on every thread regardless of length; a summary with no visible generation age.",
    "key_rules": [
@@ -1039,6 +1070,7 @@
     "details",
     "metadata"
    ],
+   "states": "static display · row hover reveals the optional trailing action · empty value = \"—\" (text.tertiary).",
    "a11y": "semantic <dl>/<dt>/<dd>.",
    "forbidden": "more than ~10 rows without grouping under heading-sm titles; two-column term/value grids (KO/EN term widths diverge — one list per column region instead); using it as a form (labels + inputs = form, patterns.md §3).",
    "key_rules": [
@@ -1078,6 +1110,7 @@
     "source marker"
    ],
    "states": "default, hover (bg.selected), broken (source no longer retrievable — chip gets status.warning numeral and the popover says so).",
+   "a11y": "the 18px marker keeps an invisible ≥24px hit area (the 24px floor applies to targets, not glyphs); hovering a source card highlights its inline [n] markers and vice versa — the number mapping is visual, not mental.",
    "forbidden": "decorative use, self-citation, fake numbering, more than 3 chips per sentence (synthesize instead); footnote styles other than this one.",
    "key_rules": [
     "never fake citations — unsourced claims get the 'Model knowledge' badge",
@@ -1095,6 +1128,7 @@
     "mention",
     "file card"
    ],
+   "states": "hover border.strong (click opens the object) · stacks past 3 expand to a vertical list.",
    "forbidden": "thumbnails or content previews inside the card (v1 has no preview language); more than one meta line; manual colors; stacks used for anything but referenced objects.",
    "key_rules": [
     "outlined radius-md card: icon tile + title + one caption meta line (corrected 2026-08-03 by SY021, was sm); no thumbnails",
@@ -1111,6 +1145,7 @@
     "event stream",
     "changelog"
    ],
+   "states": "consecutive same-actor events MAY collapse, expandable · timestamps show absolute on hover · older entries load via \"Load more\".",
    "forbidden": "editable or deletable history rows; relative-only timestamps; mixing a comment thread into the audit feed (separate surfaces); icons per row unless the concept is in the registry.",
    "key_rules": [
     "actor avatar shape carries authorship",
@@ -1128,6 +1163,8 @@
     "file explorer",
     "nested list"
    ],
+   "states": "expanded/collapsed per node (chevron rotates, fast) · selected row bg.selected (single) or checkbox mode with mixed-state parents · drag drop-target = 2px border.focus insertion line.",
+   "a11y": "arrows navigate/expand/collapse, roving tabindex, type-ahead; checkbox mode uses mixed-state parents per the cross-component convention.",
    "forbidden": "trees for flat or 2-level data (grouped list instead); connecting guide lines (indent + chevron suffice).",
    "key_rules": [
     "rows 28; indent 20/level; max 4 levels then drill-in",
@@ -1146,6 +1183,7 @@
     "monospace",
     "code display"
    ],
+   "states": "capped at max-height 400px with a \"Show all\" expander · streaming content renders when the fence closes · copy confirms via Toast.",
    "forbidden": "editing affordances (this is display; editors are out of system scope); nested scrolling beyond the one horizontal overflow.",
    "key_rules": [
     "header: language chip + copy",
@@ -1163,6 +1201,8 @@
     "unified diff",
     "changes"
    ],
+   "states": "unchanged runs collapse to an expandable \"⋯ N unchanged lines\" row.",
+   "a11y": "never color alone — the +/− gutter markers are the colorblind-safe channel for added/removed lines.",
    "forbidden": "three-way diffs (out of scope v1); syntax highlighting inside diffs (one signal at a time); scroll-linked panes that can desynchronize.",
    "key_rules": [
     "unified default; side-by-side ≥960px",
@@ -1180,6 +1220,8 @@
     "thumbnails",
     "generated images"
    ],
+   "states": "rest (2–3 cards fanned; a single item flat) · hover/focus (card straightens to 0° and raises shadow.xs at fast) · prefers-reduced-motion renders the whole group flat and static.",
+   "a11y": "cards respond to focus as they do to hover (straighten + raise); prefers-reduced-motion renders the group flat and static.",
    "key_rules": [
     "±2.5° alternating rotation, ~20% overlap, max 3 + '+N' (badge in caption strip); single item flat",
     "card = media area + surface caption strip with hairline rule",
@@ -1197,6 +1239,8 @@
     "number field",
     "range slider"
    ],
+   "states": "dragging (value label above the thumb, Tooltip surface) · thumb focus ring · NumberInput clamps to min/max on blur with a caption note.",
+   "a11y": "keyboard steps — Slider arrows step, Shift = 10×; NumberInput stepper chevrons carry 24px hit areas and arrows step; a Slider never renders without a visible numeric value.",
    "forbidden": "sliders for dates/times; steppers on non-numeric inputs; percent sliders whose denominator is unknown.",
    "key_rules": [
     "slider never without a visible value; never for unbounded/precision",
@@ -1212,6 +1256,7 @@
     "plan picker",
     "pricing options"
    ],
+   "states": "unselected (outlined Card) · selected = 1px border.selected + flush 4px border.subtle outline (one continuous two-tone halo) + 16px check top-right.",
    "a11y": "radiogroup/group, arrow-key navigation, whole card is the target.",
    "forbidden": "nesting inputs inside choice cards; unequal card heights in one group; images/illustrations (v1 has none).",
    "key_rules": [
@@ -1229,6 +1274,8 @@
     "entity preview",
     "hover popover"
    ],
+   "states": "closed at rest · open after 500ms hover or on focus · closes on leave/Esc.",
+   "a11y": "opens on focus, not only hover; Esc closes; hover is enhancement, never requirement — everything in the card must also exist on the entity's click-through page, so keyboard and assistive access never depend on hover.",
    "forbidden": "forms; nested HoverCards; hover cards on elements that already open popovers.",
    "key_rules": [
     "500ms delay; ≤320px; avatar header + 2–4 key-value rows + ≤1 ghost action",
@@ -1245,6 +1292,7 @@
     "are you sure",
     "delete confirm"
    ],
+   "states": "open, anchored to the trigger · Esc/outside-click cancels.",
    "forbidden": "chaining popconfirms; inputs inside; using it to soften actions that deserve a Modal.",
    "key_rules": [
     "one question + Cancel/confirm pair",
@@ -1260,6 +1308,7 @@
     "contextual actions",
     "secondary menu"
    ],
+   "a11y": "an accelerator, never the only path — every action also exists in visible UI (pointer-hidden affordances must not gate any action); the browser context menu on text selections is never overridden.",
    "forbidden": "context-only actions; submenus beyond one level; overriding browser context menu on text selections.",
    "key_rules": [
     "same Menu component at pointer",
@@ -1276,6 +1325,7 @@
     "events",
     "agenda"
    ],
+   "states": "today = outlined pill · >3 events per cell collapse to \"+N\" (popover lists all) · empty days are simply empty.",
    "forbidden": "month cells scrolling internally; empty-day placeholders (empty days are simply empty); more than one event color system (viz assignment only).",
    "key_rules": [
     "day cells ≥96px; max 3 events + '+N' popover",
@@ -1293,6 +1343,7 @@
     "activity center",
     "unread"
    ],
+   "states": "unread (bg.surface fill + 8px status.info-bg-solid dot on the left edge) · row hover/focus floats the read/dismiss cluster (adds an overlay, never reflows the row) · empty (compact EmptyState flavor).",
    "forbidden": "marketing content; more than one content inline action per item (the read/dismiss hover controls are exempt — they are chrome, not content actions); unread counts anywhere except the bell's count overlay (99+ rule); type expressed by color/tint alone.",
    "key_rules": [
     "items templated from content verbs; unread dot + surface fill",
@@ -1313,6 +1364,7 @@
    ],
    "variants": "modes: build (edit) · run (read-only + per-node run status); edge: default · Condition branch (If / Else label-sm tag).",
    "states": "empty (a lone Start node + \"add first node\" affordance), default, node selected, node running/failed, connecting (a live edge follows the cursor; invalid targets dim), read-only (Run mode or insufficient permission).",
+   "a11y": "FlowNode takes the blue border.focus ring on keyboard focus; CanvasControls are icon-only squares with required aria-label; a running edge's pulse is static under reduced-motion; state is a token + a glyph, never a hue alone.",
    "forbidden": "decorative node fill-colors (status is dot + glyph, never hue alone); free-form node shapes (one silhouette); mixing straight and curved edge styles; gradients/glow on nodes or edges; more than one grouping nesting level; any node type absent from the manifest.",
    "key_rules": [
     "canvas = bg.sunken + subtle dot grid (the one sanctioned bg texture); one fixed Start anchor, ≥1 End",
@@ -1334,6 +1386,7 @@
     "console log"
    ],
    "states": "from the ai-patterns.md §3 superset (single source since 2026-08-03) — a run reaches pending, queued, running, awaiting-input, partial, success, failed, cancelled, skipped. RunLog's own behaviours on top of the shared indicators: running live-appends with a named working line (aria-live=polite) and pulses, no shimmer; success collapses to \"N steps · 12s\"; failed auto-expands and surfaces the error line + an optional Retry ghost action; awaiting-input surfaces the unblocking action and does not auto-expand (a blocked run is not an error). This line previously listed five states that differed from AgentStep's five while the manifest claimed they were identical.",
+   "a11y": "live-append is aria-live=polite with a named working line; the running step pulses, never shimmers; pin-to-bottom is a toggle, never forced; status = dot + glyph, never hue alone.",
    "forbidden": "color-only status; editing log content; auto-scroll that fights manual scroll.",
    "key_rules": [
     "expandable steps using the ai-patterns §3 state superset (SHARED with AgentStep — this entry previously claimed the two vocabularies matched while the two prose specs listed different five-state sets) → mono log lines in a bg.sunken block",
@@ -1393,6 +1446,7 @@
     "applications"
    ],
    "states": "default · search-filtered (empty groups hide; compact no-results line) · loading (skeleton squircles) · empty (\"no apps yet\" + create action).",
+   "a11y": "keyboard traversal with ↵ opening a tile; one action per tile.",
    "forbidden": "color in the launcher's own chrome — panel, labels, frame, system-app tiles, and empty slots stay achromatic (graphite / neutral); color lives ONLY inside a user-supplied app icon, never in the frame or the system-app marks (the icon rule holds for chrome). A modal stacked on top; arbitrary grid reflow; bordered-card tiles (icon-forward, not boxed).",
    "key_rules": [
     "centered FAUX-GLASS overlay over a bg.scrim backdrop — an OPAQUE frosted tint (glass.surface + glass.rim inset highlight + glass.border), radius 2xl, shadow.xl, z.modal; it READS as frosted glass with NO backdrop-filter (corrected 2026-08-03: this entry said 'glass-scrimless … radius lg', stale after the glass→opaque reversal — real translucency is forbidden by SY015 and the design.md §8 never-list, and the launcher does sit over a scrim)",

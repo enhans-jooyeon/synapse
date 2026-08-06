@@ -1,0 +1,176 @@
+/* Tabs — components.md · Tabs (editable variant 2026-07-30; last synced 2026-08-05).
+   Tokens only; the gate lints this file (validate.py `all` lints storybook CSS).
+   SYNC partners are listed in Tabs.tsx's header.
+   TEXT tabs only — boxed/pill tab styles are forbidden (spec Forbidden). */
+
+.sy-tabs { display: flex; align-items: stretch; }
+
+/* The strip: height 40, container bottom rule border.subtle; overflow scrolls horizontally
+   with fade edges, NEVER wraps (spec Bilingual). The scrollbar stays the global quiet
+   default (foundations §6 — never styled per component). */
+.sy-tabs__scroll {
+  display: flex; align-items: stretch;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--sy-border-subtle);
+  min-width: 0; flex: 0 1 auto;
+}
+/* Fade edges — scroll-state classes toggled by the TSX. mask alpha only; not a color choice. */
+.sy-tabs__scroll--fade-l { mask-image: linear-gradient(to right, transparent, black 24px); }
+.sy-tabs__scroll--fade-r { mask-image: linear-gradient(to right, black calc(100% - 24px), transparent); }
+.sy-tabs__scroll--fade-l.sy-tabs__scroll--fade-r {
+  mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+}
+
+.sy-tabs__item {
+  position: relative;
+  display: inline-flex; align-items: center;
+  flex: none;
+  box-sizing: border-box;
+  height: 40px;
+  /* the active underline: a 2px bottom border flush against the container rule — carried
+     by every item as transparent so activation never shifts layout */
+  border-bottom: 2px solid transparent;
+}
+.sy-tabs__item--active { border-bottom-color: var(--sy-bg-inverse); }
+
+/* Closing — `fast` width collapse (spec States; the width set + zeroed by the TSX).
+   The motion law forbids width animation outside accordion height — the Tabs entry states
+   this one anyway: contradiction FLAGGED, the component spec's letter implemented. */
+.sy-tabs__item--closing {
+  overflow: hidden;
+  min-width: 0;
+  opacity: 0;
+  transition: width var(--sy-duration-fast) var(--sy-ease-exit),
+              opacity var(--sy-duration-fast) var(--sy-ease-exit);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sy-tabs__item--closing { transition: none; }
+}
+
+/* The tab — body-size (14) medium, text.secondary at rest, active text.primary.
+   Padding-x 12 is FLAGGED provisional (unstated). Hover text.primary (unstated; the
+   SegmentedControl hover channel taken — finish rule demands a transition). */
+.sy-tabs__tab {
+  display: inline-flex; align-items: center;
+  gap: var(--sy-space-1_5);
+  height: 100%;
+  padding: 0 var(--sy-space-3);
+  border: none; background: transparent;
+  color: var(--sy-text-secondary);
+  font: var(--sy-weight-medium) var(--sy-body-size) / var(--sy-body-lh) var(--sy-font-sans);
+  white-space: nowrap; /* tab width from content; total overflow scrolls, never wraps to two lines */
+  cursor: pointer;
+  transition: color var(--sy-duration-instant) var(--sy-ease-standard);
+}
+.sy-tabs__tab:hover { color: var(--sy-text-primary); }
+.sy-tabs__item--active .sy-tabs__tab { color: var(--sy-text-primary); }
+
+.sy-tabs__tab:focus-visible {
+  outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus);
+}
+
+/* Optional count Badge after the label — the slot only positions it. */
+.sy-tabs__badge { display: inline-flex; flex: none; }
+
+/* ---- editable — user-created tabs ---- */
+
+/* Tabs that carry a ✕ trim their trailing padding: the ✕ takes over that side
+   (the −2px trailing-affix trim, foundations §3, is folded into the ✕'s own margin). */
+.sy-tabs__item--editable .sy-tabs__tab { padding-right: var(--sy-space-1); }
+
+/* The ✕ — a separate 16px button (12px glyph) inside the tab shape. Appears on hover or
+   when active; ALWAYS present on touch. Space is reserved while hidden so its appearance
+   never shifts the strip. */
+.sy-tabs__close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; flex: none;
+  margin-right: calc(var(--sy-space-3) - 2px); /* the tab's own end padding minus the icon trim */
+  padding: 0; border: none; border-radius: var(--sy-radius-xs);
+  background: transparent;
+  color: var(--sy-icon-tertiary);
+  cursor: pointer;
+  visibility: hidden;
+  transition: background var(--sy-duration-instant) var(--sy-ease-standard),
+              color var(--sy-duration-instant) var(--sy-ease-standard);
+}
+.sy-tabs__item:hover .sy-tabs__close,
+.sy-tabs__item--active .sy-tabs__close,
+.sy-tabs__close:focus-visible { visibility: visible; }
+@media (hover: none) {
+  .sy-tabs__close { visibility: visible; }
+}
+.sy-tabs__close:hover { background: var(--sy-bg-hover); color: var(--sy-text-primary); }
+.sy-tabs__close:focus-visible {
+  outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus);
+}
+
+.sy-tabs__x {
+  width: 12px; height: 12px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* Dirty — a 6px text.tertiary dot REPLACES the ✕ until hover (spec States). On touch
+   (no hover to reveal the ✕) the ✕ wins — FLAGGED provisional (the spec leaves the
+   dirty × touch intersection unstated). */
+.sy-tabs__dot {
+  display: none;
+  width: 6px; height: 6px; flex: none;
+  border-radius: var(--sy-radius-full);
+  background: var(--sy-text-tertiary);
+}
+@media (hover: hover) {
+  .sy-tabs__item--dirty .sy-tabs__close { visibility: visible; }
+  .sy-tabs__item--dirty .sy-tabs__close .sy-tabs__dot { display: block; }
+  .sy-tabs__item--dirty .sy-tabs__close .sy-tabs__x { display: none; }
+  .sy-tabs__item--dirty:hover .sy-tabs__close .sy-tabs__dot,
+  .sy-tabs__item--dirty .sy-tabs__close:focus-visible .sy-tabs__dot { display: none; }
+  .sy-tabs__item--dirty:hover .sy-tabs__close .sy-tabs__x,
+  .sy-tabs__item--dirty .sy-tabs__close:focus-visible .sy-tabs__x { display: block; }
+}
+
+/* Inline rename — an Input inheriting the tab's type scale; Enter commits, Esc reverts
+   (focus moves in and returns to the tab on commit — handled in the TSX). */
+.sy-tabs__rename {
+  box-sizing: border-box;
+  height: 24px;
+  margin: 0 var(--sy-space-1);
+  padding: 0 var(--sy-space-1);
+  border: 1px solid var(--sy-border-focus-input);
+  border-radius: var(--sy-radius-xs);
+  background: var(--sy-bg-page);
+  color: var(--sy-text-primary);
+  font: var(--sy-weight-medium) var(--sy-body-size) / var(--sy-body-lh) var(--sy-font-sans);
+}
+.sy-tabs__rename:focus-visible { outline: none; }
+
+/* The + — after the last tab, OUTSIDE the scroll region so it never scrolls away.
+   A 24px ghost icon-button (xs icon-only geometry); disables at 7. */
+.sy-tabs__add {
+  display: inline-flex; align-items: center; justify-content: center;
+  align-self: center;
+  width: var(--sy-control-height-xs); height: var(--sy-control-height-xs);
+  flex: none;
+  margin-left: var(--sy-space-1);
+  padding: 0; border: none;
+  border-radius: var(--sy-radius-control-xs);
+  background: transparent;
+  color: var(--sy-text-secondary);
+  cursor: pointer;
+  transition: background var(--sy-duration-instant) var(--sy-ease-standard),
+              color var(--sy-duration-instant) var(--sy-ease-standard);
+}
+.sy-tabs__add > svg {
+  width: 16px; height: 16px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.sy-tabs__add:hover:not(:disabled) { background: var(--sy-bg-hover); }
+.sy-tabs__add:focus-visible {
+  outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus);
+}
+/* Ghost disabled carve-out (Button 2026-08-03): no fill; the muted glyph carries the state. */
+.sy-tabs__add:disabled { background: transparent; color: var(--sy-text-disabled); cursor: not-allowed; }

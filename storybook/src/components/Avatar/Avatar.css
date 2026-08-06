@@ -1,0 +1,130 @@
+/* Avatar — components.md · Avatar (last synced 2026-08-05).
+   Tokens only; the gate lints this file (validate.py `all` lints storybook CSS).
+   SYNC partners are listed in Avatar.tsx's header.
+   Shape encodes authorship (mandatory product language): humans = radius full,
+   agents = squared radius sm (8) at EVERY size — the spec pins one step, not the
+   size-keyed control ladder. */
+
+.sy-avatar {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: none;
+  box-sizing: border-box;
+  overflow: visible; /* the status dot rides the corner; the image clips itself */
+  /* Initials tint: the spec demands "deterministic viz palette background at 20% opacity".
+     No viz tint tokens exist (tokens/synapse.css carries only the PLACEHOLDER comments for
+     the retired category tint/text families) — FLAGGED provisional: an OPAQUE 20% mix over
+     bg.page (no alpha, mode-aware through both tokens), pending real tint tokens.
+     See proposals/2026-08-05-batch1-implementation-ambiguities.md. */
+}
+
+.sy-avatar--human { border-radius: var(--sy-radius-full); }
+.sy-avatar--agent { border-radius: var(--sy-radius-sm); }
+
+/* Closed size set 20/24/32/40/56 (ratified Sizes slot). width/height are the spec's own
+   size constants — there is no avatar size token to reference. */
+.sy-avatar--20 { width: 20px; height: 20px; }
+.sy-avatar--24 { width: 24px; height: 24px; }
+.sy-avatar--32 { width: 32px; height: 32px; }
+.sy-avatar--40 { width: 40px; height: 40px; }
+.sy-avatar--56 { width: 56px; height: 56px; }
+
+.sy-avatar__img {
+  width: 100%; height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  display: block;
+}
+
+/* Initials — 2 Latin letters / 1 Hangul syllable, 600 weight (spec). Type steps per size
+   are FLAGGED provisional (unstated): 11/12/13/16/20 off the closed type scale, tracking
+   roughly half the box. Sealed single-line container → line-height collapses to 1 (the
+   Badge optical-centering precedent; the md-badge 1px nudge is md-badge-only). */
+.sy-avatar__initials {
+  font: var(--sy-weight-semibold) var(--sy-text-13) / 1 var(--sy-font-sans);
+  user-select: none;
+}
+.sy-avatar--20 .sy-avatar__initials { font-size: var(--sy-text-11); }
+.sy-avatar--24 .sy-avatar__initials { font-size: var(--sy-text-12); }
+.sy-avatar--40 .sy-avatar__initials { font-size: var(--sy-text-16); }
+.sy-avatar--56 .sy-avatar__initials { font-size: var(--sy-text-20); }
+
+/* Deterministic viz tint (assigned by name hash in the TSX) — background is the 20% tint,
+   text is the matching hue. The raw --sy-viz-* text usage is FLAGGED: the tokens file's own
+   comment says "never use raw --sy-viz-* as text" (the AA-verified darkened text family was
+   removed with the category-* chips) — the spec's "matching 600-weight text" letter is
+   implemented, the AA conflict is recorded, not resolved. */
+.sy-avatar--viz-1 { background: color-mix(in srgb, var(--sy-viz-1) 20%, var(--sy-bg-page)); color: var(--sy-viz-1); }
+.sy-avatar--viz-2 { background: color-mix(in srgb, var(--sy-viz-2) 20%, var(--sy-bg-page)); color: var(--sy-viz-2); }
+.sy-avatar--viz-3 { background: color-mix(in srgb, var(--sy-viz-3) 20%, var(--sy-bg-page)); color: var(--sy-viz-3); }
+.sy-avatar--viz-4 { background: color-mix(in srgb, var(--sy-viz-4) 20%, var(--sy-bg-page)); color: var(--sy-viz-4); }
+.sy-avatar--viz-5 { background: color-mix(in srgb, var(--sy-viz-5) 20%, var(--sy-bg-page)); color: var(--sy-viz-5); }
+.sy-avatar--viz-6 { background: color-mix(in srgb, var(--sy-viz-6) 20%, var(--sy-bg-page)); color: var(--sy-viz-6); }
+.sy-avatar--viz-7 { background: color-mix(in srgb, var(--sy-viz-7) 20%, var(--sy-bg-page)); color: var(--sy-viz-7); }
+.sy-avatar--viz-8 { background: color-mix(in srgb, var(--sy-viz-8) 20%, var(--sy-bg-page)); color: var(--sy-viz-8); }
+
+/* ---- Status dot — bottom-right, 2px bg.page ring (the sanctioned zero-blur ring form,
+   foundations §6); mid -bg-solid values, never the darker text tokens. Sized per avatar:
+   24→8 · 32→10 · 40→12 · 56→14; the 20px avatar never carries one (enforced in TSX). ---- */
+.sy-avatar__dot {
+  position: absolute; right: 0; bottom: 0;
+  border-radius: var(--sy-radius-full);
+  box-shadow: 0 0 0 2px var(--sy-bg-page);
+}
+.sy-avatar--24 .sy-avatar__dot { width: 8px; height: 8px; }
+.sy-avatar--32 .sy-avatar__dot { width: 10px; height: 10px; }
+.sy-avatar--40 .sy-avatar__dot { width: 12px; height: 12px; }
+.sy-avatar--56 .sy-avatar__dot { width: 14px; height: 14px; }
+
+/* Humans — presence. */
+.sy-avatar__dot--active { background: var(--sy-status-success-bg-solid); }
+.sy-avatar__dot--away { background: var(--sy-border-strong); }
+
+/* Agents — run state. `running` pulses; parameters are FLAGGED provisional (the spec says
+   only "pulse"): opacity-only (motion law: animate only opacity/transform), 1.6s loop. */
+.sy-avatar__dot--running { background: var(--sy-status-info-bg-solid); animation: sy-avatar-pulse 1.6s var(--sy-ease-standard) infinite; }
+.sy-avatar__dot--failed { background: var(--sy-status-danger-bg-solid); }
+
+@keyframes sy-avatar-pulse { 50% { opacity: 0.4; } }
+@media (prefers-reduced-motion: reduce) {
+  .sy-avatar__dot--running { animation: none; }
+}
+
+/* ---- AvatarGroup — overlapping stack: offset −25% of the avatar size, each member with a
+   2px bg.page ring; max 4 visible + "+N" (enforced in TSX); humans first, then agents. ----
+   The −25% offsets are written as on-scale px × factor so the spacing lint reads on-scale
+   values: −5 = 10×−0.5 · −6 = 12×−0.5 · −8 = 16×−0.5 · −10 = 20×−0.5 · −14 = 28×−0.5. */
+.sy-avatar-group { display: inline-flex; align-items: center; }
+.sy-avatar-group .sy-avatar,
+.sy-avatar-group__overflow { box-shadow: 0 0 0 2px var(--sy-bg-page); }
+.sy-avatar-group .sy-avatar--20 + *, .sy-avatar-group__overflow--20 { margin-left: calc(10px * -0.5); }
+.sy-avatar-group .sy-avatar--24 + *, .sy-avatar-group__overflow--24 { margin-left: calc(12px * -0.5); }
+.sy-avatar-group .sy-avatar--32 + *, .sy-avatar-group__overflow--32 { margin-left: calc(16px * -0.5); }
+.sy-avatar-group .sy-avatar--40 + *, .sy-avatar-group__overflow--40 { margin-left: calc(20px * -0.5); }
+.sy-avatar-group .sy-avatar--56 + *, .sy-avatar-group__overflow--56 { margin-left: calc(28px * -0.5); }
+.sy-avatar-group .sy-avatar:first-child { margin-left: 0; }
+
+/* "+N" overflow circle — bg.sunken, micro text (11/16 semibold); its click opens a popover
+   listing ALL members (spec) — Popover is not in the library yet, FLAGGED: rendered as a
+   plain button wired to the consumer's handler. */
+.sy-avatar-group__overflow {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: none;
+  box-sizing: border-box;
+  border: none; padding: 0;
+  border-radius: var(--sy-radius-full);
+  background: var(--sy-bg-sunken);
+  color: var(--sy-text-secondary);
+  font: var(--sy-weight-semibold) var(--sy-text-11) / 1 var(--sy-font-sans);
+}
+.sy-avatar-group__overflow--20 { width: 20px; height: 20px; }
+.sy-avatar-group__overflow--24 { width: 24px; height: 24px; }
+.sy-avatar-group__overflow--32 { width: 32px; height: 32px; }
+.sy-avatar-group__overflow--40 { width: 40px; height: 40px; }
+.sy-avatar-group__overflow--56 { width: 56px; height: 56px; }
+button.sy-avatar-group__overflow { cursor: pointer; }
+button.sy-avatar-group__overflow:hover { background: var(--sy-bg-hover); color: var(--sy-text-primary); }
+button.sy-avatar-group__overflow:focus-visible {
+  outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus);
+}

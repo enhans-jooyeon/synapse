@@ -1,0 +1,127 @@
+/* Chip — components.md · Chip (fill-encodes-interactivity, 2026-07-30; last synced 2026-08-05).
+   Tokens only; the gate lints this file (validate.py `all` lints storybook CSS).
+   SYNC partners are listed in Chip.tsx's header.
+   Height 24, radius sm — "the smaller Chip (24px) stays sm (8)" (foundations §5); the
+   size-keyed control-radius ladder does NOT apply here, the spec pins the step.
+   NEVER opacity as a state signal; disabled = text.disabled + border.subtle. */
+
+/* Base: OUTLINED at rest — outline says "actionable" (a filled/tinted 24px pill is a Badge).
+   Label 12/18 medium — FLAGGED provisional: the Chip entry states no type style; Badge's
+   optical-centering note fixes "24px/12px proportions (`lg` badge, Chip)" and rules that at
+   this geometry plain flex centering is correct (no md-badge 1px nudge), so label-sm metrics
+   are the implemented reading. Padding-x 8 (control-padding-x-xs, the 24px control step) —
+   also FLAGGED (unstated). See proposals/2026-08-05-batch1-implementation-ambiguities.md. */
+.sy-chip {
+  box-sizing: border-box;
+  display: inline-flex; align-items: center;
+  gap: var(--sy-space-1); /* glyph–label gap 4px — FLAGGED provisional (unstated; 12px glyphs sit tighter than Button's 16px-icon 6px gap) */
+  height: 24px;
+  padding: 0 var(--sy-space-2);
+  border: 1px solid var(--sy-border-default);
+  border-radius: var(--sy-radius-sm);
+  background: var(--sy-bg-page);
+  color: var(--sy-text-primary);
+  font: var(--sy-weight-medium) var(--sy-text-12) / var(--sy-text-12-lh) var(--sy-font-sans);
+  white-space: nowrap; /* labels never truncate — wrap the ROW, never the chip (spec Forbidden) */
+  transition: background var(--sy-duration-instant) var(--sy-ease-standard),
+              color var(--sy-duration-instant) var(--sy-ease-standard),
+              border-color var(--sy-duration-instant) var(--sy-ease-standard);
+}
+
+.sy-chip__label { display: inline-flex; align-items: center; }
+
+/* Affordance glyphs are 12px (spec: "trailing 12px ✕", "leading 12px ✓"). */
+.sy-chip__glyph {
+  width: 12px; height: 12px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ---- input — a removable selection. The body is not a target; only the ✕ is. ---- */
+/* Leading Avatar slot — the spec says "Avatar 16", outside Avatar's closed size set
+   (20/24/32/40/56): FLAGGED. The slot clamps its content to 16px. */
+.sy-chip__avatar { display: inline-flex; flex: none; width: 16px; height: 16px;
+  /* pull the avatar toward the edge: the −2px trim generalized to Chips (foundations §3)
+     reads on the leading affix side */
+  margin-left: -2px; }
+.sy-chip__avatar > * { width: 16px; height: 16px; }
+
+/* The remove ✕ is its own 16px control inside the 24px chip row; hover treatment is
+   unstated in the spec — FLAGGED provisional: the universal hover overlay on the button
+   only, never on the chip body (which is not a target and must not read hoverable). */
+.sy-chip__remove {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; flex: none;
+  margin-right: -2px; /* trailing-affix −2px optical trim (foundations §3, generalized to Chips) */
+  padding: 0; border: none; border-radius: var(--sy-radius-xs);
+  background: transparent; color: var(--sy-icon-secondary); cursor: pointer;
+  transition: background var(--sy-duration-instant) var(--sy-ease-standard),
+              color var(--sy-duration-instant) var(--sy-ease-standard);
+}
+.sy-chip__remove:hover:not(:disabled) { background: var(--sy-bg-hover); color: var(--sy-text-primary); }
+.sy-chip__remove:disabled { color: var(--sy-icon-disabled); cursor: not-allowed; }
+
+/* ---- list-filter — toggleable refinement. At rest: transparent + border.default +
+   text.secondary. Hover mapping is unstated ("bg.hover or border.strong") — FLAGGED
+   provisional: the universal bg.hover overlay, as on rows and menus. ---- */
+.sy-chip--filter { background: transparent; color: var(--sy-text-secondary); cursor: pointer; }
+.sy-chip--filter:hover:not(:disabled) { background: var(--sy-bg-hover); color: var(--sy-text-primary); }
+
+/* Selected, MULTI-select — NO fill: three channels move at once and border.selected does
+   the heavy lifting (19.9:1 vs the rest state's 1.13:1 on the page — spec's own numbers);
+   keeping the fill off is what lets five selected filters stay quiet. */
+.sy-chip--filter.sy-chip--selected {
+  border-color: var(--sy-border-selected);
+  color: var(--sy-text-primary);
+}
+
+/* Selected, SINGLE-select/toggle — bg.inverse-soft, NOT bg.inverse: pure key black is
+   byte-identical to action.primary-bg, so a selected chip would render as a primary
+   button (spec). White label clears AA on the softened key (12.53:1 — spec's number). */
+.sy-chip--filter.sy-chip--single.sy-chip--selected {
+  background: var(--sy-bg-inverse-soft);
+  border-color: transparent;
+  color: var(--sy-text-on-inverse);
+}
+.sy-chip--filter.sy-chip--single.sy-chip--selected:hover:not(:disabled) {
+  background: var(--sy-bg-inverse-soft); /* the solid selected fill does not take the page hover overlay */
+  color: var(--sy-text-on-inverse);
+}
+
+/* Leading-glyph side takes the −2px optical trim when the ✓ is present (selected). */
+.sy-chip--filter.sy-chip--selected { padding-left: calc(var(--sy-space-2) - 2px); }
+
+/* ---- suggestion — agent-suggested actions; console + empty states ONLY, max 3 (review-
+   enforced). bg.raised + border.default hairline; hover steps BOTH channels (spec).
+   Carries NO affordance glyph — the spec's rendering names none while its own rule 1
+   demands one on every chip: contradiction FLAGGED, not resolved. ---- */
+.sy-chip--suggestion { background: var(--sy-bg-raised); cursor: pointer; }
+.sy-chip--suggestion:hover:not(:disabled) {
+  background: var(--sy-bg-hover);
+  border-color: var(--sy-border-strong);
+}
+
+/* ---- Focus — the general two-ring system (foundations §6/§9): 2px page-gap ring +
+   2px border.focus ring. Chips do NOT take Button's target-keyed rings (that is Button's
+   one sanctioned divergence). The ring lands on the interactive element only: the chip
+   button itself, or the ✕ on input chips. ---- */
+.sy-chip--filter:focus-visible,
+.sy-chip--suggestion:focus-visible,
+.sy-chip__remove:focus-visible {
+  outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus);
+}
+
+/* ---- Disabled — text.disabled + border.subtle, no interaction, NEVER opacity (spec).
+   The resting fill (bg.page / bg.raised / transparent) is kept and any selected fill is
+   dropped — a live inverse fill on a dead control would read as available (the Button
+   disabled-outline logic) — FLAGGED provisional (the spec states only text + border). ---- */
+.sy-chip--disabled { color: var(--sy-text-disabled); border-color: var(--sy-border-subtle); cursor: not-allowed; }
+/* Selected + disabled — both selected treatments collapse to the disabled outline (the
+   TSX always emits .sy-chip--disabled, so these outgun the selected rules by specificity). */
+.sy-chip--filter.sy-chip--selected.sy-chip--disabled,
+.sy-chip--filter.sy-chip--single.sy-chip--selected.sy-chip--disabled {
+  background: transparent;
+  border-color: var(--sy-border-subtle);
+  color: var(--sy-text-disabled);
+}

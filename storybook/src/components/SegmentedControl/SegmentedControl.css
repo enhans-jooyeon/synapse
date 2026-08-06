@@ -1,0 +1,76 @@
+/* SegmentedControl — components.md · SegmentedControl (last synced 2026-08-05).
+   Tokens only; the gate lints this file (validate.py `all` lints storybook CSS).
+   SYNC partners are listed in SegmentedControl.tsx's header.
+
+   CONCENTRIC GEOMETRY (foundations §5, corrected 2026-08-03 by SY021): the container is an
+   ASSEMBLED CONTROL, a containment role — radius `tray` (12) — with 4px inner padding; the
+   segments are nested elements — radius `nested` (8) — because inner = outer − inset
+   (12 − 4 = 8). Role-tier tokens on purpose (radius vocabulary applies by element class):
+   a future re-tiering is a one-alias change.
+
+   ASSEMBLED HEIGHT — the spec contradicts itself: the Anatomy prose says segments 24 and
+   "the assembled control lands exactly on the control height (32)" (24 + 4 + 4), while the
+   Key rules bullet says "assembled control = 36". FLAGGED, not resolved — the detailed
+   prose reading (24-high segments → 32 assembled = control-height-sm) is implemented.
+   See proposals/2026-08-05-batch1-implementation-ambiguities.md. */
+
+.sy-segctl {
+  box-sizing: border-box;
+  display: inline-flex; align-items: center;
+  padding: var(--sy-space-1); /* the 4px inset that makes the corner arithmetic work */
+  background: var(--sy-bg-sunken);
+  border-radius: var(--sy-radius-tray);
+}
+
+/* Segments: height 24, radius nested (8), padding-x 12, 13 medium, text.secondary.
+   The transparent 1px border holds the box constant so the selected hairline never
+   shifts layout (the border-substitute concern foundations §6 solves with rings —
+   here a constant border does it without stacking onto the focus ring). */
+.sy-segctl__seg {
+  box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--sy-space-1_5); /* icon–label gap when a segment carries both (Button's ratified step) */
+  height: 24px;
+  padding: 0 var(--sy-space-3);
+  border: 1px solid transparent;
+  border-radius: var(--sy-radius-nested);
+  background: transparent;
+  color: var(--sy-text-secondary);
+  font: var(--sy-weight-medium) var(--sy-text-13) / var(--sy-text-13-lh) var(--sy-font-sans);
+  white-space: nowrap; /* segment widths from content — "지난 30일" and "Last 30 days" both fit (spec Bilingual) */
+  cursor: pointer;
+  transition: background var(--sy-duration-instant) var(--sy-ease-standard),
+              color var(--sy-duration-instant) var(--sy-ease-standard),
+              border-color var(--sy-duration-instant) var(--sy-ease-standard);
+}
+
+.sy-segctl__seg > svg { width: 16px; height: 16px; flex: none; }
+
+/* Icon-only segments (approved icon list only, review-enforced; label becomes aria-label).
+   32px wide — FLAGGED provisional (geometry unstated): square-plus, keeping the 24px-tall
+   segment a comfortable target inside the 32px assembled control. */
+.sy-segctl__seg--icon { padding: 0; width: 32px; }
+
+/* Hover — text.primary (the spec's one stated hover channel; no fill). */
+.sy-segctl__seg:hover:not(:disabled) { color: var(--sy-text-primary); }
+
+/* Selected — bg.page fill + 1px border.default + text.primary. */
+.sy-segctl__seg--selected,
+.sy-segctl__seg--selected:hover:not(:disabled) {
+  background: var(--sy-bg-page);
+  border-color: var(--sy-border-default);
+  color: var(--sy-text-primary);
+}
+
+/* Focus — the general two-ring system; the gap ring uses the surface the segment SITS ON
+   (bg.sunken, per foundations §6's override rule), not bg.page. */
+.sy-segctl__seg:focus-visible {
+  outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-sunken), 0 0 0 4px var(--sy-border-focus);
+}
+
+/* Disabled — WHOLE control only (never individual segments). Rendering is FLAGGED
+   provisional (unstated): labels drop to text.disabled, the selected segment keeps its
+   bg.page fill so the choice stays readable, never opacity. */
+.sy-segctl--disabled .sy-segctl__seg { color: var(--sy-text-disabled); cursor: not-allowed; }
+.sy-segctl--disabled .sy-segctl__seg--selected { background: var(--sy-bg-page); border-color: var(--sy-border-subtle); }

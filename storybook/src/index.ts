@@ -7,6 +7,18 @@ export type { InputProps } from "./components/Input/Input";
 export { Card } from "./components/Card/Card";
 export type { CardProps } from "./components/Card/Card";
 
+/* ---- Track B batch 1 (added 2026-08-05 — DISTRIBUTION.md dependency-chain build-out) ----
+   Specs: components.md · Chip / Avatar / SegmentedControl / Tabs. Provisional readings are
+   FLAGGED in proposals/2026-08-05-batch1-implementation-ambiguities.md, not resolved. */
+export { Chip } from "./components/Chip/Chip";
+export type { ChipProps, ChipVariant, ChipSelectionMode } from "./components/Chip/Chip";
+export { Avatar, AvatarGroup, MAX_GROUP_VISIBLE } from "./components/Avatar/Avatar";
+export type { AvatarProps, AvatarGroupProps, AvatarGroupItem, AvatarKind, AvatarSize, AvatarStatus } from "./components/Avatar/Avatar";
+export { SegmentedControl, MAX_SEGMENTS } from "./components/SegmentedControl/SegmentedControl";
+export type { SegmentedControlProps, SegmentedControlOption } from "./components/SegmentedControl/SegmentedControl";
+export { Tabs, MAX_TABS } from "./components/Tabs/Tabs";
+export type { TabsProps, TabItem } from "./components/Tabs/Tabs";
+
 /* ---- Chat surface (added 2026-08-03 — chat-interface gap audit) ----
    Specs: components.md · Thread / Message / AnswerHeader / VariantPager /
    Reasoning / SelectionPill / FollowUpPanel / ConversationSummary.
