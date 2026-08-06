@@ -4,6 +4,25 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+*(nothing yet)*
+
+## 2.2.0 — 2026-08-05 — the machine surface: generated manifest, JSON CLI, stricter gate, +5 components
+
+**Minor release — additive throughout; no token renames or removals.** The theme is the one Astryx lesson worth having: *one canonical source per fact, everything else generated*. The manifest is now a projection of `components.md` rather than a hand-maintained twin, the CLI speaks JSON, and four new gate rules make previously-silent classes of drift fatal.
+
+### ⚠ Consumer-visible strictness (read before upgrading CI)
+
+Four rules now REJECT things that silently passed at 2.1.0. None is a rename — each enforces a rule the contract already stated:
+
+| Rule | What now fails | Fix |
+|---|---|---|
+| **SY110** | a screen-intent carrying any key outside the schema (e.g. the removed `density`, or ad-hoc keys like `boundary`) | delete the key; the intent schema is closed |
+| **SY109** | `viewer_role` outside `Guest · Member · Manager · Owner · Admin` | use a real role (`product-context.md`) |
+| **SY022** | a stated component-count claim that disagrees with reality | update the claim (the gate names the right number) |
+| **SY023** | z-index outside the two sanctioned vocabularies | floating layers → `--sy-z-*`; local sibling ordering → −1..2 inside `isolation: isolate` |
+
+Also: `validate.py all` now lints `storybook/src/components/**/*.css`, so component CSS is under the same rules as the rest of the system.
+
 - **z-index contract completed (engineer feedback, ratified 2026-08-05).** Foundations §6 now states the second vocabulary explicitly: floating/pinned layers take the six `--sy-z-*` tokens; **local sibling ordering inside one component is −1..2 and MUST sit inside an isolated stacking context** (`isolation: isolate`) — two vocabularies split by element class, like the radius tier. New gate **SY023** enforces it (tokens pass; local literals warn without the file-level isolation marker, SY007-style; everything else errors), and the product gate flags `z-10`+/`z-9999` Tailwind classes. `migration/z-index-migration.md` carries the decision tree + the Tailwind theme mapping for the ~250-call-site product migration. Dogfooded immediately: SY023's first run found the repo's own render violating it — two dropdown panels and two sticky headers at literal `20`/`2` (→ tokens) and two un-isolated local stacks (→ `isolation: isolate`) — all fixed.
 
 - **storybook library: +4 components toward parity — Chip, Avatar, SegmentedControl, Tabs (track B batch 1, the smaller four of `docs/DISTRIBUTION.md`'s dependency chain; 13 → 17 of 68).** Each lands at the Button hygiene bar: machine header (`@input`/`@output`/`@position` + SYNC block + `Last synced spec:` line), tokens-only CSS that passes `validate.py all` at 0/0, stories exercising the closed lists (EN + KO), and the general two-ring focus system (Button's target-keyed rings stay Button's one divergence). Where the spec is silent or self-inconsistent, the code carries a FLAGGED provisional reading, never a resolution — all 31 are registered in `proposals/2026-08-05-batch1-implementation-ambiguities.md` (the Button-register pattern; `components.md` untouched). Per component:
