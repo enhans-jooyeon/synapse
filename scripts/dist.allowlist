@@ -46,3 +46,20 @@ tooling/product-gates/
 
 # --- App Generation feature: chart/component catalog (reconciled to v1.0.0) ---
 app-generation/
+
+# --- Product migration: the conversion guides (one per area) + their index ---
+# Listed INDIVIDUALLY, never as `migration/`: the rest of that folder is the pre-1.0
+# shadcn migration's working papers (color-token-map.*, component-inventory-diff.md,
+# decisions.md, replacement-rules.*, token-*.md, variant-decisions.md, the review CSVs
+# and generated HTML dumps, verify-token-map.py) — a finished internal audit trail that
+# names rejected options and must stay private. migration/README.md is the two-part index
+# that keeps the next person from shipping the wrong half.
+migration/README.md
+migration/2026-08-06-audit-migration-guide.md
+migration/color-token-snapping.md
+migration/scale-snapping.md
+migration/typography-tailwind-migration.md
+migration/icon-sizing.md
+migration/shadow-triage.md
+migration/motion-durations.md
+migration/z-index-migration.md
