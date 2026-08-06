@@ -1,9 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Synapse screen intent",
-  "description": "Declaration an agent completes BEFORE generating a screen (design.md §4 made machine-checkable). Validate with: python3 tools/validate.py page <file>. Component names must match synapse.manifest.json keys exactly.",
+  "description": "Declaration an agent completes BEFORE generating a screen (design.md §4 made machine-checkable). Validate with: python3 tools/validate.py page <file>. Component names must match synapse.manifest.json keys exactly. The schema is CLOSED (additionalProperties: false at every level): unknown keys — including removed concepts like 'density' — are rejected, not ignored.",
   "type": "object",
   "required": ["name", "archetype", "regions", "locales", "states", "permissions"],
+  "additionalProperties": false,
   "properties": {
     "name": { "type": "string", "minLength": 1 },
     "archetype": { "enum": ["workbench", "object", "settings", "guided", "console", "home"] },
@@ -12,6 +13,7 @@
       "items": {
         "type": "object",
         "required": ["id", "components"],
+        "additionalProperties": false,
         "properties": {
           "id": { "type": "string" },
           "components": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
@@ -23,6 +25,7 @@
     "states": {
       "type": "object",
       "required": ["empty", "loading", "error"],
+      "additionalProperties": false,
       "properties": {
         "empty": { "const": true, "description": "Empty state specified for every list/table/search." },
         "loading": { "const": true, "description": "Skeleton/spinner behavior specified per the feedback tree." },
@@ -32,8 +35,12 @@
     "permissions": {
       "type": "object",
       "required": ["viewer_role"],
+      "additionalProperties": false,
       "properties": {
-        "viewer_role": { "type": "string", "minLength": 1 },
+        "viewer_role": {
+          "enum": ["Guest", "Member", "Manager", "Owner", "Admin"],
+          "$comment": "The closed role-tier vocabulary from product-context.md ('Role tiers (clearance order): Guest < Member < Manager < Owner < Admin'). validate.py SY109 reads this enum at run time, so the two cannot diverge."
+        },
         "hidden_capabilities": { "type": "array", "items": { "type": "string" }, "description": "Plan-gated features omitted from the screen (patterns.md §6)." },
         "disabled_with_reason": { "type": "array", "items": { "type": "string" }, "description": "Org-obtainable capabilities rendered disabled + reason Tooltip." }
       }

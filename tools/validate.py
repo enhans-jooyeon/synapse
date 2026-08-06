@@ -5,7 +5,7 @@ Usage:
     python3 tools/validate.py tokens                 # validate the token source of truth
     python3 tools/validate.py ui FILE [FILE ...]     # lint generated UI (html/css)
     python3 tools/validate.py page INTENT.json       # validate a screen-intent declaration
-    python3 tools/validate.py all                    # tokens + every .html in repo root
+    python3 tools/validate.py all                    # tokens + every .html in repo root + storybook component CSS
 
 Exit code 0 = pass (warnings allowed), 1 = errors found.
 Stdlib only. Rule IDs map to the governing document sections.
@@ -24,6 +24,7 @@ Rules (E = error, W = warning):
   SY019 E icon not in assets/icons/lucide-registry.json, off-scale size, or stroke != 1.5 — run tools/check_icons.py (icons.md)
   SY020 E tokens/synapse.css disagrees with tokens/synapse.tokens.json (per mode); W = a CSS var with no JSON origin — closes the TOKEN half of audit Defect 7
   SY021 E synapse.manifest.json key_rules contradict components.md prose (never-list vocabulary, token names, radius names) — closes the PROSE half of audit Defect 7
+  SY022 E a stated component-count claim disagrees with reality — the "67 vs 68" class; checks four surfaces (components.md preamble, README.md, docs/DISTRIBUTION.md, storybook/package.json) against components.md's ## heading count and storybook/src/components
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
@@ -190,6 +191,7 @@ VAR_DECL = r"(" + VAR_NAME + r")\s*:\s*([^;]+);"
 PARITY_GROUPS = [
     (("semantic", "color"),               [],           "E"),
     (("semantic", "padding"),             ["padding"],  "E"),
+    (("semantic", "radius"),              ["radius"],   "E"),  # containment-role tier (V1, 2026-08-05): inset/nested/tray/card/overlay/shell
     (("density", "control"),              ["control"],  "E"),
     (("density", "layout"),               [],           "E"),
     (("primitive", "space"),              ["space"],    "E"),
@@ -378,8 +380,13 @@ def lint_css_text(text, path, line_of, defined):
             report("E", "SY006", path, ln, "text-transform: uppercase is forbidden")
         if prop.endswith("backdrop-filter") and val.strip() != "none":
             report("E", "SY015", path, ln, f"backdrop-filter is forbidden — overlays are opaque, no glassmorphism (foundations §6) — got '{val[:40]}'")
-        if prop == "letter-spacing":
-            report("W", "SY007", path, ln, "letter-spacing declared — must never apply to Hangul")
+        if prop == "letter-spacing" and val not in ("0", "normal", "inherit", "unset"):
+            # SUPPRESSED when the file carries the sanctioned Hangul reset — a
+            # `:lang(ko)` rule zeroing letter-spacing means the tracking is
+            # Latin-scoped exactly as foundations §2.3 requires; warning anyway
+            # trains people to ignore SY007 (a noisy gate gets switched off).
+            if not re.search(r":lang\(ko\)[^{]*\{[^}]*letter-spacing:\s*0", text):
+                report("W", "SY007", path, ln, "letter-spacing declared — must never apply to Hangul (add a `:lang(ko) { letter-spacing: 0 }` reset to suppress this warning)")
         if prop == "box-shadow" and "var(--sy-shadow" not in val and val != "none":
             # sanctioned exemption: a zero-blur, zero-offset ring (inset OR outset) using a token is a
             # border substitute / focus ring, not elevation (foundations §6). Elevation needs blur → a shadow token.
@@ -495,16 +502,28 @@ def check_ui(paths):
     for path in paths:
         text = open(path, encoding="utf-8").read()
         if path.endswith(".css"):
-            lint_css_text(text, path, lambda pos, t=text: t[:pos].count("\n") + 1, defined)
+            # Blank out /* … */ comment CONTENTS (newlines preserved so line numbers
+            # hold): documentation prose citing hex values ("the ramp jumps #FFFFFF →
+            # #F4F4F6") is not a violation — three such false positives surfaced the
+            # day storybook CSS came under the gate (2026-08-05).
+            stripped = re.sub(r"/\*.*?\*/", lambda m: re.sub(r"[^\n]", " ", m.group(0)), text, flags=re.S)
+            lint_css_text(stripped, path, lambda pos, t=stripped: t[:pos].count("\n") + 1, defined)
         else:
             UILinter(path, defined).feed(text)
 
 # ---------------------------------------------------------------- page mode
 
 ARCHETYPES = {"workbench", "object", "settings", "guided", "console", "home"}
+SCHEMA_PATH = os.path.join(ROOT, "tools", "screen-intent.schema.json")
 
 def check_page(path):
-    """Validate a screen-intent declaration (SY1xx rules) against the manifest + contract."""
+    """Validate a screen-intent declaration (SY1xx rules) against the manifest + contract.
+
+    The intent schema (tools/screen-intent.schema.json) is CLOSED — additionalProperties
+    is false at every object level — and this checker enforces it (SY110): unknown keys,
+    including removed concepts like 'density', are REJECTED, not ignored. The allowed-key
+    sets and the viewer_role enum are read from the schema file itself, so the vocabulary
+    lives in exactly one place (adoption ruling #4, 2026-08-05)."""
     try:
         intent = json.load(open(path, encoding="utf-8"))
     except Exception as e:
@@ -512,6 +531,19 @@ def check_page(path):
     manifest_path = os.path.join(ROOT, "synapse.manifest.json")
     manifest = json.load(open(manifest_path, encoding="utf-8"))
     known = set(manifest["components"].keys())
+    schema = json.load(open(SCHEMA_PATH, encoding="utf-8"))
+    props = schema["properties"]
+
+    # SY110 — closed schema: no unknown keys at any object level
+    def closed(obj, allowed, where):
+        for k in obj:
+            if k not in allowed:
+                report("E", "SY110", path, 0,
+                       f"{where}: unknown key '{k}' — the intent schema is closed "
+                       f"(additionalProperties: false); allowed keys: {sorted(allowed)}. "
+                       f"Removed concepts (e.g. 'density') are rejected, not ignored")
+    if isinstance(intent, dict):
+        closed(intent, set(props), "intent")
 
     arch = intent.get("archetype")
     if arch not in ARCHETYPES:
@@ -520,8 +552,10 @@ def check_page(path):
     regions = intent.get("regions") or []
     if not regions:
         report("E", "SY102", path, 0, "no regions declared")
+    region_allowed = set(props["regions"]["items"]["properties"])
     for r in regions:
         rid = r.get("id", "?")
+        closed(r, region_allowed, f"region '{rid}'")
         for c in r.get("components", []):
             if c not in known:
                 report("E", "SY105", path, 0, f"region '{rid}': component '{c}' not in manifest (closed set)")
@@ -534,13 +568,21 @@ def check_page(path):
         report("E", "SY107", path, 0, f"locales {sorted(locales)} — both 'en' and 'ko' are mandatory")
 
     states = intent.get("states") or {}
+    closed(states, set(props["states"]["properties"]), "states")
     for s in ("empty", "loading", "error"):
         if states.get(s) is not True:
             report("E", "SY108", path, 0, f"states.{s} must be declared true — a screen without it is unfinished (design.md §4.5)")
 
     perms = intent.get("permissions") or {}
-    if not perms.get("viewer_role"):
+    closed(perms, set(props["permissions"]["properties"]), "permissions")
+    role = perms.get("viewer_role")
+    roles = props["permissions"]["properties"]["viewer_role"]["enum"]  # single source: the schema
+    if not role:
         report("E", "SY109", path, 0, "permissions.viewer_role missing — screens generated without viewer context are unreviewable (patterns.md §6)")
+    elif role not in roles:
+        report("E", "SY109", path, 0,
+               f"permissions.viewer_role '{role}' is not a real role — the closed set is "
+               f"{roles} (clearance order Guest < Member < Manager < Owner < Admin, product-context.md)")
 
 # ------------------------------------------------------------------- runner
 
@@ -693,6 +735,62 @@ def check_prose_manifest_parity():
                                f"{name}: manifest claims radius '{rad}' which its components.md "
                                f"entry never states — one of the two is stale")
 
+# ------------------------------------------------- SY022 count-claim parity
+
+def check_count_claims():
+    """SY022 — mechanically-checkable count claims must match reality.
+
+    The "67 vs 68" class: prose states a component count, the set changes, the number
+    survives. Deliberately NARROW (SY021's philosophy — a noisy gate gets switched
+    off): exactly four surfaces, each with one fixed phrase shape. Ground truth:
+    M = the number of '## ' headings in components.md; N (the built seed) = the
+    number of component directories under storybook/src/components."""
+    md = open(COMPONENTS_MD, encoding="utf-8").read()
+    heading_count = len(re.findall(r"(?m)^## ", md))
+    sb_dir = os.path.join(ROOT, "storybook", "src", "components")
+    built_count = len([d for d in os.listdir(sb_dir)
+                       if os.path.isdir(os.path.join(sb_dir, d))]) if os.path.isdir(sb_dir) else 0
+
+    def check_pair(fpath, n, m, phrase):
+        if int(n) != built_count:
+            report("E", "SY022", fpath, 0,
+                   f"claims '{phrase}' but storybook/src/components has {built_count} "
+                   f"component directories — update the claim to {built_count}")
+        if int(m) != heading_count:
+            report("E", "SY022", fpath, 0,
+                   f"claims '{phrase}' but components.md has {heading_count} '##' entries "
+                   f"— update the claim to {heading_count}")
+
+    # 1. components.md preamble: "The N component entries"
+    m = re.search(r"The (\d+) component entries", md)
+    if m and int(m.group(1)) != heading_count:
+        report("E", "SY022", COMPONENTS_MD, 0,
+               f"preamble claims 'The {m.group(1)} component entries' but the file has "
+               f"{heading_count} '##' entries — update the claim to {heading_count}")
+
+    # 2. README.md: "`components.md` (N)" and "N-of-M seed"
+    readme_path = os.path.join(ROOT, "README.md")
+    if os.path.exists(readme_path):
+        readme = open(readme_path, encoding="utf-8").read()
+        m = re.search(r"`components\.md` \((\d+)\)", readme)
+        if m and int(m.group(1)) != heading_count:
+            report("E", "SY022", readme_path, 0,
+                   f"claims '`components.md` ({m.group(1)})' but components.md has "
+                   f"{heading_count} '##' entries — update the claim to {heading_count}")
+        m = re.search(r"(\d+)-of-(\d+) seed", readme)
+        if m:
+            check_pair(readme_path, m.group(1), m.group(2), m.group(0))
+
+    # 3 + 4. docs/DISTRIBUTION.md and storybook/package.json: "N of M components"
+    for rel in (os.path.join("docs", "DISTRIBUTION.md"), os.path.join("storybook", "package.json")):
+        fpath = os.path.join(ROOT, rel)
+        if not os.path.exists(fpath):
+            continue
+        text = open(fpath, encoding="utf-8").read()
+        for m in re.finditer(r"(\d+) of (\d+) components", text):
+            check_pair(fpath, m.group(1), m.group(2), m.group(0))
+
+
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in ("tokens", "ui", "page", "all"):
         print(__doc__)
@@ -706,9 +804,23 @@ def main():
         for p in sys.argv[2:]:
             check_page(p)
     if mode == "all":
-        check_ui([os.path.join(ROOT, f) for f in os.listdir(ROOT) if f.endswith(".html")])
+        html = [os.path.join(ROOT, f) for f in os.listdir(ROOT) if f.endswith(".html")]
+        # Adoption ruling #5 (2026-08-05, proposals/2026-08-05-astryx-adoption-rulings.md):
+        # the React layer's component CSS carries the same tokens-only contract as shipped
+        # HTML, so `all` lints storybook/src/components/**/*.css with the existing ui rules
+        # (SY001 raw colors, SY002 off-scale values, SY015 backdrop-filter, ...) — making
+        # the components' "the gate lints this file" headers true rather than aspirational.
+        sb_root = os.path.join(ROOT, "storybook", "src", "components")
+        sb_css = sorted(
+            os.path.join(dirpath, f)
+            for dirpath, _dirs, files in os.walk(sb_root)
+            for f in files
+            if f.endswith(".css")
+        )
+        check_ui(html + sb_css)
         check_manifest()
         check_prose_manifest_parity()
+        check_count_claims()
     errors = [i for i in issues if i[0] == "E"]
     warnings = [i for i in issues if i[0] == "W"]
     for sev, rule, path, line, msg in issues:

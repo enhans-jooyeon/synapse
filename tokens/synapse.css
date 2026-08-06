@@ -72,6 +72,10 @@
   --sy-radius-xl: 20px;
   --sy-radius-2xl: 24px;
   --sy-radius-full: 9999px;
+  /* semantic radius — containment-role tier (V1, 2026-08-05): aliases of the primitives above.
+     Controls take the size-keyed control radii; containment takes these role names (foundations §3). */
+  --sy-radius-inset: 4px; --sy-radius-nested: 8px; --sy-radius-tray: 12px;
+  --sy-radius-card: 16px; --sy-radius-overlay: 20px; --sy-radius-shell: 24px;
   /* padding — semantic aliases of the space scale */
   --sy-padding-none: 0px;
   --sy-padding-2xs: var(--sy-space-1);

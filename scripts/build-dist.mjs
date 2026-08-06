@@ -99,6 +99,8 @@ The machine-enforceable contract for generating AgentOS UI. This is the **curate
 - \`python3 tools/validate.py ui <files>\` — lint generated HTML/CSS artifacts
 - \`python3 tools/synapse.py lookup <name>\` — is X a real component / token / recipe? (fuzzy; suggests the closest real ones)
 - \`python3 tools/synapse.py validate <intent.json>\` — check a screen-intent declaration (\`tools/screen-intent.schema.json\`; worked example in \`examples/\`)
+- \`python3 tools/synapse.py doctor\` — is this bundle healthy and current? Split-bundle version check, staleness vs the source repo's latest release (degrades to a warn offline), gate runnability, Python floor. Exit 0 unless a check FAILS (stale = warn = still passes) — safe to wire into CI
+- Add \`--json\` to any \`tools/synapse.py\` command for machine envelopes — one JSON object per stdout line, stable \`type\` discriminators and append-only error \`code\`s (contract documented in \`tools/synapse.py\`'s header; agents branch on \`code\`, never on message strings)
 
 Stdlib-only Python 3 — no installs.
 

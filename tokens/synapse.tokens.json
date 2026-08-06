@@ -642,10 +642,10 @@
         "$value": "10px",
         "$description": "10px step, off the 4px scale by design: 12px (md) read too round on 32-36px controls. Default control radius; controls scale radius with size — sm size uses sm (8), default uses this 10, lg size uses md (12)."
       },
-        "control-md": {
-          "$value": "{primitive.radius.10}",
-          "$description": "The default control radius, exposed as --sy-radius-control-md. Added to the source 2026-07-31: the CSS variable already shipped with no token describing it (the same CSS-only-token shape as control-height-xs, audit Defect 7). Aliases radius.10, which stays internal."
-        },
+      "control-md": {
+        "$value": "{primitive.radius.10}",
+        "$description": "The default control radius, exposed as --sy-radius-control-md. Added to the source 2026-07-31: the CSS variable already shipped with no token describing it (the same CSS-only-token shape as control-height-xs, audit Defect 7). Aliases radius.10, which stays internal."
+      },
       "md": {
         "$value": "12px"
       },
@@ -842,6 +842,34 @@
       },
       "xl": {
         "$value": "{primitive.space.8}"
+      }
+    },
+    "radius": {
+      "$type": "dimension",
+      "$description": "Containment-role radius tier (V1, adopted + executed 2026-08-05 — proposals/2026-08-05-astryx-adoption-rulings.md). Aliases the radius primitives per foundations §3's container ladder — never redefines a value. PRECEDENCE RULE: radius vocabulary applies by ELEMENT CLASS — interactive controls (button, input, Select/Combobox trigger) take the size-keyed control radii (xs→control-xs 6 · sm→sm 8 · md→control-md 10 · lg→md 12, foundations §3), containment surfaces take this role tier; an element is never both. Corner-anchored children inside a rounded container follow the concentric rule (inner = outer − inset), not the tier. The Composer's conditional radius (full ↔ lg, amended 2026-08-03) stays conditional and outside the tier.",
+      "inset": {
+        "$value": "{primitive.radius.xs}",
+        "$description": "Tiny insets (4px)."
+      },
+      "nested": {
+        "$value": "{primitive.radius.sm}",
+        "$description": "Corner-anchored nested elements — segments, menu items, quotes (8px)."
+      },
+      "tray": {
+        "$value": "{primitive.radius.md}",
+        "$description": "Menus, trays, assembled controls, and notice strips at control height (Banner/Toast) (12px)."
+      },
+      "card": {
+        "$value": "{primitive.radius.lg}",
+        "$description": "Cards (16px)."
+      },
+      "overlay": {
+        "$value": "{primitive.radius.xl}",
+        "$description": "Modals and Drawers (20px) — pairs with border.overlay / shadow.xl (foundations §6)."
+      },
+      "shell": {
+        "$value": "{primitive.radius.2xl}",
+        "$description": "Section shells — the outermost rounded well a page region sits in; one per region, never nested (24px)."
       }
     },
     "type": {

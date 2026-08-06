@@ -5,7 +5,7 @@
     { "id": "main",
       "components": ["Table", "Badge", "Avatar", "Input (text)", "Select", "DatePicker", "SegmentedControl", "Button", "Pagination", "EmptyState", "Skeleton · Spinner", "Card"],
       "recipes": ["R1", "R4", "R6"] },
-    { "id": "detail-pane", "boundary": "splitpanel",
+    { "id": "detail-pane",
       "components": ["DescriptionList", "Badge", "AgentStep", "Button", "Tabs"] }
   ],
   "locales": ["en", "ko"],

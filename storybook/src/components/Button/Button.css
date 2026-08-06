@@ -1,47 +1,155 @@
-/* Button — components.md · Button. Tokens only; the gate lints this file. */
+/* Button — components.md · Button (two-axis buttonStyle × target, 2026-07-30; last synced 2026-08-05).
+   Tokens only; the gate lints this file (validate.py ui — joins `all` mode per adoption ruling #5).
+   SYNC partners are listed in Button.tsx's header.
+   NO color-mix anywhere — the tinted rings were deleted 2026-07-30 (failed WCAG 1.4.11).
+   NO :active/pressed rules — the pressed state was dropped 2026-07-30; feedback comes from the click. */
+
+/* Base = md. Per-size height, padding-x ladder (control-padding-x 8/10/12/16), per-size
+   radius (control-xs 6 · sm 8 · control-md 10 · md 12) and the two-step label scale
+   (11 at xs; 13 shared by sm and md — the dense range separates by height, not type; 14 at lg). */
 .sy-btn {
+  box-sizing: border-box;
   display: inline-flex; align-items: center; justify-content: center;
-  gap: var(--sy-space-1_5);
+  gap: var(--sy-space-1_5); /* icon–label gap 6px at every size — ratified 2026-08-05 */
   height: var(--sy-control-height-md);
-  padding: 0 var(--sy-control-padding-x);
-  border: none; border-radius: var(--sy-radius-md); cursor: pointer;
+  padding: 0 var(--sy-control-padding-x-md);
+  border: none;
+  border-radius: var(--sy-radius-control-md);
+  cursor: pointer;
   font: var(--sy-weight-medium) var(--sy-label-size) / var(--sy-label-lh) var(--sy-font-sans);
-  color: var(--sy-text-primary); background: transparent;
+  color: var(--sy-text-primary);
+  background: transparent;
   transition: background var(--sy-duration-instant) var(--sy-ease-standard),
-              color var(--sy-duration-instant) var(--sy-ease-standard);
+              color var(--sy-duration-instant) var(--sy-ease-standard),
+              border-color var(--sy-duration-instant) var(--sy-ease-standard);
 }
-.sy-btn:focus-visible { outline: 2px solid transparent; outline-offset: 2px; box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px color-mix(in srgb, var(--sy-border-focus) 50%, transparent); }
-.sy-btn--primary:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px color-mix(in srgb, var(--sy-action-primary-bg) 45%, transparent); }
-.sy-btn--secondary:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px color-mix(in srgb, var(--sy-text-primary) 40%, transparent); }
-.sy-btn--ghost:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px color-mix(in srgb, var(--sy-text-primary) 40%, transparent); }
-.sy-btn--danger:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px color-mix(in srgb, var(--sy-status-danger-bg-solid) 55%, transparent); }
-.sy-btn--brand:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px color-mix(in srgb, var(--sy-action-brand-bg) 55%, transparent); }
-.sy-btn--sm { height: var(--sy-control-height-sm); }
-.sy-btn--icon { width: var(--sy-control-height-md); padding: 0; }
+
+/* xs is INLINE-ONLY (WCAG 2.5.8 Inline exception — inside a sentence or a table cell's text
+   flow; never toolbars, dialog footers, form rows). Runtime cannot enforce placement — review must. */
+.sy-btn--xs {
+  height: var(--sy-control-height-xs);
+  padding: 0 var(--sy-control-padding-x-xs);
+  border-radius: var(--sy-radius-control-xs);
+  font: var(--sy-weight-medium) var(--sy-text-11) / var(--sy-text-11-lh) var(--sy-font-sans);
+}
+.sy-btn--sm {
+  height: var(--sy-control-height-sm);
+  padding: 0 var(--sy-control-padding-x-sm);
+  border-radius: var(--sy-radius-sm);
+}
+/* lg is heroes only; presence comes from height, padding and radius — the label steps to 14, not 16. */
+.sy-btn--lg {
+  height: var(--sy-control-height-lg);
+  padding: 0 var(--sy-control-padding-x-lg);
+  border-radius: var(--sy-radius-md);
+  font: var(--sy-weight-medium) var(--sy-body-size) / var(--sy-body-lh) var(--sy-font-sans);
+}
+
+/* Icon-only buttons are always SQUARE — width equals the size's control height. */
+.sy-btn--icon { padding: 0; width: var(--sy-control-height-md); }
+.sy-btn--icon.sy-btn--xs { width: var(--sy-control-height-xs); }
 .sy-btn--icon.sy-btn--sm { width: var(--sy-control-height-sm); }
 .sy-btn--icon.sy-btn--lg { width: var(--sy-control-height-lg); }
-.sy-btn--lg { height: var(--sy-control-height-lg); font-size: var(--sy-body-size); }
+
+/* Icons hold at 16 through lg and step once, to 12 at xs (matches the label's single step). */
+.sy-btn > svg { width: 16px; height: 16px; flex: none; }
+.sy-btn--xs > svg { width: 12px; height: 12px; }
+
+/* Optical padding trim — on icon+text buttons the icon side runs the size's own
+   control-padding-x minus 2 (a stroke icon carries internal whitespace). Per side; icon-only
+   buttons are exempt (the classes are only emitted on labelled buttons). */
+.sy-btn--lead { padding-left: calc(var(--sy-control-padding-x-md) - 2px); }
+.sy-btn--trail { padding-right: calc(var(--sy-control-padding-x-md) - 2px); }
+.sy-btn--xs.sy-btn--lead { padding-left: calc(var(--sy-control-padding-x-xs) - 2px); }
+.sy-btn--xs.sy-btn--trail { padding-right: calc(var(--sy-control-padding-x-xs) - 2px); }
+.sy-btn--sm.sy-btn--lead { padding-left: calc(var(--sy-control-padding-x-sm) - 2px); }
+.sy-btn--sm.sy-btn--trail { padding-right: calc(var(--sy-control-padding-x-sm) - 2px); }
+.sy-btn--lg.sy-btn--lead { padding-left: calc(var(--sy-control-padding-x-lg) - 2px); }
+.sy-btn--lg.sy-btn--trail { padding-right: calc(var(--sy-control-padding-x-lg) - 2px); }
+
+/* ---- The 12-cell matrix: buttonStyle says how loud, target says what kind. ---- */
+
+/* primary — the single main action of a region (max one, counted across targets).
+   The destructive cell carries a NORMAL-weight label — the weight compensation was retired
+   2026-07-30 when the solid danger fill moved a ramp step deeper and cleared AA outright.
+   Brand hover DARKENS in both modes (the softened azure.550 step, 2026-07-31). */
 .sy-btn--primary { background: var(--sy-action-primary-bg); color: var(--sy-action-primary-fg); }
-.sy-btn--primary:hover, .sy-btn--primary:active { background: var(--sy-action-primary-bg-hover); }
+.sy-btn--primary:hover:not(:disabled) { background: var(--sy-action-primary-bg-hover); }
+.sy-btn--primary.sy-btn--destructive { background: var(--sy-status-danger-bg-solid); color: var(--sy-action-danger-fg); }
+.sy-btn--primary.sy-btn--destructive:hover:not(:disabled) { background: var(--sy-status-danger-bg-solid-hover); }
+.sy-btn--primary.sy-btn--brand { background: var(--sy-action-brand-bg); color: var(--sy-action-brand-fg); }
+.sy-btn--primary.sy-btn--brand:hover:not(:disabled) { background: var(--sy-action-brand-bg-hover); }
+
+/* secondary (tonal) — standard actions, the default choice. Coloured cells sit one ramp step
+   lighter than the subtle status tint so they stay distinguishable from Banner/Badge at rest. */
 .sy-btn--secondary { background: var(--sy-action-secondary-bg); }
-.sy-btn--secondary:hover, .sy-btn--secondary:active { background: var(--sy-action-secondary-bg-hover); }
+.sy-btn--secondary:hover:not(:disabled) { background: var(--sy-action-secondary-bg-hover); }
+.sy-btn--secondary.sy-btn--destructive { background: var(--sy-action-secondary-danger-bg); color: var(--sy-status-danger); }
+.sy-btn--secondary.sy-btn--destructive:hover:not(:disabled) { background: var(--sy-action-secondary-danger-bg-hover); }
+.sy-btn--secondary.sy-btn--brand { background: var(--sy-action-secondary-brand-bg); color: var(--sy-action-secondary-brand-fg); }
+.sy-btn--secondary.sy-btn--brand:hover:not(:disabled) { background: var(--sy-action-secondary-brand-bg-hover); }
+
+/* outline — actions on tinted or sunken surfaces. Hover steps the BORDER in all three targets
+   (closed 2026-07-30); the fill stays put so the variant never converges with tonal secondary. */
+.sy-btn--outline { background: var(--sy-bg-page); border: 1px solid var(--sy-border-default); }
+.sy-btn--outline:hover:not(:disabled) { border-color: var(--sy-border-strong); }
+.sy-btn--outline.sy-btn--destructive { border-color: var(--sy-border-error); color: var(--sy-status-danger); }
+.sy-btn--outline.sy-btn--destructive:hover:not(:disabled) { border-color: var(--sy-border-error-hover); }
+.sy-btn--outline.sy-btn--brand { border-color: var(--sy-action-brand-border); color: var(--sy-action-brand-fg-on-page); }
+.sy-btn--outline.sy-btn--brand:hover:not(:disabled) { border-color: var(--sy-action-brand-border-hover); }
+
+/* ghost — low emphasis. Hover is NEUTRAL in all three targets (closed 2026-07-30): the hue
+   stays in the label; the backdrop takes the universal hover overlay, same as rows and menus. */
 .sy-btn--ghost { color: var(--sy-text-secondary); }
-.sy-btn--ghost:hover, .sy-btn--ghost:active { background: var(--sy-bg-hover); }
-.sy-btn--danger { background: var(--sy-status-danger-bg-solid); color: var(--sy-action-danger-fg);
-  font-weight: var(--sy-weight-semibold); /* §8 weight compensation */ }
-.sy-btn--danger:hover, .sy-btn--danger:active { background: var(--sy-status-danger-bg-solid-hover); }
-.sy-btn--brand { background: var(--sy-action-brand-bg); color: var(--sy-action-brand-fg); }
-.sy-btn--brand:hover, .sy-btn--brand:active { background: var(--sy-action-brand-bg-hover); }
-.sy-btn:disabled { background: var(--sy-bg-disabled); color: var(--sy-text-disabled); cursor: not-allowed; }
-/* GHOST CARVE-OUT (2026-08-03, components.md · Button). ghost is the one variant whose hover is a
-   page-tint rather than its own fill: bg.hover over white computes to #F5F5F5 against bg.disabled
-   #F4F4F6 — one step per channel, so the disabled fill read as hover. ghost mutes the label/glyph
-   instead (not opacity, which stays forbidden). */
-.sy-btn--ghost:disabled { background: transparent; }
-.sy-btn--pill { border-radius: var(--sy-radius-full); padding: 0 var(--sy-space-5); }
-.sy-btn__spinner {
-  width: 16px; height: 16px; border-radius: var(--sy-radius-full); flex: none;
-  border: 2px solid var(--sy-border-default); border-top-color: currentColor;
-  animation: sy-spin 0.8s linear infinite;
+.sy-btn--ghost:hover:not(:disabled) { background: var(--sy-bg-hover); }
+.sy-btn--ghost.sy-btn--destructive { color: var(--sy-status-danger); }
+.sy-btn--ghost.sy-btn--brand { color: var(--sy-action-brand-fg-on-page); }
+
+/* ---- Focus (2026-07-30): a 2px page-gap ring plus a 2px colored ring. HUE comes from target,
+   STRENGTH from buttonStyle — primary is the only strong ring; secondary/outline/ghost take the
+   soft mode-invariant mid-tones. This is Button's one sanctioned divergence from the general
+   focus rule. Soft rules first; the two-class primary rules override by specificity. ---- */
+.sy-btn:focus-visible {
+  outline: 2px solid transparent; outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus-soft);
 }
-@keyframes sy-spin { to { transform: rotate(360deg); } }
+.sy-btn--destructive:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-error-soft); }
+.sy-btn--brand:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-action-brand-border-soft); }
+.sy-btn--primary:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-focus-input); }
+.sy-btn--primary.sy-btn--destructive:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-border-error-hover); }
+.sy-btn--primary.sy-btn--brand:focus-visible { box-shadow: 0 0 0 2px var(--sy-bg-page), 0 0 0 4px var(--sy-action-brand-border-hover); }
+
+/* ---- Disabled (must stay AFTER the matrix — same specificity, later wins). The grey fill is
+   the signal on filled variants; the label is text.disabled in ALL twelve cells (the per-target
+   disabled labels were withdrawn 2026-07-30). Never opacity. ---- */
+.sy-btn:disabled { background: var(--sy-bg-disabled); color: var(--sy-text-disabled); cursor: not-allowed; }
+/* Disabled outline drops its target hue with the label — a live-coloured border on a dead
+   control would read as available. Ratified 2026-08-05: the spec now states neutral
+   border.default in ALL targets (proposals/2026-08-05-button-implementation-ambiguities.md). */
+.sy-btn--outline:disabled { border-color: var(--sy-border-default); }
+/* GHOST CARVE-OUT (2026-08-03). Ghost is the one variant whose hover is a page tint, and the
+   disabled grey computes to within one step per channel of that hovered surface in light mode —
+   so a filled disabled ghost read as hovered. Disabled ghost takes NO fill; the state is carried
+   by the muted label/glyph alone. That label sits below the disabled-contrast floor by design
+   (a receding signal), so a disabled ghost must never be the only channel carrying the state. */
+.sy-btn--ghost:disabled { background: transparent; }
+
+/* Pill — JURISDICTION: primary + lg only, Guided heroes / empty-state first-use, target
+   default or brand (never destructive; never xs/sm/md; never secondary/outline/ghost). */
+.sy-btn--pill { border-radius: var(--sy-radius-full); }
+
+/* Loading — the registry loader-circle glyph, rotated by CSS, at the size's icon size via
+   the shared `.sy-btn > svg` rule (12 at xs, 16 at sm–lg; ratified 2026-08-05). It REPLACES
+   the leading icon (or the glyph itself on icon-only buttons) so width never changes there;
+   on a TEXT-ONLY button it prepends, and that width change is the spec's documented exception
+   (ratified 2026-08-05). The label stays; the TSX keeps aria-label unchanged and sets
+   aria-busy. Under reduced motion the rotation stops and the glyph is never swapped. */
+.sy-btn__spinner {
+  fill: none; stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  animation: sy-btn-spin 0.8s linear infinite;
+}
+@keyframes sy-btn-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .sy-btn__spinner { animation: none; }
+}

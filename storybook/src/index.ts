@@ -1,5 +1,5 @@
 export { Button } from "./components/Button/Button";
-export type { ButtonProps } from "./components/Button/Button";
+export type { ButtonProps, ButtonStyle, ButtonTarget, ButtonSize } from "./components/Button/Button";
 export { Badge } from "./components/Badge/Badge";
 export type { BadgeProps } from "./components/Badge/Badge";
 export { Input } from "./components/Input/Input";

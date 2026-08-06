@@ -1,4 +1,4 @@
-<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-08-05 — v2.0.0 release prep (cloud Cowork session): version bumped, CHANGELOG restructured (curated 2.0.0 section + internal-history cut), tools/ now ships in the harness, publish pipeline verifies tag == $version and stamps provenance, build-dist gained a shipped-doc reference check, stale artifacts fixed. UNCOMMITTED working-tree changes — review the diff, commit, tag v2.0.0, push. -->
+<!-- Session handoff. Paste this file (or point the new session at it) to resume with full context. Not a spec file; safe to edit freely. Last updated: 2026-08-05 (evening) — v2.1.0 SHIPPED (Lucide revert, generated manifest + keywords, migration-test fixes; harness republished with real provenance SHA). All Astryx adoption items #1–#6 BUILT: manifest parser, keywords, --json CLI + error codes, gate tightening (SY022/SY109/SY110 + storybook CSS under the gate), Button two-axis realignment + SYNC headers, synapse doctor, dense never-list. Visual rulings CLOSED: V1 adopt (execution pending — radius-tier proposal owed), V2/V3/V6 rejected after prototypes, V4/V5 deferred with triggers. OPEN: Button implementation ambiguities proposal (6 rulings), V1 radius-tier proposal draft, MCP trigger fires at next tagged release. Post-v2.1.0 batch is UNCOMMITTED on June's Mac — commit + push (NO tag until v2.2.0 is wrapped). -->
 
 # Synapse — session handoff
 
@@ -52,6 +52,21 @@ Gate rules worth knowing: **SY020 CSS<->JSON token parity** (added 2026-07-31; p
 **As of 2026-08-03: `main` carries everything and is 37 commits AHEAD of `origin/main`. THE PUSH IS THE FIRST THING TO DO** — the sandbox cannot push (no credentials). Gates green throughout: `validate.py all` 0/0 (SY001–SY021), `check_icons.py` 0 errors / 2 expected warnings, `verify-token-map.py` in sync, `preview.html` JS `node --check` clean, `components.md` headings == manifest keys 68/68.
 
 **Nothing in this session has been seen in a browser.** The preview cannot render in the sandbox, so every visual judgement was made from markup, token arithmetic and simulation. That is exactly how the composer alignment took five passes (see below) — **look at the deployed preview after pushing** before trusting any of the visual work.
+
+## This session (2026-08-05, evening) — v2.1.0 shipped; adoption items #2–#6 built; visual rulings closed
+
+**v2.1.0 released** (tag pushed by June; hardened workflow's first live run — all guards passed, harness provenance now carries the real SHA `1450fb5`). Documented §6 exception: 35 Lucide icon renames rode a minor because v2.0.0 lived <1 day with no generating consumers — "do not cite as precedent without a ruling."
+
+**Built since v2.1.0 (uncommitted batch on June's Mac, accumulating toward v2.2.0):**
+- **#3 `--json` + stable error codes** on synapse.py (12 type discriminators, 6 append-only codes, contract in the file header; human output byte-identical).
+- **#4 gate tightening**: screen-intent schema closed (`additionalProperties:false` → SY110), SY109 role membership (enum read from the schema at runtime), SY022 count-claim parsing (4 surfaces). The strict schema evicted an undeclared `boundary` key from the example — June ruled it stays out.
+- **#5 phase 1 Button hygiene**: storybook Button rewritten to the two-axis `buttonStyle × target` spec (12-cell matrix, deprecation shim for old `variant`, SYNC header, tsc green, 64 token refs verified); `validate.py all` now lints `storybook/src/components/**/*.css` — landing that required two linter fixes (CSS comment-stripping; SY007 suppressed when the sanctioned `:lang(ko)` reset is present), both negative-tested. **Six spec ambiguities held in `proposals/2026-08-05-button-implementation-ambiguities.md` — need June's rulings.** One outright contradiction fixed in components.md (stale "(semibold on danger)").
+- **#6b `synapse doctor`**: 7 read-only checks incl. live staleness vs source tags (offline-degrading), split-bundle detection; warns pass / fails fail; works from inside the dist bundle. Python floor mechanically verified at 3.7.
+- **Migration-test feedback** (June's engineer, 4 points): product-gate TW-regex/dir-arg/states.json fixes applied as given; the proposed ALIASES dict rejected as a second mapping surface — implemented via separator-insensitive keyword matching instead (all 12 of her old-name queries verified resolving).
+
+**Visual rulings closed** (full record in `proposals/2026-08-05-astryx-adoption-rulings.md`): V2 alpha borders REJECTED (prototype falsified the premise — half-step inversion on bg.page), V3 inset rings REJECTED after a two-round weight study (2px heavy; 1px buys nothing; 1.5px DPR-fragile) — **open residue: error and error+focus fields are visually identical today**, filed in the ruling; V4 light-dark() DEFERRED with trigger (confirm Chrome 123+/Safari 17.5+ customer floor; mechanism proven 9/9 pixel-identical).
+
+**Next session:** V1 radius-tier proposal draft (adopted, unexecuted); Button ambiguity rulings; at the v2.2.0 tag the MCP trigger fires (#1+#3 both built).
 
 ## This session (2026-08-05, later) — adopt/defer rulings + Lucide icon revert (cloud Cowork session, continued)
 

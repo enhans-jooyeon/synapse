@@ -50,9 +50,11 @@ python3 tools/build_manifest.py                              # after any compone
 
 # harness CLI (what a generating agent calls)
 python3 tools/synapse.py lookup FlowNode                     # is it real? show its rules (or closest matches)
+python3 tools/synapse.py --json lookup modal                 # machine envelope: {"type": "lookup.component", ...} — stable type/code contract in tools/synapse.py's header
 python3 tools/synapse.py validate examples/screen-intent.example.json
 python3 tools/synapse.py gate
 python3 tools/synapse.py digest                              # what LLMs keep getting wrong (reads feedback/)
+python3 tools/synapse.py doctor                              # bundle + environment health (split-bundle, staleness vs source tags, gate runnable) — exit 1 only on FAIL, warns pass
 ```
 
 ## Status (read before adopting)
