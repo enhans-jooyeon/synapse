@@ -23,7 +23,7 @@
   .shell { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: 100vh; }
 
   .topbar {
-    grid-column: 1 / -1; position: sticky; top: 0; z-index: 20;
+    grid-column: 1 / -1; position: sticky; top: 0; z-index: var(--sy-z-sticky);
     display: flex; align-items: center; gap: var(--sy-space-3);
     height: 56px; padding: 0 var(--sy-space-6);
     background: var(--sy-bg-page); border-bottom: 1px solid var(--sy-border-subtle);

@@ -289,14 +289,14 @@
   .field .ctrl input[readonly] { background: var(--sy-bg-page); cursor: pointer; }
   .field .ctrl:hover input[readonly]:not(:focus-visible) { border-color: var(--sy-border-strong); }
   /* interactive Select popover (preview): menu anchored under the trigger, shown on .open */
-  .ctrl[data-select] .sel-menu { position: absolute; top: calc(100% + var(--sy-space-1)); left: 0; min-width: 100%; display: none; z-index: 20; }
+  .ctrl[data-select] .sel-menu { position: absolute; top: calc(100% + var(--sy-space-1)); left: 0; min-width: 100%; display: none; z-index: var(--sy-z-dropdown); }
   .ctrl[data-select].open .sel-menu { display: block; }
   .ctrl[data-select].open input[readonly] { border-color: var(--sy-border-focus-input); }
   .ctrl[data-select] .sel-chev { transition: transform var(--sy-duration-fast) var(--sy-ease-standard); }
   .ctrl[data-select].open .sel-chev { transform: rotate(180deg); }
   /* generic popover anchor (Combobox menu, DatePicker calendar) */
   .pop { position: relative; }
-  .pop > .pop-panel { position: absolute; top: calc(100% + var(--sy-space-1)); left: 0; display: none; z-index: 20; }
+  .pop > .pop-panel { position: absolute; top: calc(100% + var(--sy-space-1)); left: 0; display: none; z-index: var(--sy-z-dropdown); }
   .pop.open > .pop-panel { display: block; }
   .pop.open > .pop-panel.menu { display: flex; }       /* combobox listbox keeps its flex column */
   .pop.open > .pop-panel.pop-flex { display: flex; }   /* range picker keeps preset rail + calendar side by side */
@@ -683,7 +683,7 @@
   .ctx-stack .ctx { position: relative; outline: 2px solid var(--sy-bg-page); }
   .ctx-stack .under { position: absolute; inset: -4px 4px auto 4px; height: 100%; background: var(--sy-bg-raised);
     border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-md); }
-  .media-fan { display: flex; padding: var(--sy-space-4) var(--sy-space-2); }
+  .media-fan { isolation: isolate; display: flex; padding: var(--sy-space-4) var(--sy-space-2); }
   .media-fan .m-card { width: 180px; height: 120px; background: var(--sy-bg-page); border: 1px solid var(--sy-border-default);
     border-radius: var(--sy-radius-lg); display: flex; flex-direction: column; align-items: stretch; overflow: hidden;
     color: var(--sy-text-secondary); outline: 2px solid var(--sy-bg-page);
@@ -820,7 +820,7 @@
   .frow { display: flex; align-items: center; gap: var(--sy-space-2); height: 40px; max-width: 480px;
     font-size: var(--sy-text-13); position: relative; border-bottom: 1px solid var(--sy-border-subtle); }
   .frow .sz { color: var(--sy-text-tertiary); font-variant-numeric: tabular-nums; margin-left: auto; }
-  .split { position: relative; display: flex; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-2xl); overflow: hidden; height: 180px; }
+  .split { isolation: isolate; position: relative; display: flex; border: 1px solid var(--sy-border-default); border-radius: var(--sy-radius-2xl); overflow: hidden; height: 180px; }
   .split .pane { padding: var(--sy-space-4); font-size: var(--sy-text-13); color: var(--sy-text-secondary); }
   /* Divider: 1px visual line centered in an invisible 8px drag hit-area (spec §SplitPanel) */
   .split .div { position: relative; width: 8px; flex: none; background: transparent; cursor: col-resize; display: flex; align-items: center; justify-content: center; }
@@ -4405,7 +4405,7 @@ team: finance</pre>
             tpl.forEach(function (t, ix) { if (!match(t)) return; (pinned[ix] ? pin : rest).push(ix); });
             function group(label, list) {
               if (!list.length) return;
-              html += '<div class="sy-type-micro-label" style="color: var(--sy-text-tertiary); padding: var(--sy-space-2) var(--sy-space-2) var(--sy-space-0_5); position: sticky; top: 0; background: var(--sy-bg-surface); z-index: 1;" lang="ko">' + label + '</div>';
+              html += '<div class="sy-type-micro-label" style="color: var(--sy-text-tertiary); padding: var(--sy-space-2) var(--sy-space-2) var(--sy-space-0_5); position: sticky; top: 0; background: var(--sy-bg-surface); z-index: var(--sy-z-sticky);" lang="ko">' + label + '</div>';
               list.forEach(function (ix) { html += rowHtml(ix); shown.push(ix); });
             }
             group('즐겨찾기', pin);

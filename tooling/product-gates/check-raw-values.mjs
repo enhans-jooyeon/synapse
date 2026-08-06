@@ -21,6 +21,7 @@ const RAW_HEX = /#[0-9a-fA-F]{3,8}\b/;
 const RAW_RGB = /\b(rgb|rgba|hsl|hsla)\(/;
 const RAW_PX = /\b\d+(\.\d+)?px\b/;            // bare px literal
 const TW_ARBITRARY = /-\[[^\]]+\]/;             // e.g. p-[13px], text-[#abc] — Tailwind arbitrary values always have a dash before the bracket; plain JS indexing (acc[key]) must not match (2026-08-05, migration-test feedback)
+const TW_RAW_Z = /\bz-(?:[1-9]\d|\d{3,})\b/;    // Tailwind z classes at 10+ (z-10…z-50, z-9999): floating layers take the token classes (z-sticky…z-tooltip, mapped in the Tailwind theme); local sibling ordering is z-0/z-1/z-2 inside an isolated stacking context — foundations §6 / SY023 (ratified 2026-08-05)
 const ALLOW = /synapse-allow/;                  // opt-out marker requires a harness ticket ref
 
 let violations = 0;
@@ -33,6 +34,7 @@ for (const file of files) {
       ['SY001', RAW_RGB, 'raw rgb/hsl color'],
       ['SY002', RAW_PX, 'bare px literal (use a token)'],
       ['SY002', TW_ARBITRARY, 'Tailwind arbitrary value (use a token class)'],
+      ['SY023', TW_RAW_Z, 'raw z-index class (floating layers: z-sticky…z-tooltip token classes; local ordering: z-0/1/2 + isolation)'],
     ]) {
       if (re.test(line)) {
         console.error(`ERROR ${rule} ${file}:${i + 1} — ${msg}: ${line.trim().slice(0, 80)}`);

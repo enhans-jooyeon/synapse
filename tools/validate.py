@@ -25,6 +25,7 @@ Rules (E = error, W = warning):
   SY020 E tokens/synapse.css disagrees with tokens/synapse.tokens.json (per mode); W = a CSS var with no JSON origin — closes the TOKEN half of audit Defect 7
   SY021 E synapse.manifest.json key_rules contradict components.md prose (never-list vocabulary, token names, radius names) — closes the PROSE half of audit Defect 7
   SY022 E a stated component-count claim disagrees with reality — the "67 vs 68" class; checks four surfaces (components.md preamble, README.md, docs/DISTRIBUTION.md, storybook/package.json) against components.md's ## heading count and storybook/src/components
+  SY023 E/W z-index outside the two sanctioned vocabularies — floating layers take --sy-z-* tokens; local sibling ordering is a −1..2 literal inside an isolated stacking context (W if the file lacks `isolation: isolate`) — foundations §6, ratified 2026-08-05
   SY008 E reference to undefined --sy-* variable — tokens
   SY009 E raw box-shadow (not a --sy-shadow-* token) — foundations §6
   SY010 W line-height/font-size ratio < 1.4 in one declaration block — foundations §2.3.3
@@ -387,6 +388,22 @@ def lint_css_text(text, path, line_of, defined):
             # trains people to ignore SY007 (a noisy gate gets switched off).
             if not re.search(r":lang\(ko\)[^{]*\{[^}]*letter-spacing:\s*0", text):
                 report("W", "SY007", path, ln, "letter-spacing declared — must never apply to Hangul (add a `:lang(ko) { letter-spacing: 0 }` reset to suppress this warning)")
+        if prop == "z-index":
+            # SY023 (ratified 2026-08-05, foundations §6): two z vocabularies split by
+            # element class. Floating/pinned layers → a --sy-z-* token. Local sibling
+            # ordering → small integers (−1..2) INSIDE an isolated stacking context;
+            # the isolation requirement is checked at file granularity (same trick as
+            # SY007's :lang(ko) suppression): a literal without `isolation: isolate`
+            # anywhere in the file warns. Anything else — 9999, Tailwind-scale numbers,
+            # token values typed as literals — is an error: the fix is the scale.
+            v = val.strip()
+            if "var(--sy-z-" in v or v == "auto":
+                pass
+            elif re.fullmatch(r"-?[0-2]", v):
+                if "isolation: isolate" not in text and "isolation:isolate" not in text:
+                    report("W", "SY023", path, ln, f"local z-index {v} without `isolation: isolate` in the file — local stacking must be inside an isolated stacking context (foundations §6)")
+            else:
+                report("E", "SY023", path, ln, f"z-index {v} — floating layers take a --sy-z-* token (sticky 100 … tooltip 600); local sibling ordering is −1..2 inside an isolated context; nothing else is sanctioned")
         if prop == "box-shadow" and "var(--sy-shadow" not in val and val != "none":
             # sanctioned exemption: a zero-blur, zero-offset ring (inset OR outset) using a token is a
             # border substitute / focus ring, not elevation (foundations §6). Elevation needs blur → a shadow token.
