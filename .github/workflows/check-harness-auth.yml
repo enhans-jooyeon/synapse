@@ -32,7 +32,12 @@ jobs:
         run: |
           set +e
           if [ -z "${DEPLOY_KEY:-}" ]; then
-            echo "not configured — falling through to the PAT checks below."
+            echo "NOT CONFIGURED — no HARNESS_DEPLOY_KEY secret on this repo."
+            echo "DK=absent" >> "$GITHUB_ENV"
+            echo ""
+            echo "  If you believe you added it, the secret NAME is the usual culprit — it must"
+            echo "  be exactly HARNESS_DEPLOY_KEY, on this repository (not the harness repo,"
+            echo "  and not an organization secret)."
             echo ""
             echo "  A deploy key is the route that needs only REPO ADMIN on the target repo."
             echo "  A fine-grained PAT against an org-owned repo can require an org OWNER's"
@@ -46,6 +51,7 @@ jobs:
           export GIT_SSH_COMMAND="ssh -i ~/.ssh/harness_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"
           OUT="$(git ls-remote git@github.com:viralpick/synapse-harness.git 2>&1)"; RC=$?
           if [ $RC -ne 0 ]; then
+            echo "DK=broken" >> "$GITHUB_ENV"
             echo "READ FAILED (exit ${RC}): ${OUT}"
             echo "  The public half is probably not on viralpick/synapse-harness, or the"
             echo "  private half was pasted without its BEGIN/END lines."
@@ -58,8 +64,13 @@ jobs:
           git commit --allow-empty -m probe --quiet
           OUT="$(git push --dry-run origin HEAD:refs/heads/main 2>&1)"; RC=$?
           if [ $RC -eq 0 ]; then
+            echo "DK=ok" >> "$GITHUB_ENV"
             echo "WRITE OK — the deploy key can publish. publish-harness.yml will use it."
+            echo ""
+            echo "  This is the path publish-harness.yml prefers, so the PAT checks that follow"
+            echo "  are INFORMATIONAL ONLY and cannot fail this job."
           else
+            echo "DK=readonly" >> "$GITHUB_ENV"
             echo "WRITE FAILED (exit ${RC}): ${OUT}"
             echo "  The key is installed but READ-ONLY. On the target repo: Settings ->"
             echo "  Deploy keys -> remove it and re-add with 'Allow write access' TICKED."
@@ -67,10 +78,16 @@ jobs:
             exit 1
           fi
 
-      - name: 2b · PAT is present
+      - name: 2b · PAT is present (fallback route)
+        shell: bash {0}
         env:
           DEPLOY_TOKEN: ${{ secrets.HARNESS_DEPLOY_TOKEN }}
         run: |
+          set +e
+          if [ "${DK:-}" = "ok" ]; then
+            echo "SKIPPED — the deploy key already works; the PAT is not used."
+            exit 0
+          fi
           if [ -z "${DEPLOY_TOKEN:-}" ]; then
             echo "FAIL — HARNESS_DEPLOY_TOKEN is EMPTY or does not exist on this repo."
             echo ""
@@ -106,6 +123,18 @@ jobs:
           set +e
           set -uo pipefail
           FAILED=0
+
+          # Once the deploy key is proven, publish-harness.yml never touches the PAT — so a
+          # PAT failure must not fail this job. The first version of this workflow did fail
+          # it, reporting BROKEN while the configured route was healthy. Run the checks for
+          # information, then exit on the deploy key's verdict.
+          if [ "${DK:-}" = "ok" ]; then
+            echo "NOTE: the deploy key passed. Everything below is INFORMATIONAL about the"
+            echo "      unused PAT fallback and cannot fail this job."
+            INFORMATIONAL=1
+          else
+            INFORMATIONAL=0
+          fi
 
           probe () {  # $1 = owner
             local OWNER="$1"
@@ -189,8 +218,23 @@ jobs:
           fi
 
           echo ""
+          echo "════════════════════════════════════════════════════════════"
+          if [ "$INFORMATIONAL" -eq 1 ]; then
+            if [ "$FAILED" -ne 0 ]; then
+              echo "RESULT: HEALTHY — publishing goes over the DEPLOY KEY, which passed."
+              echo "        The PAT fallback is broken, which does not matter. Delete the"
+              echo "        HARNESS_DEPLOY_TOKEN secret to stop testing a credential you"
+              echo "        no longer use, or leave it as a dormant backup."
+            else
+              echo "RESULT: HEALTHY — both the deploy key and the PAT fallback work."
+            fi
+            exit 0
+          fi
           if [ "$FAILED" -ne 0 ]; then
-            echo "RESULT: the harness publish path is BROKEN. Do not cut a release yet."
+            echo "RESULT: BROKEN — no working route to the harness. Do not cut a release."
+            echo "        Deploy key: ${DK:-absent}. PAT: failed."
+            echo "        The deploy key is the route a repo admin can fix alone; see"
+            echo "        docs/DISTRIBUTION.md step 2."
             exit 1
           fi
-          echo "RESULT: the harness publish path is HEALTHY."
+          echo "RESULT: HEALTHY — publishing goes over the PAT fallback (no deploy key set)."
