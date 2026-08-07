@@ -1,13 +1,16 @@
 # Diagnose the harness publish path WITHOUT cutting a release.
 #
-# publish-harness.yml only fires on a `v*.*.*` tag, and a tag is immutable — so a
-# misconfigured token or a disabled-Actions policy costs a whole version number to
-# discover. This workflow does the same auth handshake, publishes NOTHING, and can be
-# run from the Actions tab as many times as needed.
+# publish-harness.yml fires only on a `v*.*.*` tag, and a tag is immutable — so a bad
+# token or a disabled-Actions policy costs a whole version number to discover. This runs
+# the same handshake, publishes NOTHING, and can be re-run freely.
 #
 # Run it: Actions → "Check harness auth" → Run workflow.
-# If it does not appear in the Actions list at all, Actions are disabled for this repo
-# or blocked by the organization's Actions policy — that is itself the answer.
+# If it is not listed in the Actions tab at all, Actions are disabled for this repo or
+# blocked by the organization's Actions policy — that absence is itself the diagnosis.
+#
+# DESIGN RULE: no step may exit on a raw git error. Git fails with exit 128 for every
+# auth problem and prints nothing useful, so every git call here captures its output,
+# classifies it, and prints the remedy. The job fails at the END, after the report.
 name: Check harness auth
 
 on:
@@ -16,54 +19,109 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    env:
+      GIT_TERMINAL_PROMPT: '0'      # never hang waiting for a username/password prompt
     steps:
-      - name: Actions can run at all
-        run: echo "✓ Actions are enabled and this runner started. Policy is not the problem."
+      - name: 1 · Actions can run at all
+        run: echo "PASS — runner started, so the org/repo Actions policy is not the problem."
 
-      - name: HARNESS_DEPLOY_TOKEN is present
+      - name: 2 · Secret is present
         env:
           DEPLOY_TOKEN: ${{ secrets.HARNESS_DEPLOY_TOKEN }}
         run: |
           if [ -z "${DEPLOY_TOKEN:-}" ]; then
-            echo "✗ HARNESS_DEPLOY_TOKEN is EMPTY."
+            echo "FAIL — HARNESS_DEPLOY_TOKEN is EMPTY or does not exist on this repo."
             echo ""
-            echo "  Repo secrets travel with a repo through an org transfer; ORG-level secrets"
-            echo "  do not. If this secret lived on the enhans-jooyeon org, it is gone and must"
-            echo "  be re-added as a REPO secret here:"
-            echo "    Settings → Secrets and variables → Actions → New repository secret"
+            echo "  Repo secrets travel with a repo through an org transfer. ORG-level secrets"
+            echo "  do NOT. If this secret lived on the enhans-jooyeon org, it is gone."
+            echo ""
+            echo "  Fix: Settings -> Secrets and variables -> Actions -> New REPOSITORY secret"
+            echo "       name: HARNESS_DEPLOY_TOKEN"
             exit 1
           fi
-          echo "✓ secret is set (${#DEPLOY_TOKEN} characters)"
+          echo "PASS — secret is set (${#DEPLOY_TOKEN} characters)."
+          case "$DEPLOY_TOKEN" in
+            github_pat_*) echo "       Looks like a FINE-GRAINED PAT. These are bound to a resource owner"
+                          echo "       and do NOT follow a repo across an org transfer. If step 3 fails," 
+                          echo "       reissue it with Resource owner = viralpick." ;;
+            ghp_*)        echo "       Looks like a CLASSIC PAT. These are scoped by permission, not owner," 
+                          echo "       so an org move does not invalidate them — but the account behind it" 
+                          echo "       still needs write access to viralpick/synapse-harness." ;;
+            ghs_*|gho_*)  echo "       Looks like an app/OAuth token, not a PAT. Probably not what you want." ;;
+            *)            echo "       Unrecognised token prefix — check you pasted the whole value." ;;
+          esac
 
-      - name: Token can READ the harness repo
+      - name: 3 · Diagnose read + write access
         env:
           DEPLOY_TOKEN: ${{ secrets.HARNESS_DEPLOY_TOKEN }}
         run: |
           set -uo pipefail
-          for OWNER in viralpick enhans-jooyeon; do
-            URL="https://x-access-token:${DEPLOY_TOKEN}@github.com/${OWNER}/synapse-harness.git"
-            if git ls-remote "$URL" >/dev/null 2>&1; then
-              echo "✓ read OK via ${OWNER}/synapse-harness"
-            else
-              echo "✗ read FAILED via ${OWNER}/synapse-harness"
-            fi
-          done
-          echo ""
-          echo "A fine-grained PAT is scoped to a resource OWNER and does not follow an org"
-          echo "transfer. If viralpick fails, reissue the token under the viralpick org with"
-          echo "Contents: Read and write on synapse-harness."
+          FAILED=0
 
-      - name: Token can WRITE to the harness repo (dry run — pushes nothing)
-        env:
-          DEPLOY_TOKEN: ${{ secrets.HARNESS_DEPLOY_TOKEN }}
-        run: |
-          set -euo pipefail
-          git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/viralpick/synapse-harness.git" probe
-          cd probe
-          git config user.name "synapse-bot"
-          git config user.email "synapse-bot@users.noreply.github.com"
-          git commit --allow-empty -m "auth probe (not pushed)" --quiet
-          # --dry-run performs the full auth + ref negotiation and writes nothing.
-          git push --dry-run origin HEAD:refs/heads/main
+          probe () {  # $1 = owner
+            local OWNER="$1"
+            local URL="https://x-access-token:${DEPLOY_TOKEN}@github.com/${OWNER}/synapse-harness.git"
+            local OUT RC
+            OUT="$(git ls-remote "$URL" 2>&1)"; RC=$?
+            # Never let the token itself reach the log, whatever git echoed back.
+            OUT="${OUT//${DEPLOY_TOKEN}/***}"
+            if [ $RC -eq 0 ]; then
+              echo "  READ  ${OWNER}/synapse-harness — OK"
+              return 0
+            fi
+            echo "  READ  ${OWNER}/synapse-harness — FAILED (git exit ${RC})"
+            echo "        git said: ${OUT}"
+            case "$OUT" in
+              *"could not read Username"*|*"Authentication failed"*|*"Invalid username or password"*)
+                echo "        MEANING: the token was rejected. It is expired, revoked, or malformed." ;;
+              *"not found"*|*"Repository not found"*)
+                echo "        MEANING: authenticated, but this token cannot SEE that repo. For a"
+                echo "                 fine-grained PAT this is the classic symptom of the wrong"
+                echo "                 Resource owner, or of the repo not being in its selected list." ;;
+              *"403"*|*"Forbidden"*)
+                echo "        MEANING: the org blocks this token. Check viralpick -> Settings ->"
+                echo "                 Personal access tokens, which can require org approval." ;;
+              *) echo "        MEANING: unclassified — paste the line above and I will read it." ;;
+            esac
+            return 1
+          }
+
+          echo "── Read probe ──────────────────────────────────────────────"
+          probe viralpick        || FAILED=1
+          probe enhans-jooyeon   || true   # informational only; the old path is not required
+
           echo ""
-          echo "✓ WRITE ACCESS CONFIRMED. publish-harness.yml will succeed on the next tag."
+          echo "── Write probe (dry run — pushes nothing) ──────────────────"
+          if [ "$FAILED" -eq 0 ]; then
+            OUT="$(git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/viralpick/synapse-harness.git" probe 2>&1)"; RC=$?
+            OUT="${OUT//${DEPLOY_TOKEN}/***}"
+            if [ $RC -ne 0 ]; then
+              echo "  CLONE FAILED (git exit ${RC}): ${OUT}"
+              FAILED=1
+            else
+              cd probe
+              git config user.name  "synapse-bot"
+              git config user.email "synapse-bot@users.noreply.github.com"
+              git commit --allow-empty -m "auth probe (never pushed)" --quiet
+              OUT="$(git push --dry-run origin HEAD:refs/heads/main 2>&1)"; RC=$?
+              OUT="${OUT//${DEPLOY_TOKEN}/***}"
+              if [ $RC -eq 0 ]; then
+                echo "  WRITE OK — publish-harness.yml will succeed on the next tag."
+              else
+                echo "  WRITE FAILED (git exit ${RC}): ${OUT}"
+                echo "        MEANING: the token can read but not write. A fine-grained PAT needs"
+                echo "                 Repository permissions -> Contents: READ AND WRITE."
+                FAILED=1
+              fi
+              cd ..
+            fi
+          else
+            echo "  SKIPPED — read access failed first; fix that before testing write."
+          fi
+
+          echo ""
+          if [ "$FAILED" -ne 0 ]; then
+            echo "RESULT: the harness publish path is BROKEN. Do not cut a release yet."
+            exit 1
+          fi
+          echo "RESULT: the harness publish path is HEALTHY."
