@@ -68,10 +68,22 @@ while read -r LOCAL_REF LOCAL_SHA REMOTE_REF REMOTE_SHA; do
          "the release notes were never rolled and the bundle will ship without them."
   fi
 
-  if grep -q "TITLE ME" <<< "$LOG"; then
-    fail "$TAG still contains the literal placeholder 'TITLE ME' in CHANGELOG.md." \
-         "v2.5.0 shipped its heading as 'TITLE ME'. Title it, amend, retag."
-  fi
+  # Check the HEADING LINE only, never the whole file. Scanning the document produces a
+  # false positive the moment a release note *mentions* the placeholder — which this
+  # changelog does, describing this very check. A guard that fires on its own
+  # documentation is one people learn to bypass, and `--no-verify` is one keystroke.
+  HEADING="$(grep -m1 "^## ${VER} " <<< "$LOG")"
+  case "$HEADING" in
+    *"TITLE ME"*)
+      fail "$TAG has an untitled heading: ${HEADING}" \
+           "cut-release.mjs leaves 'TITLE ME' for a human to replace, and v2.5.0 shipped" \
+           "with it still there. Title the heading, then:" \
+           "" \
+           "    git add -A && git commit --amend --no-edit" \
+           "    git tag -d ${TAG} && git tag ${TAG}" \
+           "    git push origin main && git push origin ${TAG}"
+      ;;
+  esac
 
   echo "✓ pre-push: ${TAG} matches source ${SRC}, changelog rolled and titled." >&2
 done

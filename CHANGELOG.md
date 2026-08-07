@@ -6,7 +6,7 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 *(nothing yet)*
 
-## 2.7.0 — 2026-08-07 — TITLE ME
+## 2.7.0 — 2026-08-07 — Tailwind v4 ships, the enforcement model corrected, publishing fixed
 
 - **A pre-push hook, because `cut-release.mjs` only helps when someone remembers to run it.** v2.6.0 was tagged without running it: the commit still declared 2.5.0, and `publish-harness.yml` correctly refused with `VERSION MISMATCH: tag=v2.6.0 tokens.$version=2.5.0`. The guard worked — but it fires in CI, *after* the tag is on origin, and a tag is immutable, so by the time it speaks the version number is already spent. That is the fifth number burned (v2.2.0 … v2.6.0). **A tool you must remember to invoke is a reminder, not enforcement.** `.githooks/pre-push` is the enforcement: it fires on `git push` regardless of what anyone remembered, reads the version surfaces *out of the tagged commit* rather than the working tree (they differ exactly when the mistake is being made), and refuses on any of — tag ≠ `tokens.$version` / `design.md` / `preview.html`, no `## <version>` section in the changelog, or the literal `TITLE ME` still present. Enable once per clone: `git config core.hooksPath .githooks`.
   - **Verified against real history, not fixtures**: it blocks the v2.6.0 commit with the exact mismatch table, blocks v2.5.0 on the `TITLE ME` placeholder that actually shipped, passes v2.4.0 and v2.3.0, and ignores branch pushes and tag deletions.
