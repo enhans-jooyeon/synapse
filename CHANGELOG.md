@@ -4,6 +4,10 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+*(nothing yet)*
+
+## 2.7.0 — 2026-08-07 — TITLE ME
+
 - **A pre-push hook, because `cut-release.mjs` only helps when someone remembers to run it.** v2.6.0 was tagged without running it: the commit still declared 2.5.0, and `publish-harness.yml` correctly refused with `VERSION MISMATCH: tag=v2.6.0 tokens.$version=2.5.0`. The guard worked — but it fires in CI, *after* the tag is on origin, and a tag is immutable, so by the time it speaks the version number is already spent. That is the fifth number burned (v2.2.0 … v2.6.0). **A tool you must remember to invoke is a reminder, not enforcement.** `.githooks/pre-push` is the enforcement: it fires on `git push` regardless of what anyone remembered, reads the version surfaces *out of the tagged commit* rather than the working tree (they differ exactly when the mistake is being made), and refuses on any of — tag ≠ `tokens.$version` / `design.md` / `preview.html`, no `## <version>` section in the changelog, or the literal `TITLE ME` still present. Enable once per clone: `git config core.hooksPath .githooks`.
   - **Verified against real history, not fixtures**: it blocks the v2.6.0 commit with the exact mismatch table, blocks v2.5.0 on the `TITLE ME` placeholder that actually shipped, passes v2.4.0 and v2.3.0, and ignores branch pushes and tag deletions.
   - **It also rejected a correct tag twice while being written, for a reason worth keeping.** `writer | grep -q` is a trap under `set -o pipefail`: `grep -q` exits at the first match and closes the pipe, the writer dies of SIGPIPE with **141**, and pipefail reports the pipeline as FAILED *even though the match succeeded*. Moving the writer from `git show` to `printf` changed nothing, because pipefail is what reads the status. Both checks now use a herestring, which has no upstream process, so grep's own exit code is the only one in play. **Any `set -o pipefail` script that pipes a large input into `grep -q` has this bug latent in it.**
