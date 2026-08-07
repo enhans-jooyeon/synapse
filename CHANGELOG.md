@@ -4,6 +4,10 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
+*(nothing yet)*
+
+## 2.8.0 — 2026-08-07 — TITLE ME
+
 - **Every publish check now runs locally, because a check that only runs in CI cannot save a version number.** v2.7.0 was cut correctly — version surfaces agreed, changelog rolled and titled, gate green, manifest current, tag on the tip of main — and still failed to publish: `scripts/build-dist.mjs` re-validates every cross-reference in the shipped docs, and one link in `migration/motion-durations.md` was written as `` `check-raw-values.mjs` `` instead of `` `tooling/product-gates/check-raw-values.mjs` ``, the form every other reference in the repo uses. That check runs in `publish-harness.yml` **after** the tag reaches origin, where it is immutable. A one-word omission cost a release.
   - **`build-dist.mjs` added to both local guards** — `cut-release.mjs`'s preflight (as check 7) and `.githooks/pre-push`. The hook is the one that matters, since it cannot be skipped by forgetting. To make the check meaningful it first requires a clean tree and `HEAD == the tagged commit`, so that the bundle it validates is genuinely the bundle being tagged rather than whatever happens to be in the working directory. **Verified by breaking the reference again and confirming the hook reproduces CI's exact error message before the push.**
   - **The rule this encodes, after six burned version numbers (v2.2.0 … v2.7.0):** any check that exists in CI but not on the developer's machine will eventually be discovered by a tag, and a tag cannot be taken back. CI's job is to be the second opinion, not the first.
