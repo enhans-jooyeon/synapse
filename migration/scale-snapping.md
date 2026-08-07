@@ -34,6 +34,8 @@ def snap(v, scale):
 
 The highest-value step in this area, and the cheapest: **it turns the migration from a lint problem into a build problem.** Today `text-[10.5px]` compiles and a gate complains afterwards. Wire the theme to the token file and the same string has no class to resolve to — **the ~131 decimal-px sites fail to compile**, along with every `rounded-[2px]` and `p-[7px]`, at the point where the wrong value was typed.
 
+**Tailwind v3:**
+
 ```js
 // tailwind.config — the three scales come from tokens; Tailwind's defaults are REPLACED.
 // tooling/product-gates/tailwind.synapse.cjs already ships `spacing` + `borderRadius`
@@ -55,7 +57,28 @@ theme: {
 }
 ```
 
-Two riders. (1) `fontSize` **must** be bundles with `lineHeight`/`letterSpacing` emptied beside it, so a font snap cannot leave an unbundled line-height behind. (2) A theme cannot delete bracket syntax: replacement kills every *named* off-scale class outright, and the arbitrary form needs the preset's arbitrary-value ban beside it — enforced today by `tooling/product-gates/check-raw-values.mjs` (SY002). Land both.
+**Tailwind v4:** there is no `theme` object — the three scales are theme *variables*, and "replace the defaults" is a `: initial` clear on each namespace. `spacing` → `--spacing-*`, `borderRadius` → `--radius-*`, `fontSize` → `--text-*`.
+
+```css
+/* app.css — after `@import "tailwindcss"` and Synapse's own tokens/synapse.css */
+@theme inline {
+  --spacing-*: initial;              /* also removes v4's bare `--spacing` multiplier, which */
+  --radius-*:  initial;              /*   is what generates p-7/p-13 dynamically — so the    */
+  --text-*:    initial;              /*   scale really is closed */
+  --leading-*: initial;  --tracking-*: initial;    /* the fontSize rider, v4 spelling */
+
+  --spacing-1: var(--sy-space-1);    /* p-1 = 4px … p-96 = 384px; half-steps keep the token */
+  --spacing-0_5: var(--sy-space-0_5);/*   key, so the class is p-0_5 (not Tailwind's p-0.5) */
+  --spacing-px: 1px;                 /* the sanctioned hairline offset ONLY */
+  --radius-card: var(--sy-radius-card);   /* prefer the role tier: inset/nested/tray/card/  */
+  --radius-md:   var(--sy-radius-md);     /*   overlay/shell. The two control-optical steps */
+                                          /*   6/10 are rounded-control-xs / -control-md    */
+  --text-body: var(--sy-body-size);       /* + --text-body--line-height / --font-weight     */
+  /* …the full scales: tooling/product-gates/tailwind.synapse.v4.css */
+}
+```
+
+Two riders, both versions. (1) `fontSize` **must** be bundles with `lineHeight`/`letterSpacing` emptied beside it (v4: `--text-NAME` + its paired `--line-height`/`--font-weight`, with `--leading-*`/`--tracking-*` cleared), so a font snap cannot leave an unbundled line-height behind. (2) A theme cannot delete bracket syntax: replacement kills every *named* off-scale class outright, and the arbitrary form needs the preset's arbitrary-value ban beside it — enforced today by `tooling/product-gates/check-raw-values.mjs` (SY002). Land both.
 
 ## The mapping tables
 
@@ -102,7 +125,7 @@ June's summary: **10px font → 11px** (331 uses; no 10px token created), **2px 
 
 ## Enforcement
 
-- Product repo — `tooling/product-gates/check-raw-values.mjs`: **SY002** flags a bare px literal and any Tailwind arbitrary value (`text-[10.5px]`, `rounded-[2px]`, `p-[7px]`). Wire it into product CI, and land the theme replacement above so the gate is a backstop rather than the front line.
+- Product repo — `tooling/product-gates/check-raw-values.mjs`: **SY002** flags a bare px literal and any Tailwind arbitrary value (`text-[10.5px]`, `rounded-[2px]`, `p-[7px]`). Wire it into product CI, and land the theme replacement above so the gate is a backstop rather than the front line. Presets: `tooling/product-gates/tailwind.synapse.cjs` (v3) · `tooling/product-gates/tailwind.synapse.v4.css` (v4).
 - DS repo — `tools/validate.py`: **SY002** lexes the CSS-declaration form against `FONT_SCALE` / `RADIUS_SCALE` / `SPACE_SCALE`; **SY007 / SY010** cover the unbundling side. **`synapse-allow`** remains the documented escape hatch and must carry a harness ticket reference on the line. Dogfooding precedent: replace-the-theme is what closed z-index (`migration/z-index-migration.md` — 3 errors + 4 missing isolations in this repo's own render on day one) and typography.
 
 ## Not changing in the DS — the answer to "which DS files do I update?" is **NONE**

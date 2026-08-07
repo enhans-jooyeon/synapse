@@ -20,6 +20,8 @@ One correction to carry forward first: Dahye's original message cited **§7** fo
 
 Four of Tailwind's default `boxShadow` keys — `sm` / `md` / `lg` / `xl` — are **byte-identical to Synapse's own shadow token names.** Source the scale under the same names and `shadow-lg` means two different things depending on whether the theme loaded, and no lint rule can tell correct code from a leftover. So the scale is exposed **prefixed**, replacing Tailwind's defaults (`tooling/product-gates/tailwind.synapse.cjs`):
 
+**Tailwind v3:**
+
 ```js
 // tailwind.config — the token scale, prefixed; Tailwind's defaults are REPLACED
 theme: {
@@ -30,6 +32,23 @@ theme: {
   ),
 }
 ```
+
+**Tailwind v4:** `boxShadow` becomes the `--shadow-*` namespace — clear it, then re-add the five steps prefixed. Enumerated rather than generated, which drops `thumb`/`glass` by construction (the v3 snippet emits them and SY009 flags them):
+
+```css
+/* app.css — after `@import "tailwindcss"` and Synapse's own tokens/synapse.css */
+@theme inline {
+  --shadow-*: initial;                        /* Tailwind's sm…2xl/inner cease to exist */
+  --shadow-float-xs: var(--sy-shadow-xs);     /* resting lift  */
+  --shadow-float-sm: var(--sy-shadow-sm);     /* hover/lift    */
+  --shadow-float-md: var(--sy-shadow-md);     /* shallow float */
+  --shadow-float-lg: var(--sy-shadow-lg);     /* standard float */
+  --shadow-float-xl: var(--sy-shadow-xl);     /* deep          */
+  /* thumb + glass deliberately absent — see the special cases below */
+}
+```
+
+The complete preset is `tooling/product-gates/tailwind.synapse.v4.css` (v4) / `tooling/product-gates/tailwind.synapse.cjs` (v3); take it whole rather than pasting this block.
 
 Two things follow, and both matter:
 
@@ -94,7 +113,7 @@ Three special cases:
 
 - **`shadow-none`** — usually a *fix* someone applied to cancel an inherited shadow. Delete both sides: remove the source shadow, then remove the `shadow-none`.
 - **`shadow-inner`** — an inset *with* blur. Neither a ring (blur > 0) nor elevation (Synapse has no inset elevation). Almost always wants `bg.sunken` instead.
-- **A slider / knob handle** on a track takes `--sy-shadow-thumb` — a dedicated control token with an all-around ambient component so a borderless handle defines its circumference against a same-value background. It is **not** a step on the elevation scale and is scoped to draggable knobs on tracks. **Mind the class form:** `primitive.shadow` also carries `thumb` and `glass`, so the snippet above emits `shadow-float-thumb` / `shadow-float-glass` — and SY009's allowlist only passes `shadow-float-{xs,sm,md,lg,xl}`, so both would be flagged. Reach the thumb through the Slider component or the CSS var, not a utility class.
+- **A slider / knob handle** on a track takes `--sy-shadow-thumb` — a dedicated control token with an all-around ambient component so a borderless handle defines its circumference against a same-value background. It is **not** a step on the elevation scale and is scoped to draggable knobs on tracks. **Mind the class form:** `primitive.shadow` also carries `thumb` and `glass`, so the **v3** snippet — which maps the group programmatically — emits `shadow-float-thumb` / `shadow-float-glass`, and SY009's allowlist only passes `shadow-float-{xs,sm,md,lg,xl}`, so both would be flagged. The **v4** block enumerates the five steps instead, so neither exists. Either way, reach the thumb through the Slider component or the CSS var, not a utility class.
 
 ## Enforcement
 

@@ -21,11 +21,37 @@ The JS/TS enforcement layer for the **product repo** — the machine half of the
 | Accessibility floor | Contrast/role/label/target | `eslint-plugin-jsx-a11y` + `axe` in tests |
 | Visual snapshots | Reviewer sees all states at a glance | Chromatic or Playwright (wire to your account) |
 
+## The two Tailwind presets — pick by your Tailwind major version
+
+| File | Targets | Form | Theme source |
+|---|---|---|---|
+| `tailwind.synapse.cjs` | **Tailwind v3** | JS config, used via `presets: [require(...)]` | reads `tokens/synapse.tokens.json` at build time |
+| `tailwind.synapse.v4.css` | **Tailwind v4** | CSS `@theme inline` + `@utility`, used via `@import` | aliases the `--sy-*` variables from `tokens/synapse.css` |
+
+They are not interchangeable: v4 has no JS theme, so a v3 config cannot be loaded, adapted, or half-used there. The v4 file is complete — colors, spacing, radius (incl. the containment-role tier), the prefixed `shadow-float-*` scale, easing, the three families, the four weights, all 20 type styles as `--text-*` bundles, plus `@utility` blocks for the six z roles and the four durations.
+
+**Import order for v4 — this matters.** The preset declares no values; it only maps Tailwind namespaces onto `--sy-*` variables that must already exist.
+
+```css
+@import "tailwindcss";
+@import "@enhans-jooyeon/synapse/tokens/synapse.css";      /* defines every --sy-*, incl. [data-theme="dark"] */
+@import "./tooling/product-gates/tailwind.synapse.v4.css"; /* maps the namespaces onto them */
+```
+
+Aliasing rather than copying values is what keeps **dark mode working**: utilities resolve `var(--sy-…)` in the element's own scope, so `bg-bg-surface` follows `[data-theme]`. Copying resolved values into the theme would freeze one mode.
+
+**Two things are worse on v4, and both land on `check-raw-values.mjs`:**
+
+- v4 has **no `--z-index-*` and no `--transition-duration-*` namespace**. `z-10` / `z-9999` / `duration-500` are bare-value utilities that no theme can delete, so **SY023 and SY025 are the only enforcement on v4, not a backstop.** Wire the gate into CI *before* migrating.
+- A CSS theme still cannot delete bracket syntax (`p-[7px]`, `bg-[#4f46e5]`) — SY002's job on both versions.
+
+**Exclude `tailwind.synapse.v4.css` from the gate's glob.** It necessarily writes `--sy-shadow-*` (SY009's regex), `1px` and `-0.01em` (SY002's px/literal scans): it is the theme, not product code.
+
 ## Install
 
 1. Copy this folder into the product repo (e.g. `tooling/synapse-gates/`).
 2. Merge `.eslintrc.synapse.cjs` into the repo's ESLint config (`extends` or spread `rules`), and add `eslint-plugin-jsx-a11y`.
-3. Merge `tailwind.synapse.cjs` — the point is `future.hoverOnlyWhenSupported` aside, **arbitrary values disabled** and the theme sourced from `@enhans-jooyeon/synapse` tokens.
+3. Wire the preset for your version — **v3:** merge `tailwind.synapse.cjs` (the point is `future.hoverOnlyWhenSupported` aside, **arbitrary values disabled** and the theme sourced from `@enhans-jooyeon/synapse` tokens). **v4:** `@import` `tailwind.synapse.v4.css` in the order above.
 4. Add the scripts to CI (`ui-gate.yml` is a ready GitHub Actions job).
 5. Author declares required states in a `*.states.json` next to each screen; `check-state-coverage.mjs` verifies a story per declared state.
 

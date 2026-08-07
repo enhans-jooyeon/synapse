@@ -13,6 +13,8 @@ Typography in Synapse is a **bundle, not three properties.** `design.md` hard ru
 
 Same move that worked for z-index — make the wrong thing unexpressible, and leave the gate as the backstop for what a theme can't delete.
 
+**Tailwind v3** — the `fontSize` bundle, with `lineHeight` / `letterSpacing` emptied beside it.
+
 ```js
 // tailwind.config — typography becomes bundles; the override classes cease to exist
 theme: {
@@ -44,6 +46,30 @@ theme: {
   letterSpacing: {},
 }
 ```
+
+**Tailwind v4** — same shape, different mechanism. There is no `fontSize` object; the bundle is a `--text-NAME` variable plus its paired `--text-NAME--line-height` / `--text-NAME--font-weight` / `--text-NAME--letter-spacing`. `lineHeight: {}` / `letterSpacing: {}` become namespace clears: `--leading-*: initial` / `--tracking-*: initial`.
+
+```css
+/* app.css — after `@import "tailwindcss"` and Synapse's own tokens/synapse.css */
+@theme inline {
+  --text-*: initial;                    /* Tailwind's text-xs…9xl cease to exist */
+  --leading-*: initial;                 /* SY010 — no leading-* class at all; the paired */
+  --tracking-*: initial;                /* SY007 — line-height is a Hangul FLOOR, and     */
+                                        /*   letter-spacing must never reach Hangul       */
+
+  --text-body: var(--sy-body-size);                       /* one style, all three parts */
+  --text-body--line-height: var(--sy-body-lh);
+  --text-body--font-weight: var(--sy-weight-regular);
+
+  --text-heading-xl: var(--sy-text-24);                   /* the one sanctioned tracking */
+  --text-heading-xl--line-height: var(--sy-text-24-lh);
+  --text-heading-xl--font-weight: var(--sy-weight-bold);
+  --text-heading-xl--letter-spacing: -0.01em;             /* Latin only — see the rider */
+  /* …the other 18 styles: tooling/product-gates/tailwind.synapse.v4.css */
+}
+```
+
+Take the whole preset — **`tooling/product-gates/tailwind.synapse.v4.css`** has all 20 styles wired to `--sy-*` — rather than retyping the table. Two v4 riders: a `--text-*` pair carries size + line-height + weight + tracking and **nothing else**, so `family` (`font-display` / `font-mono`) and the `stat-*` `tabular-nums` still ride along as a second class; and a theme variable has **no `:lang()` scope**, so the `:lang(ko)` tracking resets that `tokens/synapse.css` applies to `display-*` / `heading-lg` / `micro-label` / `stat-*` cannot be expressed — those styles emit no tracking here, and a Latin-only case that wants it uses the `.sy-type-*` class, which carries the reset.
 
 After this, `text-body` / `text-heading-md` / `text-micro-label` carry the whole decision, and the ~424 call sites collapse to "pick the right style."
 

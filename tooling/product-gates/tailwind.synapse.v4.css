@@ -1,0 +1,605 @@
+/* =============================================================================
+ * Synapse Tailwind preset — TAILWIND v4 (CSS-first `@theme`)
+ * =============================================================================
+ *
+ * The v3 sibling of this file is `tailwind.synapse.cjs` (a JS `presets:` entry).
+ * v4 has no JS theme: the theme IS CSS custom properties in an `@theme` block, so a
+ * v3 config cannot be loaded, adapted, or half-used. This file is the v4 equivalent.
+ *
+ * ── Import order (this matters) ──────────────────────────────────────────────
+ *
+ *   @import "tailwindcss";
+ *   @import "@enhans-jooyeon/synapse/tokens/synapse.css";   -- defines every --sy-*
+ *   @import "./tooling/product-gates/tailwind.synapse.v4.css";
+ *
+ * `tokens/synapse.css` MUST come first. This file declares no values — it only maps
+ * Tailwind's theme namespaces onto `--sy-*` variables that must already exist. Import
+ * it alone and every utility resolves to nothing.
+ *
+ * ── What this file does, and the one rule it follows ─────────────────────────
+ *
+ * It ALIASES; it never re-declares. Every entry below is `var(--sy-…)`, not a hex, a
+ * px, or a cubic-bezier. Two consequences:
+ *
+ *   1. One source of truth. A token change ships in `tokens/synapse.css` and lands here
+ *      with no regeneration step, no build script, and no drift window.
+ *   2. Dark mode keeps working, for free. `tokens/synapse.css` redefines the colour
+ *      surface under `[data-theme="dark"]`; because the utilities resolve `var(--sy-…)`
+ *      in the ELEMENT'S own scope, `bg-bg-surface` is light or dark according to where
+ *      the element sits. Copying resolved values into the theme would freeze one mode.
+ *
+ * Exactly TWO entries below are literals rather than `var(--sy-…)`, each marked
+ * NON-TOKEN with its reason (`--spacing-px`, and heading-xl's sanctioned tracking).
+ * Nothing else may join them: a value that has no `--sy-*` is a proposal
+ * (design.md §6), not a preset entry.
+ *
+ * ── Still required beside this file ──────────────────────────────────────────
+ *
+ * A CSS theme CANNOT DELETE BRACKET SYNTAX. Replacing a namespace kills every NAMED
+ * off-scale class (`text-slate-500`, `rounded-2`, `shadow-lg` stop compiling) but
+ * `bg-[#4f46e5]`, `p-[7px]`, `text-[10.5px]` are still valid Tailwind. Worse in v4 than
+ * in v3: several utilities now accept BARE values with no namespace behind them at all
+ * (`z-10`, `duration-500` — see §5). So:
+ *
+ *   • Ban arbitrary values in review and in the editor. They are not a fallback.
+ *   • `check-raw-values.mjs` remains the backstop and is NOT optional here — it is the
+ *     only enforcement for the bracket form and for v4's bare-value utilities.
+ *
+ * Exclude THIS file from that gate's glob. It necessarily writes `--sy-shadow-*`
+ * (SY009's regex), `1px` (SY002's bare-px scan) and `-0.01em`: it is the theme, not
+ * product code. The gate scans `src/`.
+ *
+ * ── Why `@theme inline` ──────────────────────────────────────────────────────
+ *
+ * Without `inline`, Tailwind emits a SECOND parallel variable vocabulary — a real
+ * `--color-bg-surface: var(--sy-bg-surface)` declaration on `:root`, with utilities
+ * pointing at `--color-bg-surface`. Both forms cascade correctly for `[data-theme]`
+ * switching on `<html>`; the non-inline form is not broken. But for a system whose
+ * whole doctrine is a SINGLE token surface, shipping 104 colour variables twice under
+ * two names is noise — the next person has to learn which of `--sy-bg-surface` and
+ * `--color-bg-surface` to write, and the honest answer ("either") is the problem.
+ * `inline` makes the utility reference `var(--sy-bg-surface)` directly, so `--sy-*`
+ * stays the only vocabulary in the built CSS. (It also means the alias survives being
+ * scoped: if `data-theme` is ever set on a subtree rather than on `<html>`, an inline
+ * alias still resolves in that subtree.)
+ *
+ * ── Naming: why the class names stutter ──────────────────────────────────────
+ *
+ * The colour name is the token name, verbatim: `--sy-bg-page` → `--color-bg-page` →
+ * `bg-bg-page`. That reads badly, and it is still the right call. Dropping the group
+ * to get `bg-page` / `text-primary` COLLIDES: `disabled` names three different tokens
+ * (bg, text, icon), `primary` names two (text, icon), `secondary` two. A single flat
+ * key space would have to merge them, and then `bg-primary` silently means the text
+ * colour. Same reasoning as the `shadow-float-*` prefix (2026-08-06): a name that
+ * stutters is cheaper than a name that is ambiguous, and `bg-bg-page` greps back to
+ * `--sy-bg-page` byte-for-byte.
+ * ========================================================================== */
+
+
+/* =============================================================================
+ * 1. CLEAR THE DEFAULTS
+ * -----------------------------------------------------------------------------
+ * `--<namespace>-*: initial` empties a namespace so Tailwind's built-ins stop
+ * existing as classes. Each clear below is a rule, not a preference.
+ * ========================================================================== */
+
+@theme inline {
+  /* SY001 — Tailwind's 22 palette families are not the system's colours. After this,
+     `text-slate-500` / `bg-zinc-200` have nothing to resolve to and fail to compile. */
+  --color-*: initial;
+
+  /* SY002 — the spacing scale is closed and exhaustive. This also removes v4's bare
+     `--spacing` multiplier, which is what generates `p-7` / `p-13` dynamically; without
+     it, only the explicit steps in §2 exist. */
+  --spacing-*: initial;
+
+  /* SY002 — the radius scale is closed (nonzero floor 4; 6 and 10 are the documented
+     control-optical exceptions). Kills `rounded-sm/md/lg/xl/2xl/3xl` as Tailwind means
+     them, which is the point: those four keys are byte-identical to Synapse token names. */
+  --radius-*: initial;
+
+  /* SY009 — borders-first (foundations §6). Tailwind's `shadow-sm…xl` collide by name
+     with `--sy-shadow-*`, so a bare `shadow-lg` would be unresolvable-by-eye. Cleared
+     here, re-exposed PREFIXED in §4 (ruling 2026-08-06). */
+  --shadow-*: initial;
+
+  /* SY002 / design.md hard rule 2 — a font size is not a property, it is a bundle.
+     Tailwind's `text-xs…text-9xl` cease to exist; §6 re-adds the 20 type styles. */
+  --text-*: initial;
+
+  /* SY007 — letter-spacing must never reach Hangul, and the type styles already carry
+     the one sanctioned tracking. Unbundling must be UNEXPRESSIBLE, so this namespace
+     gets no replacement: after this there is no `tracking-*` class at all. */
+  --tracking-*: initial;
+
+  /* SY010 — the paired line-height is a FLOOR sized for Hangul ascent/descent
+     ("NEVER tighten", foundations §2.3.3). Same treatment: cleared, never replaced,
+     so `leading-tight` (1.25, below the 1.4 floor by construction) cannot be typed. */
+  --leading-*: initial;
+
+  /* foundations §7 — three curves by role. `ease-linear` ceases to exist, which is the
+     easing half of the motion migration; `linear` survives only inside a keyframe
+     animation, which is exactly where it is legal. */
+  --ease-*: initial;
+
+  /* SY004 — no weight outside 400/500/600/700. Kills `font-thin`, `font-extrabold`,
+     `font-black`. (Prefer the type style, which carries the weight; this namespace is
+     the floor for the cases that reach for a weight class anyway.) */
+  --font-weight-*: initial;
+
+  /* NOT CLEARED — `--font-*`. The family namespace is matched by prefix, and
+     `--font-weight-*` sits under the same prefix, so `--font-*: initial` is not a safe
+     one-liner here. `font-serif` therefore survives from Tailwind's defaults;
+     SY003's product-side coverage stays with `check-raw-values.mjs` / ESLint. */
+}
+
+
+/* =============================================================================
+ * 2. SPACING — the closed 4px grid (24 steps)
+ * -----------------------------------------------------------------------------
+ * Token keys are 4px-multiplier indexes, so Tailwind muscle memory survives
+ * (foundations §3): `p-1` = 4px, `p-4` = 16px, `p-96` = 384px. There is no 7 — `p-[7px]`
+ * has no home. Half-steps keep the TOKEN key (`space.0_5`), so the class is `p-0_5`,
+ * not Tailwind's conventional `p-0.5`; the key matches `--sy-space-0_5` exactly.
+ * ========================================================================== */
+
+@theme inline {
+  --spacing-0:   var(--sy-space-0);
+  --spacing-0_5: var(--sy-space-0_5);
+  --spacing-1:   var(--sy-space-1);
+  --spacing-1_5: var(--sy-space-1_5);
+  --spacing-2:   var(--sy-space-2);
+  --spacing-2_5: var(--sy-space-2_5);
+  --spacing-3:   var(--sy-space-3);
+  --spacing-4:   var(--sy-space-4);
+  --spacing-5:   var(--sy-space-5);
+  --spacing-6:   var(--sy-space-6);
+  --spacing-7:   var(--sy-space-7);
+  --spacing-8:   var(--sy-space-8);
+  --spacing-10:  var(--sy-space-10);
+  --spacing-12:  var(--sy-space-12);
+  --spacing-16:  var(--sy-space-16);
+  --spacing-20:  var(--sy-space-20);
+  --spacing-24:  var(--sy-space-24);
+  --spacing-32:  var(--sy-space-32);
+  --spacing-40:  var(--sy-space-40);
+  --spacing-48:  var(--sy-space-48);
+  --spacing-56:  var(--sy-space-56);
+  --spacing-64:  var(--sy-space-64);
+  --spacing-80:  var(--sy-space-80);
+  --spacing-96:  var(--sy-space-96);
+
+  /* NON-TOKEN (1 of 3). `px` is the sanctioned hairline offset beside a 1px border and
+     nothing else — migration/scale-snapping.md. No 1px space token exists, deliberately;
+     never snap TO 1 for anything else. */
+  --spacing-px: 1px;
+
+  /* `--sy-padding-*` (none/2xs/xs/sm/md/lg/xl) is DELIBERATELY not exposed. It aliases
+     the same values as the space scale, and two spellings for 16px (`p-4` and `p-md`)
+     is exactly the ambiguity this preset exists to remove. Reach the semantic padding
+     through the components, or `p-4`. */
+
+  /* Layout width with a real token: `max-w-content` = 760px. */
+  --container-content: var(--sy-content-max);
+
+  /* NOT EXPOSED, on purpose — the density/layout constants:
+     `--sy-control-height-*` / `--sy-control-padding-x-*` / `--sy-control-gap` are the
+       component contract (Button, Input, Select); there is no v4 namespace for height
+       (`h-*` reads `--spacing-*`), and a `h-control-md` utility would invite hand-built
+       controls. Take them from the components.
+     `--sy-page-padding` (32) / `--sy-section-gap` (40) / `--sy-card-padding` (28) /
+       `--sy-stack-gap` (16) / `--sy-table-cell-x` (12) are layout constants that already
+       sit ON the space scale, so `p-8` / `gap-10` / `p-7` / `gap-4` / `px-3` express them
+       without a second name. `--sy-table-row` (36) is a HEIGHT, and heights are free
+       values outside the scales (migration/scale-snapping.md) — it stays in Table.
+     If a product genuinely needs one as a class, that is a preset change here — not a
+     local `p-[28px]`. */
+}
+
+
+/* =============================================================================
+ * 3. RADIUS — size scale + the containment-role tier
+ * -----------------------------------------------------------------------------
+ * The role tier (V1, 2026-08-05, foundations §3/§5) is the preferred spelling for
+ * containment: `rounded-card`, not `rounded-lg`. Controls take the size-keyed control
+ * radii. Note the v3 guide writes the two control-optical steps as bare `6`/`10`; in
+ * CSS-var land they are only reachable by their token names, so the classes are
+ * `rounded-control-xs` / `rounded-control-md`.
+ * ========================================================================== */
+
+@theme inline {
+  /* size scale */
+  --radius-none:       var(--sy-radius-none);
+  --radius-xs:         var(--sy-radius-xs);
+  --radius-sm:         var(--sy-radius-sm);
+  --radius-control-xs: var(--sy-radius-control-xs);   /* 6 — control-optical exception */
+  --radius-control-md: var(--sy-radius-control-md);   /* 10 — control-optical exception */
+  --radius-md:         var(--sy-radius-md);
+  --radius-lg:         var(--sy-radius-lg);
+  --radius-xl:         var(--sy-radius-xl);
+  --radius-2xl:        var(--sy-radius-2xl);
+  --radius-full:       var(--sy-radius-full);
+
+  /* containment-role tier — prefer these names for containers */
+  --radius-inset:   var(--sy-radius-inset);     /* 4  — nested chip, inner field */
+  --radius-nested:  var(--sy-radius-nested);    /* 8  — a box inside a box */
+  --radius-tray:    var(--sy-radius-tray);      /* 12 — trays, toolbars */
+  --radius-card:    var(--sy-radius-card);      /* 16 — cards */
+  --radius-overlay: var(--sy-radius-overlay);   /* 20 — menus, popovers, dialogs */
+  --radius-shell:   var(--sy-radius-shell);     /* 24 — app shell, sheets */
+}
+
+
+/* =============================================================================
+ * 4. SHADOW — PREFIXED, because `float` is the jurisdiction
+ * -----------------------------------------------------------------------------
+ * Ruling 2026-08-06 (migration audit test 8). Synapse's shadow tokens are named
+ * xs/sm/md/lg/xl — byte-identical to Tailwind's defaults — so exposing them under the
+ * same names would make `shadow-lg` mean two different things depending on whether the
+ * theme loaded, and no lint rule could tell a token class from a leftover. Prefixed,
+ * a bare `shadow-*` is ALWAYS a leftover and SY009 works as a permanent allowlist.
+ *
+ * And `float` is not decoration — foundations §6 is borders-first: shadows exist ONLY
+ * for floating layers. Writing `shadow-float-md` on a static card reads wrong, which is
+ * the point. Pick the step by ROLE, never by matching the old blur radius:
+ *   xs resting lift · sm hover/lift · md shallow float · lg standard float · xl deep.
+ * ========================================================================== */
+
+@theme inline {
+  --shadow-float-xs: var(--sy-shadow-xs);
+  --shadow-float-sm: var(--sy-shadow-sm);
+  --shadow-float-md: var(--sy-shadow-md);
+  --shadow-float-lg: var(--sy-shadow-lg);
+  --shadow-float-xl: var(--sy-shadow-xl);
+
+  /* DELIBERATELY ABSENT: `--sy-shadow-thumb` and `--sy-shadow-glass`. Neither is a step
+     on the elevation scale, so neither gets a `float` utility — and SY009's allowlist
+     passes only `shadow-float-{xs,sm,md,lg,xl}`, so emitting them would ship classes the
+     gate flags (migration/shadow-triage.md). `thumb` is scoped to draggable knobs on
+     tracks: reach it through the Slider component or `var(--sy-shadow-thumb)` in CSS.
+     `glass` is DORMANT — do not apply it (foundations §6).
+
+     Also absent: `--drop-shadow-*`. It is a CSS-filter effect with no Synapse token
+     behind it and SY009 flags every form of it. */
+}
+
+
+/* =============================================================================
+ * 5. MOTION — easing has a namespace; DURATION DOES NOT
+ * -----------------------------------------------------------------------------
+ * v4 has `--ease-*`. It has NO `--transition-duration-*` namespace: `duration-<n>` is a
+ * bare-value utility resolved arithmetically, so there is nothing to replace and nothing
+ * to clear. The v3 guide's `theme: { transitionDuration }` move — make the wrong value
+ * unexpressible — HAS NO v4 EQUIVALENT.
+ *
+ * So the four steps are minted with `@utility` (§7), and `duration-500` still compiles
+ * in v4 no matter what this file says. On v4, SY025 in `check-raw-values.mjs` is not a
+ * backstop — it is the ONLY enforcement. Wire it into CI before you migrate.
+ * ========================================================================== */
+
+@theme inline {
+  --ease-standard: var(--sy-ease-standard);   /* A → B transitions (the default choice) */
+  --ease-enter:    var(--sy-ease-enter);      /* something appearing */
+  --ease-exit:     var(--sy-ease-exit);       /* something leaving — always at `fast` */
+
+  /* No `--animate-*` entries. Continuous (looping) animation is outside §7's
+     jurisdiction (ruled 2026-08-06): a spinner writes `0.8s linear infinite` in CSS and
+     is correct. The theme should not offer a utility that makes a loop look like a
+     transition. */
+}
+
+
+/* =============================================================================
+ * 6. TYPOGRAPHY — the three families, the four weights, the 20 type styles
+ * -----------------------------------------------------------------------------
+ * `--text-NAME` supports paired `--text-NAME--line-height`, `--text-NAME--font-weight`
+ * and `--text-NAME--letter-spacing`. That is the exact v4 equivalent of the v3 `fontSize`
+ * bundle: `text-body` sets size + line-height + weight in one class, and because §1
+ * cleared `--leading-*` and `--tracking-*`, there is no class left to unbundle it with.
+ *
+ * THREE THINGS A `--text-*` PAIR CANNOT CARRY, so they stay on `.sy-type-*` or on a
+ * second utility:
+ *   • FAMILY — display styles want `--sy-font-display`, code styles `--sy-font-mono`.
+ *     Pair the class: `text-display-xl font-display`, `text-code font-mono`.
+ *   • `font-variant-numeric: tabular-nums` on the three `stat-*` styles → add
+ *     `tabular-nums`, or use `.sy-type-stat*`.
+ *   • `:lang(ko)` SCOPING. In `tokens/synapse.css` the tracking on display-*, heading-lg,
+ *     micro-label and stat-* is reset to 0 for Hangul. A theme variable has no language
+ *     scope, so those trackings are NOT emitted here — only `heading-xl` carries the one
+ *     tracking the migration guide sanctions. For a Latin-only display or stat heading
+ *     where the tracking is wanted, use the `.sy-type-*` class, which carries the reset.
+ * ========================================================================== */
+
+@theme inline {
+  /* families — three, and only three (SY003) */
+  --font-sans:    var(--sy-font-sans);
+  --font-display: var(--sy-font-display);
+  --font-mono:    var(--sy-font-mono);
+
+  /* weights — four, and only four (SY004) */
+  --font-weight-regular:  var(--sy-weight-regular);
+  --font-weight-medium:   var(--sy-weight-medium);
+  --font-weight-semibold: var(--sy-weight-semibold);
+  --font-weight-bold:     var(--sy-weight-bold);
+
+  /* ---- the 20 type styles ------------------------------------------------ */
+  /* Each entry names the SAME variable the matching `.sy-type-*` rule names in
+     tokens/synapse.css, so the two can never disagree. That is why `body` / `heading-sm`
+     read `--sy-body-size` and `label` reads `--sy-label-size` rather than the equal-valued
+     `--sy-text-14` / `--sy-text-13`: those are the vars the DS itself uses. */
+
+  --text-display-xl: var(--sy-text-44);
+  --text-display-xl--line-height: var(--sy-text-44-lh);
+  --text-display-xl--font-weight: var(--sy-weight-bold);
+
+  --text-display: var(--sy-text-36);
+  --text-display--line-height: var(--sy-text-36-lh);
+  --text-display--font-weight: var(--sy-weight-semibold);
+
+  --text-display-sm: var(--sy-text-30);
+  --text-display-sm--line-height: var(--sy-text-30-lh);
+  --text-display-sm--font-weight: var(--sy-weight-semibold);
+
+  --text-heading-xl: var(--sy-text-24);
+  --text-heading-xl--line-height: var(--sy-text-24-lh);
+  --text-heading-xl--font-weight: var(--sy-weight-bold);
+  /* NON-TOKEN (2 of 3). The one sanctioned tracking, Latin-only. Synapse has no
+     `--sy-tracking-*` token — the value lives in the `.sy-type-heading-xl` rule — so this
+     is the literal, exactly as the v3 `fontSize` table states it. The `:lang(ko)` reset
+     cannot be expressed here: for Hangul-heavy headings use `.sy-type-heading-xl`. */
+  --text-heading-xl--letter-spacing: -0.01em;
+
+  --text-heading-lg: var(--sy-text-18);
+  --text-heading-lg--line-height: var(--sy-text-18-lh);
+  --text-heading-lg--font-weight: var(--sy-weight-semibold);
+
+  --text-heading-md: var(--sy-text-16);
+  --text-heading-md--line-height: var(--sy-text-16-lh);
+  --text-heading-md--font-weight: var(--sy-weight-semibold);
+
+  --text-heading-sm: var(--sy-body-size);
+  --text-heading-sm--line-height: var(--sy-body-lh);
+  --text-heading-sm--font-weight: var(--sy-weight-semibold);
+
+  --text-body-lg: var(--sy-text-16);
+  --text-body-lg--line-height: var(--sy-text-16-lh);
+  --text-body-lg--font-weight: var(--sy-weight-regular);
+
+  --text-body: var(--sy-body-size);
+  --text-body--line-height: var(--sy-body-lh);
+  --text-body--font-weight: var(--sy-weight-regular);
+
+  --text-body-sm: var(--sy-text-13);
+  --text-body-sm--line-height: var(--sy-text-13-lh);
+  --text-body-sm--font-weight: var(--sy-weight-regular);
+
+  --text-label: var(--sy-label-size);
+  --text-label--line-height: var(--sy-label-lh);
+  --text-label--font-weight: var(--sy-weight-medium);
+
+  --text-label-sm: var(--sy-text-12);
+  --text-label-sm--line-height: var(--sy-text-12-lh);
+  --text-label-sm--font-weight: var(--sy-weight-medium);
+
+  --text-caption: var(--sy-text-12);
+  --text-caption--line-height: var(--sy-text-12-lh);
+  --text-caption--font-weight: var(--sy-weight-regular);
+
+  --text-micro: var(--sy-text-11);
+  --text-micro--line-height: var(--sy-text-11-lh);
+  --text-micro--font-weight: var(--sy-weight-semibold);
+
+  /* micro-label's 0.02em tracking is `:lang(ko)`-reset in the DS and is NOT emitted here
+     (see the §6 header). `.sy-type-micro-label` carries it. Note text-transform:
+     uppercase is SY006-forbidden either way. */
+  --text-micro-label: var(--sy-text-11);
+  --text-micro-label--line-height: var(--sy-text-11-lh);
+  --text-micro-label--font-weight: var(--sy-weight-semibold);
+
+  --text-code: var(--sy-text-13);
+  --text-code--line-height: var(--sy-text-13-lh);
+  --text-code--font-weight: var(--sy-weight-regular);
+
+  --text-code-sm: var(--sy-text-12);
+  --text-code-sm--line-height: var(--sy-text-12-lh);
+  --text-code-sm--font-weight: var(--sy-weight-regular);
+
+  --text-stat-lg: var(--sy-text-30);
+  --text-stat-lg--line-height: var(--sy-text-30-lh);
+  --text-stat-lg--font-weight: var(--sy-weight-semibold);
+
+  --text-stat: var(--sy-text-24);
+  --text-stat--line-height: var(--sy-text-24-lh);
+  --text-stat--font-weight: var(--sy-weight-semibold);
+
+  --text-stat-sm: var(--sy-text-20);
+  --text-stat-sm--line-height: var(--sy-text-20-lh);
+  --text-stat-sm--font-weight: var(--sy-weight-semibold);
+}
+
+
+/* =============================================================================
+ * 7. Z-INDEX and DURATION — `@utility`, because v4 has no namespace for either
+ * -----------------------------------------------------------------------------
+ * v4 has NO `--z-index-*` namespace and NO `--transition-duration-*` namespace. Both
+ * utilities take bare values (`z-10`, `duration-500`) resolved arithmetically, so:
+ *
+ *   • The v3 guides' `theme: { zIndex }` and `theme: { transitionDuration }` snippets
+ *     have NO v4 equivalent. There is nothing to replace and nothing to clear.
+ *   • Named roles must be MINTED with `@utility`, below. Custom `@utility` utilities
+ *     support variants automatically, so `lg:z-drawer` and `hover:duration-fast` work.
+ *   • `z-10` / `z-9999` / `duration-500` REMAIN VALID TAILWIND on v4 and this file
+ *     cannot stop them. SY023 and SY025 in `check-raw-values.mjs` are the enforcement,
+ *     not a backstop. On v4 that gate is mandatory, not recommended.
+ *
+ * (For a one-off, `z-(--sy-z-modal)` is v4 shorthand for `z-[var(--sy-z-modal)]` — but
+ * it is an arbitrary value and trips SY002. Use the named utilities.)
+ * ========================================================================== */
+
+/* Stacking — every floating/pinned element takes exactly ONE of these (foundations §6,
+   SY023). Local sibling ordering inside one component stays on the integers −1..2 with
+   `isolation: isolate` on the component root; that half needs no utility. */
+@utility z-sticky   { z-index: var(--sy-z-sticky);   }   /* 100 */
+@utility z-dropdown { z-index: var(--sy-z-dropdown); }   /* 200 */
+@utility z-drawer   { z-index: var(--sy-z-drawer);   }   /* 300 */
+@utility z-modal    { z-index: var(--sy-z-modal);    }   /* 400 */
+@utility z-toast    { z-index: var(--sy-z-toast);    }   /* 500 */
+@utility z-tooltip  { z-index: var(--sy-z-tooltip);  }   /* 600 */
+
+/* Motion — the scale is closed at four values and they are ROLE assignments, not speeds
+   (foundations §7). Exits are always `fast`; no entrance exceeds one duration step. */
+@utility duration-instant { transition-duration: var(--sy-duration-instant); }  /* 100ms — hover, focus */
+@utility duration-fast    { transition-duration: var(--sy-duration-fast);    }  /* 150ms — dropdowns, tooltips, ALL exits */
+@utility duration-base    { transition-duration: var(--sy-duration-base);    }  /* 200ms — modals, drawers, accordions */
+@utility duration-slow    { transition-duration: var(--sy-duration-slow);    }  /* 300ms — page-level transitions, toasts */
+
+
+/* =============================================================================
+ * 8. COLOUR — the full semantic surface (104 tokens)
+ * -----------------------------------------------------------------------------
+ * Names are the token names verbatim (see the header). Every entry is available on
+ * every colour utility — `bg-`, `text-`, `border-`, `ring-`, `fill-`, `divide-` — so
+ * discipline about which family goes where is a review matter, not a compile matter:
+ * `--sy-icon-*` on an icon, `--sy-border-*` on a border, and never a `--sy-viz-*` in UI
+ * chrome (viz is chart series ONLY, fixed order, assigned in sequence).
+ *
+ * The three colour jurisdictions still hold (foundations §1.1): functional indigo owns
+ * link/focus/status-info, brand azure owns action.brand-* and ai.solid, graphite point
+ * owns brand identity. Never a link in azure, never a CTA in indigo.
+ * ========================================================================== */
+
+@theme inline {
+  /* ---- backgrounds / surfaces (13) -------------------------------------- */
+  --color-bg-page:           var(--sy-bg-page);
+  --color-bg-surface:        var(--sy-bg-surface);
+  --color-bg-raised:         var(--sy-bg-raised);
+  --color-bg-raised-2:       var(--sy-bg-raised-2);
+  --color-bg-sunken:         var(--sy-bg-sunken);
+  --color-bg-hover:          var(--sy-bg-hover);
+  --color-bg-active:         var(--sy-bg-active);
+  --color-bg-selected:       var(--sy-bg-selected);
+  --color-bg-selected-hover: var(--sy-bg-selected-hover);
+  --color-bg-disabled:       var(--sy-bg-disabled);
+  --color-bg-scrim:          var(--sy-bg-scrim);
+  --color-bg-inverse:        var(--sy-bg-inverse);
+  --color-bg-inverse-soft:   var(--sy-bg-inverse-soft);
+
+  /* ---- text (9) ---------------------------------------------------------- */
+  --color-text-primary:         var(--sy-text-primary);
+  --color-text-secondary:       var(--sy-text-secondary);
+  --color-text-tertiary:        var(--sy-text-tertiary);
+  --color-text-placeholder:     var(--sy-text-placeholder);
+  --color-text-disabled:        var(--sy-text-disabled);
+  --color-text-on-inverse:      var(--sy-text-on-inverse);
+  --color-text-on-solid:        var(--sy-text-on-solid);
+  --color-text-link:            var(--sy-text-link);
+  --color-text-link-on-inverse: var(--sy-text-link-on-inverse);
+
+  /* ---- icon (9) — a dedicated family; only icon-primary differs from text-* --- */
+  --color-icon-primary:    var(--sy-icon-primary);
+  --color-icon-secondary:  var(--sy-icon-secondary);
+  --color-icon-tertiary:   var(--sy-icon-tertiary);
+  --color-icon-disabled:   var(--sy-icon-disabled);
+  --color-icon-on-inverse: var(--sy-icon-on-inverse);
+  --color-icon-info:       var(--sy-icon-info);
+  --color-icon-success:    var(--sy-icon-success);
+  --color-icon-warning:    var(--sy-icon-warning);
+  --color-icon-danger:     var(--sy-icon-danger);
+
+  /* ---- border (12) — borders-first: this family does the work shadows don't --- */
+  --color-border-subtle:       var(--sy-border-subtle);
+  --color-border-default:      var(--sy-border-default);
+  --color-border-overlay:      var(--sy-border-overlay);
+  --color-border-strong:       var(--sy-border-strong);
+  --color-border-strong-hover: var(--sy-border-strong-hover);
+  --color-border-focus:        var(--sy-border-focus);
+  --color-border-focus-input:  var(--sy-border-focus-input);
+  --color-border-focus-soft:   var(--sy-border-focus-soft);
+  --color-border-selected:     var(--sy-border-selected);
+  --color-border-error:        var(--sy-border-error);
+  --color-border-error-hover:  var(--sy-border-error-hover);
+  --color-border-error-soft:   var(--sy-border-error-soft);
+
+  /* ---- action (19) ------------------------------------------------------- */
+  --color-action-primary-bg:              var(--sy-action-primary-bg);
+  --color-action-primary-bg-hover:        var(--sy-action-primary-bg-hover);
+  --color-action-primary-fg:              var(--sy-action-primary-fg);
+  --color-action-secondary-bg:            var(--sy-action-secondary-bg);
+  --color-action-secondary-bg-hover:      var(--sy-action-secondary-bg-hover);
+  --color-action-brand-bg:                var(--sy-action-brand-bg);
+  --color-action-brand-bg-hover:          var(--sy-action-brand-bg-hover);
+  --color-action-brand-bg-subtle:         var(--sy-action-brand-bg-subtle);
+  --color-action-brand-fg:                var(--sy-action-brand-fg);
+  --color-action-brand-fg-on-page:        var(--sy-action-brand-fg-on-page);
+  --color-action-brand-border:            var(--sy-action-brand-border);
+  --color-action-brand-border-hover:      var(--sy-action-brand-border-hover);
+  --color-action-brand-border-soft:       var(--sy-action-brand-border-soft);
+  --color-action-danger-fg:               var(--sy-action-danger-fg);
+  --color-action-secondary-danger-bg:     var(--sy-action-secondary-danger-bg);
+  --color-action-secondary-danger-bg-hover: var(--sy-action-secondary-danger-bg-hover);
+  --color-action-secondary-brand-bg:      var(--sy-action-secondary-brand-bg);
+  --color-action-secondary-brand-bg-hover: var(--sy-action-secondary-brand-bg-hover);
+  --color-action-secondary-brand-fg:      var(--sy-action-secondary-brand-fg);
+
+  /* ---- status (17) ------------------------------------------------------- */
+  --color-status-info:                   var(--sy-status-info);
+  --color-status-info-bg:                var(--sy-status-info-bg);
+  --color-status-info-bg-solid:          var(--sy-status-info-bg-solid);
+  --color-status-info-on-inverse:        var(--sy-status-info-on-inverse);
+  --color-status-success:                var(--sy-status-success);
+  --color-status-success-bg:             var(--sy-status-success-bg);
+  --color-status-success-bg-solid:       var(--sy-status-success-bg-solid);
+  --color-status-success-on-inverse:     var(--sy-status-success-on-inverse);
+  --color-status-warning:                var(--sy-status-warning);
+  --color-status-warning-bg:             var(--sy-status-warning-bg);
+  --color-status-warning-bg-solid:       var(--sy-status-warning-bg-solid);
+  --color-status-warning-on-inverse:     var(--sy-status-warning-on-inverse);
+  --color-status-danger:                 var(--sy-status-danger);
+  --color-status-danger-bg:              var(--sy-status-danger-bg);
+  --color-status-danger-bg-solid:        var(--sy-status-danger-bg-solid);
+  --color-status-danger-bg-solid-hover:  var(--sy-status-danger-bg-solid-hover);
+  --color-status-danger-on-inverse:      var(--sy-status-danger-on-inverse);
+
+  /* ---- AI (5) ------------------------------------------------------------ */
+  --color-ai-surface:       var(--sy-ai-surface);
+  --color-ai-surface-hover: var(--sy-ai-surface-hover);
+  --color-ai-border:        var(--sy-ai-border);
+  --color-ai-fg:            var(--sy-ai-fg);
+  --color-ai-solid:         var(--sy-ai-solid);
+
+  /* ---- emphasis (4) ------------------------------------------------------ */
+  --color-emphasis-surface: var(--sy-emphasis-surface);
+  --color-emphasis-border:  var(--sy-emphasis-border);
+  --color-emphasis-fg:      var(--sy-emphasis-fg);
+  --color-emphasis-fg-soft: var(--sy-emphasis-fg-soft);
+
+  /* ---- brand (2) — brand-identity objects ONLY --------------------------- */
+  --color-brand-point:    var(--sy-brand-point);
+  --color-brand-point-fg: var(--sy-brand-point-fg);
+
+  /* ---- data visualization (9) — chart series ONLY, never UI chrome -------- */
+  --color-viz-1: var(--sy-viz-1);
+  --color-viz-2: var(--sy-viz-2);
+  --color-viz-3: var(--sy-viz-3);
+  --color-viz-4: var(--sy-viz-4);
+  --color-viz-5: var(--sy-viz-5);
+  --color-viz-6: var(--sy-viz-6);
+  --color-viz-7: var(--sy-viz-7);
+  --color-viz-8: var(--sy-viz-8);
+  --color-meter-fill: var(--sy-meter-fill);
+
+  /* ---- glass (5 colours) — AppLauncher's faux-glass ---------------------- */
+  --color-glass-surface:  var(--sy-glass-surface);
+  --color-glass-border:   var(--sy-glass-border);
+  --color-glass-rim:      var(--sy-glass-rim);
+  --color-glass-accent:   var(--sy-glass-accent);
+  --color-glass-selected: var(--sy-glass-selected);
+}
+
+/* The two non-colour glass tokens. `--sy-glass-blur` is a length and maps cleanly;
+   `--sy-glass-filter` is a whole `blur() saturate() brightness()` function list with no
+   v4 namespace — reach it as `backdrop-filter: var(--sy-glass-filter)` in CSS, or
+   through the AppLauncher component. */
+@theme inline {
+  --blur-glass: var(--sy-glass-blur);
+}

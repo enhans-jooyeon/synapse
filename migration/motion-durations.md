@@ -39,6 +39,8 @@ Practical consequence: **product gate SY025 skips any line declaring `infinite`.
 
 Same move as z-index and typography — make the wrong thing unexpressible. `duration-500` / `duration-700` / `duration-1000` / `duration-75` cease to be classes, and so does `ease-linear`, which is what closes the easing half in the same edit.
 
+**Tailwind v3:**
+
 ```js
 // tailwind.config — motion comes from tokens; Tailwind's defaults are REPLACED, not extended.
 const t = require('@enhans-jooyeon/synapse/tokens/synapse.tokens.json');
@@ -64,6 +66,28 @@ theme: {
 
 After this, `duration-instant…slow` and `ease-standard/enter/exit` are the whole transition vocabulary, and the only way to write `linear` is in a keyframe animation — which is exactly where it is legal.
 
+**Tailwind v4 — and here the two halves split.** Easing has a namespace; duration does **not**. v4 has **no `--transition-duration-*` namespace**: `duration-<n>` is a bare-value utility resolved arithmetically, so there is no scale to replace, nothing to clear, and **`duration-500` compiles regardless of the theme**. The four steps must be *minted* with `@utility` (variants like `hover:duration-fast` still work); only the easing half keeps the make-it-unexpressible move.
+
+```css
+/* app.css — after `@import "tailwindcss"` and Synapse's own tokens/synapse.css */
+@theme inline {
+  --ease-*: initial;                            /* `ease-linear` ceases to exist — the */
+  --ease-standard: var(--sy-ease-standard);     /*   easing half, closed exactly as in v3 */
+  --ease-enter:    var(--sy-ease-enter);
+  --ease-exit:     var(--sy-ease-exit);
+  /* No --animate-* entries: loops are outside §7's jurisdiction, so the theme should not
+     offer a utility that makes a loop look like a transition. */
+}
+
+/* No namespace exists for duration, so the four steps are minted as utilities. */
+@utility duration-instant { transition-duration: var(--sy-duration-instant); }  /* 100ms */
+@utility duration-fast    { transition-duration: var(--sy-duration-fast);    }  /* 150ms — ALL exits */
+@utility duration-base    { transition-duration: var(--sy-duration-base);    }  /* 200ms */
+@utility duration-slow    { transition-duration: var(--sy-duration-slow);    }  /* 300ms */
+```
+
+**Plan for the consequence:** on v4 the theme cannot delete `duration-500`, so **SY025 in `tooling/product-gates/check-raw-values.mjs` is not a backstop — it is the only enforcement**, and it must be in CI *before* the conversion starts. The `infinite` exemption is unchanged and still does the same work: a looping animation legitimately carries `linear` and an off-scale period, SY025 skips the line, and no `@utility` should be minted for a loop period. Complete preset: `tooling/product-gates/tailwind.synapse.v4.css` (v4) · `tooling/product-gates/tailwind.synapse.cjs` (v3).
+
 ## Decision tree per call site
 
 ```
@@ -88,7 +112,7 @@ For each duration / easing declaration:
 
 ## Enforcement
 
-- Product repo — `tooling/product-gates/check-raw-values.mjs`, **SY025**: an off-scale Tailwind `duration-<n>` class or an arbitrary `duration-[…]` is an error; on-scale values (100/150/200/300) pass via a negative lookahead. A line matching `/\binfinite\b/` is exempt from the duration rules only — every other rule still runs on it. `synapse-allow` + a harness ticket reference is the documented escape.
+- Product repo — `tooling/product-gates/check-raw-values.mjs`, **SY025**: an off-scale Tailwind `duration-<n>` class or an arbitrary `duration-[…]` is an error; **mandatory on Tailwind v4**, where no theme change can delete those classes; on-scale values (100/150/200/300) pass via a negative lookahead. A line matching `/\binfinite\b/` is exempt from the duration rules only — every other rule still runs on it. `synapse-allow` + a harness ticket reference is the documented escape.
 - DS repo — **SY025 is deliberately NOT implemented in `tools/validate.py`.** The id is listed in its docstring so it is reserved and discoverable, with the reason: the violating form is a Tailwind class that exists only in product JSX, and this repo's own CSS already writes `--sy-duration-*`, so there is no declaration form here to lex.
 - Precedent worth citing: the jurisdiction move itself. SY019's >24px relaxation (`migration/icon-sizing.md`) resolved an identical shape — a value that looked like a violation because a spec claimed jurisdiction it never specified — by naming the boundary instead of minting a token. Two rulings, one pattern, same day.
 
