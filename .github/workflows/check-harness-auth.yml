@@ -25,7 +25,49 @@ jobs:
       - name: 1 · Actions can run at all
         run: echo "PASS — runner started, so the org/repo Actions policy is not the problem."
 
-      - name: 2 · Secret is present
+      - name: 2a · Deploy key (the route a repo admin can self-serve)
+        shell: bash {0}
+        env:
+          DEPLOY_KEY: ${{ secrets.HARNESS_DEPLOY_KEY }}
+        run: |
+          set +e
+          if [ -z "${DEPLOY_KEY:-}" ]; then
+            echo "not configured — falling through to the PAT checks below."
+            echo ""
+            echo "  A deploy key is the route that needs only REPO ADMIN on the target repo."
+            echo "  A fine-grained PAT against an org-owned repo can require an org OWNER's"
+            echo "  approval, which a plain member cannot grant. See publish-harness.yml."
+            exit 0
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/harness_key
+          chmod 600 ~/.ssh/harness_key
+          ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/harness_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"
+          OUT="$(git ls-remote git@github.com:viralpick/synapse-harness.git 2>&1)"; RC=$?
+          if [ $RC -ne 0 ]; then
+            echo "READ FAILED (exit ${RC}): ${OUT}"
+            echo "  The public half is probably not on viralpick/synapse-harness, or the"
+            echo "  private half was pasted without its BEGIN/END lines."
+            exit 1
+          fi
+          echo "READ OK via deploy key."
+          git clone --depth 1 git@github.com:viralpick/synapse-harness.git dk >/dev/null 2>&1
+          cd dk
+          git config user.name synapse-bot; git config user.email synapse-bot@users.noreply.github.com
+          git commit --allow-empty -m probe --quiet
+          OUT="$(git push --dry-run origin HEAD:refs/heads/main 2>&1)"; RC=$?
+          if [ $RC -eq 0 ]; then
+            echo "WRITE OK — the deploy key can publish. publish-harness.yml will use it."
+          else
+            echo "WRITE FAILED (exit ${RC}): ${OUT}"
+            echo "  The key is installed but READ-ONLY. On the target repo: Settings ->"
+            echo "  Deploy keys -> remove it and re-add with 'Allow write access' TICKED."
+            echo "  (That checkbox cannot be changed after the key is added.)"
+            exit 1
+          fi
+
+      - name: 2b · PAT is present
         env:
           DEPLOY_TOKEN: ${{ secrets.HARNESS_DEPLOY_TOKEN }}
         run: |

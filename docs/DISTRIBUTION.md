@@ -47,7 +47,19 @@ You and one other designer maintain the **full source repo** (this one: proposal
 
 **One-time setup (yours — needs your GitHub account):**
 1. Create an empty repo `enhans-jooyeon/synapse-harness` (this is what the team clones/points their LLM tools at).
-2. In the **source** repo → Settings → Secrets and variables → Actions → add `HARNESS_DEPLOY_TOKEN` = a PAT (or fine-grained token) with **write access to `synapse-harness`**.
+2. Give the publish workflow write access to the harness repo. **Prefer a deploy key** — a fine-grained PAT against an *org-owned* repo can require an org owner's approval, which a plain org member cannot grant, so the PAT route is not self-serviceable by a maintainer who only has repo admin. A deploy key is: it is added on the target repo by anyone with repo admin, sits outside org PAT policy, never expires, and is scoped to exactly one repository.
+
+   ```bash
+   ssh-keygen -t ed25519 -f harness_deploy_key -N "" -C "synapse harness publish"
+   ```
+
+   - **Public half** (`harness_deploy_key.pub`) → `synapse-harness` → Settings → Deploy keys → Add deploy key → **tick “Allow write access”**. That checkbox cannot be changed later; a read-only key must be removed and re-added.
+   - **Private half** (`harness_deploy_key`) → the **source** repo → Settings → Secrets and variables → Actions → new **repository** secret named `HARNESS_DEPLOY_KEY`, pasted whole including its `BEGIN`/`END` lines.
+   - Delete both local files afterwards.
+
+   `HARNESS_DEPLOY_TOKEN` (a PAT with write access to `synapse-harness`) is still honoured as a fallback when no deploy key is set. Note that **repository** secrets survive an org transfer and **organization** secrets do not — a publish that breaks immediately after a transfer is usually this.
+
+   Verify either route without cutting a release: Actions → **Check harness auth** → Run workflow.
 3. That's it. From then on, cutting a release publishes automatically.
 
 **Your day-to-day:** vibe-code freely in the source repo; changes land under `## Unreleased`. When a round is ready for the team, cut a release:

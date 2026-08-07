@@ -78,13 +78,46 @@ jobs:
         run: |
           SOURCE_DATE="$(date -u +%F)" node scripts/build-dist.mjs
 
+      # AUTH: deploy key FIRST, token as fallback.
+      #
+      # A fine-grained PAT against an ORG-owned repo can require an org owner's approval,
+      # which a plain org member cannot grant — so the token route is not self-serviceable
+      # by this repo's maintainer. A DEPLOY KEY is: it is configured on the target repo by
+      # anyone with repo admin, is not subject to org PAT policy, never expires, and is
+      # scoped to exactly one repository (strictly tighter than any PAT).
+      #
+      # Setup, once — see docs/DISTRIBUTION.md:
+      #   ssh-keygen -t ed25519 -f harness_deploy_key -N "" -C "synapse harness publish"
+      #   PUBLIC  (harness_deploy_key.pub) -> viralpick/synapse-harness
+      #        Settings -> Deploy keys -> Add deploy key -> TICK "Allow write access"
+      #   PRIVATE (harness_deploy_key)     -> viralpick/synapse
+      #        Settings -> Secrets and variables -> Actions -> New repository secret
+      #        name: HARNESS_DEPLOY_KEY   (paste the whole file, BEGIN/END lines included)
+      #   Then delete both local files.
       - name: Mirror ./dist to the team harness repo
         env:
+          DEPLOY_KEY: ${{ secrets.HARNESS_DEPLOY_KEY }}
           DEPLOY_TOKEN: ${{ secrets.HARNESS_DEPLOY_TOKEN }}
         run: |
           set -euo pipefail
           TAG="${GITHUB_REF_NAME}"
-          git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/viralpick/synapse-harness.git" out
+          if [ -n "${DEPLOY_KEY:-}" ]; then
+            mkdir -p ~/.ssh && chmod 700 ~/.ssh
+            printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/harness_key
+            chmod 600 ~/.ssh/harness_key
+            ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+            export GIT_SSH_COMMAND="ssh -i ~/.ssh/harness_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"
+            REMOTE="git@github.com:viralpick/synapse-harness.git"
+            echo "auth: deploy key"
+          elif [ -n "${DEPLOY_TOKEN:-}" ]; then
+            REMOTE="https://x-access-token:${DEPLOY_TOKEN}@github.com/viralpick/synapse-harness.git"
+            echo "auth: PAT (HARNESS_DEPLOY_TOKEN) — no deploy key configured"
+          else
+            echo "NEITHER HARNESS_DEPLOY_KEY NOR HARNESS_DEPLOY_TOKEN IS SET."
+            echo "Nothing can be published. See the setup comment above this step."
+            exit 1
+          fi
+          git clone --depth 1 "$REMOTE" out
           find out -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           cp -R dist/. out/
           cd out
