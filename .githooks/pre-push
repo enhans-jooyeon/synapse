@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# Refuse to push a vX.Y.Z tag whose source version does not match it.
+#
+# WHY. scripts/cut-release.mjs exists to make the bump and the tag one operation, and it
+# works — when it is run. Five version numbers (v2.2.0 … v2.6.0) have now been burned,
+# and the last one was burned by tagging without running the script at all. A tool you
+# must remember to invoke is not enforcement; it is a reminder. This hook is the
+# enforcement, because it fires on `git push` whether or not anyone remembered anything.
+#
+# publish-harness.yml checks the same things, but it checks them AFTER the tag exists on
+# origin — and a tag is immutable, so by then the version number is already spent. The
+# only place this can be caught cheaply is before the push leaves the machine.
+#
+# Enable once per clone:   git config core.hooksPath .githooks
+# Bypass (do not):         git push --no-verify
+set -uo pipefail
+
+RED=''; NC=''
+if [ -t 2 ]; then RED=$'\033[31m'; NC=$'\033[0m'; fi
+fail () { echo "" >&2; echo "${RED}✗ pre-push: $1${NC}" >&2; shift; for l in "$@"; do echo "  $l" >&2; done; echo "" >&2; exit 1; }
+
+while read -r LOCAL_REF LOCAL_SHA REMOTE_REF REMOTE_SHA; do
+  case "$REMOTE_REF" in refs/tags/v*) ;; *) continue ;; esac
+  [ "$LOCAL_SHA" = "0000000000000000000000000000000000000000" ] && continue   # tag deletion
+
+  TAG="${REMOTE_REF#refs/tags/}"
+  VER="${TAG#v}"
+  case "$VER" in [0-9]*.[0-9]*.[0-9]*) ;; *) continue ;; esac   # only strict vX.Y.Z
+
+  # Read the version surfaces AS THEY EXIST IN THE TAGGED COMMIT, not the working tree —
+  # the two differ exactly when this mistake is being made.
+  SRC="$(git show "${LOCAL_SHA}:tokens/synapse.tokens.json" 2>/dev/null \
+        | python3 -c 'import json,sys; print(json.load(sys.stdin)["$version"])' 2>/dev/null)"
+  HDR="$(git show "${LOCAL_SHA}:design.md" 2>/dev/null | grep -om1 'Version [0-9][0-9.]*' | cut -d' ' -f2)"
+  PRV="$(git show "${LOCAL_SHA}:preview.html" 2>/dev/null | grep -om1 'v[0-9][0-9.]*' | head -1)"
+  PRV="${PRV#v}"
+
+  if [ "$VER" != "$SRC" ] || [ "$VER" != "$HDR" ] || [ "$VER" != "$PRV" ]; then
+    fail "$TAG does not match the source version in the commit it points at." \
+         "tag                        ${VER}" \
+         "tokens/synapse.tokens.json ${SRC:-<unreadable>}" \
+         "design.md header           ${HDR:-<unreadable>}" \
+         "preview.html               ${PRV:-<unreadable>}" \
+         "" \
+         "The bump was skipped. Do NOT retag — a pushed tag is immutable and this one" \
+         "is not pushed yet, so nothing is spent. Delete it locally and cut properly:" \
+         "" \
+         "    git tag -d ${TAG}" \
+         "    node scripts/cut-release.mjs ${VER}" \
+         "    # title the CHANGELOG heading, then commit, push main, tag, push tag" \
+         "" \
+         "This is what burned v2.6.0. publish-harness.yml catches it too, but only" \
+         "after the tag is on origin and the number is already gone."
+  fi
+
+  # Read the changelog ONCE, then match with a HERESTRING — never a pipeline.
+  # `something | grep -q` is a trap under `set -o pipefail`: grep exits at the first
+  # match and closes the pipe, the writer dies of SIGPIPE with 141, and pipefail reports
+  # the whole pipeline as FAILED even though the match SUCCEEDED. This hook rejected a
+  # correctly-cut tag twice on that alone — first with `git show |`, then with `printf |`,
+  # because moving the writer does not help when pipefail is what is reading the status.
+  # A herestring has no upstream process, so grep's own exit code is the only one there is.
+  LOG="$(git show "${LOCAL_SHA}:CHANGELOG.md" 2>/dev/null)"
+
+  if ! grep -q "^## ${VER} " <<< "$LOG"; then
+    fail "$TAG has no '## ${VER}' section in CHANGELOG.md at that commit." \
+         "cut-release.mjs rolls Unreleased into a dated section. If it is missing," \
+         "the release notes were never rolled and the bundle will ship without them."
+  fi
+
+  if grep -q "TITLE ME" <<< "$LOG"; then
+    fail "$TAG still contains the literal placeholder 'TITLE ME' in CHANGELOG.md." \
+         "v2.5.0 shipped its heading as 'TITLE ME'. Title it, amend, retag."
+  fi
+
+  echo "✓ pre-push: ${TAG} matches source ${SRC}, changelog rolled and titled." >&2
+done
+exit 0
