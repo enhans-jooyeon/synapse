@@ -1,10 +1,10 @@
 # Publish the curated team harness on each release tag.
 # Cutting a release = pushing a vX.Y.Z tag from the source repo. This gate-checks,
 # builds the curated bundle from scripts/dist.allowlist, and mirrors it to the
-# separate team repo (enhans-jooyeon/synapse-harness). Internal docs never ship.
+# separate team repo (viralpick/synapse-harness). Internal docs never ship.
 #
 # One-time setup (see docs/DISTRIBUTION.md):
-#   1. Create the empty repo  enhans-jooyeon/synapse-harness
+#   1. Create the empty repo  viralpick/synapse-harness
 #   2. Add repo secret  HARNESS_DEPLOY_TOKEN  = a PAT with write access to synapse-harness
 name: Publish team harness
 
@@ -84,7 +84,7 @@ jobs:
         run: |
           set -euo pipefail
           TAG="${GITHUB_REF_NAME}"
-          git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/enhans-jooyeon/synapse-harness.git" out
+          git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/viralpick/synapse-harness.git" out
           find out -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
           cp -R dist/. out/
           cd out

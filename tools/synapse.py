@@ -125,7 +125,7 @@ TOKENS_JSON = os.path.join(ROOT, "tokens", "synapse.tokens.json")
 SCHEMA = os.path.join(ROOT, "tools", "screen-intent.schema.json")
 # doctor's staleness probe always asks the SOURCE repo (works from a dist bundle,
 # which has no .git); keep in sync with docs/DISTRIBUTION.md if the repo moves.
-SOURCE_REPO = "https://github.com/enhans-jooyeon/synapse.git"
+SOURCE_REPO = "https://github.com/viralpick/synapse.git"
 
 # Closed sets for the correction ledger (see docs/process/correction-ledger.md).
 LEDGER_CATEGORIES = {
