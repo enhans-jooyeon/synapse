@@ -52,9 +52,16 @@ jobs:
           esac
 
       - name: 3 · Diagnose read + write access
+        # `shell: bash {0}` REPLACES the default `bash -e {0}`. This matters more than it
+        # looks: with errexit on, the first failing git command kills the step at 128 before
+        # any diagnostic prints — which is precisely the opacity this workflow exists to
+        # remove, and it swallowed two runs before being spotted. `set +e` repeats it
+        # explicitly so a future edit to the `shell:` line cannot silently reintroduce it.
+        shell: bash {0}
         env:
           DEPLOY_TOKEN: ${{ secrets.HARNESS_DEPLOY_TOKEN }}
         run: |
+          set +e
           set -uo pipefail
           FAILED=0
 
@@ -92,31 +99,51 @@ jobs:
 
           echo ""
           echo "── Write probe (dry run — pushes nothing) ──────────────────"
-          if [ "$FAILED" -eq 0 ]; then
-            OUT="$(git clone --depth 1 "https://x-access-token:${DEPLOY_TOKEN}@github.com/viralpick/synapse-harness.git" probe 2>&1)"; RC=$?
-            OUT="${OUT//${DEPLOY_TOKEN}/***}"
-            if [ $RC -ne 0 ]; then
-              echo "  CLONE FAILED (git exit ${RC}): ${OUT}"
-              FAILED=1
-            else
+          if [ "$FAILED" -ne 0 ]; then
+            echo "  SKIPPED — read access failed first; fix that before testing write."
+          else
+            run_git () {   # $1 = human label; rest = the command
+              local LABEL="$1"; shift
+              local OUT RC
+              OUT="$("$@" 2>&1)"; RC=$?
+              OUT="${OUT//${DEPLOY_TOKEN}/***}"
+              if [ $RC -eq 0 ]; then
+                echo "  ${LABEL} — OK"
+                return 0
+              fi
+              echo "  ${LABEL} — FAILED (git exit ${RC})"
+              echo "        git said: ${OUT}"
+              return 1
+            }
+
+            URL="https://x-access-token:${DEPLOY_TOKEN}@github.com/viralpick/synapse-harness.git"
+            if run_git "clone" git clone --depth 1 "$URL" probe; then
               cd probe
               git config user.name  "synapse-bot"
               git config user.email "synapse-bot@users.noreply.github.com"
               git commit --allow-empty -m "auth probe (never pushed)" --quiet
-              OUT="$(git push --dry-run origin HEAD:refs/heads/main 2>&1)"; RC=$?
-              OUT="${OUT//${DEPLOY_TOKEN}/***}"
-              if [ $RC -eq 0 ]; then
+              if run_git "push --dry-run" git push --dry-run origin HEAD:refs/heads/main; then
+                echo ""
                 echo "  WRITE OK — publish-harness.yml will succeed on the next tag."
               else
-                echo "  WRITE FAILED (git exit ${RC}): ${OUT}"
-                echo "        MEANING: the token can read but not write. A fine-grained PAT needs"
-                echo "                 Repository permissions -> Contents: READ AND WRITE."
+                echo ""
+                echo "        MEANING: the token READS but cannot WRITE. Read and write are"
+                echo "                 separate permissions, so a working ls-remote proves"
+                echo "                 nothing about push."
+                echo "        FIX:     github.com/settings/personal-access-tokens -> this token"
+                echo "                 -> Repository permissions -> Contents: READ AND WRITE"
+                echo "                 (Read-only is the default and is not enough.)"
+                echo "                 If viralpick requires approval for fine-grained PATs, an"
+                echo "                 org owner must also approve it: viralpick -> Settings ->"
+                echo "                 Personal access tokens -> Pending requests."
                 FAILED=1
               fi
               cd ..
+            else
+              echo "        MEANING: ls-remote succeeded but clone did not — unusual. Paste the"
+              echo "                 git message above."
+              FAILED=1
             fi
-          else
-            echo "  SKIPPED — read access failed first; fix that before testing write."
           fi
 
           echo ""
