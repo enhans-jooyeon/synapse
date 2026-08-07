@@ -4,9 +4,12 @@ Versioning is **release-based** (design.md §6): ongoing work lands under **Unre
 
 ## Unreleased
 
-*(nothing yet)*
+## 2.8.0 — 2026-08-07 — Tailwind v4 ships, the enforcement model corrected, publishing fixed
 
-## 2.8.0 — 2026-08-07 — TITLE ME
+- **`cut-release.mjs` now takes the release title as an argument, because the placeholder step failed three times out of four.** The script used to write `TITLE ME` into the heading and trust a human to replace it *between two copy-pasted commands*. v2.5.0 shipped with the heading reading literally `TITLE ME`; the pre-push hook then caught two more attempts before they reached origin. The step was not being skipped through carelessness — a manual edit wedged between two commands is a step with nothing holding it in place. `node scripts/cut-release.mjs 2.8.0 "the title"` writes the real heading directly, the placeholder never exists, and the printed follow-up drops from three steps to two.
+  - **The hook's own remedy text was also wrong** — it said `git commit --amend`, which is correct only while the commit is unpushed, and on both occasions it fired `main` had already been pushed. Amending would have rewritten published history. It now names both cases and which applies.
+
+*(nothing yet)*
 
 - **Every publish check now runs locally, because a check that only runs in CI cannot save a version number.** v2.7.0 was cut correctly — version surfaces agreed, changelog rolled and titled, gate green, manifest current, tag on the tip of main — and still failed to publish: `scripts/build-dist.mjs` re-validates every cross-reference in the shipped docs, and one link in `migration/motion-durations.md` was written as `` `check-raw-values.mjs` `` instead of `` `tooling/product-gates/check-raw-values.mjs` ``, the form every other reference in the repo uses. That check runs in `publish-harness.yml` **after** the tag reaches origin, where it is immutable. A one-word omission cost a release.
   - **`build-dist.mjs` added to both local guards** — `cut-release.mjs`'s preflight (as check 7) and `.githooks/pre-push`. The hook is the one that matters, since it cannot be skipped by forgetting. To make the check meaningful it first requires a clean tree and `HEAD == the tagged commit`, so that the bundle it validates is genuinely the bundle being tagged rather than whatever happens to be in the working directory. **Verified by breaking the reference again and confirming the hook reproduces CI's exact error message before the push.**

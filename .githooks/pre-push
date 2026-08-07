@@ -76,12 +76,19 @@ while read -r LOCAL_REF LOCAL_SHA REMOTE_REF REMOTE_SHA; do
   case "$HEADING" in
     *"TITLE ME"*)
       fail "$TAG has an untitled heading: ${HEADING}" \
-           "cut-release.mjs leaves 'TITLE ME' for a human to replace, and v2.5.0 shipped" \
-           "with it still there. Title the heading, then:" \
+           "Newer cut-release.mjs takes the title as an argument and never writes this" \
+           "placeholder; this commit predates that or the script was not used." \
            "" \
+           "Title the heading, then — NOTE which case you are in:" \
+           "" \
+           "  if this commit is NOT yet on origin:" \
            "    git add -A && git commit --amend --no-edit" \
-           "    git tag -d ${TAG} && git tag ${TAG}" \
-           "    git push origin main && git push origin ${TAG}"
+           "  if it IS already pushed (amending would rewrite published history):" \
+           "    git add -A && git commit -m 'Title the ${VER} heading'" \
+           "" \
+           "  then, either way:" \
+           "    git push origin main" \
+           "    git tag -d ${TAG} && git tag ${TAG} && git push origin ${TAG}"
       ;;
   esac
 

@@ -3,8 +3,15 @@
  * cut-release — do the whole release in ONE atomic step, so a version number can
  * never describe work that isn't in the tag.
  *
- *   node scripts/cut-release.mjs 2.6.0          # check + bump + roll changelog
- *   node scripts/cut-release.mjs 2.6.0 --check  # verify only, change nothing
+ *   node scripts/cut-release.mjs 2.6.0 "What this release is"   # check + bump + roll
+ *   node scripts/cut-release.mjs 2.6.0 --check                  # verify only, no writes
+ *
+ * THE TITLE IS AN ARGUMENT, NOT A LATER EDIT. This script used to write a `TITLE ME`
+ * placeholder into the heading and trust a human to replace it between two commands.
+ * That gap failed three times out of four: v2.5.0 SHIPPED with the heading reading
+ * literally "TITLE ME", and the pre-push hook caught two more attempts. A step that sits
+ * between two copy-pasted commands is a step that gets skipped. Taking it up front means
+ * the placeholder never exists.
  *
  * WHY THIS EXISTS. Three releases in a row (v2.2.0, v2.3.0, v2.4.0) shipped a bundle
  * that did not match its own release notes, all the same way: the version was bumped
@@ -26,12 +33,20 @@ import { fileURLToPath } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const version = process.argv[2];
 const checkOnly = process.argv.includes('--check');
+const title = process.argv.slice(3).filter(a => a !== '--check').join(' ').trim();
 const sh = (c) => execSync(c, { cwd: ROOT, encoding: 'utf8' }).trim();
 const die = (msg, fix) => { console.error(`\n✗ ${msg}`); if (fix) console.error(`  → ${fix}`); process.exit(1); };
 
 if (!version || !/^\d+\.\d+\.\d+$/.test(version)) {
-  die('usage: node scripts/cut-release.mjs <major.minor.patch> [--check]');
+  die('usage: node scripts/cut-release.mjs <major.minor.patch> "<release title>" [--check]');
 }
+if (!checkOnly && !title) {
+  die('a release title is required.',
+      'It goes straight into the heading, so no placeholder is ever written and there is\n' +
+      '    no follow-up edit to forget. One line, no leading "vX.Y.Z" or date — both are added.\n\n' +
+      `      node scripts/cut-release.mjs ${version} "Tailwind v4 ships, publishing fixed"`);
+}
+if (title.includes('TITLE ME')) die('the title still says TITLE ME.', 'Write the real one.');
 const tag = `v${version}`;
 
 // ── Preflight. Every one of these has bitten a real release. ────────────────
@@ -110,19 +125,20 @@ bump('tokens/synapse.tokens.json', `"$version": "${cur}"`, `"$version": "${versi
 bump('design.md', `**Version ${cur} ·`, `**Version ${version} ·`);
 bump('preview.html', `v${cur}`, `v${version}`);
 
-// Roll Unreleased → a dated section. The heading line is left for a human to title.
+// Roll Unreleased → a dated, TITLED section. Nothing is left for a follow-up edit.
 const today = new Date().toISOString().slice(0, 10);
-const rolled = log.replace('## Unreleased', `## Unreleased\n\n*(nothing yet)*\n\n## ${version} — ${today} — TITLE ME`);
+const rolled = log.replace('## Unreleased', `## Unreleased\n\n*(nothing yet)*\n\n## ${version} — ${today} — ${title}`);
 writeFileSync(join(ROOT, 'CHANGELOG.md'), rolled);
 execSync('python3 tools/build_manifest.py', { cwd: ROOT, stdio: 'pipe' });
 
 console.log(`\n✓ Bumped ${cur} → ${version} (tokens, design.md, preview.html, manifest) and rolled the changelog.
 
-  NEXT — title the release, then run these THREE together, in this order:
+  Heading: ## ${version} — ${today} — ${title}
 
-    1. edit CHANGELOG.md   replace "TITLE ME" on the ${version} heading
-    2. git add -A && git commit -m "v${version}: <summary>"
-    3. git push origin main && git tag ${tag} && git push origin ${tag}
+  NEXT — nothing to edit. Run these TWO together, in this order:
 
-  Do not add more work between steps 2 and 3 — that is precisely how v2.2.0,
-  v2.3.0 and v2.4.0 each shipped a bundle that did not match its release notes.`);
+    1. git add -A && git commit -m "v${version}: ${title}"
+    2. git push origin main && git tag ${tag} && git push origin ${tag}
+
+  Do not add more work between them — that is precisely how v2.2.0, v2.3.0 and
+  v2.4.0 each shipped a bundle that did not match its release notes.`);
