@@ -85,6 +85,30 @@ while read -r LOCAL_REF LOCAL_SHA REMOTE_REF REMOTE_SHA; do
       ;;
   esac
 
-  echo "✓ pre-push: ${TAG} matches source ${SRC}, changelog rolled and titled." >&2
+  # The bundle must BUILD. publish-harness.yml runs build-dist.mjs, but only after the
+  # tag is on origin — and a tag is immutable, so a broken doc reference costs a version
+  # number. v2.7.0 died on one missing directory prefix in one link. Running it here is
+  # a few seconds against a number that cannot be reclaimed.
+  #
+  # It runs against the WORKING TREE, which is only equivalent to the tagged commit when
+  # the tree is clean and HEAD is the tag — so require exactly that rather than quietly
+  # validating something other than what is being pushed.
+  if [ -n "$(git status --porcelain)" ]; then
+    fail "$TAG cannot be verified: the working tree is dirty." \
+         "The tag must capture everything. Commit or stash, re-tag, and push again."
+  fi
+  if [ "$(git rev-parse HEAD)" != "$(git rev-parse "${LOCAL_SHA}^{commit}")" ]; then
+    fail "$TAG does not point at HEAD, so the bundle cannot be checked against it." \
+         "Check out the tagged commit, or re-cut the tag on the tip."
+  fi
+  if ! BUILD_OUT="$(SOURCE_DATE=1970-01-01 node scripts/build-dist.mjs 2>&1)"; then
+    fail "$TAG would not BUILD a harness bundle." \
+         "$BUILD_OUT" \
+         "" \
+         "publish-harness.yml runs this too — but only after the tag reaches origin," \
+         "where it is immutable. Fix it now; the tag is not pushed yet, so nothing is spent."
+  fi
+
+  echo "✓ pre-push: ${TAG} matches source ${SRC}, changelog rolled and titled, bundle builds." >&2
 done
 exit 0

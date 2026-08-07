@@ -84,6 +84,19 @@ if (!/^- /m.test(unreleased)) {
 }
 console.log('  ✓ unreleased   has entries to roll');
 
+// 7. The bundle must BUILD. build-dist.mjs re-checks every cross-reference in the
+// shipped docs, and it runs in publish-harness.yml AFTER the tag exists on origin —
+// so a broken reference costs a whole version number to discover. v2.7.0 died exactly
+// here, on a single doc link written without its directory prefix. Any check CI has
+// that this script does not will eventually burn a release; run it locally too.
+try { execSync('node scripts/build-dist.mjs', { cwd: ROOT, stdio: 'pipe', env: { ...process.env, SOURCE_DATE: '1970-01-01' } }); }
+catch (e) {
+  const out = `${e.stdout || ''}${e.stderr || ''}`.trim();
+  die('scripts/build-dist.mjs FAILED — the harness bundle would not build.',
+      `${out}\n    This is what publish-harness.yml runs after the tag is already pushed.`);
+}
+console.log('  ✓ bundle       build-dist.mjs succeeds (all shipped references resolve)');
+
 if (checkOnly) { console.log(`\nPreflight passed. Re-run without --check to cut ${tag}.`); process.exit(0); }
 
 // ── Bump: all four surfaces, or none. ──────────────────────────────────────

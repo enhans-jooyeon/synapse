@@ -70,7 +70,7 @@ After this, `duration-instant…slow` and `ease-standard/enter/exit` are the who
 
   **The easing exception, verified by compiling against Tailwind 4.3.3.** `--ease-*: initial` removes the *named* curves — `ease-in-out` is gone — but **`ease-linear` and `ease-initial` survive it**, because v4 ships them as static utilities that never consult the namespace. So the v3 sentence above ("the only way to write `linear` is in a keyframe animation") is **false on v4**: `ease-linear` compiles on any transition.
 
-  **And nothing catches it.** `check-raw-values.mjs` has no easing rule at all — its inventory is SY001/SY002/SY007/SY009/SY010/SY023/SY025. On v4, `ease-linear` on an ordinary hover is currently a silent contract violation on both sides. This is an open gap awaiting a ruling, not a settled rule: the §7 jurisdiction boundary deliberately keeps `linear` legal for continuous motion, so a gate rule has to separate linear-on-a-spinner from linear-on-a-hover. Until that ruling lands, **easing on v4 is review-only** — treat it as a manual check item in the conversion PR.
+  **And nothing catches it.** `tooling/product-gates/check-raw-values.mjs` has no easing rule at all — its inventory is SY001/SY002/SY007/SY009/SY010/SY023/SY025. On v4, `ease-linear` on an ordinary hover is currently a silent contract violation on both sides. This is an open gap awaiting a ruling, not a settled rule: the §7 jurisdiction boundary deliberately keeps `linear` legal for continuous motion, so a gate rule has to separate linear-on-a-spinner from linear-on-a-hover. Until that ruling lands, **easing on v4 is review-only** — treat it as a manual check item in the conversion PR.
 
 ```css
 /* app.css — after `@import "tailwindcss"` and Synapse's own tokens/synapse.css */
