@@ -40,10 +40,28 @@ They are not interchangeable: v4 has no JS theme, so a v3 config cannot be loade
 
 Aliasing rather than copying values is what keeps **dark mode working**: utilities resolve `var(--sy-…)` in the element's own scope, so `bg-bg-surface` follows `[data-theme]`. Copying resolved values into the theme would freeze one mode.
 
-**Two things are worse on v4, and both land on `check-raw-values.mjs`:**
+### What a theme can and cannot enforce — read this before converting call sites
 
-- v4 has **no `--z-index-*` and no `--transition-duration-*` namespace**. `z-10` / `z-9999` / `duration-500` are bare-value utilities that no theme can delete, so **SY023 and SY025 are the only enforcement on v4, not a backstop.** Wire the gate into CI *before* migrating.
-- A CSS theme still cannot delete bracket syntax (`p-[7px]`, `bg-[#4f46e5]`) — SY002's job on both versions.
+A preset is **not** the enforcement layer, on either version. It removes the *named*
+off-scale conveniences; everything else reaches `check-raw-values.mjs` or reaches
+production. Verified by compiling both presets, not by reading them.
+
+| | v3 preset | v4 preset | enforced by |
+|---|---|---|---|
+| Named off-scale (`shadow-lg`, `text-3xl`, `leading-tight`, `tracking-wide`) | blocked | blocked | the theme |
+| **Bracket syntax** (`p-[13px]`, `leading-[1.1]`, `tracking-[.05em]`, `z-[9999]`) | **compiles** | **compiles** | SY002 only |
+| Bare-number `z-10` / `z-50` / `duration-500` | blocked | **compiles** | SY023 / SY025 |
+| `leading-<number>` (reads the *spacing* scale, not `--leading-*`) | blocked | **compiles** | SY010 only |
+| `ease-linear`, `ease-initial` (static utilities) | compiles | **compiles** | **nothing — open gap** |
+
+Bracket syntax is parsed before the theme is consulted, so no Tailwind config on any
+version can delete it. The v3 preset's docstring claimed for a while that it did; that
+claim was false and has been corrected in the file.
+
+**The operational consequence: wire `check-raw-values.mjs` into CI BEFORE you convert a
+single call site.** Converting first and gating later means the conversion is unverified
+and the regressions are silent — on v4 most of all, where four of the five rows above
+land on the gate alone.
 
 **Exclude `tailwind.synapse.v4.css` from the gate's glob.** It necessarily writes `--sy-shadow-*` (SY009's regex), `1px` and `-0.01em` (SY002's px/literal scans): it is the theme, not product code.
 
@@ -51,8 +69,8 @@ Aliasing rather than copying values is what keeps **dark mode working**: utiliti
 
 1. Copy this folder into the product repo (e.g. `tooling/synapse-gates/`).
 2. Merge `.eslintrc.synapse.cjs` into the repo's ESLint config (`extends` or spread `rules`), and add `eslint-plugin-jsx-a11y`.
-3. Wire the preset for your version — **v3:** merge `tailwind.synapse.cjs` (the point is `future.hoverOnlyWhenSupported` aside, **arbitrary values disabled** and the theme sourced from `@enhans-jooyeon/synapse` tokens). **v4:** `@import` `tailwind.synapse.v4.css` in the order above.
-4. Add the scripts to CI (`ui-gate.yml` is a ready GitHub Actions job).
+3. **Add the scripts to CI first** (`ui-gate.yml` is a ready GitHub Actions job). This is step 3 and not step 5 deliberately — see the table above: the preset does not enforce SY002, and on v4 it does not enforce SY023/SY025/SY010 either. A conversion done before the gate runs is a conversion nobody checked.
+4. Wire the preset for your version — **v3:** merge `tailwind.synapse.cjs`; its value is that the theme is sourced from `@enhans-jooyeon/synapse` tokens and **replaces** the defaults, so the named off-scale classes stop existing. **v4:** `@import` `tailwind.synapse.v4.css` in the order above.
 5. Author declares required states in a `*.states.json` next to each screen; `check-state-coverage.mjs` verifies a story per declared state.
 
 ## Non-negotiable

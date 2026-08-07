@@ -66,7 +66,12 @@ const TW_LEADING = /\bleading-(?:none|tight|snug|normal|relaxed|loose|\d+|\[[^\]
 // and bare `shadow` were unflagged despite `xs` being a token name, and a correctly-migrated
 // product emitting `shadow-lg` from a same-named token scale would have been flagged forever.
 // `drop-shadow-*` is a CSS-filter utility with no Synapse token behind it: always a violation.
-const TW_SHADOW = /(?<!drop-)\bshadow(?!-float-(?:xs|sm|md|lg|xl)\b)(?:-[a-z0-9[\]()#.,%_-]+)?\b/;
+// `shadow-none` is ALLOWED alongside `shadow-float-*`: borders-first means the common
+// correct edit is REMOVING elevation, and a variant that inherits a shadow from its base
+// needs a way to say so. Flagging it told the author to reach for `shadow-float-*`, which
+// is the opposite of the ruling. (`shadow-none` is also a v4 static utility that survives
+// `--shadow-*: initial`, so it stays expressible whatever the theme does.)
+const TW_SHADOW = /(?<!drop-)\bshadow(?!-(?:float-(?:xs|sm|md|lg|xl)|none)\b)(?:-[a-z0-9[\]()#.,%_-]+)?\b/;
 const TW_DROP_SHADOW = /\bdrop-shadow(?:-[a-z0-9[\]()#.,%_-]+)?\b/;
 // SY025 — off-scale transition duration. foundations §7 closes motion duration to FOUR values:
 // instant 100 · fast 150 · base 200 · slow 300 (`--sy-duration-*`). Tailwind's `duration-<n>`

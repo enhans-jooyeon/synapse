@@ -1,8 +1,17 @@
 /**
- * Tailwind preset for the product repo — sources the theme from Synapse tokens
- * and DISABLES arbitrary values, so `[13px]` / `[#4f46e5]` cannot compile.
- * This is the front line for SY001 (raw color) and SY002 (off-scale value):
- * if it isn't a token, it isn't expressible.
+ * Tailwind preset for the product repo — **Tailwind v3 ONLY**; a v4 app has no JS
+ * theme and uses `tailwind.synapse.v4.css` instead. It sources the theme from Synapse
+ * tokens and REPLACES (not extends) the defaults, so the named off-scale conveniences
+ * cease to exist: `shadow-lg`, `text-3xl`, `leading-tight`, `tracking-wide` stop
+ * compiling because no such theme key remains.
+ *
+ * IT DOES NOT DISABLE ARBITRARY VALUES — and no Tailwind config on any version can.
+ * `p-[13px]`, `text-[#4f46e5]`, `leading-[1.1]`, `z-[9999]` are parsed as bracket
+ * syntax BEFORE the theme is consulted, so they compile against any theme. SY001 and
+ * SY002 are enforced by `check-raw-values.mjs`, NOT by this file. Earlier revisions of
+ * this docstring claimed the opposite in three places; the claim was false on v3 and is
+ * false on v4. **Wire the gate into CI before converting call sites** — until it runs,
+ * nothing is enforced.
  *
  * Usage in the product's tailwind.config: `presets: [require('./tooling/synapse-gates/tailwind.synapse.cjs')]`
  * Generate the theme objects from tokens/synapse.tokens.json at build time so they never drift.
@@ -17,7 +26,9 @@ const spacing = Object.fromEntries(
 );
 
 module.exports = {
-  // Hard stop: no bracketed arbitrary values anywhere.
+  // `future: {}` is a no-op. It never blocked bracket syntax; it is kept only so that a
+  // reader who remembers the old "hard stop" comment lands on this correction rather
+  // than on silence. The arbitrary-value ban is check-raw-values.mjs (SY002).
   future: {},
   theme: {
     // Replace (not extend) the defaults so only tokenized values exist.
@@ -51,10 +62,8 @@ module.exports = {
     // and letterSpacing emptied, so `leading-*`/`tracking-*` cease to exist
     // (migration/typography-tailwind-migration.md).
   },
-  // Disable arbitrary values — the enforcement that makes SY001/SY002 unbypassable.
-  // (Tailwind+: `experimental` / plugin; if unavailable, pair with check-raw-values.mjs.)
-  corePlugins: {
-    // keep defaults; the arbitrary-value ban is enforced by the lint scan below
-    // and by NOT whitelisting bracket syntax in your editor/formatter.
-  },
+  // Empty ON PURPOSE, and it disables nothing. Tailwind exposes no switch for bracket
+  // syntax on any version, so there is nothing that could go here. SY001/SY002 are
+  // enforced by check-raw-values.mjs, run in CI over the same globs as this build.
+  corePlugins: {},
 };

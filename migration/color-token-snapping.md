@@ -14,7 +14,7 @@ That third point is what drives the hard constraint below. Snapping recovers the
 
 ## The real fix: replace the palette in the theme, don't extend it
 
-Same move as z-index and typography — make the wrong thing unexpressible, and leave the gate as the backstop.
+Same move as z-index and typography — delete the off-token names so they stop compiling (the theme removes the *named* off-scale classes; bracket syntax reaches the gate on every version — see the enforcement table in `2026-08-06-audit-migration-guide.md`).
 
 ```js
 // tailwind.config — colors come from tokens, and NOTHING else exists.

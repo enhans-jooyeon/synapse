@@ -81,6 +81,25 @@
  * -----------------------------------------------------------------------------
  * `--<namespace>-*: initial` empties a namespace so Tailwind's built-ins stop
  * existing as classes. Each clear below is a rule, not a preference.
+ *
+ * WHAT A CLEAR DOES NOT DO — verified by compiling this file against Tailwind 4.3.3,
+ * not inferred. A clear removes NAMED classes from that namespace. It does not remove:
+ *
+ *   • BRACKET SYNTAX. `p-[13px]`, `leading-[1.1]`, `tracking-[.05em]`, `z-[9999]`,
+ *     `duration-[350ms]` all compile against this file. Tailwind parses brackets before
+ *     consulting the theme, so no config on ANY version can delete them — the v3 preset's
+ *     docstring claimed it could; that claim was false and is corrected there. SY002.
+ *   • BARE-NUMBER utilities. `z-10`, `z-50`, `duration-500` — see section 8 below.
+ *   • `leading-<number>`. It resolves off the SPACING scale, not `--leading-*`, so
+ *     `leading-7` survives the `--leading-*` clear and emits `var(--sy-space-7)`.
+ *     Unbundling typography is still reachable on v4. SY010.
+ *   • STATIC utilities. `ease-linear` and `ease-initial` survive `--ease-*: initial`
+ *     (`ease-in-out` does not). No gate rule currently covers easing at all — this is a
+ *     known open gap pending a ruling, since §7 keeps `linear` legal for continuous
+ *     motion. Treat easing as review-only on v4.
+ *
+ * NET: this file is not the enforcement layer. `check-raw-values.mjs` is, and on v4 it
+ * must be in CI BEFORE call sites are converted, not after.
  * ========================================================================== */
 
 @theme inline {

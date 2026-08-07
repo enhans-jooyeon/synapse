@@ -11,7 +11,7 @@ Typography in Synapse is a **bundle, not three properties.** `design.md` hard ru
 
 ## The real fix: delete the classes in the theme
 
-Same move that worked for z-index — make the wrong thing unexpressible, and leave the gate as the backstop for what a theme can't delete.
+Same move that worked for z-index — delete the override classes so the named ones stop compiling (the theme removes the *named* off-scale classes; bracket syntax reaches the gate on every version — see the enforcement table in `2026-08-06-audit-migration-guide.md`).
 
 **Tailwind v3** — the `fontSize` bundle, with `lineHeight` / `letterSpacing` emptied beside it.
 
@@ -41,7 +41,9 @@ theme: {
     'stat': ['24px', { lineHeight: '34px', fontWeight: '600' }],
     'stat-sm': ['20px', { lineHeight: '30px', fontWeight: '600' }],
   },
-  // 2. No `leading-*`, no `tracking-*` classes at all. Unbundling becomes unexpressible.
+  // 2. No NAMED `leading-*` / `tracking-*` classes. NB this does not stop `leading-[1.1]`
+  //    or `tracking-[.05em]` (bracket syntax bypasses the theme), and on v4 it does not
+  //    stop `leading-7` either — that reads the SPACING scale. SY010/SY007 catch all three.
   lineHeight: {},
   letterSpacing: {},
 }
